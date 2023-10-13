@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>ChatMD</title>
+	<title>ChatMD</title>
 	<meta charset="utf-8">
-    <style>
-    </style>
+	<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1 id="chatbot-name">Chatbot</h1>
-    <div id="chat" class="chat-container">
-        <!-- La conversation sera affichée ici -->
-    </div>
-    <input type="text" id="user-input" placeholder="Tapez votre message...">
-    <button id="send-button">Envoyer</button>
-    <script src="chatbot.js"></script>
+	<h1 id="chatbot-name">Chatbot</h1>
+	<main>
+		<div id="chat" class="chat-container">
+			<!-- La conversation sera affichée ici -->
+		</div>
+		<div id="controls">
+			<div id="input-container">
+				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0"></div>
+			</div>
+			<button id="send-button">Envoyer</button>
+		</div>
+	</main>
+	<script src="chatbot.js"></script>
 </body>
+
 </html>
