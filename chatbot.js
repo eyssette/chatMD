@@ -20,6 +20,7 @@ const sendButton = document.getElementById("send-button");
 
 function createChatMessage(message, isUser) {
 	const chatMessage = document.createElement("div");
+	chatMessage.classList.add("message");
 	chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 	chatMessage.textContent = message;
 	chatContainer.appendChild(chatMessage);
@@ -114,6 +115,7 @@ sendButton.addEventListener("click", () => {
 userInput.addEventListener("keyup", (event) => {
 	if (event.key === "Enter") {
 		sendButton.click();
+		window.scrollTo(0, document.body.scrollHeight);
 	}
 });
 
