@@ -19,6 +19,7 @@ function getMarkdownContent() {
 			.then((data) => {
 				md = data;
 				chatData = parseMarkdown(md);
+				/* console.log(chatData); */
 				createChatBot(chatData);
 			})
 			.catch((error) => console.error(error));
@@ -69,7 +70,11 @@ function parseMarkdown(markdownContent) {
 				if (!lastOrderedList) {
 					lastOrderedList = [];
 				}
-				lastOrderedList.push(line.replace(/^\d+\.\s/, "").trim());
+				const listContent = line.replace(/^\d+\.\s/, "").trim()
+				const link = listContent.replace(/^\[.*?\]\(/,'').replace(/\)$/,'')
+				const text = listContent.replace(/\]\(.*/,'').replace(/^\[/,'')
+				lastOrderedList.push([text,link]);
+				/* lastOrderedList.push(listContent); */
 			} else if (line.length > 0) {
 				content.push(line);
 				listParsed = true;

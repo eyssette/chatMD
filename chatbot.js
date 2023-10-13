@@ -77,6 +77,7 @@ function createChatBot(chatData) {
 		let bestMatchScore = 0;
 		let bestDistanceScore = 0;
 		let userInputTextToLowerCase = userInputText.toLowerCase();
+		let indexBestMatch;
 
 		for (let i = 0; i < chatData.length; i++) {
 			/* On teste l'identité ou la similarité entre les mots ou expressions clés et le message envoyé */
@@ -112,14 +113,27 @@ function createChatBot(chatData) {
 			if (matchScore > bestMatchScore) {
 				bestMatch = responses;
 				bestMatchScore = matchScore;
+				indexBestMatch = i;
 			}
 		}
 
 		if (bestMatch) {
 			// On envoie le meilleur choix s'il en existe un
-			const response = Array.isArray(bestMatch)
+			let response = Array.isArray(bestMatch)
 				? bestMatch.join("\n")
 				: bestMatch;
+			const options = chatData[indexBestMatch][3];
+			if(options) {
+				let messageOptions = '\n';
+				for (let i = 0; i < options.length; i++) {
+					const option = options[i];
+					const optionText = option[0];
+					const optionLink = option[1];
+					messageOptions = messageOptions + '- <a href="'+optionLink+'">' + optionText + '</a>\n';
+				}
+				response = response+messageOptions;
+				/* createChatMessage(messageOptions, false); */
+			}
 			createChatMessage(response, false);
 		} else {
 			// En cas de correspondance non trouvée, on envoie le message par défaut
