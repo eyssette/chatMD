@@ -6,18 +6,25 @@ document.addEventListener("DOMContentLoaded", function () {
 	const userInput = document.getElementById("user-input");
 	const sendButton = document.getElementById("send-button");
 
+	// Gestion du markdown dans les réponses du chatbot
 	var converter = new showdown.Converter();
+	function markdownToHTML(text) {
+		const html = converter.makeHtml(text);
+		return html
+	}
 
+	// Création du message par le bot ou l'utilisateur
 	function createChatMessage(message, isUser) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		const html = converter.makeHtml(message);
+		const html = markdownToHTML(message)
 		chatMessage.innerHTML = html;
 		chatContainer.appendChild(chatMessage);
 	}
 
 	function levenshteinDistance(a, b) {
+		/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */
 		if (a.length === 0) return b.length;
 		if (b.length === 0) return a.length;
 
@@ -44,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		return matrix[b.length][a.length];
 	}
 
-	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
+	const LEVENSHTEIN_THRESHOLD = 5; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
 
 	function chatbotResponse(userInputText) {
@@ -54,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		let userInputTextToLowerCase = userInputText.toLowerCase();
 
 		for (let i = 0; i < chatData.length; i++) {
+			/* On teste l'identité ou la similarité entre les mots ou expressions clés et le message envoyé */
 			const keywords = chatData[i][1];
 			const responses = chatData[i][2];
 			let matchScore = 0;
@@ -62,8 +70,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			for (let keyword of keywords) {
 				let keywordToLowerCase = keyword.toLowerCase();
 				if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
+					// Test de l'identité stricte
+					// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				} else {
+					// Sinon : test de la similarité
 					distance = levenshteinDistance(
 						keywordToLowerCase,
 						userInputTextToLowerCase
@@ -73,9 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					}
 				}
 			}
-			/* console.log("matchScore:"+matchScore);
-		console.log("distanceScore:"+distanceScore); */
 			if (matchScore == 0) {
+				// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement
 				if (distanceScore > bestDistanceScore) {
 					matchScore++;
 					bestDistanceScore = distanceScore;
@@ -88,14 +98,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 
 		if (bestMatch) {
-				const response = Array.isArray(bestMatch) ? bestMatch.join('\n') : bestMatch;
-				createChatMessage(response, false);
+			// On envoie le meilleur choix s'il en existe un
+			const response = Array.isArray(bestMatch) ? bestMatch.join('\n') : bestMatch;
+			createChatMessage(response, false);
 		} else {
-			// Aucune correspondance trouvée
+			// En cas de correspondance non trouvée, on envoie le message par défaut
 			createChatMessage(defaultMessage, false);
 		}
 	}
 
+	// Gestion des événéments js
 	sendButton.addEventListener("click", () => {
 		const userInputText = userInput.innerText;
 		if (userInputText.trim() !== "") {
@@ -122,6 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		this.classList.add("placeholder");
 	});
 
-	// Message d'accueil du chatbot
+	// Envoi du message d'accueil du chatbot
 	createChatMessage(initialMessage, false);
 });

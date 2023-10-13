@@ -107,13 +107,17 @@ main {
 }
 
 .user-message {
-	/* border: 1px solid rgb(27, 74, 239); */
 	box-shadow: rgba(0, 0, 0, 0.12) 0px 0.3px 0.9px,
 		rgba(0, 0, 0, 0.16) 0px 1.6px 3.6px;
 	color: rgb(255, 255, 255);
 	background-color: rgb(0, 132, 255);
 	float: right;
 }
+
+.user-message p {
+	margin:0px 5px;
+}
+
 .bot-message {
 	float: left;
 	/* background: rgba(255, 255, 255, 0.7); */

@@ -1,27 +1,20 @@
-/* const chatData = [
-	["discussion1", ["ce qu'est la philosophie", "défini", "philosophie"], ["La philosophie c'est l'art de se poser des questions"], null],
-	[
-		"discussion2",
-		["démarches","philosophie"],
-		["Salut ça va", "Nickel ?"],
-		["option 1", "option 2"],
-	],
-	["Nom du chatbot"],
-]; */
-
 const initialMessage = "Bonjour, en quoi puis-je vous être utile ?";
 const defaultMessage = "Désolé, je ne comprends pas votre question.";
 
 md = `# Chatbot Philo
 
 ## Définition de la philosophie
-- défini
+- définir
+- définition
 - ce qu'est la philosophie
+- Qu'est-ce que la philosophie ?
 
 Faire de la philosophie, c'est réfléchir à des questions qui portent sur des notions générales et fondamentales de notre existence (la liberté, le bien et le mal, la vérité, …).
 
 ## Les grandes démarches
 - démarche
+- quatre démarches
+- 4 démarches
 
 En philosophie, il y a 4 démarches importantes :
 - problématiser
