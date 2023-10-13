@@ -158,3 +158,8 @@ footer a {
 .Typewriter__cursor {
 	display:none;
 }
+
+#chat img {
+	display:block;
+	margin:1em;
+}
