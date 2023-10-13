@@ -59,6 +59,7 @@ function chatbotResponse(userInputText) {
 	let bestMatch = null;
 	let bestMatchScore = 0;
 	let bestDistanceScore = 0;
+	let userInputTextToLowerCase = userInputText.toLowerCase();
 
 	for (let i = 0; i < chatData.length; i++) {
 		const keywords = chatData[i][1];
@@ -67,10 +68,11 @@ function chatbotResponse(userInputText) {
 		let distanceScore = 0;
 		let distance = 0;
 		for (let keyword of keywords) {
-			if (userInputText.includes(keyword)) {
+			let keywordToLowerCase=keyword.toLowerCase();
+			if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
 				matchScore = matchScore + MATCH_SCORE_IDENTITY;
 			} else {
-				distance = levenshteinDistance(keyword, userInputText);
+				distance = levenshteinDistance(keywordToLowerCase, userInputTextToLowerCase);
 				if (distance < LEVENSHTEIN_THRESHOLD) {
 					distanceScore++;
 				}
@@ -101,11 +103,11 @@ function chatbotResponse(userInputText) {
 }
 
 sendButton.addEventListener("click", () => {
-	const userInputText = userInput.value;
+	const userInputText = userInput.innerText;
 	if (userInputText.trim() !== "") {
 		createChatMessage(userInputText, true);
 		chatbotResponse(userInputText);
-		userInput.value = "";
+		userInput.innerText = "";
 	}
 });
 
@@ -114,6 +116,18 @@ userInput.addEventListener("keyup", (event) => {
 		sendButton.click();
 	}
 });
+
+userInput.focus();
+
+userInput.addEventListener('focus', function(){
+  this.classList.remove('placeholder');
+});
+
+userInput.addEventListener('blur', function(){
+	this.classList.add('placeholder');
+});
+
+
 
 // Message d'accueil du chatbot
 createChatMessage(initialMessage, false);
