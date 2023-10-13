@@ -1,6 +1,6 @@
 const chatData = [
     ["discussion1", ["hello", "you"], ["Hello how are you ?", "Good ?"], null],
-    ["discussion2", ["coucou"], ["Salut ça va", "Nickel ?"], ["option 1", "option 2"]],
+    ["discussion2", ["salut", "toi"], ["Salut ça va", "Nickel ?"], ["option 1", "option 2"]],
     ["Nom du chatbot"]
 ];
 
@@ -19,21 +19,35 @@ function createChatMessage(message, isUser) {
 }
 
 function chatbotResponse(userInputText) {
+    let bestMatch = null;
+    let bestMatchScore = 0;
+
     for (let i = 0; i < chatData.length; i++) {
         const keywords = chatData[i][1];
         const responses = chatData[i][2];
-
-        if (keywords.every(keyword => userInputText.includes(keyword))) {
-            // Trouvé une correspondance, afficher la réponse du chatbot
-            for (let response of responses) {
-                createChatMessage(response, false);
+        let matchScore = 0;
+        for (let keyword of keywords) {
+            if (userInputText.includes(keyword)) {
+                matchScore++;
             }
-            return;
+        }
+
+        if (matchScore > bestMatchScore) {
+            bestMatch = responses;
+            bestMatchScore = matchScore;
         }
     }
-    // Aucune correspondance trouvée
-    createChatMessage("Désolé, je ne comprends pas votre question.", false);
+
+    if (bestMatch) {
+        for (let response of bestMatch) {
+            createChatMessage(response, false);
+        }
+    } else {
+        // Aucune correspondance trouvée
+        createChatMessage("Désolé, je ne comprends pas votre question.", false);
+    }
 }
+
 
 sendButton.addEventListener('click', () => {
     const userInputText = userInput.value;
