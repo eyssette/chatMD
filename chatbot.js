@@ -21,10 +21,13 @@ function createChatBot(chatData) {
 			loop: false,
 			delay: 15,
 		});
-		typewriter.typeString(content).start().callFunction(() => {
-			/* userInput.setAttribute("contenteditable", true); */
-			/* userInput.focus(); */
-		  });
+		typewriter
+			.typeString(content)
+			.start()
+			.callFunction(() => {
+				/* userInput.setAttribute("contenteditable", true); */
+				/* userInput.focus(); */
+			});
 	}
 
 	// Création du message par le bot ou l'utilisateur
@@ -123,22 +126,33 @@ function createChatBot(chatData) {
 				? bestMatch.join("\n")
 				: bestMatch;
 			const options = chatData[indexBestMatch][3];
-			if(options) {
-				let messageOptions = '\n';
-				for (let i = 0; i < options.length; i++) {
-					const option = options[i];
-					const optionText = option[0];
-					const optionLink = option[1];
-					messageOptions = messageOptions + '- <a href="'+optionLink+'">' + optionText + '</a>\n';
-				}
-				response = response+messageOptions;
-				/* createChatMessage(messageOptions, false); */
-			}
+			response = gestionOptions(response, options);
 			createChatMessage(response, false);
 		} else {
 			// En cas de correspondance non trouvée, on envoie le message par défaut
 			createChatMessage(defaultMessage, false);
 		}
+	}
+
+	function gestionOptions(response, options) {
+		if (options) {
+			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
+			let messageOptions = "\n";
+			for (let i = 0; i < options.length; i++) {
+				const option = options[i];
+				const optionText = option[0];
+				const optionLink = option[1];
+				messageOptions =
+					messageOptions +
+					'- <a href="#' +
+					optionLink +
+					'">' +
+					optionText +
+					"</a>\n";
+			}
+			response = response + messageOptions;
+		}
+		return response;
 	}
 
 	// Gestion des événéments js
@@ -169,6 +183,24 @@ function createChatBot(chatData) {
 
 	userInput.addEventListener("blur", function () {
 		this.classList.add("placeholder");
+	});
+
+	chatContainer.addEventListener("click", function (event) {
+		const target = event.target;
+		if (target.tagName === "A") {
+			event.preventDefault();
+			createChatMessage(target.innerText,true)
+			const optionLink = target.getAttribute("href").substring(1);
+			for (let i = 0; i < chatData.length; i++) {
+				const title = chatData[i][0];
+				if (optionLink == title) {
+					let response = chatData[i][2];
+					const options = chatData[i][3];
+					response = gestionOptions(response.join("\n"), options);
+					createChatMessage(response, false);
+				}
+			}
+		}
 	});
 
 	// Envoi du message d'accueil du chatbot
