@@ -10,7 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	var converter = new showdown.Converter();
 	function markdownToHTML(text) {
 		const html = converter.makeHtml(text);
-		return html
+		return html;
+	}
+
+	function typeWriter(content, element) {
+		var typewriter = new Typewriter(element, {
+			loop: false,
+			delay: 15,
+			cursor: ''
+		});
+		typewriter.typeString(content).start();
 	}
 
 	// Création du message par le bot ou l'utilisateur
@@ -18,8 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		const html = markdownToHTML(message)
-		chatMessage.innerHTML = html;
+		const html = markdownToHTML(message);
+		if (isUser) {
+			chatMessage.innerHTML = html;
+		} else {
+			typeWriter(html, chatMessage);
+		}
 		chatContainer.appendChild(chatMessage);
 	}
 
@@ -99,7 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		if (bestMatch) {
 			// On envoie le meilleur choix s'il en existe un
-			const response = Array.isArray(bestMatch) ? bestMatch.join('\n') : bestMatch;
+			const response = Array.isArray(bestMatch)
+				? bestMatch.join("\n")
+				: bestMatch;
 			createChatMessage(response, false);
 		} else {
 			// En cas de correspondance non trouvée, on envoie le message par défaut
@@ -112,7 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		const userInputText = userInput.innerText;
 		if (userInputText.trim() !== "") {
 			createChatMessage(userInputText, true);
-			chatbotResponse(userInputText);
+			setTimeout(() => {
+				chatbotResponse(userInputText);
+			}, 300);
 			userInput.innerText = "";
 		}
 	});

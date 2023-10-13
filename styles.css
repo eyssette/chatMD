@@ -126,7 +126,7 @@ main {
 	/* box-shadow: rgba(0, 0, 0, 0.12) 0px 0.3px 0.9px, rgba(0, 0, 0, 0.16) 0px 1.6px 3.6px; */
 }
 
-.bot-message > :first-child:before {
+.bot-message span >:first-child:before {
 	content: "🗣️";
 	margin-right: 10px;
 	font-size: 2em;
@@ -147,4 +147,9 @@ footer {
 footer a {
 	color: #0453ad;
 	text-decoration: none;
+}
+
+
+.Typewriter__cursor {
+	display:none;
 }
