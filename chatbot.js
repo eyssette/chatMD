@@ -117,8 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	});
 
-	userInput.addEventListener("keyup", (event) => {
+	userInput.addEventListener("keypress", (event) => {
 		if (event.key === "Enter") {
+			event.preventDefault();
 			sendButton.click();
 			window.scrollTo(0, document.body.scrollHeight);
 		}
