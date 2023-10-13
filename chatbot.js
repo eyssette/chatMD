@@ -123,7 +123,7 @@ function createChatBot(chatData) {
 		if (bestMatch) {
 			// On envoie le meilleur choix s'il en existe un
 			let response = Array.isArray(bestMatch)
-				? bestMatch.join("\n")
+				? bestMatch.join("\n\n")
 				: bestMatch;
 			const options = chatData[indexBestMatch][3];
 			response = gestionOptions(response, options);
@@ -201,7 +201,7 @@ function createChatBot(chatData) {
 							let response = chatData[i][2];
 							const options = chatData[i][3];
 							response = Array.isArray(response)
-								? response.join("\n")
+								? response.join("\n\n")
 								: response;
 							response = gestionOptions(response, options);
 							createChatMessage(response, false);
