@@ -6,11 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	const userInput = document.getElementById("user-input");
 	const sendButton = document.getElementById("send-button");
 
+	var converter = new showdown.Converter();
+
 	function createChatMessage(message, isUser) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		chatMessage.textContent = message;
+		const html = converter.makeHtml(message);
+		chatMessage.innerHTML = html;
 		chatContainer.appendChild(chatMessage);
 	}
 
