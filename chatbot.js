@@ -191,14 +191,19 @@ function createChatBot(chatData) {
 			event.preventDefault();
 			createChatMessage(target.innerText,true)
 			const optionLink = target.getAttribute("href").substring(1);
+			if (optionLink != '') {
 			for (let i = 0; i < chatData.length; i++) {
 				const title = chatData[i][0];
 				if (optionLink == title) {
-					let response = chatData[i][2];
-					const options = chatData[i][3];
-					response = gestionOptions(response.join("\n"), options);
-					createChatMessage(response, false);
+						let response = chatData[i][2];
+						const options = chatData[i][3];
+						response = Array.isArray(response) ? response.join("\n"): response;
+						response = gestionOptions(response, options);
+						createChatMessage(response, false);
+					}
 				}
+			} else {
+				createChatMessage(initialMessage, false)
 			}
 		}
 	});
