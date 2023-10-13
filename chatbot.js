@@ -1,5 +1,6 @@
 function createChatBot(chatData) {
 	const chatbotName = chatData.pop();
+	const initialMessage = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
 
 	const chatContainer = document.getElementById("chat");
@@ -133,7 +134,7 @@ function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
-			}, 300);
+			}, 100);
 			userInput.innerText = "";
 		}
 	});
