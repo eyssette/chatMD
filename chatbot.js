@@ -9,6 +9,8 @@ const chatData = [
 	["Nom du chatbot"],
 ];
 
+const initialMessage = "Bonjour, en quoi puis-je vous être utile ?";
+
 const chatbotName = chatData.pop();
 document.getElementById("chatbot-name").textContent = chatbotName;
 
@@ -50,6 +52,9 @@ function levenshteinDistance(a, b) {
 	return matrix[b.length][a.length];
 }
 
+const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
+const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
+
 function chatbotResponse(userInputText) {
 	let bestMatch = null;
 	let bestMatchScore = 0;
@@ -63,24 +68,25 @@ function chatbotResponse(userInputText) {
 		let distance = 0;
 		for (let keyword of keywords) {
 			if (userInputText.includes(keyword)) {
-				matchScore++;
+				matchScore = matchScore + MATCH_SCORE_IDENTITY;
 			} else {
-				distance = levenshteinDistance(keyword, userInputText)
-				if (distance < 3) {
+				distance = levenshteinDistance(keyword, userInputText);
+				if (distance < LEVENSHTEIN_THRESHOLD) {
 					distanceScore++;
 				}
 			}
 		}
+		/* console.log("matchScore:"+matchScore);
+		console.log("distanceScore:"+distanceScore); */
 		if (matchScore == 0) {
 			if (distanceScore > bestDistanceScore) {
-				bestMatch = responses;
+				matchScore++;
 				bestDistanceScore = distanceScore;
 			}
-		} else {
-			if (matchScore > bestMatchScore) {
-				bestMatch = responses;
-				bestMatchScore = matchScore;
-			}
+		}
+		if (matchScore > bestMatchScore) {
+			bestMatch = responses;
+			bestMatchScore = matchScore;
 		}
 	}
 
@@ -110,4 +116,4 @@ userInput.addEventListener("keyup", (event) => {
 });
 
 // Message d'accueil du chatbot
-createChatMessage("Bonjour, en quoi puis-je vous être utile ?", false);
+createChatMessage(initialMessage, false);
