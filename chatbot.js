@@ -1,6 +1,6 @@
 function createChatBot(chatData) {
 	const chatbotName = chatData.pop();
-	const initialMessage = chatData.pop();
+	let initialMessage = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
 
 	const chatContainer = document.getElementById("chat");
@@ -19,7 +19,7 @@ function createChatBot(chatData) {
 		/* userInput.setAttribute("contenteditable", false); */
 		var typewriter = new Typewriter(element, {
 			loop: false,
-			delay: 15,
+			delay: 10,
 		});
 		typewriter
 			.typeString(content)
@@ -209,5 +209,9 @@ function createChatBot(chatData) {
 	});
 
 	// Envoi du message d'accueil du chatbot
+	initialMessage = gestionOptions(initialMessage[0].join('\n'),initialMessage[1])
+	/* 
+	initialMessage = initialMessage[0].join('\n') + '\n' + initialMessage[1].join('\n')
+ */
 	createChatMessage(initialMessage, false);
 }

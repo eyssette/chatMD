@@ -34,7 +34,7 @@ function parseMarkdown(markdownContent) {
 	const lines = markdownContent.split("\n");
 	let chatbotData = [];
 	let chatbotTitle = [""];
-	let initialMessage = [];
+	
 	let initialMessageComputed = false;
 	let currentH2Title = null;
 	let currentLiItems = [];
@@ -42,12 +42,23 @@ function parseMarkdown(markdownContent) {
 	let lastOrderedList = null;
 	const regexOrderedList = /^\d{1,3}\.\s/;
 	let listParsed = false;
+	let initialMessageContent = [];
+	let initialMessageOptions = [];
 
 	for (let line of lines) {
 		if (line.startsWith("# ")) {
 			chatbotTitle[0] = line.replace("# ", "").trim();
 		} else if (line.startsWith("> ") && !initialMessageComputed) {
-			initialMessage.push(line.replace("> ", "").trim());
+			line = line.replace(/^> /, "").trim();
+			if (line.match(regexOrderedList)) {
+				line = line.replace(/^> /, "").trim();
+				const listContent = line.replace(/^\d+\.\s/, "").trim();
+				const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+				const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
+				initialMessageOptions.push([text, link]);
+			} else {
+				initialMessageContent.push(line)
+			}
 		} else if (line.startsWith("## ")) {
 			initialMessageComputed = true;
 			if (currentH2Title) {
@@ -86,7 +97,9 @@ function parseMarkdown(markdownContent) {
 		content.join("\n"),
 		lastOrderedList,
 	]);
-	chatbotData.push(initialMessage.join("\n"));
+
+	const initialMessage = [initialMessageContent,initialMessageOptions];
+	chatbotData.push(initialMessage);
 	chatbotData.push(chatbotTitle);
 
 	return chatbotData;
