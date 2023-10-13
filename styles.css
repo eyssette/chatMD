@@ -83,6 +83,7 @@ main {
 	width: 100%;
 	text-align: left;
 	padding: 5px;
+	height:1em;
 }
 
 .placeholder {
@@ -94,6 +95,10 @@ main {
 	color: grey;
 	font-style: italic;
 }
+/* [contenteditable="false"]:before {
+	content:"Attendez votre tour";
+	color: #AAA;
+} */
 
 .message {
 	margin-top: 0.5em;

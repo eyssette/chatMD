@@ -14,12 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	function typeWriter(content, element) {
+		/* userInput.blur(); */
+		/* userInput.setAttribute("contenteditable", false); */
 		var typewriter = new Typewriter(element, {
 			loop: false,
 			delay: 15,
-			cursor: ''
 		});
-		typewriter.typeString(content).start();
+		typewriter.typeString(content).start().callFunction(() => {
+			/* userInput.setAttribute("contenteditable", true); */
+			/* userInput.focus(); */
+		  });
 	}
 
 	// Création du message par le bot ou l'utilisateur
