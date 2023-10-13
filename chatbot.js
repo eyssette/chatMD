@@ -189,31 +189,36 @@ function createChatBot(chatData) {
 	chatContainer.addEventListener("click", function (event) {
 		const target = event.target;
 		if (target.tagName === "A") {
-			event.preventDefault();
-			createChatMessage(target.innerText,true)
-			const optionLink = target.getAttribute("href").substring(1);
-			if (optionLink != '') {
-			for (let i = 0; i < chatData.length; i++) {
-				const title = chatData[i][0];
-				if (optionLink == title) {
-						let response = chatData[i][2];
-						const options = chatData[i][3];
-						response = Array.isArray(response) ? response.join("\n"): response;
-						response = gestionOptions(response, options);
-						createChatMessage(response, false);
+			const link = target.getAttribute("href");
+			if (link.startsWith("#")) {
+				event.preventDefault();
+				createChatMessage(target.innerText, true);
+				const optionLink = link.substring(1);
+				if (optionLink != "") {
+					for (let i = 0; i < chatData.length; i++) {
+						const title = chatData[i][0];
+						if (optionLink == title) {
+							let response = chatData[i][2];
+							const options = chatData[i][3];
+							response = Array.isArray(response)
+								? response.join("\n")
+								: response;
+							response = gestionOptions(response, options);
+							createChatMessage(response, false);
+						}
 					}
+				} else {
+					createChatMessage(initialMessage, false);
 				}
-			} else {
-				createChatMessage(initialMessage, false)
+				window.scrollTo(0, document.body.scrollHeight);
 			}
-			window.scrollTo(0, document.body.scrollHeight);
 		}
 	});
 
 	// Envoi du message d'accueil du chatbot
-	initialMessage = gestionOptions(initialMessage[0].join('\n'),initialMessage[1])
-	/* 
-	initialMessage = initialMessage[0].join('\n') + '\n' + initialMessage[1].join('\n')
- */
+	initialMessage = gestionOptions(
+		initialMessage[0].join("\n"),
+		initialMessage[1]
+	);
 	createChatMessage(initialMessage, false);
 }
