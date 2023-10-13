@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function createChatBot(chatData) {
 	const chatbotName = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
 
@@ -158,4 +158,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Envoi du message d'accueil du chatbot
 	createChatMessage(initialMessage, false);
-});
+}
