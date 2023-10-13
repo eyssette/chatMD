@@ -12,9 +12,9 @@ let md = `# ChatMD
 let chatData;
 
 function getMarkdownContent() {
-	const url = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
-	if (url !== "") {
-		fetch(url)
+	const urlMD = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
+	if (urlMD !== "") {
+		fetch(urlMD)
 			.then((response) => response.text())
 			.then((data) => {
 				md = data;
@@ -47,37 +47,37 @@ function parseMarkdown(markdownContent) {
 		if (line.startsWith("# ")) {
 			chatbotTitle[0] = line.replace("# ", "").trim();
 		} else if (line.startsWith("> ") && !initialMessageComputed) {
-				initialMessage.push(line.replace("> " ,"").trim());
-			} else if (line.startsWith("## ")) {
-				initialMessageComputed = true;
-				if (currentH2Title) {
-					chatbotData.push([
-						currentH2Title,
-						currentLiItems,
-						content,
-						lastOrderedList,
-					]);
-				}
-				currentH2Title = line.replace("## ", "").trim(); // Titre h2
-				currentLiItems = [];
-				lastOrderedList = null;
-				listParsed = false;
-				content = [];
-			} else if (line.startsWith("- ") && !listParsed) {
-				currentLiItems.push(line.replace("- ", "").trim());
-			} else if (line.match(regexOrderedList)) {
-				listParsed = false;
-				if (!lastOrderedList) {
-					lastOrderedList = [];
-				}
-				const listContent = line.replace(/^\d+\.\s/, "").trim()
-				const link = listContent.replace(/^\[.*?\]\(/,'').replace(/\)$/,'')
-				const text = listContent.replace(/\]\(.*/,'').replace(/^\[/,'')
-				lastOrderedList.push([text,link]);
-				/* lastOrderedList.push(listContent); */
-			} else if (line.length > 0) {
-				content.push(line);
-				listParsed = true;
+			initialMessage.push(line.replace("> ", "").trim());
+		} else if (line.startsWith("## ")) {
+			initialMessageComputed = true;
+			if (currentH2Title) {
+				chatbotData.push([
+					currentH2Title,
+					currentLiItems,
+					content,
+					lastOrderedList,
+				]);
+			}
+			currentH2Title = line.replace("## ", "").trim(); // Titre h2
+			currentLiItems = [];
+			lastOrderedList = null;
+			listParsed = false;
+			content = [];
+		} else if (line.startsWith("- ") && !listParsed) {
+			currentLiItems.push(line.replace("- ", "").trim());
+		} else if (line.match(regexOrderedList)) {
+			listParsed = false;
+			if (!lastOrderedList) {
+				lastOrderedList = [];
+			}
+			const listContent = line.replace(/^\d+\.\s/, "").trim();
+			const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
+			lastOrderedList.push([text, link]);
+			/* lastOrderedList.push(listContent); */
+		} else if (line.length > 0) {
+			content.push(line);
+			listParsed = true;
 		}
 	}
 	chatbotData.push([
@@ -86,8 +86,8 @@ function parseMarkdown(markdownContent) {
 		content.join("\n"),
 		lastOrderedList,
 	]);
-	chatbotData.push(initialMessage.join('\n'));
-	chatbotData.push(chatbotTitle)
+	chatbotData.push(initialMessage.join("\n"));
+	chatbotData.push(chatbotTitle);
 
 	return chatbotData;
 }
