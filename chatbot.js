@@ -164,6 +164,7 @@ function createChatBot(chatData) {
 				chatbotResponse(userInputText);
 			}, 100);
 			userInput.innerText = "";
+			window.scrollTo(0, document.body.scrollHeight);
 		}
 	});
 
@@ -205,6 +206,7 @@ function createChatBot(chatData) {
 			} else {
 				createChatMessage(initialMessage, false)
 			}
+			window.scrollTo(0, document.body.scrollHeight);
 		}
 	});
 
