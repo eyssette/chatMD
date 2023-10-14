@@ -162,9 +162,9 @@ function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
+				window.scrollTo(0, document.body.scrollHeight);
 			}, 100);
 			userInput.innerText = "";
-			window.scrollTo(0, document.body.scrollHeight);
 		}
 	});
 
