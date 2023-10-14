@@ -225,4 +225,5 @@ function createChatBot(chatData) {
 		initialMessage[1]
 	);
 	createChatMessage(initialMessage, false);
+	initialMessage = initialMessage.replace(/<span class=\"unique\">.*?\<\/span>/,'');
 }
