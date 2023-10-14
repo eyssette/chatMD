@@ -71,8 +71,15 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 let chatData;
 
 function getMarkdownContent() {
-	const urlMD = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
+	let urlMD = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
 	if (urlMD !== "") {
+		if (urlMD.startsWith('https://github.com')) {
+			urlMD = urlMD.replace('https://github.com', 'https://raw.githubusercontent.com');
+				urlMD = urlMD.replace('/blob/', '/');
+			}
+			if (urlMD.startsWith('https://codimd') && urlMD.indexOf('download')=== -1 ) {
+				urlMD = urlMD.replace('?edit','').replace('?both','').replace('?view','')+'/download';
+			}
 		fetch(urlMD)
 			.then((response) => response.text())
 			.then((data) => {
