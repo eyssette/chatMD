@@ -83,7 +83,7 @@ main {
 	width: 100%;
 	text-align: left;
 	padding: 5px;
-	height:1em;
+	height: 1em;
 }
 
 .placeholder {
@@ -120,7 +120,7 @@ main {
 }
 
 .user-message p {
-	margin:0px 5px;
+	margin: 0px 5px;
 }
 
 .bot-message {
@@ -131,7 +131,7 @@ main {
 	/* box-shadow: rgba(0, 0, 0, 0.12) 0px 0.3px 0.9px, rgba(0, 0, 0, 0.16) 0px 1.6px 3.6px; */
 }
 
-.bot-message span >:first-child:before {
+.bot-message span > :first-child:before {
 	content: "🗣️";
 	margin-right: 10px;
 	font-size: 2em;
@@ -154,17 +154,21 @@ footer a {
 	text-decoration: none;
 }
 
-
 .Typewriter__cursor {
-	display:none;
+	display: none;
 }
 
 #chat img {
-	display:block;
-	margin:1em;
+	display: block;
+	margin: 1em;
 }
 
-#chat li, #chat li p {
-	margin-top:0.25em;
-	margin-bottom:0.25em;
+#chat li,
+#chat li p {
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+
+.message:not(:first-of-type) .unique {
+	display: none !important;
 }
