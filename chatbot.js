@@ -8,7 +8,7 @@ function createChatBot(chatData) {
 	const sendButton = document.getElementById("send-button");
 
 	// Gestion du markdown dans les réponses du chatbot
-	var converter = new showdown.Converter();
+	var converter = new showdown.Converter({emoji: true, parseImgDimensions: true});
 	function markdownToHTML(text) {
 		const html = converter.makeHtml(text);
 		return html;
