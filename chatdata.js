@@ -31,6 +31,7 @@ Une forge est un outil plus complet qui permet d'héberger des fichiers texte et
 
 ## Syntaxe
 - syntaxe
+- règles
 
 La syntaxe pour écrire un chatbot avec chatMD est la suivante : [voir un exemple](#Exemple)
 
@@ -57,11 +58,14 @@ Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk
 ## Merci
 - merci
 - remercier
-- félicitation
+- remercie
+- félicitations
+- félicit
 - bravo
 - super
 - excellent
 - génial
+- wow
 
 Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.github.io).
 
