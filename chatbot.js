@@ -7,8 +7,13 @@ function createChatBot(chatData) {
 	const userInput = document.getElementById("user-input");
 	const sendButton = document.getElementById("send-button");
 
+	let optionsLastResponse = null;
+
 	// Gestion du markdown dans les réponses du chatbot
-	var converter = new showdown.Converter({emoji: true, parseImgDimensions: true});
+	var converter = new showdown.Converter({
+		emoji: true,
+		parseImgDimensions: true,
+	});
 	function markdownToHTML(text) {
 		const html = converter.makeHtml(text);
 		return html;
@@ -75,67 +80,103 @@ function createChatBot(chatData) {
 	const LEVENSHTEIN_THRESHOLD = 5; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
 
+	function messageFromSelectedOption(optionLink) {
+		if (optionLink != "") {
+			for (let i = 0; i < chatData.length; i++) {
+				const title = chatData[i][0];
+				if (optionLink == title) {
+					let response = chatData[i][2];
+					const options = chatData[i][3];
+					response = Array.isArray(response) ? response.join("\n\n") : response;
+					optionsLastResponse = options;
+					response = gestionOptions(response, options);
+					createChatMessage(response, false);
+				}
+			}
+		} else {
+			createChatMessage(initialMessage, false);
+		}
+	}
+
 	function chatbotResponse(userInputText) {
 		let bestMatch = null;
 		let bestMatchScore = 0;
 		let bestDistanceScore = 0;
 		let userInputTextToLowerCase = userInputText.toLowerCase();
 		let indexBestMatch;
-
-		for (let i = 0; i < chatData.length; i++) {
-			/* On teste l'identité ou la similarité entre les mots ou expressions clés et le message envoyé */
-			const keywords = chatData[i][1];
-			const responses = chatData[i][2];
-			let matchScore = 0;
-			let distanceScore = 0;
-			let distance = 0;
-			for (let keyword of keywords) {
-				let keywordToLowerCase = keyword.toLowerCase();
-				if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
-					// Test de l'identité stricte
-					// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
-					matchScore = matchScore + MATCH_SCORE_IDENTITY;
-				} else {
-					// Sinon : test de la similarité
-					distance = levenshteinDistance(
-						keywordToLowerCase,
-						userInputTextToLowerCase
-					);
-					if (distance < LEVENSHTEIN_THRESHOLD) {
-						distanceScore++;
-					}
+		let optionsLastResponseKeysToLowerCase;
+		let indexLastResponseKeyMatch;
+		if (optionsLastResponse) {
+			optionsLastResponseKeysToLowerCase = optionsLastResponse.map(
+				(element) => {
+					return element[0].toLowerCase();
 				}
-			}
-			if (matchScore == 0) {
-				// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement
-				if (distanceScore > bestDistanceScore) {
-					matchScore++;
-					bestDistanceScore = distanceScore;
-				}
-			}
-			if (matchScore > bestMatchScore) {
-				bestMatch = responses;
-				bestMatchScore = matchScore;
-				indexBestMatch = i;
-			}
+			);
+			indexLastResponseKeyMatch = optionsLastResponseKeysToLowerCase.indexOf(
+				userInputTextToLowerCase
+			);
 		}
 
-		if (bestMatch) {
-			// On envoie le meilleur choix s'il en existe un
-			let response = Array.isArray(bestMatch)
-				? bestMatch.join("\n\n")
-				: bestMatch;
-			const options = chatData[indexBestMatch][3];
-			response = gestionOptions(response, options);
-			createChatMessage(response, false);
+		if (optionsLastResponse && indexLastResponseKeyMatch > -1) {
+			const optionLink = optionsLastResponse[indexLastResponseKeyMatch][1];
+			messageFromSelectedOption(optionLink);
 		} else {
-			// En cas de correspondance non trouvée, on envoie le message par défaut
-			createChatMessage(defaultMessage, false);
+			for (let i = 0; i < chatData.length; i++) {
+				/* On teste l'identité ou la similarité entre les mots ou expressions clés et le message envoyé */
+				const keywords = chatData[i][1];
+				const responses = chatData[i][2];
+				let matchScore = 0;
+				let distanceScore = 0;
+				let distance = 0;
+				for (let keyword of keywords) {
+					let keywordToLowerCase = keyword.toLowerCase();
+					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
+						// Test de l'identité stricte
+						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
+						matchScore = matchScore + MATCH_SCORE_IDENTITY;
+					} else {
+						// Sinon : test de la similarité
+						distance = levenshteinDistance(
+							keywordToLowerCase,
+							userInputTextToLowerCase
+						);
+						if (distance < LEVENSHTEIN_THRESHOLD) {
+							distanceScore++;
+						}
+					}
+				}
+				if (matchScore == 0) {
+					// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement
+					if (distanceScore > bestDistanceScore) {
+						matchScore++;
+						bestDistanceScore = distanceScore;
+					}
+				}
+				if (matchScore > bestMatchScore) {
+					bestMatch = responses;
+					bestMatchScore = matchScore;
+					indexBestMatch = i;
+				}
+			}
+
+			if (bestMatch) {
+				// On envoie le meilleur choix s'il en existe un
+				let response = Array.isArray(bestMatch)
+					? bestMatch.join("\n\n")
+					: bestMatch;
+				const options = chatData[indexBestMatch][3];
+				response = gestionOptions(response, options);
+				createChatMessage(response, false);
+			} else {
+				// En cas de correspondance non trouvée, on envoie le message par défaut
+				createChatMessage(defaultMessage, false);
+			}
 		}
 	}
 
 	function gestionOptions(response, options) {
 		if (options) {
+			optionsLastResponse = options;
 			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
 			let messageOptions = "\n";
 			for (let i = 0; i < options.length; i++) {
@@ -151,6 +192,8 @@ function createChatBot(chatData) {
 					"</a>\n";
 			}
 			response = response + messageOptions;
+		} else {
+			optionsLastResponse = null;
 		}
 		return response;
 	}
@@ -198,22 +241,7 @@ function createChatBot(chatData) {
 				event.preventDefault();
 				createChatMessage(target.innerText, true);
 				const optionLink = link.substring(1);
-				if (optionLink != "") {
-					for (let i = 0; i < chatData.length; i++) {
-						const title = chatData[i][0];
-						if (optionLink == title) {
-							let response = chatData[i][2];
-							const options = chatData[i][3];
-							response = Array.isArray(response)
-								? response.join("\n\n")
-								: response;
-							response = gestionOptions(response, options);
-							createChatMessage(response, false);
-						}
-					}
-				} else {
-					createChatMessage(initialMessage, false);
-				}
+				messageFromSelectedOption(optionLink);
 				window.scrollTo(0, document.body.scrollHeight);
 			}
 		}
@@ -225,5 +253,8 @@ function createChatBot(chatData) {
 		initialMessage[1]
 	);
 	createChatMessage(initialMessage, false);
-	initialMessage = initialMessage.replace(/<span class=\"unique\">.*?\<\/span>/,'');
+	initialMessage = initialMessage.replace(
+		/<span class=\"unique\">.*?\<\/span>/,
+		""
+	);
 }
