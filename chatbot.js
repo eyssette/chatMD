@@ -81,6 +81,7 @@ function createChatBot(chatData) {
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
 
 	function messageFromSelectedOption(optionLink) {
+		// Gestion du message à envoyer si on sélectionne une des options proposées
 		if (optionLink != "") {
 			for (let i = 0; i < chatData.length; i++) {
 				const title = chatData[i][0];
@@ -104,9 +105,11 @@ function createChatBot(chatData) {
 		let bestDistanceScore = 0;
 		let userInputTextToLowerCase = userInputText.toLowerCase();
 		let indexBestMatch;
+
 		let optionsLastResponseKeysToLowerCase;
 		let indexLastResponseKeyMatch;
 		if (optionsLastResponse) {
+			// On va comparer le message de l'utilisateur aux dernières options proposées si il y en a une
 			optionsLastResponseKeysToLowerCase = optionsLastResponse.map(
 				(element) => {
 					return element[0].toLowerCase();
@@ -118,11 +121,12 @@ function createChatBot(chatData) {
 		}
 
 		if (optionsLastResponse && indexLastResponseKeyMatch > -1) {
+			// Si le message de l'utilisateur correspond à une des options proposées, on renvoie directement vers cette option
 			const optionLink = optionsLastResponse[indexLastResponseKeyMatch][1];
 			messageFromSelectedOption(optionLink);
 		} else {
+			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
 			for (let i = 0; i < chatData.length; i++) {
-				/* On teste l'identité ou la similarité entre les mots ou expressions clés et le message envoyé */
 				const keywords = chatData[i][1];
 				const responses = chatData[i][2];
 				let matchScore = 0;
@@ -232,12 +236,15 @@ function createChatBot(chatData) {
 	chatContainer.addEventListener("click", function (event) {
 		const target = event.target;
 		if (target.tagName === "A") {
+			// Gestion du cas où on clique sur un lien
 			const currentUrl = window.location.href;
 			const link = target.getAttribute("href");
 			if (link.startsWith(currentUrl)) {
+				// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
 				window.open(link);
 			}
 			if (link.startsWith("#")) {
+				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
 				createChatMessage(target.innerText, true);
 				const optionLink = link.substring(1);
@@ -256,5 +263,5 @@ function createChatBot(chatData) {
 	initialMessage = initialMessage.replace(
 		/<span class=\"unique\">.*?\<\/span>/,
 		""
-	);
+	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois 
 }
