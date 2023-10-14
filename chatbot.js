@@ -162,9 +162,9 @@ function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
+				window.scrollTo(0, document.body.scrollHeight);
 			}, 100);
 			userInput.innerText = "";
-			window.scrollTo(0, document.body.scrollHeight);
 		}
 	});
 
@@ -189,7 +189,11 @@ function createChatBot(chatData) {
 	chatContainer.addEventListener("click", function (event) {
 		const target = event.target;
 		if (target.tagName === "A") {
+			const currentUrl = window.location.href;
 			const link = target.getAttribute("href");
+			if (link.startsWith(currentUrl)) {
+				window.open(link);
+			}
 			if (link.startsWith("#")) {
 				event.preventDefault();
 				createChatMessage(target.innerText, true);
