@@ -9,7 +9,7 @@ const defaultMessage =  [
 "Je m'excuse, mais je ne parviens pas à saisir votre demande. Pouvez-vous reformuler votre question, s'il vous plaît ?",
 "Je ne suis pas sûr de comprendre ce que vous demandez. Pouvez-vous expliquer davantage ?",
 "Je ne peux pas répondre à votre question telle qu'elle est formulée. Pouvez-vous la poser différemment ?",
-"Votre question ne semble pas correspondre à mes capacités. actuelles. Pourriez-vous la reformuler autrement ?",
+"Votre question ne semble pas correspondre à mes capacités actuelles. Pourriez-vous la reformuler autrement ?",
 "Je n'ai malheureusement pas compris votre requête.",
 "Je suis désolé, je ne suis pas capable de répondre.",
 "Malheureusement, je ne peux pas répondre à votre question.",
