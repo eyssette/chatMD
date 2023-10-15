@@ -86,15 +86,15 @@ Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk
 - en faire
 
 On peut imaginer plusieurs usages de chatMD :
-- tutoriel pour un outil informatique
-- histoire dont vous êtes le héros
-- guide méthodologique
-- soutien pour la révision d'un cours
+- Tutoriel pour un outil informatique
+- Histoire dont vous êtes le héros
+- Guide méthodologique
+- Soutien pour la révision d'un cours
 …
 
 On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
 
-Si vous avez trouvez des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
+Si vous avez trouvé des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
 
 ## Merci
 - merci
