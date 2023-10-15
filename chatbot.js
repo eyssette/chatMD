@@ -22,8 +22,6 @@ function createChatBot(chatData) {
 	}
 
 	function typeWriter(content, element) {
-		/* userInput.blur(); */
-		/* userInput.setAttribute("contenteditable", false); */
 		var typewriter = new Typewriter(element, {
 			loop: false,
 			delay: 10,
@@ -32,8 +30,7 @@ function createChatBot(chatData) {
 			.typeString(content)
 			.start()
 			.callFunction(() => {
-				/* userInput.setAttribute("contenteditable", true); */
-				/* userInput.focus(); */
+				userInput.focus();
 			});
 	}
 
