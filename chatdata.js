@@ -4,28 +4,28 @@ let md = `# ChatMD
 
 > Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même en Markdown :
 > 
-> - Créez un fichier en markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
+> - Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
 > - Respectez la syntaxe de ChatMD pour définir votre chatbot
 > 
 > Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.github.io/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
 > 
-> 1. [Qu'est-ce que le markdown ?](Markdown)
+> 1. [Qu'est-ce que le Markdown ?](Markdown)
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
 > 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
 > 4. [Tu peux me donner un exemple !](Exemple)
 
 ## Markdown
 - markdown
-Le markdown est un format de balisage très léger qui permet d'écrire rapidement du texte formaté.
+Le Markdown est un format de balisage très léger qui permet d'écrire rapidement du texte formaté.
 
-Pour découvrir le Markown, vous pouvez suivre ce [tutoriel](https://www.markdowntutorial.com/fr/).
+Pour découvrir le Markdown, vous pouvez suivre ce [tutoriel](https://www.markdowntutorial.com/fr/).
 
 ## CodiMD et forge
 - codimd
 - forge
 - en ligne
 
-[CodiMD](https://codimd.apps.education.fr/) est un outil pour écrire du markdown en ligne et il est disponible avec vos identifiants académiques sur le [portail Apps Edu](https://portail.apps.education.fr/).
+[CodiMD](https://codimd.apps.education.fr/) est un outil pour écrire du Markdown en ligne et il est disponible avec vos identifiants académiques sur le [portail Apps Edu](https://portail.apps.education.fr/).
 
 Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.aeif.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
 
