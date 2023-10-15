@@ -9,7 +9,7 @@ function createChatBot(chatData) {
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(Math.random() * defaultMessage.length);
-	let randomDefaultMessageIndexLastChoice = 0;
+	let randomDefaultMessageIndexLastChoice = [];
 
 	// Gestion du markdown dans les réponses du chatbot
 	var converter = new showdown.Converter({
@@ -175,10 +175,13 @@ function createChatBot(chatData) {
 				createChatMessage(response, false);
 			} else {
 				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
-				while (randomDefaultMessageIndex == randomDefaultMessageIndexLastChoice) {
+				while (randomDefaultMessageIndexLastChoice.includes(randomDefaultMessageIndex)) {
 					randomDefaultMessageIndex = Math.floor(Math.random() * defaultMessage.length);
 				}
-					randomDefaultMessageIndexLastChoice = randomDefaultMessageIndex;
+					if (randomDefaultMessageIndexLastChoice.length > 4) {
+						randomDefaultMessageIndexLastChoice.shift();
+					}
+					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
 					createChatMessage(defaultMessage[randomDefaultMessageIndex], false);
 			}
 		}
