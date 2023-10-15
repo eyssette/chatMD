@@ -84,6 +84,10 @@ Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk
 - objectif
 - but
 - en faire
+- tutoriel
+- histoire
+- méthod
+- révision
 
 On peut imaginer plusieurs usages de chatMD :
 - Tutoriel pour un outil informatique
