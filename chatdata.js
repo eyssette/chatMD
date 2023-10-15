@@ -7,7 +7,7 @@ let md = `# ChatMD
 > - Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
 > - Respectez la syntaxe de ChatMD pour définir votre chatbot
 > 
-> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.github.io/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.forge.aeif.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
 > 
 > 1. [Qu'est-ce que le Markdown ?](Markdown)
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
