@@ -157,7 +157,7 @@ function parseMarkdown(markdownContent) {
 	let currentLiItems = [];
 	let content = [];
 	let lastOrderedList = null;
-	const regexOrderedList = /^\d{1,3}\.\s/;
+	const regexOrderedList = /^\d{1,3}\.\s\[/;
 	let listParsed = false;
 	let initialMessageContent = [];
 	let initialMessageOptions = [];
@@ -204,7 +204,7 @@ function parseMarkdown(markdownContent) {
 			lastOrderedList.push([text, link]);
 			/* lastOrderedList.push(listContent); */
 		} else if (line.length > 0) {
-			content.push(line);
+			content.push(line+'\n');
 			listParsed = true;
 		}
 	}
