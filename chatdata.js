@@ -7,7 +7,7 @@ let md = `# ChatMD
 > - Créez un fichier en markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
 > - Respectez la syntaxe de ChatMD pour définir votre chatbot
 > 
-> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.github.io/chatMD/#URL](https://eyssette.github.io/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.github.io/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
 > 
 > 1. [Qu'est-ce que le markdown ?](Markdown)
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
@@ -27,7 +27,7 @@ Pour découvrir le Markown, vous pouvez suivre ce [tutoriel](https://www.markdow
 
 [CodiMD](https://codimd.apps.education.fr/) est un outil pour écrire du markdown en ligne et il est disponible avec vos identifiants académiques sur le [portail Apps Edu](https://portail.apps.education.fr/).
 
-Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques](https://forge.aeif.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
+Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.aeif.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
 
 ## Syntaxe
 - syntaxe
@@ -51,7 +51,7 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante : [voir un exempl
 
 Voici un exemple de chatbot qui a été créé avec ChatMD à partir du travail de Guillaume Berthelot et de Jérémy Navoizat : 
 
-- [Utilisation d'un microscope](https://eyssette.github.io/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g/download).
+- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g).
 
 Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both) pour mieux comprendre
 
