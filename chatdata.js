@@ -4,7 +4,7 @@ const defaultMessage =  [
 "Excusez-moi, je ne parviens pas à comprendre ce que vous demandez.",
 "Je suis navré, mais je ne parviens pas à saisir votre question.",
 "Malheureusement, je ne suis pas en mesure de comprendre votre question.",
-"Je suis désolé, mais je ne peux pas saisir votre question.",
+"Je suis désolé, mais je ne saisis pas votre question.",
 "Pardonnez-moi, mais je ne saisis pas le sens de votre question.",
 "Je m'excuse, mais je ne parviens pas à saisir votre demande. Pouvez-vous reformuler votre question, s'il vous plaît ?",
 "Je ne suis pas sûr de comprendre ce que vous demandez. Pouvez-vous expliquer davantage ?",
@@ -14,7 +14,7 @@ const defaultMessage =  [
 "Je suis désolé, je ne suis pas capable de répondre.",
 "Malheureusement, je ne peux pas répondre à votre question.",
 "Malheureusement je n'arrive pas à comprendre votre requête.",
-"Excusez-moi, je ne comprends pas votre requête?",
+"Excusez-moi, je ne comprends pas votre requête.",
 "Excusez-moi, je n'arrive pas à répondre à votre question.",
 "Je ne parviens pas à répondre à votre requête. Veuillez m'excuser."
 ]
