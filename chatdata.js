@@ -32,6 +32,7 @@ let md = `# ChatMD
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
 > 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
 > 4. [Tu peux me donner un exemple !](Exemple)
+> 5. [À quoi ça sert ?](À quoi ça sert ?)
 
 ## Markdown
 - markdown
@@ -51,6 +52,7 @@ Une forge est un outil plus complet qui permet d'héberger des fichiers texte et
 ## Syntaxe
 - syntaxe
 - règles
+- comment
 
 La syntaxe pour écrire un chatbot avec chatMD est la suivante : [voir un exemple](#Exemple)
 
@@ -74,6 +76,26 @@ Voici un exemple de chatbot qui a été créé avec ChatMD à partir du travail 
 
 Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both) pour mieux comprendre
 
+## À quoi ça sert ?
+- pourquoi
+- sert
+- intérêt
+- servir
+- objectif
+- but
+- en faire
+
+On peut imaginer plusieurs usages de chatMD :
+- tutoriel pour un outil informatique
+- histoire dont vous êtes le héros
+- guide méthodologique
+- soutien pour la révision d'un cours
+…
+
+On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
+
+Si vous avez trouvez des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
+
 ## Merci
 - merci
 - remercier
@@ -85,6 +107,8 @@ Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk
 - excellent
 - génial
 - wow
+- chouette
+- sympa
 
 Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.github.io).
 
