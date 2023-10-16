@@ -179,12 +179,11 @@ function parseMarkdown(markdownContent) {
 		if (line.startsWith("# ")) {
 			// Récupération du titre du chatbot
 			chatbotTitle[0] = line.replace("# ", "").trim();
-		} else if (line.startsWith("> ") && !initialMessageComputed) {
+		} else if (line.startsWith(">") && !initialMessageComputed) {
 			// Récupération du message initial du chatbot, défini par un bloc citation
-			line = line.replace(/^> /, "").trim();
+			line = line.replace(/^>\s?/, "").trim();
 			if (line.match(regexOrderedList)) {
 				// Récupération des options dans le message initial, s'il y en a
-				line = line.replace(/^> /, "").trim();
 				const listContent = line.replace(/^\d+\.\s/, "").trim();
 				const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 				const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
