@@ -94,7 +94,7 @@ On peut imaginer plusieurs usages de chatMD :
 - Histoire dont vous êtes le héros
 - Guide méthodologique
 - Soutien pour la révision d'un cours
-…
+- …
 
 On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
 
