@@ -31,7 +31,7 @@ let md = `# ChatMD
 > 1. [Qu'est-ce que le Markdown ?](Markdown)
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
 > 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
-> 4. [Tu peux me donner un exemple !](Exemple)
+> 4. [Tu peux me donner des exemples !](Exemples)
 > 5. [À quoi ça sert ?](À quoi ça sert ?)
 
 ## Markdown
@@ -54,7 +54,7 @@ Une forge est un outil plus complet qui permet d'héberger des fichiers texte et
 - règles
 - comment
 
-La syntaxe pour écrire un chatbot avec chatMD est la suivante : [voir un exemple](#Exemple)
+La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-être plus simple de [voir des exemples](#Exemples) ou bien de [récupérer un modèle](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both).
 
 - On définit le titre du chatbot dans un titre de niveau 1
 - Le message initial est à mettre dans un bloc de citation après le titre du chatbot
@@ -64,11 +64,13 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante : [voir un exempl
 	- On écrit une réponse en Markdown.
 	- [Optionnel] On indique avec une liste ordonnée les options possibles. Chaque élément de la liste doit être un lien en Mardown de la forme suivante : \`[intitulé de l'option](identifiant de l'option, qui doit correspondre à l'un des titres de niveau 2)\`.
 
-## Exemple
+## Exemples
 - exemple
 - donner un exemple
 - concret
 - concrètement
+
+Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
 
 Voici un exemple de chatbot qui a été créé avec ChatMD à partir du travail de Guillaume Berthelot et de Jérémy Navoizat : 
 
