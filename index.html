@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<title>ChatMD</title>
+		<meta
+			name="description"
+			content="ChatMD est un chatbot que l'on peut facilement configurer par soi-même en Markdown. C'est un outil libre et gratuit créé par Cédric Eyssette." />
+		<meta name="author" content="Cédric Eyssette" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="styles.css" />
+	</head>
 
-<head>
-	<meta charset="utf-8">
-	<title>ChatMD</title>
-	<meta name="description" content="ChatMD est un chatbot que l'on peut facilement configurer par soi-même en Markdown. C'est un outil libre et gratuit créé par Cédric Eyssette.">
-	<meta name="author" content="Cédric Eyssette" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-	<h1 id="chatbot-name">Chatbot</h1>
-	<main>
-		<div id="chat" class="chat-container">
-			<!-- La conversation sera affichée ici -->
-		</div>
-		<div id="controls">
-			<div id="input-container">
-				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0"></div>
+	<body>
+		<h1 id="chatbot-name">Chatbot</h1>
+		<main>
+			<div id="chat" class="chat-container">
+				<!-- La conversation sera affichée ici -->
 			</div>
-			<button id="send-button">Envoyer</button>
-		</div>
-	</main>
-	<footer>Outil libre et gratuit, créé par <a href="http://eyssette.github.io/">Cédric Eyssette</a></footer>
-	<script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-	<script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
-	<script src="chatbot.js"></script>
-	<script src="chatdata.js"></script>
-</body>
-
+			<div id="controls">
+				<div id="input-container">
+					<div
+						id="user-input"
+						contenteditable="true"
+						placeholder="Écrivez votre message"
+						tabindex="0"></div>
+				</div>
+				<button id="send-button">Envoyer</button>
+			</div>
+		</main>
+		<footer>
+			Outil libre et gratuit, créé par
+			<a href="http://eyssette.github.io/">Cédric Eyssette</a>
+		</footer>
+		<script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+		<script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+		<script src="chatbot.js"></script>
+		<script src="chatdata.js"></script>
+	</body>
 </html>

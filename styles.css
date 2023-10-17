@@ -169,18 +169,18 @@ footer a {
 	margin-bottom: 0.25em;
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width: 500px) {
 	main {
-		width: initial!important;
-		max-width: initial!important;
+		width: initial !important;
+		max-width: initial !important;
 	}
 	#chat {
-		padding: 5px!important;
+		padding: 5px !important;
 	}
 	.message {
-		padding:5px!important;
+		padding: 5px !important;
 	}
 	.bot-message {
-		width: 90%!important;
+		width: 90% !important;
 	}
 }

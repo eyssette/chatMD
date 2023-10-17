@@ -7,7 +7,9 @@ function createChatBot(chatData) {
 	const userInput = document.getElementById("user-input");
 	const sendButton = document.getElementById("send-button");
 	let optionsLastResponse = null;
-	let randomDefaultMessageIndex = Math.floor(Math.random() * defaultMessage.length);
+	let randomDefaultMessageIndex = Math.floor(
+		Math.random() * defaultMessage.length
+	);
 	let randomDefaultMessageIndexLastChoice = [];
 
 	// Gestion du markdown dans les réponses du chatbot
@@ -139,7 +141,7 @@ function createChatBot(chatData) {
 						// Test de l'identité stricte
 						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 						matchScore = matchScore + MATCH_SCORE_IDENTITY;
-					} else if (userInputTextToLowerCase.length>4) {
+					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 						distance = levenshteinDistance(
 							keywordToLowerCase,
@@ -175,14 +177,20 @@ function createChatBot(chatData) {
 			} else {
 				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
 				// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
-				while (randomDefaultMessageIndexLastChoice.includes(randomDefaultMessageIndex)) {
-					randomDefaultMessageIndex = Math.floor(Math.random() * defaultMessage.length);
+				while (
+					randomDefaultMessageIndexLastChoice.includes(
+						randomDefaultMessageIndex
+					)
+				) {
+					randomDefaultMessageIndex = Math.floor(
+						Math.random() * defaultMessage.length
+					);
 				}
-					if (randomDefaultMessageIndexLastChoice.length > 4) {
-						randomDefaultMessageIndexLastChoice.shift();
-					}
-					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-					createChatMessage(defaultMessage[randomDefaultMessageIndex], false);
+				if (randomDefaultMessageIndexLastChoice.length > 4) {
+					randomDefaultMessageIndexLastChoice.shift();
+				}
+				randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
+				createChatMessage(defaultMessage[randomDefaultMessageIndex], false);
 			}
 		}
 	}
@@ -272,5 +280,5 @@ function createChatBot(chatData) {
 	initialMessage = initialMessage.replace(
 		/<span class=\"unique\">.*?\<\/span>/,
 		""
-	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois 
+	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }
