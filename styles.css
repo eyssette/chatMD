@@ -168,3 +168,16 @@ footer a {
 	margin-top: 0.25em;
 	margin-bottom: 0.25em;
 }
+
+@media only screen and (max-width:500px) {
+	body {
+		font-size: 2.5em;
+	}
+
+	main {
+		margin-left: 10px;
+		margin-right: 10px;
+		width: initial;
+		max-width: initial;
+	}
+}
