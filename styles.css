@@ -170,13 +170,17 @@ footer a {
 }
 
 @media screen and (max-width:500px) {
-	body {
-		font-size: 2.5em!important;
-	}
 	main {
-		margin-left: 10px!important;
-		margin-right: 10px!important;
 		width: initial!important;
 		max-width: initial!important;
+	}
+	#chat {
+		padding: 5px!important;
+	}
+	.message {
+		padding:5px!important;
+	}
+	.bot-message {
+		width: 90%!important;
 	}
 }
