@@ -170,6 +170,9 @@ footer a {
 }
 
 @media screen and (max-width: 500px) {
+	body {
+		font-size:1.05em!important;
+	}
 	main {
 		width: initial !important;
 		max-width: initial !important;
@@ -182,5 +185,11 @@ footer a {
 	}
 	.bot-message {
 		width: 90% !important;
+	}
+	ul {
+		padding-left:30px!important;
+	}
+	ul ul {
+		padding-left:25px!important;
 	}
 }
