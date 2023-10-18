@@ -64,6 +64,20 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-
 	- On écrit une réponse en Markdown.
 	- [Optionnel] On indique avec une liste ordonnée les options possibles. Chaque élément de la liste doit être un lien en Mardown de la forme suivante : \`[intitulé de l'option](identifiant de l'option, qui doit correspondre à l'un des titres de niveau 2)\`.
 
+1. [Voir aussi les options de configuration plus avancées](Options de configuration)
+
+## Options de configuration
+- yaml
+- en-tête
+
+On peut ajouter un en-tête yaml à son fichier Markdown :
+
+- \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
+- \`rechercheContenu: true\` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
+- \`style\` permet d'ajouter des styles CSS personnalisés.
+\`\`\`
+
+
 ## Exemples
 - exemple
 - donner un exemple
