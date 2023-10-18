@@ -174,6 +174,10 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == 'userInput' || property == 'clavier' || property == 'keyboard') {
 					yamlUserInput = yamlData[property];
+					if(yamlUserInput === false) {
+						const controls = document.getElementById("controls");
+						controls.style.display = "none";
+					}
 				}
 				if (property == 'searchInContent' || property == 'rechercheContenu' ) {
 					yamlSearchInContent = yamlData[property];
