@@ -158,7 +158,8 @@ function createChatBot(chatData) {
 	if (yamlSearchInContent) {
 		for (let i = 0; i < chatData.length; i++) {
 			const responses = chatData[i][2];
-			const response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
+			let response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
+			response = chatData[i][0] + ' ' + response
 			vectorChatBotResponses.push(createVector(response))
 		}
 	}
