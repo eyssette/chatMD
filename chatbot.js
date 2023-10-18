@@ -294,19 +294,21 @@ function createChatBot(chatData) {
 		if (options) {
 			optionsLastResponse = options;
 			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
-			let messageOptions = "\n";
+			let messageOptions = "\n<ul>";
 			for (let i = 0; i < options.length; i++) {
 				const option = options[i];
 				const optionText = option[0];
 				const optionLink = option[1];
 				messageOptions =
 					messageOptions +
-					'- <a href="#' +
+					'<li><a href="#' +
 					optionLink +
 					'">' +
 					optionText +
-					"</a>\n";
+					"</a></li>\n";
 			}
+			messageOptions =
+					messageOptions + "</ul>"
 			response = response + messageOptions;
 		} else {
 			optionsLastResponse = null;
