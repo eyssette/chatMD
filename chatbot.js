@@ -101,8 +101,7 @@ function createChatBot(chatData) {
 		}
 	}
 
-	function cosineSimilarity(str1, str2) {
-		function tokenize(text) {
+	function tokenize(text) {
 		// Fonction pour diviser une chaîne de caractères en tokens
 		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; // On garde d'abord seulement les mots d'au moins 5 caractères
 		const tokens = [];
@@ -138,6 +137,19 @@ function createChatBot(chatData) {
 		}
 		return tokens;
 	}
+
+	function createVector(text) {
+		const tokens = tokenize(text);
+		const vec = {};
+		for (const {token, weight} of tokens) {
+			if (token) {
+				vec[token] = (vec[token] || 0) + weight;
+			}
+		}
+		return vec;
+	}
+
+	function cosineSimilarity(str, vector) {
 	
 		// Fonction pour calculer le produit scalaire de deux vecteurs
 		function dotProduct(vec1, vec2) {
@@ -158,29 +170,13 @@ function createChatBot(chatData) {
 			return Math.sqrt(sum);
 		}
 	
-		// Tokenize les deux chaînes
-		const tokens1 = tokenize(str1);
-		const tokens2 = tokenize(str2);
-		// Créez des vecteurs de fréquence de mots
-		const vec1 = {};
-		const vec2 = {};
-	
-		for (const {token, weight} of tokens1) {
-			if (token) {
-				vec1[token] = (vec1[token] || 0) + weight;
-			}
-		}
-	
-		for (const {token, weight} of tokens2) {
-			if (token) {
-				vec2[token] = (vec2[token] || 0) + weight;
-			}
-		}
+		// Crée les vecteurs pour les deux chaînes de caractère
+		const vec1 = createVector(str);
 
 		// Calculez la similarité cosinus
-		const dot = dotProduct(vec1, vec2);
+		const dot = dotProduct(vec1, vector);
 		const mag1 = magnitude(vec1);
-		const mag2 = magnitude(vec2);
+		const mag2 = magnitude(vector);
 	
 		if (mag1 === 0 || mag2 === 0) {
 			return 0; // Évitez la division par zéro
@@ -188,7 +184,14 @@ function createChatBot(chatData) {
 			return dot / (mag1 * mag2);
 		}
 	}
-	
+	let vectorChatBotResponses = [];
+	if (yamlSearchInContent) {
+		for (let i = 0; i < chatData.length; i++) {
+			const responses = chatData[i][2];
+			const response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
+			vectorChatBotResponses.push(createVector(response))
+		}
+	}
 
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
@@ -224,10 +227,8 @@ function createChatBot(chatData) {
 				let matchScore = 0;
 				let distanceScore = 0;
 				let distance = 0;
-				let response;
 				if (yamlSearchInContent) {
-						response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
-						const cosSim = cosineSimilarity(userInputTextToLowerCase,response);
+						const cosSim = cosineSimilarity(userInputTextToLowerCase,vectorChatBotResponses[i]);
 						matchScore = matchScore + cosSim;
 				}
 				for (let keyword of keywords) {
