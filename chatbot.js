@@ -103,16 +103,19 @@ function createChatBot(chatData) {
 
 	function tokenize(text) {
 		// Fonction pour diviser une chaîne de caractères en tokens
-		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; // On garde d'abord seulement les mots d'au moins 5 caractères
+
+		// On garde d'abord seulement les mots d'au moins 5 caractères
+		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; 
 		const tokens = [];
 
-		// On va créer des tokens avec à chaque fois un poids associés
+		// On va créer des tokens avec à chaque fois un poids associé
 		for (const word of words) {
 			// Premier type de token : le mot en entier ; poids le plus important
 			tokens.push({word, weight: 5});
 
 			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
 			// Plus le token est long, plus le poids du token est important
+			// Si le token correspond au début du mot, le poids est plus important
 			if (word.length >= 5) {
 				for (let i = 0; i <= word.length - 5; i++) {
 					const weight = i === 0 ? 0.6 : 0.4;
@@ -122,7 +125,7 @@ function createChatBot(chatData) {
 			}
 			if (word.length >= 6) {
 				for (let i = 0; i <= word.length - 6; i++) {
-					const weight = i === 0 ? 0.6 : 0.8;
+					const weight = i === 0 ? 0.8 : 0.6;
 					const token = word.substring(i, i + 6)
 					tokens.push({token,weight: weight});
 				}
@@ -139,6 +142,7 @@ function createChatBot(chatData) {
 	}
 
 	function createVector(text) {
+		// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token
 		const tokens = tokenize(text);
 		const vec = {};
 		for (const {token, weight} of tokens) {
@@ -149,9 +153,19 @@ function createChatBot(chatData) {
 		return vec;
 	}
 
+	let vectorChatBotResponses = [];
+	// On précalcule les vecteurs des réponses du chatbot
+	if (yamlSearchInContent) {
+		for (let i = 0; i < chatData.length; i++) {
+			const responses = chatData[i][2];
+			const response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
+			vectorChatBotResponses.push(createVector(response))
+		}
+	}
+
 	function cosineSimilarity(str, vector) {
 	
-		// Fonction pour calculer le produit scalaire de deux vecteurs
+		// Calcule le produit scalaire de deux vecteurs
 		function dotProduct(vec1, vec2) {
 			const commonWords = new Set([...Object.keys(vec1), ...Object.keys(vec2)]);
 			let dot = 0;
@@ -161,7 +175,7 @@ function createChatBot(chatData) {
 			return dot;
 		}
 	
-		// Fonction pour calculer la magnitude d'un vecteur
+		// Calcule la magnitude d'un vecteur
 		function magnitude(vec) {
 			let sum = 0;
 			for (const word in vec) {
@@ -170,26 +184,18 @@ function createChatBot(chatData) {
 			return Math.sqrt(sum);
 		}
 	
-		// Crée les vecteurs pour les deux chaînes de caractère
-		const vec1 = createVector(str);
+		// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)
+		const vectorString = createVector(str);
 
-		// Calculez la similarité cosinus
-		const dot = dotProduct(vec1, vector);
-		const mag1 = magnitude(vec1);
+		// Calcule la similarité cosinus
+		const dot = dotProduct(vectorString, vector);
+		const mag1 = magnitude(vectorString);
 		const mag2 = magnitude(vector);
 	
 		if (mag1 === 0 || mag2 === 0) {
 			return 0; // Évitez la division par zéro
 		} else {
 			return dot / (mag1 * mag2);
-		}
-	}
-	let vectorChatBotResponses = [];
-	if (yamlSearchInContent) {
-		for (let i = 0; i < chatData.length; i++) {
-			const responses = chatData[i][2];
-			const response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
-			vectorChatBotResponses.push(createVector(response))
 		}
 	}
 
@@ -204,7 +210,7 @@ function createChatBot(chatData) {
 		let optionsLastResponseKeysToLowerCase;
 		let indexLastResponseKeyMatch;
 		if (optionsLastResponse) {
-			// On va comparer le message de l'utilisateur aux dernières options proposées si il y en a une
+			// On va comparer le message de l'utilisateur aux dernières options proposées s'il y en a une
 			optionsLastResponseKeysToLowerCase = optionsLastResponse.map(
 				(element) => {
 					return element[0].toLowerCase();
