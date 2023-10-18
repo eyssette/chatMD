@@ -101,6 +101,49 @@ function createChatBot(chatData) {
 		}
 	}
 
+	function cosineSimilarityWithCommonRoot(str1, str2) {
+		// Fonction pour calculer la similarité cosinus entre deux chaînes
+		function cosineSimilarityNormalized(str1, str2) {
+			const tokens1 = str1.toLowerCase().split(' ');
+			const tokens2 = str2.toLowerCase().split(' ');
+	
+			const commonRoot = (word1, word2) => {
+				for (let i = 0; i < word1.length; i++) {
+					for (let j = 0; j < word2.length; j++) {
+						let commonChars = 0;
+						while (i + commonChars < word1.length && j + commonChars < word2.length &&
+							word1[i + commonChars] === word2[j + commonChars]) {
+							commonChars++;
+							if (commonChars >= 4) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			};
+	
+			const similarities = [];
+	
+			for (const token1 of tokens1) {
+				for (const token2 of tokens2) {
+					if (token1 === token2 || commonRoot(token1, token2)) {
+						similarities.push(1); // Identité ou racine commune
+					}
+				}
+			}
+	
+			if (similarities.length === 0) {
+				return 0; // Aucune similarité
+			}
+	
+			const similarity = similarities.reduce((acc, val) => acc + val, 0) / similarities.length;
+			return similarity;
+		}
+	
+		return cosineSimilarityNormalized(str1, str2);
+	}
+
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
 		let bestMatch = null;
@@ -135,6 +178,12 @@ function createChatBot(chatData) {
 				let matchScore = 0;
 				let distanceScore = 0;
 				let distance = 0;
+				let response;
+				if (yamlSearchInContent) {
+						response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
+						const cosSim = cosineSimilarityWithCommonRoot(userInputTextToLowerCase,response);
+						matchScore = matchScore + cosSim;
+				}
 				for (let keyword of keywords) {
 					let keywordToLowerCase = keyword.toLowerCase();
 					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
@@ -168,12 +217,12 @@ function createChatBot(chatData) {
 
 			if (bestMatch) {
 				// On envoie le meilleur choix s'il en existe un
-				let response = Array.isArray(bestMatch)
+				let selectedResponse = Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
 					: bestMatch;
 				const options = chatData[indexBestMatch][3];
-				response = gestionOptions(response, options);
-				createChatMessage(response, false);
+				selectedResponse = gestionOptions(selectedResponse, options);
+				createChatMessage(selectedResponse, false);
 			} else {
 				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
 				// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
