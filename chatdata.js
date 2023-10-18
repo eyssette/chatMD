@@ -171,6 +171,9 @@ function parseMarkdown(markdownContent) {
 			for (const property in yamlData) {
 				if (property == 'style') {
 					yamlStyle = yamlData[property];
+					const styleElement = document.createElement("style");
+					styleElement.innerHTML = yamlStyle;
+					document.body.appendChild(styleElement);
 				}
 				if (property == 'userInput' || property == 'clavier' || property == 'keyboard') {
 					yamlUserInput = yamlData[property];
