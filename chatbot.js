@@ -101,48 +101,94 @@ function createChatBot(chatData) {
 		}
 	}
 
-	function cosineSimilarityWithCommonRoot(str1, str2) {
-		// Fonction pour calculer la similarité cosinus entre deux chaînes
-		function cosineSimilarityNormalized(str1, str2) {
-			const tokens1 = str1.toLowerCase().split(' ');
-			const tokens2 = str2.toLowerCase().split(' ');
-	
-			const commonRoot = (word1, word2) => {
-				for (let i = 0; i < word1.length; i++) {
-					for (let j = 0; j < word2.length; j++) {
-						let commonChars = 0;
-						while (i + commonChars < word1.length && j + commonChars < word2.length &&
-							word1[i + commonChars] === word2[j + commonChars]) {
-							commonChars++;
-							if (commonChars >= 4) {
-								return true;
-							}
-						}
-					}
-				}
-				return false;
-			};
-	
-			const similarities = [];
-	
-			for (const token1 of tokens1) {
-				for (const token2 of tokens2) {
-					if (token1 === token2 || commonRoot(token1, token2)) {
-						similarities.push(1); // Identité ou racine commune
-					}
+	function cosineSimilarity(str1, str2) {
+		function tokenize(text) {
+		// Fonction pour diviser une chaîne de caractères en tokens
+		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; // On garde d'abord seulement les mots d'au moins 5 caractères
+		const tokens = [];
+
+		// On va créer des tokens avec à chaque fois un poids associés
+		for (const word of words) {
+			// Premier type de token : le mot en entier ; poids le plus important
+			tokens.push({word, weight: 5});
+
+			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
+			// Plus le token est long, plus le poids du token est important
+			if (word.length >= 5) {
+				for (let i = 0; i <= word.length - 5; i++) {
+					const weight = i === 0 ? 0.6 : 0.4;
+					const token = word.substring(i, i + 5)
+					tokens.push({token,weight: weight});
 				}
 			}
-	
-			if (similarities.length === 0) {
-				return 0; // Aucune similarité
+			if (word.length >= 6) {
+				for (let i = 0; i <= word.length - 6; i++) {
+					const weight = i === 0 ? 0.6 : 0.8;
+					const token = word.substring(i, i + 6)
+					tokens.push({token,weight: weight});
+				}
 			}
+			if (word.length >= 7) {
+				for (let i = 0; i <= word.length - 7; i++) {
+					const weight = i === 0 ? 1 : 0.8;
+					const token = word.substring(i, i + 7)
+					tokens.push({token,weight: weight});
+				}
+			}
+		}
+		return tokens;
+	}
 	
-			const similarity = similarities.reduce((acc, val) => acc + val, 0) / similarities.length;
-			return similarity;
+		// Fonction pour calculer le produit scalaire de deux vecteurs
+		function dotProduct(vec1, vec2) {
+			const commonWords = new Set([...Object.keys(vec1), ...Object.keys(vec2)]);
+			let dot = 0;
+			for (const word of commonWords) {
+				dot += (vec1[word] || 0) * (vec2[word] || 0);
+			}
+			return dot;
 		}
 	
-		return cosineSimilarityNormalized(str1, str2);
+		// Fonction pour calculer la magnitude d'un vecteur
+		function magnitude(vec) {
+			let sum = 0;
+			for (const word in vec) {
+				sum += vec[word] ** 2;
+			}
+			return Math.sqrt(sum);
+		}
+	
+		// Tokenize les deux chaînes
+		const tokens1 = tokenize(str1);
+		const tokens2 = tokenize(str2);
+		// Créez des vecteurs de fréquence de mots
+		const vec1 = {};
+		const vec2 = {};
+	
+		for (const {token, weight} of tokens1) {
+			if (token) {
+				vec1[token] = (vec1[token] || 0) + weight;
+			}
+		}
+	
+		for (const {token, weight} of tokens2) {
+			if (token) {
+				vec2[token] = (vec2[token] || 0) + weight;
+			}
+		}
+
+		// Calculez la similarité cosinus
+		const dot = dotProduct(vec1, vec2);
+		const mag1 = magnitude(vec1);
+		const mag2 = magnitude(vec2);
+	
+		if (mag1 === 0 || mag2 === 0) {
+			return 0; // Évitez la division par zéro
+		} else {
+			return dot / (mag1 * mag2);
+		}
 	}
+	
 
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
@@ -181,7 +227,7 @@ function createChatBot(chatData) {
 				let response;
 				if (yamlSearchInContent) {
 						response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
-						const cosSim = cosineSimilarityWithCommonRoot(userInputTextToLowerCase,response);
+						const cosSim = cosineSimilarity(userInputTextToLowerCase,response);
 						matchScore = matchScore + cosSim;
 				}
 				for (let keyword of keywords) {
