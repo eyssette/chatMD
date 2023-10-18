@@ -120,6 +120,10 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 
 `;
 
+let yamlStyle = '';
+let yamlUserInput = true;
+let yamlSearchInContent = false;
+
 let chatData;
 
 function getMarkdownContent() {
@@ -161,6 +165,24 @@ function getMarkdownContent() {
 getMarkdownContent();
 
 function parseMarkdown(markdownContent) {
+	if (markdownContent.split("---").length > 2) {
+		try {
+			yamlData = jsyaml.load(markdownContent.split("---")[1]);
+			for (const property in yamlData) {
+				if (property == 'style') {
+					yamlStyle = yamlData[property];
+				}
+				if (property == 'userInput' || property == 'clavier' || property == 'keyboard') {
+					yamlUserInput = yamlData[property];
+				}
+				if (property == 'searchInContent' || property == 'rechercheContenu' ) {
+					yamlSearchInContent = yamlData[property];
+				}
+			}
+		} catch (e) {
+
+		}
+	}
 	const lines = markdownContent.split("\n");
 	let chatbotData = [];
 	let chatbotTitle = [""];
