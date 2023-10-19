@@ -101,11 +101,49 @@ function createChatBot(chatData) {
 		}
 	}
 
+	function removeAccents(str) {
+		const accentMap = {
+		  à: 'a',
+		  â: 'a',
+		  é: 'e',
+		  è: 'e',
+		  ê: 'e',
+		  ë: 'e',
+		  î: 'i',
+		  ï: 'i',
+		  ô: 'o',
+		  ö: 'o',
+		  û: 'u',
+		  ü: 'u',
+		  ÿ: 'y',
+		  ç: 'c',
+		  À: 'A',
+		  Â: 'A',
+		  É: 'E',
+		  È: 'E',
+		  Ê: 'E',
+		  Ë: 'E',
+		  Î: 'I',
+		  Ï: 'I',
+		  Ô: 'O',
+		  Ö: 'O',
+		  Û: 'U',
+		  Ü: 'U',
+		  Ÿ: 'Y',
+		  Ç: 'C',
+		};
+	  
+		return str.replace(/[àâéèêëîïôöûüÿçÀÂÉÈÊËÎÏÔÖÛÜŸÇ]/g, (match) => accentMap[match] || match);
+	  }
+
 	function tokenize(text, indexChatBotResponse) {
 		// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 
-		// On garde d'abord seulement les mots d'au moins 5 caractères
-		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; 
+		// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
+		let words = text.toLowerCase()
+		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g,"");
+		words = removeAccents(words);
+		words = words.split(/\s|'/).filter(word => word.length >= 5) || []; 
 		const tokens = [];
 
 		// On va créer des tokens avec à chaque fois un poids associé
