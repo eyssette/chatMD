@@ -336,7 +336,6 @@ function createChatBot(chatData) {
 				}
 			}
 			if (bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) {
-				console.log(bestMatchScore)
 				// On envoie le meilleur choix s'il en existe un
 				let selectedResponse = Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
