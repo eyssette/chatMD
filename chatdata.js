@@ -222,7 +222,7 @@ function parseMarkdown(markdownContent) {
 				if (property == "searchInContent" || property == "rechercheContenu") {
 					yamlSearchInContent = yamlData[property];
 				}
-				if (property == "gestionGrosMots" || property == "detectDadWords") {
+				if (property == "gestionGrosMots" || property == "detectBadWords") {
 					yamldetectBadWords = yamlData[property];
 					if (yamldetectBadWords === true) {
 						function loadScript(src) {
