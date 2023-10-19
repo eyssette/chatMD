@@ -92,9 +92,8 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 
 - \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 - \`rechercheContenu: true\` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
-- \`style\` permet d'ajouter des styles CSS personnalisés.
-\`\`\`
-
+- \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
+- \`grosMots: false\` permet d'interdire les gros mots et de formuler une réponse adéquate si l'utilisateur en utilise
 
 ## Exemples
 - exemple
