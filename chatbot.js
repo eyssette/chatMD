@@ -165,6 +165,7 @@ function createChatBot(chatData) {
 	}
 
 	function cosineSimilarity(str, vector) {
+		// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
 	
 		// Calcule le produit scalaire de deux vecteurs
 		function dotProduct(vec1, vec2) {
