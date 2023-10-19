@@ -81,6 +81,7 @@ function createChatBot(chatData) {
 
 	const LEVENSHTEIN_THRESHOLD = 5; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
+	const BESTMATCH_THRESHOLD = 0.55 // Seuil pour que le bestMatch soit pertinent
 
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
@@ -334,7 +335,8 @@ function createChatBot(chatData) {
 					indexBestMatch = i;
 				}
 			}
-			if (bestMatch) {
+			if (bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) {
+				console.log(bestMatchScore)
 				// On envoie le meilleur choix s'il en existe un
 				let selectedResponse = Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
