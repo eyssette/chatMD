@@ -101,8 +101,8 @@ function createChatBot(chatData) {
 		}
 	}
 
-	function tokenize(text) {
-		// Fonction pour diviser une chaîne de caractères en tokens
+	function tokenize(text, indexChatBotResponse) {
+		// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 
 		// On garde d'abord seulement les mots d'au moins 5 caractères
 		const words = text.toLowerCase().split(/\s|'|,|\.|\:|\?|\!|\(|\)|\[|\]/).filter(word => word.length >= 5) || []; 
@@ -115,35 +115,50 @@ function createChatBot(chatData) {
 
 			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
 			// Plus le token est long, plus le poids du token est important
+			const weights = [0, 0, 0, 0, 0.4, 0.6, 0.8];
 			// Si le token correspond au début du mot, le poids est plus important
-			if (word.length >= 5) {
-				for (let i = 0; i <= word.length - 5; i++) {
-					const weight = i === 0 ? 0.6 : 0.4;
-					const token = word.substring(i, i + 5)
-					tokens.push({token,weight: weight});
+			const bonusStart = 0.2;
+			// Si le token est présent dans le titre, le poids est très important
+			const bonusInTitle = 10;
+
+			function weightedToken(index, tokenDimension) {
+				let weight = weights[tokenDimension-1]; // Poids en fonction de la taille du token
+				weight = index === 0 ? weight+bonusStart : weight; // Bonus si le token est en début du mot
+				const token = word.substring(index, index + tokenDimension);
+				if (indexChatBotResponse) {
+					const titleResponse = chatData[indexChatBotResponse][0].toLowerCase();
+					if (titleResponse.includes(token)) {
+						weight = weight + bonusInTitle;
+					}
+				}
+				return {token, weight: weight}
+			}
+			
+			const wordLength = word.length;
+			
+			if (wordLength >= 5) {
+				for (let i = 0; i <= wordLength - 5; i++) {
+					tokens.push(weightedToken(i,5));
 				}
 			}
-			if (word.length >= 6) {
-				for (let i = 0; i <= word.length - 6; i++) {
-					const weight = i === 0 ? 0.8 : 0.6;
-					const token = word.substring(i, i + 6)
-					tokens.push({token,weight: weight});
+			if (wordLength >= 6) {
+				for (let i = 0; i <= wordLength - 6; i++) {
+					tokens.push(weightedToken(i,6));
 				}
 			}
-			if (word.length >= 7) {
-				for (let i = 0; i <= word.length - 7; i++) {
-					const weight = i === 0 ? 1 : 0.8;
-					const token = word.substring(i, i + 7)
-					tokens.push({token,weight: weight});
+			if (wordLength >= 7) {
+				for (let i = 0; i <= wordLength - 7; i++) {
+					tokens.push(weightedToken(i,7));
 				}
 			}
 		}
 		return tokens;
 	}
 
-	function createVector(text) {
-		// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token
-		const tokens = tokenize(text);
+	function createVector(text, indexChatBotResponse) {
+		// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
+		const index = indexChatBotResponse ? indexChatBotResponse : false 
+		const tokens = tokenize(text, indexChatBotResponse);
 		const vec = {};
 		for (const {token, weight} of tokens) {
 			if (token) {
@@ -160,7 +175,8 @@ function createChatBot(chatData) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
 			response = chatData[i][0] + ' ' + response
-			vectorChatBotResponses.push(createVector(response))
+			const vectorResponse = createVector(response, i)
+			vectorChatBotResponses.push(vectorResponse)
 		}
 	}
 
@@ -248,7 +264,7 @@ function createChatBot(chatData) {
 				let distance = 0;
 				if (yamlSearchInContent) {
 						const cosSim = cosineSimilarity(userInputTextToLowerCase,vectorChatBotResponses[i]);
-						matchScore = matchScore + cosSim;
+						matchScore = matchScore + cosSim + 0.5;
 				}
 				for (let keyword of keywords) {
 					let keywordToLowerCase = keyword.toLowerCase();
@@ -280,7 +296,6 @@ function createChatBot(chatData) {
 					indexBestMatch = i;
 				}
 			}
-
 			if (bestMatch) {
 				// On envoie le meilleur choix s'il en existe un
 				let selectedResponse = Array.isArray(bestMatch)
