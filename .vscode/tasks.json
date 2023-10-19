@@ -1,0 +1,31 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Minify js & css",
+			"dependsOn": ["Combine Scripts", "Minify CSS", "Minify JS"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Combine Scripts",
+			"type": "shell",
+			"command": "python combine-scripts.py"
+		},
+		{
+			"label": "Minify CSS",
+			"type": "shell",
+			"command": "minifyall ${workspaceFolder}/styles.css -s .min"
+		},
+		{
+			"label": "Minify JS",
+			"type": "shell",
+			"command": "node-minify --compressor terser --input ${workspaceFolder}/script.min.js --output 'script.min.js'"
+		}
+
+	]
+}
