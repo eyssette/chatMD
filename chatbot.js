@@ -202,6 +202,17 @@ function createChatBot(chatData) {
 
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
+
+		if(yamlBadWords === false) {
+			if (filterBadWords.check(userInputText)) {
+				const randomBadWordsMessageIndex = Math.floor(
+					Math.random() * badWordsMessage.length
+				);
+				createChatMessage(badWordsMessage[randomBadWordsMessageIndex],false);
+				return;
+			}
+		}
+
 		let bestMatch = null;
 		let bestMatchScore = 0;
 		let bestDistanceScore = 0;

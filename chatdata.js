@@ -19,7 +19,25 @@ const defaultMessage = [
 	"Je ne parviens pas à répondre à votre requête. Veuillez m'excuser.",
 ];
 
-let md = `# ChatMD
+const badWordsMessage = [
+	"Même si je ne suis qu'un chatbot, merci de vous adresser à moi avec un langage approprié",
+	"Je préférerais que nous restions courtois dans notre communication.",
+	"Les insultes ne sont pas nécessaires. Comment puis-je vous aider autrement ?",
+	"Essayons de garder une conversation respectueuse.",
+	"Je préfère une conversation respectueuse et productive.",
+	"Je vous encourage à reformuler votre question ou commentaire de manière respectueuse.",
+	"Les mots offensants ne sont pas nécessaires ici. Comment puis-je vous aider de manière constructive ?",
+	"Restons courtois dans nos échanges, s'il vous plaît.",
+	"Injures et grossièretés ne mènent nulle part. Comment puis-je vous assister ?",
+	"Je suis ouvert à la discussion, mais veuillez garder un langage respectueux.",
+	"Essayons de communiquer de manière civilisée !"
+];
+
+let md = `
+---
+grosMots: false
+---
+# ChatMD
 
 > Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même en Markdown :
 > 
@@ -134,11 +152,13 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 
 `;
 
-let yamlStyle = '';
+let yamlStyle = "";
 let yamlUserInput = true;
 let yamlSearchInContent = false;
+let yamlBadWords = true;
 
 let chatData;
+let filterBadWords;
 
 function getMarkdownContent() {
 	// Récupération du markdown externe
@@ -183,26 +203,56 @@ function parseMarkdown(markdownContent) {
 		try {
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
 			for (const property in yamlData) {
-				if (property == 'style') {
+				if (property == "style") {
 					yamlStyle = yamlData[property];
 					const styleElement = document.createElement("style");
 					styleElement.innerHTML = yamlStyle;
 					document.body.appendChild(styleElement);
 				}
-				if (property == 'userInput' || property == 'clavier' || property == 'keyboard') {
+				if (
+					property == "userInput" ||
+					property == "clavier" ||
+					property == "keyboard"
+				) {
 					yamlUserInput = yamlData[property];
-					if(yamlUserInput === false) {
+					if (yamlUserInput === false) {
 						const controls = document.getElementById("controls");
 						controls.style.display = "none";
 					}
 				}
-				if (property == 'searchInContent' || property == 'rechercheContenu' ) {
+				if (property == "searchInContent" || property == "rechercheContenu") {
 					yamlSearchInContent = yamlData[property];
 				}
-			}
-		} catch (e) {
+				if (property == "grosMots" || property == "badWords") {
+					yamlBadWords = yamlData[property];
+					if (yamlBadWords === false) {
+						function loadScript(src) {
+							// Fonction pour charger des scripts
+							return new Promise((resolve, reject) => {
+							  const script = document.createElement('script');
+							  script.src = src;
+							  script.onload = resolve;
+							  script.onerror = reject;
+							  document.head.appendChild(script);
+							});
+						  }
+						  Promise.all([
+							loadScript('https://cdn.jsdelivr.net/npm/leo-profanity'),
+							loadScript('badWords-fr.js')
+						  ])
+							.then(() => {
+							  // Les deux scripts sont chargés et prêts à être utilisés
+							  filterBadWords = LeoProfanity;
+							  filterBadWords.add(badWordsFR);
+							})
+							.catch((error) => {
+							  console.error('Une erreur s\'est produite lors du chargement des scripts :', error);
+							});
 
-		}
+					}
+				}
+			}
+		} catch (e) {}
 	}
 	const lines = markdownContent.split("\n");
 	let chatbotData = [];
