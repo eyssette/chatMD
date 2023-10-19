@@ -1,5 +1,3 @@
-import rjsmin
-
 # Chemin des fichiers source
 chatbot_js_file = "chatbot.js"
 chatdata_js_file = "chatdata.js"
