@@ -50,7 +50,8 @@ gestionGrosMots: true
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
 > 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
 > 4. [Tu peux me donner des exemples !](Exemples)
-> 5. [À quoi ça sert ?](À quoi ça sert ?)
+> 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
+> 6. [À quoi ça sert ?](À quoi ça sert ?)
 
 ## Markdown
 - markdown
@@ -100,6 +101,8 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - donner un exemple
 - concret
 - concrètement
+- modèle
+- template
 
 Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
 
