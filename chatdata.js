@@ -88,6 +88,8 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-
 ## Options de configuration
 - yaml
 - en-tête
+- options
+- avancé
 
 On peut ajouter un en-tête yaml à son fichier Markdown :
 
