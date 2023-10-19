@@ -35,7 +35,7 @@ const badWordsMessage = [
 
 let md = `
 ---
-grosMots: false
+gestionGrosMots: true
 ---
 # ChatMD
 
@@ -93,7 +93,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 - \`rechercheContenu: true\` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
-- \`grosMots: false\` permet d'interdire les gros mots et de formuler une réponse adéquate si l'utilisateur en utilise
+- \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 
 ## Exemples
 - exemple
@@ -154,7 +154,7 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 let yamlStyle = "";
 let yamlUserInput = true;
 let yamlSearchInContent = false;
-let yamlBadWords = true;
+let yamldetectBadWords = false;
 
 let chatData;
 let filterBadWords;
@@ -222,9 +222,9 @@ function parseMarkdown(markdownContent) {
 				if (property == "searchInContent" || property == "rechercheContenu") {
 					yamlSearchInContent = yamlData[property];
 				}
-				if (property == "grosMots" || property == "badWords") {
-					yamlBadWords = yamlData[property];
-					if (yamlBadWords === false) {
+				if (property == "gestionGrosMots" || property == "detectDadWords") {
+					yamldetectBadWords = yamlData[property];
+					if (yamldetectBadWords === true) {
 						function loadScript(src) {
 							// Fonction pour charger des scripts
 							return new Promise((resolve, reject) => {

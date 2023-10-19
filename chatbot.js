@@ -203,7 +203,7 @@ function createChatBot(chatData) {
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
 
-		if(yamlBadWords === false) {
+		if(yamldetectBadWords === true) {
 			if (filterBadWords.check(userInputText)) {
 				const randomBadWordsMessageIndex = Math.floor(
 					Math.random() * badWordsMessage.length
