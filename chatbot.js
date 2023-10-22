@@ -28,6 +28,7 @@ function createChatBot(chatData) {
 			strings: [content],
 			typeSpeed: 1,
 			startDelay: 100,
+			onBegin: () => {userInput.focus()},
 		});
 	}
 
