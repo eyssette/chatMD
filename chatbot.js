@@ -24,16 +24,11 @@ function createChatBot(chatData) {
 
 	// Effet machine à écrire
 	function typeWriter(content, element) {
-		var typewriter = new Typewriter(element, {
-			loop: false,
-			delay: 10,
+		var typed = new Typed(element, {
+			strings: [content],
+			typeSpeed: 1,
+			startDelay: 100,
 		});
-		typewriter
-			.typeString(content)
-			.start()
-			.callFunction(() => {
-				userInput.focus();
-			});
 	}
 
 	// Création du message par le bot ou l'utilisateur
