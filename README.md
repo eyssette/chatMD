@@ -5,7 +5,17 @@ ChatMD est un chatbot, que vous pouvez configurer par vous-même en Markdown :
 - Créez un fichier en [markdown]((https://www.markdowntutorial.com/fr/)) et mettez-le en ligne : sur [CodiMD](https://codimd.apps.education.fr/), ou sur une [forge](https://forge.aeif.fr/)
 - Respectez la syntaxe de ChatMD pour définir votre chatbot
  
-Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.github.io/chatMD/#URL](https://eyssette.github.io/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.forge.aeif.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+
+
+## Exemples
+
+Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
+
+Voici quelques exemple de chatbot créés avec ChatMD :
+
+- [Méthode de la dissertation en philosophie](https://eyssette.forge.aeif.fr/chatMD/#https://eyssette.forge.aeif.fr/chatbot/dissertation-philosophie.md)
+- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
 
 
 ## Syntaxe
@@ -20,10 +30,29 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante :
 	- On écrit une réponse en Markdown.
 	- [Optionnel] On indique avec une liste ordonnée les options possibles. Chaque élément de la liste doit être un lien en Mardown de la forme suivante : \`[intitulé de l'option](identifiant de l'option, qui doit correspondre à l'un des titres de niveau 2)\`.
 
-## Exemple
+## Options de configuration plus avancées
 
-Voici un exemple de chatbot qui a été créé avec ChatMD à partir du travail de Guillaume Berthelot et de Jérémy Navoizat : 
+On peut ajouter un en-tête yaml à son fichier Markdown.  
+Par exemple :
 
-- [Utilisation d'un microscope](https://eyssette.github.io/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g/download).
+```yaml
+clavier: false
+rechercheContenu: true
+gestionsGrosMots: true
+style: a{color:red}
+```
 
-Vous pouvez aussi [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both) pour mieux comprendre
+- `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
+- `rechercheContenu: true` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
+- `gestionGrosMots: true` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
+- `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
+
+## Crédits
+
+Chat MD est un outil libre et gratuit sous licence MIT.
+
+Il utilise d'autres logiciels libres :
+- [js-yaml](https://github.com/nodeca/js-yaml) pour la gestion des en-têtes yaml
+- [typed.js](https://github.com/mattboldt/typed.js) pour l'effet "machine à écrire"
+- [showdown](https://github.com/showdownjs/showdown) pour la conversion du markdown en html
+- [leo-profanity](https://github.com/jojoee/leo-profanity) et [french-badwords-list](https://github.com/darwiin/french-badwords-list/) pour la gestion des gros mots
