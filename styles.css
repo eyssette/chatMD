@@ -47,10 +47,8 @@ main {
 
 #chat {
 	min-height: 350px;
-	/* border: 1px solid #cacaca; */
 	font-family: "Inter", sans-serif, Avenir, Helvetica, Arial;
 	font-size: 0.9rem;
-	/* background-color: white; */
 	position: relative;
 	overflow: hidden;
 	padding: 10px;
@@ -95,10 +93,6 @@ main {
 	color: grey;
 	font-style: italic;
 }
-/* [contenteditable="false"]:before {
-	content:"Attendez votre tour";
-	color: #AAA;
-} */
 
 .message {
 	margin-top: 0.5em;
@@ -125,10 +119,8 @@ main {
 
 .bot-message {
 	float: left;
-	/* background: rgba(255, 255, 255, 0.7); */
 	margin-top: 10px;
 	margin-bottom: 10px;
-	/* box-shadow: rgba(0, 0, 0, 0.12) 0px 0.3px 0.9px, rgba(0, 0, 0, 0.16) 0px 1.6px 3.6px; */
 }
 
 .bot-message > :first-child:before {
@@ -153,10 +145,6 @@ footer a {
 	text-decoration: none;
 }
 
-.Typewriter__cursor {
-	display: none;
-}
-
 #chat img {
 	display: block;
 	margin: 1em;
@@ -170,7 +158,7 @@ footer a {
 
 @media screen and (max-width: 500px) {
 	body {
-		font-size:1.05em!important;
+		font-size: 1.05em !important;
 	}
 	main {
 		width: initial !important;
@@ -186,9 +174,9 @@ footer a {
 		width: 90% !important;
 	}
 	ul {
-		padding-left:30px!important;
+		padding-left: 30px !important;
 	}
 	ul ul {
-		padding-left:25px!important;
+		padding-left: 25px !important;
 	}
 }
