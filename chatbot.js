@@ -38,7 +38,7 @@ function createChatBot(chatData) {
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		const html = markdownToHTML(message);
-		// Effet machine à écrire : pas quand il s'agit d'un message de l'utilisateur, seulement quand c'est le chatbot qui répond
+		// Effet machine à écrire : pas d'effet quand il s'agit d'un message de l'utilisateur, seulement quand c'est le chatbot qui répond
 		if (isUser) {
 			chatMessage.innerHTML = html;
 		} else {
@@ -162,6 +162,7 @@ function createChatBot(chatData) {
 				const token = word.substring(index, index + tokenDimension);
 				if (indexChatBotResponse) {
 					const titleResponse = chatData[indexChatBotResponse][0].toLowerCase();
+					// Bonus si le token est dans le titre
 					if (titleResponse.includes(token)) {
 						weight = weight + bonusInTitle;
 					}
