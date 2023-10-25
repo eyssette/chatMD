@@ -30,7 +30,7 @@ const badWordsMessage = [
 	"Restons courtois dans nos échanges, s'il vous plaît.",
 	"Injures et grossièretés ne mènent nulle part. Comment puis-je vous assister ?",
 	"Je suis ouvert à la discussion, mais veuillez garder un langage respectueux.",
-	"Essayons de communiquer de manière civilisée !"
+	"Essayons de communiquer de manière civilisée !",
 ];
 
 let md = `
@@ -160,6 +160,7 @@ let yamlStyle = "";
 let yamlUserInput = true;
 let yamlSearchInContent = false;
 let yamldetectBadWords = false;
+let yamlMaths = false;
 
 let chatData;
 let filterBadWords;
@@ -202,6 +203,17 @@ function getMarkdownContent() {
 
 getMarkdownContent();
 
+function loadScript(src) {
+	// Fonction pour charger des scripts
+	return new Promise((resolve, reject) => {
+		const script = document.createElement("script");
+		script.src = src;
+		script.onload = resolve;
+		script.onerror = reject;
+		document.head.appendChild(script);
+	});
+}
+
 function parseMarkdown(markdownContent) {
 	if (markdownContent.split("---").length > 2) {
 		try {
@@ -230,29 +242,27 @@ function parseMarkdown(markdownContent) {
 				if (property == "gestionGrosMots" || property == "detectBadWords") {
 					yamldetectBadWords = yamlData[property];
 					if (yamldetectBadWords === true) {
-						function loadScript(src) {
-							// Fonction pour charger des scripts
-							return new Promise((resolve, reject) => {
-							  const script = document.createElement('script');
-							  script.src = src;
-							  script.onload = resolve;
-							  script.onerror = reject;
-							  document.head.appendChild(script);
-							});
-						  }
-						  Promise.all([
-							loadScript('https://cdn.jsdelivr.net/npm/leo-profanity'),
-							loadScript('badWords-fr.js')
-						  ])
+						Promise.all([
+							loadScript("https://cdn.jsdelivr.net/npm/leo-profanity"),
+							loadScript("badWords-fr.js"),
+						])
 							.then(() => {
-							  // Les deux scripts sont chargés et prêts à être utilisés
-							  filterBadWords = LeoProfanity;
-							  filterBadWords.add(badWordsFR);
+								// Les deux scripts sont chargés et prêts à être utilisés
+								filterBadWords = LeoProfanity;
+								filterBadWords.add(badWordsFR);
 							})
 							.catch((error) => {
-							  console.error('Une erreur s\'est produite lors du chargement des scripts :', error);
+								console.error(
+									"Une erreur s'est produite lors du chargement des scripts :",
+									error
+								);
 							});
-
+					}
+				}
+				if (property == "maths") {
+					yamlMaths = yamlData[property];
+					if (yamlMaths === true) {
+						loadScript("https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js")
 					}
 				}
 			}

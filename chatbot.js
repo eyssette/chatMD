@@ -28,7 +28,8 @@ function createChatBot(chatData) {
 			strings: [content],
 			typeSpeed: 1,
 			startDelay: 100,
-			onBegin: () => {userInput.focus()},
+			onBegin: () => {userInput.focus();},
+			onStringTyped: () => {MathJax.typesetPromise()}
 		});
 	}
 
@@ -37,7 +38,11 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		const html = markdownToHTML(message);
+		let html = markdownToHTML(message);
+		if (yamlMaths === true) {
+			html = html.replace(/\$\$(.*?)\$\$/g, '&#92;[$1&#92;]')
+			.replace(/\$(.*?)\$/g, '&#92;\($1&#92;\)')
+		}
 		// Effet machine à écrire : pas d'effet quand il s'agit d'un message de l'utilisateur, seulement quand c'est le chatbot qui répond
 		if (isUser) {
 			chatMessage.innerHTML = html;
