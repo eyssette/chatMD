@@ -61,6 +61,7 @@ Pour découvrir le Markdown, vous pouvez suivre ce [tutoriel](https://www.markdo
 
 ## CodiMD et forge
 - codimd
+- codi
 - forge
 - en ligne
 
@@ -88,6 +89,7 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-
 ## Options de configuration
 - yaml
 - en-tête
+- en-tête yaml
 - options
 - avancé
 
@@ -115,6 +117,7 @@ Voici quelques exemple de chatbot créés avec ChatMD :
 - [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
 
 ## À quoi ça sert ?
+- à quoi ça sert ?
 - pourquoi
 - sert
 - intérêt
