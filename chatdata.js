@@ -97,6 +97,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`rechercheContenu: true\` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
+- \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
 
 ## Exemples
 - exemple
