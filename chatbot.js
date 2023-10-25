@@ -84,7 +84,27 @@ function createChatBot(chatData) {
 		return matrix[b.length][a.length];
 	}
 
-	const LEVENSHTEIN_THRESHOLD = 5; // Seuil de similarité
+	function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
+		// Teste la présence d'un mot dans une chaîne de caractère qui a une distance de Levenshstein inférieure à une distance donnée
+		
+		const words = string.split(" ");
+		// On parcourt les mots
+		
+		for (const word of words) {
+		  // On calcule la distance de Levenshtein entre le mot et le mot cible
+		  const distanceLevenshtein = levenshteinDistance(word, keyWord);
+	  
+		  // Si la distance est inférieure à la distance donnée, on renvoie vrai
+		  if (distanceLevenshtein < distance) {
+			return true;
+		  }
+		}
+
+		// Si on n'a pas trouvé de mot avec une distance inférieure à la distance donnée, on renvoie faux
+		return false;
+	  }
+
+	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
 	const BESTMATCH_THRESHOLD = 0.55 // Seuil pour que le bestMatch soit pertinent
 
@@ -321,11 +341,7 @@ function createChatBot(chatData) {
 						matchScore =  matchScore + keywordToLowerCase.length/10;
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
-						distance = levenshteinDistance(
-							keywordToLowerCase,
-							userInputTextToLowerCase
-						);
-						if (distance < LEVENSHTEIN_THRESHOLD) {
+						if (hasLevenshteinDistanceLessThan(userInputTextToLowerCase, keyword, LEVENSHTEIN_THRESHOLD)) {	
 							distanceScore++;
 						}
 					}
