@@ -29,7 +29,11 @@ function createChatBot(chatData) {
 			typeSpeed: 1,
 			startDelay: 100,
 			onBegin: () => {userInput.focus();},
-			onStringTyped: () => {MathJax.typesetPromise()}
+			onStringTyped: () => {
+				if (yamlMaths === true) {
+					MathJax.typesetPromise()
+				}
+			}
 		});
 	}
 
