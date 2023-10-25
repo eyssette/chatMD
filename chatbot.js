@@ -308,6 +308,8 @@ function createChatBot(chatData) {
 						// Test de l'identité stricte
 						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 						matchScore = matchScore + MATCH_SCORE_IDENTITY;
+						// On privilégie les correspondances sur les keywords plus longs
+						matchScore =  matchScore + keywordToLowerCase.length/10;
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 						distance = levenshteinDistance(
