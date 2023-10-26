@@ -40,12 +40,14 @@ clavier: false
 rechercheContenu: true
 gestionsGrosMots: true
 style: a{color:red}
+maths: true
 ```
 
 - `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 - `rechercheContenu: true` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
 - `gestionGrosMots: true` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
+- `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
 
 ## Crédits
 
