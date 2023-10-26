@@ -141,11 +141,10 @@ footer {
 }
 
 footer a {
-	color: #123153;
 	text-decoration: none;
 }
 footer a:hover {
-	text-decoration: underline #123153;
+	text-decoration: underline;
 }
 
 #chat img {
