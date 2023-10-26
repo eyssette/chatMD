@@ -29,12 +29,36 @@ function createChatBot(chatData) {
 			typeSpeed: 1,
 			startDelay: 100,
 			onBegin: () => {userInput.focus();},
-			onStringTyped: () => {
-				if (yamlMaths === true) {
-					MathJax.typesetPromise()
-				}
-			}
 		});
+	}
+
+	function convertLatexExpressions(string) {
+		string = string
+			.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
+			.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
+		let expressionsLatex = string.match(
+			new RegExp(/&#92;\[.*&#92;\]|&#92;\(.*&#92;\)/g)
+		);
+		if (expressionsLatex) {
+			// On n'utilise Katex que s'il y a des expressions en Latex dans le Markdown
+			for (let expressionLatex of expressionsLatex) {
+				// On vérifie si le mode d'affichage de l'expression (inline ou block)
+				const inlineMaths = expressionLatex.includes("&#92;[") ? true : false;
+				// On récupère la formule mathématique
+				let mathInExpressionLatex = expressionLatex
+					.replace("&#92;[", "")
+					.replace("&#92;]", "");
+				mathInExpressionLatex = mathInExpressionLatex
+					.replace("&#92;(", "")
+					.replace("&#92;)", "");
+				// On convertit la formule mathématique en HTML avec Katex
+				stringWithLatex = katex.renderToString(mathInExpressionLatex, {
+					displayMode: inlineMaths,
+				});
+				string = string.replace(expressionLatex, stringWithLatex);
+			}
+		}
+		return string;
 	}
 
 	// Création du message par le bot ou l'utilisateur
@@ -44,16 +68,26 @@ function createChatBot(chatData) {
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		let html = markdownToHTML(message);
 		if (yamlMaths === true) {
-			html = html.replace(/\$\$(.*?)\$\$/g, '&#92;[$1&#92;]')
-			.replace(/\$(.*?)\$/g, '&#92;\($1&#92;\)')
-		}
-		// Effet machine à écrire : pas d'effet quand il s'agit d'un message de l'utilisateur, seulement quand c'est le chatbot qui répond
-		if (isUser) {
-			chatMessage.innerHTML = html;
+			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
+			setTimeout(() => {
+				html = convertLatexExpressions(html);
+				// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
+				if (isUser) {
+					chatMessage.innerHTML = html;
+				} else {
+					typeWriter(html, chatMessage);
+				}
+				chatContainer.appendChild(chatMessage);
+			}, 100);
 		} else {
-			typeWriter(html, chatMessage);
+			// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
+			if (isUser) {
+				chatMessage.innerHTML = html;
+			} else {
+				typeWriter(html, chatMessage);
+			}
+			chatContainer.appendChild(chatMessage);
 		}
-		chatContainer.appendChild(chatMessage);
 	}
 
 	function levenshteinDistance(a, b) {

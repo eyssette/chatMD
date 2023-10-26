@@ -168,6 +168,7 @@ let yamlMaths = false;
 
 let chatData;
 let filterBadWords;
+let katexScript;
 
 function getMarkdownContent() {
 	// Récupération du markdown externe
@@ -212,9 +213,22 @@ function loadScript(src) {
 	return new Promise((resolve, reject) => {
 		const script = document.createElement("script");
 		script.src = src;
+		// On a besoin de savoir si le script Katex est chargé si on doit gérer l'écriture des maths en Latex dans le Markdown
+		katexScript = src.includes("katex") ? script : undefined;
 		script.onload = resolve;
 		script.onerror = reject;
 		document.head.appendChild(script);
+	});
+}
+function loadCSS(src) {
+	// Fonction pour charger des CSS
+	return new Promise((resolve, reject) => {
+		const styleElement = document.createElement("link");
+		styleElement.href = src;
+		styleElement.rel = "stylesheet"
+		styleElement.onload = resolve;
+		styleElement.onerror = reject;
+		document.head.appendChild(styleElement);
 	});
 }
 
@@ -223,6 +237,15 @@ function parseMarkdown(markdownContent) {
 		try {
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
 			for (const property in yamlData) {
+				if (property == "maths") {
+					yamlMaths = yamlData[property];
+					if (yamlMaths === true) {
+						Promise.all(
+								[loadScript("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"),
+								loadCSS("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css")]
+							)
+					}
+				}
 				if (property == "style") {
 					yamlStyle = yamlData[property];
 					const styleElement = document.createElement("style");
@@ -261,12 +284,6 @@ function parseMarkdown(markdownContent) {
 									error
 								);
 							});
-					}
-				}
-				if (property == "maths") {
-					yamlMaths = yamlData[property];
-					if (yamlMaths === true) {
-						loadScript("https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js")
 					}
 				}
 			}
