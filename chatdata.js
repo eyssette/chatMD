@@ -168,7 +168,6 @@ let yamlMaths = false;
 
 let chatData;
 let filterBadWords;
-let katexScript;
 
 function getMarkdownContent() {
 	// Récupération du markdown externe
@@ -213,8 +212,6 @@ function loadScript(src) {
 	return new Promise((resolve, reject) => {
 		const script = document.createElement("script");
 		script.src = src;
-		// On a besoin de savoir si le script Katex est chargé si on doit gérer l'écriture des maths en Latex dans le Markdown
-		katexScript = src.includes("katex") ? script : undefined;
 		script.onload = resolve;
 		script.onerror = reject;
 		document.head.appendChild(script);
