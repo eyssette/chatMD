@@ -129,6 +129,8 @@ Voici quelques exemple de chatbot créés avec ChatMD :
 - histoire
 - méthod
 - révision
+- utilité
+- utile
 
 On peut imaginer plusieurs usages de chatMD :
 - Tutoriel pour un outil informatique
