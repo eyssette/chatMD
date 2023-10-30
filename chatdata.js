@@ -100,6 +100,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
+- \`titresRéponses: "### "\` permet de changer l'identifiant des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 
 ## Exemples
 - exemple
@@ -224,7 +225,7 @@ function loadCSS(src) {
 	return new Promise((resolve, reject) => {
 		const styleElement = document.createElement("link");
 		styleElement.href = src;
-		styleElement.rel = "stylesheet"
+		styleElement.rel = "stylesheet";
 		styleElement.onload = resolve;
 		styleElement.onerror = reject;
 		document.head.appendChild(styleElement);
@@ -232,6 +233,7 @@ function loadCSS(src) {
 }
 
 function parseMarkdown(markdownContent) {
+	let responsesTitles = "## "; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 	if (markdownContent.split("---").length > 2) {
 		try {
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
@@ -239,11 +241,18 @@ function parseMarkdown(markdownContent) {
 				if (property == "maths") {
 					yamlMaths = yamlData[property];
 					if (yamlMaths === true) {
-						Promise.all(
-								[loadScript("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"),
-								loadCSS("https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css")]
-							)
+						Promise.all([
+							loadScript(
+								"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+							),
+							loadCSS(
+								"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+							),
+						]);
 					}
+				}
+				if (property == "titresRéponses" || property == "responsesTitles") {
+					responsesTitles = yamlData[property];
 				}
 				if (property == "style") {
 					yamlStyle = yamlData[property];
@@ -319,7 +328,7 @@ function parseMarkdown(markdownContent) {
 			} else {
 				initialMessageContent.push(line);
 			}
-		} else if (line.startsWith("## ")) {
+		} else if (line.startsWith(responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			initialMessageComputed = true;
 			if (currentH2Title) {
@@ -330,7 +339,7 @@ function parseMarkdown(markdownContent) {
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line.replace("## ", "").trim(); // Titre h2
+			currentH2Title = line.replace(responsesTitles, "").trim(); // Titre h2
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
