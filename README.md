@@ -41,7 +41,7 @@ rechercheContenu: true
 gestionsGrosMots: true
 style: a{color:red}
 maths: true
-titresRéponses: "### "
+titresRéponses: ["### ", "#### "]
 ```
 
 - `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
@@ -50,6 +50,7 @@ titresRéponses: "### "
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
 - `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
 - `titresRéponses: "### "` permet de changer l'identifiant des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
+- `titresRéponses: ["### ", "#### "]` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 
 ## Crédits
 

@@ -100,7 +100,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
-- \`titresRéponses: "### "\` permet de changer l'identifiant des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
+- \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 
 ## Exemples
 - exemple
@@ -232,8 +232,18 @@ function loadCSS(src) {
 	});
 }
 
+function startsWithAnyOf(string,array) {
+	// Vérifie si une variable texte commence par un élément d'un tableau
+	for (const element of array) {
+		if (string.startsWith(element)) {
+		  return element
+		  break;
+		}
+	}
+}
+
 function parseMarkdown(markdownContent) {
-	let responsesTitles = "## "; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
+	let responsesTitles = ["## "]; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 	if (markdownContent.split("---").length > 2) {
 		try {
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
@@ -253,6 +263,10 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "titresRéponses" || property == "responsesTitles") {
 					responsesTitles = yamlData[property];
+					if (typeof responsesTitles === 'string') {
+						// Cas où le yaml pour les titres des réponses ne contient pas un tableau, mais un seul élément
+						responsesTitles = [responsesTitles];
+					}
 				}
 				if (property == "style") {
 					yamlStyle = yamlData[property];
@@ -328,7 +342,7 @@ function parseMarkdown(markdownContent) {
 			} else {
 				initialMessageContent.push(line);
 			}
-		} else if (line.startsWith(responsesTitles)) {
+		} else if (startsWithAnyOf(line,responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			initialMessageComputed = true;
 			if (currentH2Title) {
@@ -339,7 +353,7 @@ function parseMarkdown(markdownContent) {
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line.replace(responsesTitles, "").trim(); // Titre h2
+			currentH2Title = line.replace(startsWithAnyOf(line,responsesTitles), "").trim(); // Titre h2
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
