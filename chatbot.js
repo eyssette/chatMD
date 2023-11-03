@@ -37,7 +37,7 @@ function createChatBot(chatData) {
 			.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
 			.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
 		let expressionsLatex = string.match(
-			new RegExp(/&#92;\[.*&#92;\]|&#92;\(.*&#92;\)/g)
+			new RegExp(/&#92;\[.*?&#92;\]|&#92;\(.*?&#92;\)/g)
 		);
 		if (expressionsLatex) {
 			// On n'utilise Katex que s'il y a des expressions en Latex dans le Markdown
