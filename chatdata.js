@@ -163,6 +163,10 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 
 `;
 
+const shortcuts = [
+	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"]
+];
+
 let yamlStyle = "";
 let yamlUserInput = true;
 let yamlSearchInContent = false;
@@ -192,6 +196,11 @@ function getMarkdownContent() {
 			urlMD =
 				urlMD.replace("?edit", "").replace("?both", "").replace("?view", "") +
 				"/download";
+		}
+		// Vérification de la présence d'un raccourci
+		shortcut = shortcuts.find(element => element[0]==urlMD)
+		if (shortcut) {
+			urlMD = shortcut[1]
 		}
 		// Récupération du contenu du fichier
 		fetch(urlMD)
