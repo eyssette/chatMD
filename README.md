@@ -49,7 +49,6 @@ titresRéponses: ["### ", "#### "]
 - `gestionGrosMots: true` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
 - `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
-- `titresRéponses: "### "` permet de changer l'identifiant des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 - `titresRéponses: ["### ", "#### "]` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 
 ## Crédits
