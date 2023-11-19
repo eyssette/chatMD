@@ -13,7 +13,7 @@ function createChatBot(chatData) {
 	let randomDefaultMessageIndexLastChoice = [];
 
 	// Gestion du markdown dans les réponses du chatbot
-	var converter = new showdown.Converter({
+	const converter = new showdown.Converter({
 		emoji: true,
 		parseImgDimensions: true,
 	});
@@ -22,14 +22,24 @@ function createChatBot(chatData) {
 		return html;
 	}
 
+	let typed
 	// Effet machine à écrire
 	function typeWriter(content, element) {
-		var typed = new Typed(element, {
+		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: 1,
 			startDelay: 100,
 			onBegin: () => {userInput.focus();},
 		});
+		userInput.addEventListener("keypress", (event) => {
+			if (event.key === "Enter") {
+				typed.stop();
+				typed.reset();
+				typed.strings = ["`"+content]
+				typed.start();
+				typed.destroy();
+			}
+		})
 	}
 
 	function convertLatexExpressions(string) {
