@@ -23,23 +23,27 @@ function createChatBot(chatData) {
 	}
 
 	let typed
+
 	// Effet machine à écrire
 	function typeWriter(content, element) {
+		const keypressHandler = (event) => {
+			if (event.key === "Enter") {
+				typed.stop();
+				typed.reset();
+				typed.strings = ["`" + content];
+				typed.start();
+				typed.destroy();
+			}
+		};
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: 1,
 			startDelay: 100,
-			onBegin: () => {userInput.focus();},
+			onBegin: () => {userInput.focus();
+				userInput.addEventListener("keypress",keypressHandler)
+			},
+			onComplete: () => {userInput.removeEventListener("keypress",keypressHandler)}
 		});
-		userInput.addEventListener("keypress", (event) => {
-			if (event.key === "Enter") {
-				typed.stop();
-				typed.reset();
-				typed.strings = ["`"+content]
-				typed.start();
-				typed.destroy();
-			}
-		})
 	}
 
 	function convertLatexExpressions(string) {
