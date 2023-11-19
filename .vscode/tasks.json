@@ -5,7 +5,7 @@
 	"tasks": [
 		{
 			"label": "Minify js & css",
-			"dependsOn": ["Combine Scripts", "Minify CSS", "Minify JS"],
+			"dependsOn": ["Combine Scripts", "Minify JS"],
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -14,17 +14,17 @@
 		{
 			"label": "Combine Scripts",
 			"type": "shell",
-			"command": "python combine-scripts.py"
+			"command": "python3 combine-scripts.py"
 		},
 		{
 			"label": "Minify CSS",
 			"type": "shell",
-			"command": "minifyall ${workspaceFolder}/styles.css -s .min"
+			"command": "minifyall styles.css -s .min"
 		},
 		{
 			"label": "Minify JS",
 			"type": "shell",
-			"command": "node-minify --compressor terser --input ${workspaceFolder}/script.min.js --output 'script.min.js'"
+			"command": "node-minify --compressor terser --input script.min.js --output script.min.js"
 		}
 
 	]
