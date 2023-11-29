@@ -24,13 +24,14 @@ function createChatBot(chatData) {
 
 	let typed
 	const messageTypeEnterToStopTypeWriter = "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement";
+	const pauseTypeWriter = "^300 "
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		const keypressHandler = (event) => {
 			if (event.key === "Enter") {
 				typed.stop();
 				typed.reset();
-				typed.strings = ["`" + content];
+				typed.strings = ["`" + content.replace(pauseTypeWriter+"`","")];
 				typed.start();
 				typed.destroy();
 			}
@@ -39,7 +40,7 @@ function createChatBot(chatData) {
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			const contentMessage = content.substring(0, optionsStart);
     		const contentOptions = content.substring(optionsStart);
-			content = contentMessage + "^300 `" +contentOptions + "`";
+			content = contentMessage + pauseTypeWriter + "`" +contentOptions + "`";
 		}
 		typed = new Typed(element, {
 			strings: [content],
