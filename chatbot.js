@@ -508,6 +508,10 @@ function createChatBot(chatData) {
 		}
 	});
 
+	document.addEventListener("keypress", (event) => {
+		userInput.focus();
+	})
+
 	userInput.focus();
 
 	userInput.addEventListener("focus", function () {
