@@ -22,6 +22,17 @@ function createChatBot(chatData) {
 		return html;
 	}
 
+	function getRandomElement(array) {
+		return array[Math.floor((Math.random()*array.length))];
+	}
+	function randomContentMessage(contentMessage) {
+		const contentSplitHR = contentMessage.split('<hr />');
+		if (contentSplitHR.length>1) {
+			contentMessage = getRandomElement(contentSplitHR);
+		}
+		return contentMessage;
+	}
+	
 	let typed
 	const messageTypeEnterToStopTypeWriter = "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement";
 	const pauseTypeWriter = "^300 "
@@ -38,9 +49,12 @@ function createChatBot(chatData) {
 		};
 		const optionsStart = content.lastIndexOf("<ul>");
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
-			const contentMessage = content.substring(0, optionsStart);
+			let contentMessage = content.substring(0, optionsStart);
+			contentMessage = randomContentMessage(contentMessage)
     		const contentOptions = content.substring(optionsStart);
 			content = contentMessage + pauseTypeWriter + "`" +contentOptions + "`";
+		} else {
+			content = randomContentMessage(content)
 		}
 		typed = new Typed(element, {
 			strings: [content],
@@ -349,10 +363,7 @@ function createChatBot(chatData) {
 
 		if(yamldetectBadWords === true && filterBadWords) {
 			if (filterBadWords.check(userInputText)) {
-				const randomBadWordsMessageIndex = Math.floor(
-					Math.random() * badWordsMessage.length
-				);
-				createChatMessage(badWordsMessage[randomBadWordsMessageIndex],false);
+				createChatMessage(getRandomElement(badWordsMessage),false);
 				return;
 			}
 		}
