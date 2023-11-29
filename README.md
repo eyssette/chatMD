@@ -50,6 +50,7 @@ titresRéponses: ["### ", "#### "]
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
 - `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
 - `titresRéponses: ["### ", "#### "]` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
+- `avatar: URL` permet de changer l'avatar du chatbot. Il faut mettre l'url de son image à la place de URL. 
 
 ## Crédits
 

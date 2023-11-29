@@ -92,6 +92,12 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-
 - en-tête yaml
 - options
 - avancé
+- avatar
+- mathématiques
+- gros mots
+- insulte
+- style
+- apparence
 
 On peut ajouter un en-tête yaml à son fichier Markdown :
 
@@ -101,6 +107,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
 - \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
+- \`avatar: URL\` permet de changer l'avatar du chatbot. Il faut mettre l'url de son image à la place de URL. 
 
 ## Exemples
 - exemple
@@ -316,6 +323,21 @@ function parseMarkdown(markdownContent) {
 								);
 							});
 					}
+				}
+				if (property == "avatar") {
+					yamlAvatar = yamlData[property];
+					const avatarCSS = `
+  						.bot-message > :first-child:before {
+        				background-image: url("${yamlAvatar}");
+        				background-size: 40px;
+						width:40px;
+						height:40px;
+						display:inline-block;
+						content:"";
+					`;
+					const avatarStyleElement = document.createElement('style');
+					avatarStyleElement.textContent = avatarCSS;
+					document.head.appendChild(avatarStyleElement);
 				}
 			}
 		} catch (e) {}
