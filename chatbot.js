@@ -23,6 +23,7 @@ function createChatBot(chatData) {
 	}
 
 	let typed
+	const messageTypeEnterToStopTypeWriter = "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement";
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		const keypressHandler = (event) => {
@@ -34,6 +35,12 @@ function createChatBot(chatData) {
 				typed.destroy();
 			}
 		};
+		const optionsStart = content.lastIndexOf("<ul>");
+		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
+			const contentMessage = content.substring(0, optionsStart);
+    		const contentOptions = content.substring(optionsStart);
+			content = contentMessage + "^300 `" +contentOptions + "`";
+		}
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: 1,
@@ -41,11 +48,13 @@ function createChatBot(chatData) {
 			onBegin: () => {
 				userInput.focus();
 				userInput.addEventListener("keypress",keypressHandler);
-				userInput.setAttribute("placeholder", "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement");
+				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
 			},
 			onComplete: () => {
 				userInput.removeEventListener("keypress",keypressHandler);
-				userInput.setAttribute("placeholder", "Écrivez votre message");
+				if(userInput.getAttribute("placeholder") == messageTypeEnterToStopTypeWriter) {
+					userInput.setAttribute("placeholder", "Écrivez votre message");
+				}
 			}
 		});
 	}
