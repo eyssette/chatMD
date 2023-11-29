@@ -1,4 +1,4 @@
-const defaultMessage = [
+let defaultMessage = [
 	"Désolé, je ne comprends pas votre question.",
 	"Pardonnez-moi, mais je ne saisis pas votre demande.",
 	"Excusez-moi, je ne parviens pas à comprendre ce que vous demandez.",
@@ -107,7 +107,8 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
 - \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
-- \`avatar: URL\` permet de changer l'avatar du chatbot. Il faut mettre l'url de son image à la place de URL. 
+- \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
+- \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
 
 ## Exemples
 - exemple
@@ -338,6 +339,13 @@ function parseMarkdown(markdownContent) {
 					const avatarStyleElement = document.createElement('style');
 					avatarStyleElement.textContent = avatarCSS;
 					document.head.appendChild(avatarStyleElement);
+				}
+				if (property == "defaultMessage" || property == "messageParDéfaut") {
+					yamlDefaultMessage = yamlData[property];
+					defaultMessage = yamlDefaultMessage
+					while (defaultMessage.length<5) {
+						defaultMessage.push(...defaultMessage);
+					}
 				}
 			}
 		} catch (e) {}
