@@ -34,11 +34,11 @@ function createChatBot(chatData) {
 	}
 	
 	let typed
-	const messageTypeEnterToStopTypeWriter = "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement";
 	const pauseTypeWriter = "^300 "
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
+		const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
 		const keypressHandler = (event) => {
 			if (event.key === "Enter") {
 				typed.stop();
