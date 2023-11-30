@@ -69,7 +69,7 @@ function createChatBot(chatData) {
 		};
 
 		// Gestion du choix d'un message au hasard quand il y a plusieurs réponses possibles
-		const optionsStart = content.lastIndexOf("<ul>");
+		const optionsStart = content.lastIndexOf('<ul class="messageOptions">');
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			let contentMessage = content.substring(0, optionsStart);
 			contentMessage = randomContentMessage(contentMessage)
@@ -510,7 +510,7 @@ function createChatBot(chatData) {
 		if (options) {
 			optionsLastResponse = options;
 			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
-			let messageOptions = "\n<ul>";
+			let messageOptions = '\n<ul class="messageOptions">';
 			for (let i = 0; i < options.length; i++) {
 				const option = options[i];
 				const optionText = option[0];

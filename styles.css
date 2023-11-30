@@ -85,7 +85,6 @@ main {
 }
 
 #user-input {
-	
 	outline: none;
 	overflow-wrap: break-word;
 	line-break: auto;
@@ -144,6 +143,29 @@ button {
 	content: "🗣️";
 	margin-right: 10px;
 	font-size: 2em;
+}
+
+.bot-message ul.messageOptions li {
+	list-style-type: none;
+}
+
+.bot-message ul.messageOptions li>a {
+	text-decoration: none;
+    background-color: #ffffff3d;
+    padding: 5px 10px;
+    display: inline-block;
+    color: black;
+    border-radius: 12px;
+    font-size: 0.95em;
+    margin-left: -20px;
+    text-align: left!important;
+    border: 1px solid #666;
+}
+
+.bot-message ul.messageOptions li>a:hover {
+	background-color: rgb(0, 132, 255);
+	border-color: rgb(0, 132, 255);
+	color:white;
 }
 
 footer {
