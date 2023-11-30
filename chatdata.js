@@ -110,6 +110,8 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
 - \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
 
+Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`---\`
+
 ## Exemples
 - exemple
 - donner un exemple

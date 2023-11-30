@@ -53,7 +53,7 @@ titresRéponses: ["### ", "#### "]
 - `messageParDéfaut: ["message 1", "message 2", "message 3"]` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente
 - `titresRéponses: ["### ", "#### "]` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 
-Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur `---`.
+Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur `---`
 
 
 ## Crédits
