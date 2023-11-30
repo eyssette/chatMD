@@ -65,3 +65,4 @@ Il utilise d'autres logiciels libres :
 - [typed.js](https://github.com/mattboldt/typed.js) pour l'effet "machine à écrire"
 - [showdown](https://github.com/showdownjs/showdown) pour la conversion du markdown en html
 - [leo-profanity](https://github.com/jojoee/leo-profanity) et [french-badwords-list](https://github.com/darwiin/french-badwords-list/) pour la gestion des gros mots
+- [katex](https://katex.org/) pour la gestion des mathématiques en Latex
