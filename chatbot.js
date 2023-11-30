@@ -38,6 +38,7 @@ function createChatBot(chatData) {
 	const pauseTypeWriter = "^300 "
 	// Effet machine à écrire
 	function typeWriter(content, element) {
+		// Gestion de "Enter" pour stopper l'effet machine à écrire
 		const keypressHandler = (event) => {
 			if (event.key === "Enter") {
 				typed.stop();
@@ -47,6 +48,11 @@ function createChatBot(chatData) {
 				typed.destroy();
 			}
 		};
+		// Gestion du scroll automatique vers le bas
+		const scrollWindow = (event) => {
+			window.scrollTo(0, document.body.scrollHeight);
+		}
+		// Gestion du choix d'un message au hasard quand il y a plusieurs réponses possibles
 		const optionsStart = content.lastIndexOf("<ul>");
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			let contentMessage = content.substring(0, optionsStart);
@@ -56,16 +62,34 @@ function createChatBot(chatData) {
 		} else {
 			content = randomContentMessage(content)
 		}
+		// Effet machine à écrire
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: 1,
 			startDelay: 100,
 			onBegin: () => {
+				// Quand l'effet démarre, on refocalise sur userInput
 				userInput.focus();
+				// On détecte un appui sur Enter pour stopper l'effet machine à écrire
 				userInput.addEventListener("keypress",keypressHandler);
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
+				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
+				document.addEventListener('DOMNodeInserted',scrollWindow);
+				setTimeout(() => {
+					// Mais on arrête le scroll automatique dès qu'il y a un mouvement de la souris ou que l'écran est touché
+					document.addEventListener('mousemove',function() {
+						document.removeEventListener("DOMNodeInserted",scrollWindow);
+					})
+					document.addEventListener('wheel',function() {
+						document.removeEventListener("DOMNodeInserted",scrollWindow);
+					})
+					document.addEventListener('touchstart',function() {
+						document.removeEventListener("DOMNodeInserted",scrollWindow);
+					})
+				}, 1000);
 			},
 			onComplete: () => {
+				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
 				userInput.removeEventListener("keypress",keypressHandler);
 				if(userInput.getAttribute("placeholder") == messageTypeEnterToStopTypeWriter) {
 					userInput.setAttribute("placeholder", "Écrivez votre message");
