@@ -32,7 +32,8 @@ function createChatBot(chatData) {
 		}
 		return contentMessage;
 	}
-	
+	const conversationElement = document.getElementById("chat")
+
 	let typed
 	const pauseTypeWriter = "^300 "
 	// Effet machine à écrire
@@ -52,6 +53,21 @@ function createChatBot(chatData) {
 		const scrollWindow = (event) => {
 			window.scrollTo(0, document.body.scrollHeight);
 		}
+
+		function handleMutation(mutationsList) {
+			for (const mutation of mutationsList) {
+				if (mutation.type === 'childList') {
+					scrollWindow();
+				}
+			}
+		}
+
+		// Configuration de MutationObserver
+		const observerConfig = {
+			childList: true,
+			subtree: true
+		};
+
 		// Gestion du choix d'un message au hasard quand il y a plusieurs réponses possibles
 		const optionsStart = content.lastIndexOf("<ul>");
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
@@ -74,19 +90,24 @@ function createChatBot(chatData) {
 				userInput.addEventListener("keypress",keypressHandler);
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
 				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
-				document.addEventListener('DOMNodeInserted',scrollWindow);
+				
+				const mutationObserver = new MutationObserver(handleMutation);
+				mutationObserver.observe(conversationElement, observerConfig);
+				
+				// Déclencher le scroll après un délai de 1000 ms
 				setTimeout(() => {
-					// Mais on arrête le scroll automatique dès qu'il y a un mouvement de la souris ou que l'écran est touché
-					document.addEventListener('mousemove',function() {
-						document.removeEventListener("DOMNodeInserted",scrollWindow);
-					})
-					document.addEventListener('wheel',function() {
-						document.removeEventListener("DOMNodeInserted",scrollWindow);
-					})
-					document.addEventListener('touchstart',function() {
-						document.removeEventListener("DOMNodeInserted",scrollWindow);
-					})
+					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
+					document.addEventListener('mousemove', function () {
+						mutationObserver.disconnect();
+					});
+					document.addEventListener('wheel', function () {
+						mutationObserver.disconnect();
+					});
+					document.addEventListener('touchstart', function () {
+						mutationObserver.disconnect();
+					});
 				}, 1000);
+				
 			},
 			onComplete: () => {
 				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
