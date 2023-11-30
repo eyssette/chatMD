@@ -148,12 +148,23 @@ function createChatBot(chatData) {
 		return string;
 	}
 
+	function processVariables(content) {
+		return content.replace(/@{(\S+)}/g, function(match, variableName) {
+			if (yamlData["variables"][variableName]) {
+				return yamlData["variables"][variableName];
+			} else {
+				return "@{"+variableName+"}";
+			}
+		});
+	}
+
 	// Création du message par le bot ou l'utilisateur
 	function createChatMessage(message, isUser) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		let html = markdownToHTML(message);
+		html = processVariables(html);
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			setTimeout(() => {

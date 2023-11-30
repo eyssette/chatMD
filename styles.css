@@ -197,6 +197,10 @@ footer a:hover {
 	margin-bottom: 0.25em;
 }
 
+pre {
+	line-height: 0.5em;
+}
+
 @media screen and (max-width: 500px) {
 	body {
 		font-size: 1.05em !important;

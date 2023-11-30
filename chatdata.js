@@ -106,11 +106,19 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
-- \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
 - \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
-- \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
 
 Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`---\`
+
+D'autres options plus avancées dans l'en-tête yaml :
+- \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
+- \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
+- On peut aussi définir des variables que l'on peut utiliser dans son chatbot ainsi : &#64;{maVariable1}
+\`\`\`
+variables:
+	maVariable1: "Ceci est ma variable 1"
+	maVariable2: "Ceci est ma variable 2"
+\`\`\`
 
 ## Exemples
 - exemple
@@ -260,6 +268,8 @@ function startsWithAnyOf(string,array) {
 		}
 	}
 }
+
+let yamlData
 
 function parseMarkdown(markdownContent) {
 	let responsesTitles = ["## "]; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
