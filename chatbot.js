@@ -81,8 +81,9 @@ function createChatBot(chatData) {
 		// Effet machine à écrire
 		typed = new Typed(element, {
 			strings: [content],
-			typeSpeed: 1,
+			typeSpeed: 0,
 			startDelay: 100,
+			showCursor: false,
 			onBegin: () => {
 				// Quand l'effet démarre, on refocalise sur userInput
 				userInput.focus();
