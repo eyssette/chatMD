@@ -24,7 +24,8 @@
 		{
 			"label": "Minify JS",
 			"type": "shell",
-			"command": "node-minify --compressor terser --input script.min.js --output script.min.js"
+			"linux": {"command": "node-minify --compressor terser --input script.min.js --output script.min.js"},
+			"osx": {"command": "npx node-minify --compressor terser --input script.min.js --output script.min.js"}
 		}
 
 	]
