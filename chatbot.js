@@ -90,12 +90,11 @@ function createChatBot(chatData) {
 				// On détecte un appui sur Enter pour stopper l'effet machine à écrire
 				userInput.addEventListener("keypress",keypressHandler);
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
-				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 				
+				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 				const mutationObserver = new MutationObserver(handleMutation);
 				mutationObserver.observe(conversationElement, observerConfig);
 				
-				// Déclencher le scroll après un délai de 1000 ms
 				setTimeout(() => {
 					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
 					document.addEventListener('mousemove', function () {
