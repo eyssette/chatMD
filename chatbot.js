@@ -32,25 +32,25 @@ function createChatBot(chatData) {
 		}
 		return contentMessage;
 	}
-	const conversationElement = document.getElementById("chat")
+	const conversationElement = document.getElementById("chat");
 
-	let typed
-	const pauseTypeWriter = "^300 "
+	let typed;
+	const pauseTypeWriter = "^300 ";
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
 		const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
-		const keypressHandler = (event) => {
+		function keypressHandler(event) {
 			if (event.key === "Enter") {
 				typed.stop();
 				typed.reset();
-				typed.strings = ["`" + content.replace(pauseTypeWriter+"`","")];
+				typed.strings = ["`" + content.replace(pauseTypeWriter + "`", "")];
 				typed.start();
 				typed.destroy();
 			}
-		};
+		}		
 		// Gestion du scroll automatique vers le bas
-		const scrollWindow = (event) => {
+		function scrollWindow() {
 			window.scrollTo(0, document.body.scrollHeight);
 		}
 
@@ -72,11 +72,11 @@ function createChatBot(chatData) {
 		const optionsStart = content.lastIndexOf('<ul class="messageOptions">');
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			let contentMessage = content.substring(0, optionsStart);
-			contentMessage = randomContentMessage(contentMessage)
+			contentMessage = randomContentMessage(contentMessage);
     		const contentOptions = content.substring(optionsStart);
 			content = contentMessage + pauseTypeWriter + "`" +contentOptions + "`";
 		} else {
-			content = randomContentMessage(content)
+			content = randomContentMessage(content);
 		}
 		// Effet machine à écrire
 		typed = new Typed(element, {
@@ -150,8 +150,8 @@ function createChatBot(chatData) {
 
 	function processVariables(content) {
 		return content.replace(/@{(\S+)}/g, function(match, variableName) {
-			if (yamlData["variables"][variableName]) {
-				return yamlData["variables"][variableName];
+			if (yamlData.variables[variableName]) {
+				return yamlData.variables[variableName];
 			} else {
 				return "@{"+variableName+"}";
 			}
@@ -238,7 +238,7 @@ function createChatBot(chatData) {
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
-	const BESTMATCH_THRESHOLD = 0.55 // Seuil pour que le bestMatch soit pertinent
+	const BESTMATCH_THRESHOLD = 0.55; // Seuil pour que le bestMatch soit pertinent
 
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
@@ -298,54 +298,53 @@ function createChatBot(chatData) {
 		// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 
 		// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
-		let words = text.toLowerCase()
+		let words = text.toLowerCase();
 		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g,"");
 		words = removeAccents(words);
 		words = words.split(/\s|'/).filter(word => word.length >= 5) || []; 
 		const tokens = [];
 
 		// On va créer des tokens avec à chaque fois un poids associé
-		for (const word of words) {
+		// Plus le token est long, plus le poids du token est important
+		const weights = [0, 0, 0, 0, 0.4, 0.6, 0.8];
+		// Si le token correspond au début du mot, le poids est plus important
+		const bonusStart = 0.2;
+		// Si le token est présent dans le titre, le poids est très important
+		const bonusInTitle = 10;
+
+		function weightedToken(index, tokenDimension, word) {
+			let weight = weights[tokenDimension - 1]; // Poids en fonction de la taille du token
+			weight = index === 0 ? weight + bonusStart : weight; // Bonus si le token est en début du mot
+			const token = word.substring(index, index + tokenDimension);
+			if (indexChatBotResponse) {
+				const titleResponse = chatData[indexChatBotResponse][0].toLowerCase();
+				// Bonus si le token est dans le titre
+				if (titleResponse.includes(token)) {
+					weight = weight + bonusInTitle;
+				}
+			}
+			return {token, weight: weight};
+		}
+
+		for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+			const word = words[wordIndex];
 			// Premier type de token : le mot en entier ; poids le plus important
 			tokens.push({word, weight: 5});
-
-			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
-			// Plus le token est long, plus le poids du token est important
-			const weights = [0, 0, 0, 0, 0.4, 0.6, 0.8];
-			// Si le token correspond au début du mot, le poids est plus important
-			const bonusStart = 0.2;
-			// Si le token est présent dans le titre, le poids est très important
-			const bonusInTitle = 10;
-
-			function weightedToken(index, tokenDimension) {
-				let weight = weights[tokenDimension-1]; // Poids en fonction de la taille du token
-				weight = index === 0 ? weight+bonusStart : weight; // Bonus si le token est en début du mot
-				const token = word.substring(index, index + tokenDimension);
-				if (indexChatBotResponse) {
-					const titleResponse = chatData[indexChatBotResponse][0].toLowerCase();
-					// Bonus si le token est dans le titre
-					if (titleResponse.includes(token)) {
-						weight = weight + bonusInTitle;
-					}
-				}
-				return {token, weight: weight}
-			}
-			
+			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes	
 			const wordLength = word.length;
-			
 			if (wordLength >= 5) {
 				for (let i = 0; i <= wordLength - 5; i++) {
-					tokens.push(weightedToken(i,5));
+					tokens.push(weightedToken(i,5,word));
 				}
 			}
 			if (wordLength >= 6) {
 				for (let i = 0; i <= wordLength - 6; i++) {
-					tokens.push(weightedToken(i,6));
+					tokens.push(weightedToken(i,6,word));
 				}
 			}
 			if (wordLength >= 7) {
 				for (let i = 0; i <= wordLength - 7; i++) {
-					tokens.push(weightedToken(i,7));
+					tokens.push(weightedToken(i,7,word));
 				}
 			}
 		}
@@ -354,7 +353,6 @@ function createChatBot(chatData) {
 
 	function createVector(text, indexChatBotResponse) {
 		// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
-		const index = indexChatBotResponse ? indexChatBotResponse : false 
 		const tokens = tokenize(text, indexChatBotResponse);
 		const vec = {};
 		for (const {token, weight} of tokens) {
@@ -371,9 +369,9 @@ function createChatBot(chatData) {
 		for (let i = 0; i < chatData.length; i++) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
-			response = chatData[i][0] + ' ' + response
-			const vectorResponse = createVector(response, i)
-			vectorChatBotResponses.push(vectorResponse)
+			response = chatData[i][0] + ' ' + response;
+			const vectorResponse = createVector(response, i);
+			vectorChatBotResponses.push(vectorResponse);
 		}
 	}
 
@@ -490,9 +488,7 @@ function createChatBot(chatData) {
 			}
 			if (bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) {
 				// On envoie le meilleur choix s'il en existe un
-				let selectedResponse = Array.isArray(bestMatch)
-					? bestMatch.join("\n\n")
-					: bestMatch;
+				let selectedResponse = Array.isArray(bestMatch) ? bestMatch.join("\n\n") : bestMatch;
 				const options = chatData[indexBestMatch][3];
 				selectedResponse = gestionOptions(selectedResponse, options);
 				createChatMessage(selectedResponse, false);
@@ -534,8 +530,7 @@ function createChatBot(chatData) {
 					optionText +
 					"</a></li>\n";
 			}
-			messageOptions =
-					messageOptions + "</ul>"
+			messageOptions = messageOptions + "</ul>";
 			response = response + messageOptions;
 		} else {
 			optionsLastResponse = null;
@@ -566,7 +561,7 @@ function createChatBot(chatData) {
 
 	document.addEventListener("keypress", (event) => {
 		userInput.focus();
-	})
+	});
 
 	userInput.focus();
 
@@ -606,7 +601,7 @@ function createChatBot(chatData) {
 	);
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
-		/<span class=\"unique\">.*?\<\/span>/,
+		/<span class=\"unique\">.*?<\/span>/,
 		""
 	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }

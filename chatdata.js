@@ -216,9 +216,9 @@ function getMarkdownContent() {
 				"/download";
 		}
 		// Vérification de la présence d'un raccourci
-		shortcut = shortcuts.find(element => element[0]==urlMD)
+		shortcut = shortcuts.find(element => element[0]==urlMD);
 		if (shortcut) {
-			urlMD = shortcut[1]
+			urlMD = shortcut[1];
 		}
 		// Récupération du contenu du fichier
 		fetch(urlMD)
@@ -263,13 +263,12 @@ function startsWithAnyOf(string,array) {
 	// Vérifie si une variable texte commence par un élément d'un tableau
 	for (const element of array) {
 		if (string.startsWith(element)) {
-		  return element
-		  break;
+		  return element;
 		}
 	}
 }
 
-let yamlData
+let yamlData;
 
 function parseMarkdown(markdownContent) {
 	let responsesTitles = ["## "]; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
@@ -354,7 +353,7 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "defaultMessage" || property == "messageParDéfaut") {
 					yamlDefaultMessage = yamlData[property];
-					defaultMessage = yamlDefaultMessage
+					defaultMessage = yamlDefaultMessage;
 					while (defaultMessage.length<5) {
 						defaultMessage.push(...defaultMessage);
 					}
