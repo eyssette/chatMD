@@ -173,7 +173,11 @@ function createChatBot(chatData) {
 				if (isUser) {
 					chatMessage.innerHTML = html;
 				} else {
-					typeWriter(html, chatMessage);
+					if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+						chatMessage.innerHTML = html;
+					} else {
+						typeWriter(html, chatMessage);
+					}
 				}
 				chatContainer.appendChild(chatMessage);
 			}, 100);
@@ -182,7 +186,11 @@ function createChatBot(chatData) {
 			if (isUser) {
 				chatMessage.innerHTML = html;
 			} else {
-				typeWriter(html, chatMessage);
+				if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+					chatMessage.innerHTML = html;
+				} else {
+					typeWriter(html, chatMessage);
+				}
 			}
 			chatContainer.appendChild(chatMessage);
 		}
