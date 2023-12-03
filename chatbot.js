@@ -158,6 +158,17 @@ function createChatBot(chatData) {
 		});
 	}
 
+	function displayMessage(html, isUser, chatMessage) {
+		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
+		// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
+		if (isUser || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			chatMessage.innerHTML = html;
+		} else {
+			typeWriter(html, chatMessage);
+		}
+		chatContainer.appendChild(chatMessage);
+	}
+
 	// Création du message par le bot ou l'utilisateur
 	function createChatMessage(message, isUser) {
 		const chatMessage = document.createElement("div");
@@ -167,32 +178,12 @@ function createChatBot(chatData) {
 		html = processVariables(html);
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
+			html = convertLatexExpressions(html);
 			setTimeout(() => {
-				html = convertLatexExpressions(html);
-				// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
-				if (isUser) {
-					chatMessage.innerHTML = html;
-				} else {
-					if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-						chatMessage.innerHTML = html;
-					} else {
-						typeWriter(html, chatMessage);
-					}
-				}
-				chatContainer.appendChild(chatMessage);
+				displayMessage(html, isUser, chatMessage);
 			}, 100);
 		} else {
-			// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
-			if (isUser) {
-				chatMessage.innerHTML = html;
-			} else {
-				if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-					chatMessage.innerHTML = html;
-				} else {
-					typeWriter(html, chatMessage);
-				}
-			}
-			chatContainer.appendChild(chatMessage);
+			displayMessage(html, isUser, chatMessage);
 		}
 	}
 
