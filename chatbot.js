@@ -34,6 +34,10 @@ function createChatBot(chatData) {
 	}
 	const conversationElement = document.getElementById("chat");
 
+	// Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
+	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	const autoFocus = isMobile ? false : true;
+
 	let typed;
 	const pauseTypeWriter = "^300 ";
 	// Effet machine à écrire
@@ -85,8 +89,8 @@ function createChatBot(chatData) {
 			startDelay: 100,
 			showCursor: false,
 			onBegin: () => {
-				// Quand l'effet démarre, on refocalise sur userInput
-				userInput.focus();
+				// Quand l'effet démarre, on refocalise sur userInput (sauf sur les smartphones)
+				if(autoFocus) {userInput.focus();}
 				// On détecte un appui sur Enter pour stopper l'effet machine à écrire
 				userInput.addEventListener("keypress",keypressHandler);
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
