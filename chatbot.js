@@ -85,7 +85,7 @@ function createChatBot(chatData) {
 		// Effet machine à écrire
 		typed = new Typed(element, {
 			strings: [content],
-			typeSpeed: -500,
+			typeSpeed: -5000,
 			startDelay: 100,
 			showCursor: false,
 			onBegin: () => {
