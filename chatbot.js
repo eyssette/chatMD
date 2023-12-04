@@ -40,7 +40,7 @@ function createChatBot(chatData) {
 
 	let typed;
 	const pauseTypeWriter = "^300 ";
-	const stopTypeWriterExecutionTimeThreshold = 700;
+	const stopTypeWriterExecutionTimeThreshold = 800;
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
