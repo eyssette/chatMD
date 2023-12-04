@@ -341,11 +341,6 @@ function parseMarkdown(markdownContent) {
 					const avatarCSS = `
   						.bot-message > :first-child:before {
         				background-image: url("${yamlAvatar}");
-        				background-size: 40px;
-						width:40px;
-						height:40px;
-						display:inline-block;
-						content:"";
 					`;
 					const avatarStyleElement = document.createElement('style');
 					avatarStyleElement.textContent = avatarCSS;

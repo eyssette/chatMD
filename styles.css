@@ -135,9 +135,15 @@ button {
 }
 
 .bot-message > :first-child:before {
-	content: "🗣️";
-	margin-right: 10px;
+	content: "";
+	margin-right: 15px;
 	font-size: 2em;
+	background-image: url("favicon.ico");
+	background-size: 40px;
+	width:40px;
+	height:40px;
+	display:inline-block;
+	vertical-align: bottom;
 }
 
 .bot-message ul.messageOptions li {
