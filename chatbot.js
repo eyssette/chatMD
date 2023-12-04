@@ -44,23 +44,33 @@ function createChatBot(chatData) {
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
 		const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
+		function stopTypeWriter() {
+			typed.stop();
+			typed.reset();
+			typed.strings = ["`" + content.replace(pauseTypeWriter + "`", "")];
+			typed.start();
+			typed.destroy();
+		}
+
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
-				typed.stop();
-				typed.reset();
-				typed.strings = ["`" + content.replace(pauseTypeWriter + "`", "")];
-				typed.start();
-				typed.destroy();
+				stopTypeWriter();
 			}
 		}		
 		// Gestion du scroll automatique vers le bas
 		function scrollWindow() {
 			window.scrollTo(0, document.body.scrollHeight);
 		}
-
+		let counter = 0;
+		const start = Date.now();
 		function handleMutation(mutationsList) {
 			for (const mutation of mutationsList) {
 				if (mutation.type === 'childList') {
+					counter++;
+					const executionTime = Date.now() - start;
+					if (counter==50 && executionTime > 600) {
+						stopTypeWriter();
+					} 
 					scrollWindow();
 				}
 			}
