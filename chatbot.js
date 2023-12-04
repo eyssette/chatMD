@@ -40,6 +40,7 @@ function createChatBot(chatData) {
 
 	let typed;
 	const pauseTypeWriter = "^300 ";
+	const stopTypeWriterExecutionTimeThreshold = 700;
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
@@ -66,11 +67,13 @@ function createChatBot(chatData) {
 		function handleMutation(mutationsList) {
 			for (const mutation of mutationsList) {
 				if (mutation.type === 'childList') {
+					// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 					counter++;
 					const executionTime = Date.now() - start;
-					if (counter==50 && executionTime > 600) {
+					if (counter==50 && executionTime > stopTypeWriterExecutionTimeThreshold) {
 						stopTypeWriter();
 					} 
+					// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 					scrollWindow();
 				}
 			}
