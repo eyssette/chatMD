@@ -63,6 +63,19 @@ variables:
 	maVariable2: "Ceci est ma variable 2"
 ```
 
+## À quoi ça sert ?
+
+On peut imaginer plusieurs usages de chatMD :
+- Tutoriel pour un outil informatique
+- Histoire dont vous êtes le héros
+- Guide méthodologique
+- Soutien pour la révision d'un cours
+- Discussion avec un personnage historique …
+
+On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
+
+Si vous avez trouvé des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
+
 ## Crédits
 
 Chat MD est un outil libre et gratuit sous licence MIT.
