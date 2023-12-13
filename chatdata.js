@@ -213,7 +213,7 @@ function getMarkdownContent() {
 			urlMD.indexOf("download") === -1
 		) {
 			urlMD =
-				urlMD.replace("?edit", "").replace("?both", "").replace("?view", "") +
+				urlMD.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"") +
 				"/download";
 		}
 		// Vérification de la présence d'un raccourci
