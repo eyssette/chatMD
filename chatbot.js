@@ -16,8 +16,11 @@ function createChatBot(chatData) {
 	const converter = new showdown.Converter({
 		emoji: true,
 		parseImgDimensions: true,
+		simpleLineBreaks: true,
+		tables: true,
 	});
 	function markdownToHTML(text) {
+		text = text.replaceAll('\n\n|','|')
 		const html = converter.makeHtml(text);
 		return html;
 	}
