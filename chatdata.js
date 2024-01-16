@@ -36,6 +36,7 @@ const badWordsMessage = [
 let md = `
 ---
 gestionGrosMots: true
+footer: false
 ---
 # ChatMD
 
@@ -191,6 +192,7 @@ let yamlUserInput = true;
 let yamlSearchInContent = false;
 let yamldetectBadWords = false;
 let yamlMaths = false;
+let yamlFooter = true;
 
 let chatData;
 let filterBadWords;
@@ -353,6 +355,9 @@ function parseMarkdown(markdownContent) {
 					while (defaultMessage.length<5) {
 						defaultMessage.push(...defaultMessage);
 					}
+				}
+				if (property == "footer") {
+					yamlFooter = yamlData[property];
 				}
 			}
 		} catch (e) {}

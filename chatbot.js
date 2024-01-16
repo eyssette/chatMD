@@ -1,4 +1,15 @@
 function createChatBot(chatData) {
+	const footerElement = document.getElementById('footer')
+	const controlsElement = document.getElementById('controls')
+	if (yamlFooter === false) {
+		footerElement.style.display= "none";
+		controlsElement.style.height = "70px";
+		const styleControls = "@media screen and (max-width: 500px) { #controls {height:110px!important}}"
+		const styleSheet = document.createElement("style")
+		styleSheet.innerText = styleControls
+		document.head.appendChild(styleSheet);
+	}
+
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
