@@ -36,7 +36,6 @@ const badWordsMessage = [
 let md = `
 ---
 gestionGrosMots: true
-footer: false
 ---
 # ChatMD
 
@@ -108,6 +107,7 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
 - \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
 - \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
+- \`footer: false\` permet de supprimer le footer
 
 Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`---\`
 
