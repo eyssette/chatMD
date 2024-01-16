@@ -29,6 +29,7 @@ function createChatBot(chatData) {
 		parseImgDimensions: true,
 		simpleLineBreaks: true,
 		tables: true,
+		openLinksInNewWindow: true,
 	});
 	function markdownToHTML(text) {
 		text = text.replaceAll('\n\n|','|')
