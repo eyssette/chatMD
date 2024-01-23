@@ -28,6 +28,7 @@ function createChatBot(chatData) {
 		emoji: true,
 		parseImgDimensions: true,
 		simpleLineBreaks: true,
+		simplifiedAutoLink: true,
 		tables: true,
 		openLinksInNewWindow: true,
 	});
