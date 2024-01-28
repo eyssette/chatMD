@@ -1,3 +1,7 @@
+body {
+	background-color: white;
+}
+
 h1,
 #controls {
 	text-align: center;
