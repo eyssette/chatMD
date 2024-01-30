@@ -126,15 +126,23 @@ function createChatBot(chatData) {
 				
 				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 				const mutationObserver = new MutationObserver(handleMutation);
-				mutationObserver.observe(conversationElement, observerConfig);
-				
+				function enableAutoScroll() {
+					mutationObserver.observe(conversationElement, observerConfig);
+				}
+				enableAutoScroll();
+
 				setTimeout(() => {
 					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
 					document.addEventListener('mousemove', function () {
 						mutationObserver.disconnect();
 					});
 					document.addEventListener('wheel', function () {
-						mutationObserver.disconnect();
+						// On remet le scroll automatique si on scrolle vers le bas de la page
+						if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+							enableAutoScroll();
+						} else {
+							mutationObserver.disconnect();
+						}
 					});
 					document.addEventListener('touchstart', function () {
 						mutationObserver.disconnect();
