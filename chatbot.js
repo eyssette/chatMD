@@ -152,7 +152,7 @@ function createChatBot(chatData) {
 							} else {
 								mutationObserver.disconnect();
 							}
-					}, 100);
+					}, 500);
 					});
 				}, 1000);
 				
