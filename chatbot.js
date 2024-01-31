@@ -146,11 +146,13 @@ function createChatBot(chatData) {
 					});
 					document.addEventListener('touchstart', function () {
 						// On remet le scroll automatique si on scrolle vers le bas de la page
-						if(window.scrollY + window.innerHeight + 50 >= document.documentElement.scrollHeight) {
-							enableAutoScroll();
-						} else {
-							mutationObserver.disconnect();
-						}
+						setTimeout(() => {
+							if(window.scrollY + window.innerHeight + 100 >= document.documentElement.scrollHeight) {
+								enableAutoScroll();
+							} else {
+								mutationObserver.disconnect();
+							}
+					}, 100);
 					});
 				}, 1000);
 				
