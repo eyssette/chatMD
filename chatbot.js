@@ -76,7 +76,12 @@ function createChatBot(chatData) {
 		}		
 		// Gestion du scroll automatique vers le bas
 		function scrollWindow() {
-			window.scrollTo(0, document.body.scrollHeight);
+			const iframeWindow = window.frameElement;
+        	if (iframeWindow && iframeWindow.contentWindow) {
+				iframeWindow.contentWindow().scrollTo(0, document.body.scrollHeight);
+			} else {
+				window.scrollTo(0, document.body.scrollHeight);
+			}
 		}
 		let counter = 0;
 		const start = Date.now();
