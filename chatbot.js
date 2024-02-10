@@ -596,7 +596,7 @@ function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
-				window.scrollTo(0, document.body.scrollHeight);
+				scrollWindow();
 			}, 100);
 			userInput.innerText = "";
 		}
@@ -606,7 +606,7 @@ function createChatBot(chatData) {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			sendButton.click();
-			window.scrollTo(0, document.body.scrollHeight);
+			scrollWindow()
 		}
 	});
 
@@ -640,7 +640,7 @@ function createChatBot(chatData) {
 				createChatMessage(target.innerText, true);
 				const optionLink = link.substring(1);
 				responseToSelectedOption(optionLink);
-				window.scrollTo(0, document.body.scrollHeight);
+				scrollWindow();
 			}
 		}
 	});
