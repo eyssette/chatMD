@@ -78,7 +78,7 @@ function createChatBot(chatData) {
 		function scrollWindow() {
 			const iframeWindow = window.frameElement;
         	if (iframeWindow && iframeWindow.contentWindow) {
-				iframeWindow.contentWindow().scrollTo(0, document.body.scrollHeight);
+				iframeWindow.contentWindow.scrollTo(0, document.body.scrollHeight);
 			} else {
 				window.scrollTo(0, document.body.scrollHeight);
 			}
