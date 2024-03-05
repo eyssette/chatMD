@@ -23,6 +23,11 @@ function createChatBot(chatData) {
 	);
 	let randomDefaultMessageIndexLastChoice = [];
 
+	// Gestion du scroll automatique vers le bas
+	function scrollWindow() {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
 	// Gestion du markdown dans les réponses du chatbot
 	const converter = new showdown.Converter({
 		emoji: true,
@@ -73,11 +78,8 @@ function createChatBot(chatData) {
 			if (event.key === "Enter") {
 				stopTypeWriter();
 			}
-		}		
-		// Gestion du scroll automatique vers le bas
-		function scrollWindow() {
-			window.scrollTo(0, document.body.scrollHeight);
 		}
+
 		let counter = 0;
 		const start = Date.now();
 		function handleMutation(mutationsList) {
