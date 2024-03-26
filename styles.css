@@ -234,16 +234,22 @@ pre {
 	font-size:0.95em;
 }
 
+.admonitionTitle {
+	font-weight:bold;
+	font-size:0.9em;
+}
+
 .admonitionTitle:before {
 	font-weight: 300;
 	margin-right: 0.5em;
+	font-size:1.15em;
 }
 
 .info .admonitionTitle, .note .admonitionTitle, .spoiler .admonitionTitle {
 	color:#0b0258;
 }
 .info .admonitionTitle:before, .note .admonitionTitle:before, .spoiler .admonitionTitle:before {
-	content:"🛈";
+	content:"ℹ️";
 }
 .warning .admonitionTitle:before, .danger .admonitionTitle:before, .bug .admonitionTitle:before {
 	content: "⚠️";
