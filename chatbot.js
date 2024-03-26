@@ -53,9 +53,9 @@ function showdownExtensionAdmonitions() {
 						const content = matchInformations[3]
 						if (title.includes('collapsible')) {
 							title = title.replace('collapsible','')
-							matchReplaced = `<div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div>`
+							matchReplaced = `<div><div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div></div>`
 						} else {
-							matchReplaced = `<div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div>`
+							matchReplaced = `<div><div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div></div>`
 						}
 						modifiedText = modifiedText.replaceAll(match,matchReplaced)
 					}

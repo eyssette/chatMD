@@ -150,6 +150,10 @@ button {
 	vertical-align: bottom;
 }
 
+.message > div > .admonition {
+	margin-left: 3em;
+}
+
 .bot-message ul.messageOptions li {
 	list-style-type: none;
 }
