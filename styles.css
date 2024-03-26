@@ -206,6 +206,58 @@ pre {
 	line-height: 0.5em;
 }
 
+.admonition {
+	border:1px solid black;
+	border-radius: 5px;
+	padding:0.5em 1em;
+	background-color: #EEE;
+}
+
+.admonition.info, .admonition.note, .admonition.spoiler {
+	border-color: #1505a1;
+	background-color: rgb(194, 225, 235);
+}
+.admonition.tip, .admonition.success {
+	border-color: #02461f;
+	background-color: rgb(207 235 194);
+}
+.admonition.warning, .admonition.danger, .admonition.bug {
+	border-color: #b94a48;
+	background-color: rgb(241 200 200);
+}
+
+.admonitionContent {
+	font-size:0.95em;
+}
+
+.admonitionTitle:before {
+	font-weight: 300;
+	margin-right: 0.5em;
+}
+
+.info .admonitionTitle, .note .admonitionTitle, .spoiler .admonitionTitle {
+	color:#0b0258;
+}
+.info .admonitionTitle:before, .note .admonitionTitle:before, .spoiler .admonitionTitle:before {
+	content:"🛈";
+}
+.warning .admonitionTitle:before, .danger .admonitionTitle:before, .bug .admonitionTitle:before {
+	content: "⚠️";
+}
+
+.tip .admonitionTitle:before, .success .admonitionTitle:before {
+	content: "💡";
+}
+
+.tip .admonitionTitle, .success .admonitionTitle {
+	color:#012e14;
+}
+.warning .admonitionTitle, .danger .admonitionTitle, .bug .admonitionTitle {
+	color:#470302;
+}
+
+
+
 @media screen and (max-width: 500px) {
 	body {
 		font-size: 1.05em !important;

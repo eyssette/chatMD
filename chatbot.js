@@ -28,6 +28,49 @@ function createChatBot(chatData) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
+	// Extensions pour Showdown
+
+	// Gestion des admonitions
+function showdownExtensionAdmonitions() {
+	return [
+	  {
+		type: 'output',
+		filter: (text) => {
+			text = text.replaceAll('<p>:::',':::')
+			const regex = /:::(.*?)\n(.*?):::/gs;
+			const matches = text.match(regex);
+			if (matches) {
+				let modifiedText = text;
+				for (const match of matches) {
+					const regex2 = /:::(.*?)\s(.*?)\n(.*?):::/s;
+					const matchInformations = regex2.exec(match);
+					const indexMatch = text.indexOf(match);
+					// Pas de transformation de l'admonition en html si l'admonition est dans un bloc code
+					const isInCode = text.substring(indexMatch-6,indexMatch) == "<code>" ? true : false
+					if (!isInCode) {
+						const type = matchInformations[1]
+						let title = matchInformations[2]
+						const content = matchInformations[3]
+						if (title.includes('collapsible')) {
+							title = title.replace('collapsible','')
+							matchReplaced = `<div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div>`
+						} else {
+							matchReplaced = `<div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div>`
+						}
+						modifiedText = modifiedText.replaceAll(match,matchReplaced)
+					}
+					
+				}
+				return modifiedText;
+			} else {
+				return text;
+			}
+		}
+	  }
+	];
+  };
+
+
 	// Gestion du markdown dans les réponses du chatbot
 	const converter = new showdown.Converter({
 		emoji: true,
@@ -36,6 +79,7 @@ function createChatBot(chatData) {
 		simplifiedAutoLink: true,
 		tables: true,
 		openLinksInNewWindow: true,
+		extensions: [showdownExtensionAdmonitions],
 	});
 	function markdownToHTML(text) {
 		text = text.replaceAll('\n\n|','|')
