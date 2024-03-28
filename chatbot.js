@@ -182,10 +182,15 @@ function showdownExtensionAdmonitions() {
 					document.addEventListener('mousemove', function () {
 						mutationObserver.disconnect();
 					});
-					document.addEventListener('wheel', function () {
+					document.addEventListener('wheel', function (e) {
 						// On remet le scroll automatique si on scrolle vers le bas de la page
-						if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-							enableAutoScroll();
+						if (e.deltaY > 0) {
+							// On détecte si on a fait un mouvement vers le bas
+							if(window.scrollY + window.innerHeight >= document.body.offsetHeight) {
+								enableAutoScroll();
+							} else {
+								mutationObserver.disconnect();
+							}
 						} else {
 							mutationObserver.disconnect();
 						}
