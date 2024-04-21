@@ -15,7 +15,7 @@ Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [mo
 Voici quelques exemple de chatbot créés avec ChatMD :
 
 - [Méthode de la dissertation en philosophie](https://eyssette.forge.aeif.fr/chatMD/#https://eyssette.forge.aeif.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
+- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
 
 
 ## Syntaxe
