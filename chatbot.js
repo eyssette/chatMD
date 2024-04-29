@@ -126,14 +126,16 @@ function showdownExtensionAdmonitions() {
 
 		let counter = 0;
 		const start = Date.now();
+		let observerConnected = true;
 		function handleMutation(mutationsList) {
 			for (const mutation of mutationsList) {
 				if (mutation.type === 'childList') {
 					// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 					counter++;
 					const executionTime = Date.now() - start;
-					if (counter==50 && executionTime > stopTypeWriterExecutionTimeThreshold) {
+					if (counter==50 && executionTime > stopTypeWriterExecutionTimeThreshold && observerConnected) {
 						stopTypeWriter(content);
+						observerConnected = false;
 						break;
 					} 
 					// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
@@ -181,6 +183,7 @@ function showdownExtensionAdmonitions() {
 				setTimeout(() => {
 					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
 					document.addEventListener('mousemove', function () {
+						observerConnected = false;
 						mutationObserver.disconnect();
 					});
 					document.addEventListener('wheel', function (e) {
@@ -190,13 +193,16 @@ function showdownExtensionAdmonitions() {
 							if(window.scrollY + window.innerHeight >= document.body.offsetHeight) {
 								enableAutoScroll();
 							} else {
+								observerConnected = false;
 								mutationObserver.disconnect();
 							}
 						} else {
+							observerConnected = false;
 							mutationObserver.disconnect();
 						}
 					});
 					document.addEventListener('touchstart', function () {
+						observerConnected = false;
 						mutationObserver.disconnect();
 						// On remet le scroll automatique si on scrolle vers le bas de la page
 						setTimeout(() => {
