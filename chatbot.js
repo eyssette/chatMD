@@ -110,17 +110,17 @@ function showdownExtensionAdmonitions() {
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
 		const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
-		function stopTypeWriter() {
+		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
-			typed.strings = ["`" + content.replace(pauseTypeWriter + "`", "")];
+			typed.strings = ["`" + slowContent.replace(pauseTypeWriter + "`", "")];
 			typed.start();
 			typed.destroy();
 		}
 
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
-				stopTypeWriter();
+				stopTypeWriter(content);
 			}
 		}
 
@@ -133,7 +133,8 @@ function showdownExtensionAdmonitions() {
 					counter++;
 					const executionTime = Date.now() - start;
 					if (counter==50 && executionTime > stopTypeWriterExecutionTimeThreshold) {
-						stopTypeWriter();
+						stopTypeWriter(content);
+						break;
 					} 
 					// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 					scrollWindow();
@@ -349,6 +350,7 @@ function showdownExtensionAdmonitions() {
 					optionsLastResponse = options;
 					response = gestionOptions(response, options);
 					createChatMessage(response, false);
+					break;
 				}
 			}
 		} else {
