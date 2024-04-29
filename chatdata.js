@@ -432,7 +432,7 @@ function parseMarkdown(markdownContent) {
 	chatbotData.push([
 		currentH2Title,
 		currentLiItems,
-		content.join("\n"),
+		content,
 		lastOrderedList,
 	]);
 
