@@ -193,6 +193,7 @@ let yamlSearchInContent = false;
 let yamldetectBadWords = false;
 let yamlMaths = false;
 let yamlFooter = true;
+let yamlTheme = "";
 
 let chatData;
 let filterBadWords;
@@ -358,6 +359,11 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "footer") {
 					yamlFooter = yamlData[property];
+				}
+				if (property == "theme") {
+					yamlTheme = yamlData[property];
+					const cssFile = yamlTheme.endsWith('.css') ? "themes/"+yamlTheme : "themes/"+yamlTheme+".css";
+					loadCSS(cssFile);
 				}
 			}
 		} catch (e) {}
