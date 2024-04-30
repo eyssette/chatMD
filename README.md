@@ -43,6 +43,7 @@ style: a{color:red}
 maths: true
 titresRéponses: ["### ", "#### "]
 footer: false
+theme: bubbles
 ```
 
 - `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
@@ -52,6 +53,7 @@ footer: false
 - `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
 - `avatar: URL` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
 - `footer: false` permet de supprimer le footer
+- `theme: bubbles` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
 
 Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur `---`
 
