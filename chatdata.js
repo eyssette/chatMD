@@ -52,6 +52,7 @@ gestionGrosMots: true
 > 4. [Tu peux me donner des exemples !](Exemples)
 > 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
 > 6. [À quoi ça sert ?](À quoi ça sert ?)
+> 7. [Comment utiliser ChatMD en tant que widget ?](Utilisation sous la forme d'un widget)
 
 ## Markdown
 - markdown
