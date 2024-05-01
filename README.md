@@ -32,7 +32,7 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante :
 
 ## Options de configuration plus avancées
 
-On peut ajouter un en-tête yaml à son fichier Markdown.  
+On peut ajouter un en-tête ```yaml``` à son fichier Markdown.  
 Par exemple :
 
 ```yaml
@@ -79,6 +79,18 @@ On peut imaginer plusieurs usages de chatMD :
 On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
 
 Si vous avez trouvé des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
+
+## Utilisation sous la forme d'un widget
+
+Vous pouvez intégrer chatMD dans une page HTML en insérant ce code en bas de page dans l'élément ```body```.
+
+```js
+<script id="chatmdWidgetScript"
+src="https://eyssette.forge.apps.education.fr/chatMD/widget.min.js" 
+data-chatbot="URL_DE_VOTRE_CHATBOT"></script>
+```
+
+Il faut bien sûr remplacer ```URL_DE_VOTRE_CHATBOT``` par l'URL de la source de votre chatbot.
 
 ## Crédits
 
