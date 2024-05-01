@@ -51,7 +51,7 @@ widgetContainer.id = "chatmdWidget";
 // Créer le premier sous-div
 const widget = document.createElement("div");
 widget.innerHTML =
-	'<img src="favicon.svg" style="display:block; width:65%;"/><span>ChatMD</span>';
+	'<img src="https://eyssette.forge.apps.education.fr/chatMD/favicon.svg" style="display:block; width:65%;"/><span>ChatMD</span>';
 
 // Créer le deuxième sous-div, qui est caché par défaut
 const chatbotBox = document.createElement("div");
