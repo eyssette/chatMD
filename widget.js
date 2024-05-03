@@ -66,14 +66,15 @@ const chatbotSRC = widgetScript.getAttribute("data-chatbot")
 	? "#" + widgetScript.getAttribute("data-chatbot")
 	: "";
 
+const imageWidget = widgetScript.getAttribute("data-image") ? widgetScript.getAttribute("data-image") : 'https://eyssette.forge.apps.education.fr/chatMD/message.svg';
+
 // Créer un élément div avec l'id "chatmdWidget"
 let widgetContainer = document.createElement("div");
 widgetContainer.id = "chatmdWidget";
 
 // Créer le premier sous-div
 const widget = document.createElement("div");
-widget.innerHTML =
-	'<img src="https://eyssette.forge.apps.education.fr/chatMD/message.svg"/>';
+widget.innerHTML = '<img src="'+imageWidget+'"/>';
 
 // Créer le deuxième sous-div, qui est caché par défaut
 const chatbotBox = document.createElement("div");
