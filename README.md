@@ -92,6 +92,8 @@ data-chatbot="URL_DE_VOTRE_CHATBOT"></script>
 
 Il faut bien sûr remplacer ```URL_DE_VOTRE_CHATBOT``` par l'URL de la source de votre chatbot.
 
+On peut customiser l'image du widget en ajoutant `data-image="URL_IMAGE"` comme paramètre.
+
 ## Crédits
 
 Chat MD est un outil libre et gratuit sous licence MIT.
