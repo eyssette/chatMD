@@ -21,6 +21,10 @@ const widgetStyle = `
 	height: 100%;
 }
 
+#chatmdWidget img {
+	width:80%;
+}
+
 #chatmdWidget div:nth-of-type(2) {
 	position: fixed;
 	right:40px;
@@ -69,7 +73,7 @@ widgetContainer.id = "chatmdWidget";
 // Créer le premier sous-div
 const widget = document.createElement("div");
 widget.innerHTML =
-	'<img src="https://eyssette.forge.apps.education.fr/chatMD/favicon.svg" style="display:block; width:65%;"/><span>ChatMD</span>';
+	'<img src="https://eyssette.forge.apps.education.fr/chatMD/message.svg"/>';
 
 // Créer le deuxième sous-div, qui est caché par défaut
 const chatbotBox = document.createElement("div");
