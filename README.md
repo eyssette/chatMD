@@ -105,4 +105,4 @@ Il utilise d'autres logiciels libres :
 - [leo-profanity](https://github.com/jojoee/leo-profanity) et [french-badwords-list](https://github.com/darwiin/french-badwords-list/) pour la gestion des gros mots
 - [katex](https://katex.org/) pour la gestion des mathématiques en Latex
 
-Merci à Perrine Douhéret pour ses suggestions d'amélioration de l'outil !
+Merci à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo pour leurs suggestions d'amélioration de l'outil !
