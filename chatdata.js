@@ -240,6 +240,18 @@ function getMarkdownContent() {
 				urlMD.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"") +
 				"/download";
 		}
+		// Gestion des fichiers hébergés via Hedgedoc
+		if (
+			urlMD.includes("hedgedoc") &&
+			urlMD.indexOf("download") === -1
+		) {
+			urlMD =
+				urlMD
+					.replace("?edit", "")
+					.replace("?both", "")
+					.replace("?view", "")
+					.replace(/#$/, "") + "/download";
+		}
 		// Vérification de la présence d'un raccourci
 		shortcut = shortcuts.find(element => element[0]==urlMD);
 		if (shortcut) {
