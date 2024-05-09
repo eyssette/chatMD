@@ -693,10 +693,12 @@ function createChatBot(chatData) {
 
 	// Une fonction pour tester si le tableau des options doit être réordonné avec de l'aléatoire
 	function shouldBeRandomized(array) {
-		for (let i = 0; i < array.length; i++) {
-		  if (array[i][2] === true) {
-			return true;
-		  }
+		if(Array.isArray(array)) {
+			for (let i = 0; i < array.length; i++) {
+			if (array[i][2] === true) {
+				return true;
+			}
+			}
 		}
 		return false;
 	  }
