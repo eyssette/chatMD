@@ -1,12 +1,13 @@
 function createChatBot(chatData) {
-	const footerElement = document.getElementById('footer')
-	const controlsElement = document.getElementById('controls')
+	const footerElement = document.getElementById("footer");
+	const controlsElement = document.getElementById("controls");
 	if (yamlFooter === false) {
-		footerElement.style.display= "none";
+		footerElement.style.display = "none";
 		controlsElement.style.height = "70px";
-		const styleControls = "@media screen and (max-width: 500px) { #controls {height:110px!important}}"
-		const styleSheet = document.createElement("style")
-		styleSheet.innerText = styleControls
+		const styleControls =
+			"@media screen and (max-width: 500px) { #controls {height:110px!important}}";
+		const styleSheet = document.createElement("style");
+		styleSheet.innerText = styleControls;
 		document.head.appendChild(styleSheet);
 	}
 
@@ -31,45 +32,46 @@ function createChatBot(chatData) {
 	// Extensions pour Showdown
 
 	// Gestion des admonitions
-function showdownExtensionAdmonitions() {
-	return [
-	  {
-		type: 'output',
-		filter: (text) => {
-			text = text.replaceAll('<p>:::',':::')
-			const regex = /:::(.*?)\n(.*?):::/gs;
-			const matches = text.match(regex);
-			if (matches) {
-				let modifiedText = text;
-				for (const match of matches) {
-					const regex2 = /:::(.*?)\s(.*?)\n(.*?):::/s;
-					const matchInformations = regex2.exec(match);
-					const indexMatch = text.indexOf(match);
-					// Pas de transformation de l'admonition en html si l'admonition est dans un bloc code
-					const isInCode = text.substring(indexMatch-6,indexMatch) == "<code>" ? true : false
-					if (!isInCode) {
-						const type = matchInformations[1]
-						let title = matchInformations[2]
-						const content = matchInformations[3]
-						if (title.includes('collapsible')) {
-							title = title.replace('collapsible','')
-							matchReplaced = `<div><div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div></div>`
-						} else {
-							matchReplaced = `<div><div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div></div>`
+	function showdownExtensionAdmonitions() {
+		return [
+			{
+				type: "output",
+				filter: (text) => {
+					text = text.replaceAll("<p>:::", ":::");
+					const regex = /:::(.*?)\n(.*?):::/gs;
+					const matches = text.match(regex);
+					if (matches) {
+						let modifiedText = text;
+						for (const match of matches) {
+							const regex2 = /:::(.*?)\s(.*?)\n(.*?):::/s;
+							const matchInformations = regex2.exec(match);
+							const indexMatch = text.indexOf(match);
+							// Pas de transformation de l'admonition en html si l'admonition est dans un bloc code
+							const isInCode =
+								text.substring(indexMatch - 6, indexMatch) == "<code>"
+									? true
+									: false;
+							if (!isInCode) {
+								const type = matchInformations[1];
+								let title = matchInformations[2];
+								const content = matchInformations[3];
+								if (title.includes("collapsible")) {
+									title = title.replace("collapsible", "");
+									matchReplaced = `<div><div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div></div>`;
+								} else {
+									matchReplaced = `<div><div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div></div>`;
+								}
+								modifiedText = modifiedText.replaceAll(match, matchReplaced);
+							}
 						}
-						modifiedText = modifiedText.replaceAll(match,matchReplaced)
+						return modifiedText;
+					} else {
+						return text;
 					}
-					
-				}
-				return modifiedText;
-			} else {
-				return text;
-			}
-		}
-	  }
-	];
-  };
-
+				},
+			},
+		];
+	}
 
 	// Gestion du markdown dans les réponses du chatbot
 	const converter = new showdown.Converter({
@@ -82,17 +84,17 @@ function showdownExtensionAdmonitions() {
 		extensions: [showdownExtensionAdmonitions],
 	});
 	function markdownToHTML(text) {
-		text = text.replaceAll('\n\n|','|')
+		text = text.replaceAll("\n\n|", "|");
 		const html = converter.makeHtml(text);
 		return html;
 	}
 
 	function getRandomElement(array) {
-		return array[Math.floor((Math.random()*array.length))];
+		return array[Math.floor(Math.random() * array.length)];
 	}
 	function randomContentMessage(contentMessage) {
-		const contentSplitHR = contentMessage.split('<hr />');
-		if (contentSplitHR.length>1) {
+		const contentSplitHR = contentMessage.split("<hr />");
+		if (contentSplitHR.length > 1) {
 			contentMessage = getRandomElement(contentSplitHR);
 		}
 		return contentMessage;
@@ -100,7 +102,10 @@ function showdownExtensionAdmonitions() {
 	const conversationElement = document.getElementById("chat");
 
 	// Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
-	const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	const isMobile =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+			navigator.userAgent
+		);
 	const autoFocus = isMobile ? false : true;
 
 	let typed;
@@ -109,7 +114,10 @@ function showdownExtensionAdmonitions() {
 	// Effet machine à écrire
 	function typeWriter(content, element) {
 		// Gestion de "Enter" pour stopper l'effet machine à écrire
-		const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
+		const messageTypeEnterToStopTypeWriter =
+			window.innerWidth > 880
+				? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
+				: "“Enter” pour stopper l'effet “machine à écrire”";
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
@@ -129,15 +137,19 @@ function showdownExtensionAdmonitions() {
 		let observerConnected = true;
 		function handleMutation(mutationsList) {
 			for (const mutation of mutationsList) {
-				if (mutation.type === 'childList') {
+				if (mutation.type === "childList") {
 					// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 					counter++;
 					const executionTime = Date.now() - start;
-					if (counter==50 && executionTime > stopTypeWriterExecutionTimeThreshold && observerConnected) {
+					if (
+						counter == 50 &&
+						executionTime > stopTypeWriterExecutionTimeThreshold &&
+						observerConnected
+					) {
 						stopTypeWriter(content);
 						observerConnected = false;
 						break;
-					} 
+					}
 					// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 					scrollWindow();
 				}
@@ -147,7 +159,7 @@ function showdownExtensionAdmonitions() {
 		// Configuration de MutationObserver
 		const observerConfig = {
 			childList: true,
-			subtree: true
+			subtree: true,
 		};
 
 		// Gestion du choix d'un message au hasard quand il y a plusieurs réponses possibles
@@ -155,8 +167,8 @@ function showdownExtensionAdmonitions() {
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			let contentMessage = content.substring(0, optionsStart);
 			contentMessage = randomContentMessage(contentMessage);
-    		const contentOptions = content.substring(optionsStart);
-			content = contentMessage + pauseTypeWriter + "`" +contentOptions + "`";
+			const contentOptions = content.substring(optionsStart);
+			content = contentMessage + pauseTypeWriter + "`" + contentOptions + "`";
 		} else {
 			content = randomContentMessage(content);
 		}
@@ -168,11 +180,13 @@ function showdownExtensionAdmonitions() {
 			showCursor: false,
 			onBegin: () => {
 				// Quand l'effet démarre, on refocalise sur userInput (sauf sur les smartphones)
-				if(autoFocus) {userInput.focus();}
+				if (autoFocus) {
+					userInput.focus();
+				}
 				// On détecte un appui sur Enter pour stopper l'effet machine à écrire
-				userInput.addEventListener("keypress",keypressHandler);
+				userInput.addEventListener("keypress", keypressHandler);
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
-				
+
 				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 				const mutationObserver = new MutationObserver(handleMutation);
 				function enableAutoScroll() {
@@ -182,15 +196,18 @@ function showdownExtensionAdmonitions() {
 
 				setTimeout(() => {
 					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
-					document.addEventListener('mousemove', function () {
+					document.addEventListener("mousemove", function () {
 						observerConnected = false;
 						mutationObserver.disconnect();
 					});
-					document.addEventListener('wheel', function (e) {
+					document.addEventListener("wheel", function (e) {
 						// On remet le scroll automatique si on scrolle vers le bas de la page
 						if (e.deltaY > 0) {
 							// On détecte si on a fait un mouvement vers le bas
-							if(window.scrollY + window.innerHeight >= document.body.offsetHeight) {
+							if (
+								window.scrollY + window.innerHeight >=
+								document.body.offsetHeight
+							) {
 								enableAutoScroll();
 							} else {
 								observerConnected = false;
@@ -201,26 +218,31 @@ function showdownExtensionAdmonitions() {
 							mutationObserver.disconnect();
 						}
 					});
-					document.addEventListener('touchstart', function () {
+					document.addEventListener("touchstart", function () {
 						observerConnected = false;
 						mutationObserver.disconnect();
 						// On remet le scroll automatique si on scrolle vers le bas de la page
 						setTimeout(() => {
-							if(window.scrollY + window.innerHeight + 200 >= document.documentElement.scrollHeight) {
+							if (
+								window.scrollY + window.innerHeight + 200 >=
+								document.documentElement.scrollHeight
+							) {
 								enableAutoScroll();
 							}
 						}, 5000);
 					});
 				}, 1000);
-				
 			},
 			onComplete: () => {
 				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
-				userInput.removeEventListener("keypress",keypressHandler);
-				if(userInput.getAttribute("placeholder") == messageTypeEnterToStopTypeWriter) {
+				userInput.removeEventListener("keypress", keypressHandler);
+				if (
+					userInput.getAttribute("placeholder") ==
+					messageTypeEnterToStopTypeWriter
+				) {
 					userInput.setAttribute("placeholder", "Écrivez votre message");
 				}
-			}
+			},
 		});
 	}
 
@@ -254,11 +276,11 @@ function showdownExtensionAdmonitions() {
 	}
 
 	function processVariables(content) {
-		return content.replace(/@{(\S+)}/g, function(match, variableName) {
+		return content.replace(/@{(\S+)}/g, function (match, variableName) {
 			if (yamlData.variables[variableName]) {
 				return yamlData.variables[variableName];
 			} else {
-				return "@{"+variableName+"}";
+				return "@{" + variableName + "}";
 			}
 		});
 	}
@@ -266,7 +288,10 @@ function showdownExtensionAdmonitions() {
 	function displayMessage(html, isUser, chatMessage) {
 		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
 		// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
-		if (isUser || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+		if (
+			isUser ||
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches
+		) {
 			chatMessage.innerHTML = html;
 		} else {
 			typeWriter(html, chatMessage);
@@ -322,23 +347,23 @@ function showdownExtensionAdmonitions() {
 
 	function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
 		// Teste la présence d'un mot dans une chaîne de caractère qui a une distance de Levenshstein inférieure à une distance donnée
-		
+
 		const words = string.split(" ");
 		// On parcourt les mots
-		
+
 		for (const word of words) {
-		  // On calcule la distance de Levenshtein entre le mot et le mot cible
-		  const distanceLevenshtein = levenshteinDistance(word, keyWord);
-	  
-		  // Si la distance est inférieure à la distance donnée, on renvoie vrai
-		  if (distanceLevenshtein < distance) {
-			return true;
-		  }
+			// On calcule la distance de Levenshtein entre le mot et le mot cible
+			const distanceLevenshtein = levenshteinDistance(word, keyWord);
+
+			// Si la distance est inférieure à la distance donnée, on renvoie vrai
+			if (distanceLevenshtein < distance) {
+				return true;
+			}
 		}
 
 		// Si on n'a pas trouvé de mot avec une distance inférieure à la distance donnée, on renvoie faux
 		return false;
-	  }
+	}
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
@@ -366,47 +391,50 @@ function showdownExtensionAdmonitions() {
 
 	function removeAccents(str) {
 		const accentMap = {
-		  à: 'a',
-		  â: 'a',
-		  é: 'e',
-		  è: 'e',
-		  ê: 'e',
-		  ë: 'e',
-		  î: 'i',
-		  ï: 'i',
-		  ô: 'o',
-		  ö: 'o',
-		  û: 'u',
-		  ü: 'u',
-		  ÿ: 'y',
-		  ç: 'c',
-		  À: 'A',
-		  Â: 'A',
-		  É: 'E',
-		  È: 'E',
-		  Ê: 'E',
-		  Ë: 'E',
-		  Î: 'I',
-		  Ï: 'I',
-		  Ô: 'O',
-		  Ö: 'O',
-		  Û: 'U',
-		  Ü: 'U',
-		  Ÿ: 'Y',
-		  Ç: 'C',
+			à: "a",
+			â: "a",
+			é: "e",
+			è: "e",
+			ê: "e",
+			ë: "e",
+			î: "i",
+			ï: "i",
+			ô: "o",
+			ö: "o",
+			û: "u",
+			ü: "u",
+			ÿ: "y",
+			ç: "c",
+			À: "A",
+			Â: "A",
+			É: "E",
+			È: "E",
+			Ê: "E",
+			Ë: "E",
+			Î: "I",
+			Ï: "I",
+			Ô: "O",
+			Ö: "O",
+			Û: "U",
+			Ü: "U",
+			Ÿ: "Y",
+			Ç: "C",
 		};
-	  
-		return str.replace(/[àâéèêëîïôöûüÿçÀÂÉÈÊËÎÏÔÖÛÜŸÇ]/g, (match) => accentMap[match] || match);
-	  }
+
+		return str.replace(
+			/[àâéèêëîïôöûüÿçÀÂÉÈÊËÎÏÔÖÛÜŸÇ]/g,
+			(match) => accentMap[match] || match
+		);
+	}
 
 	function tokenize(text, indexChatBotResponse) {
 		// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 
 		// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
 		let words = text.toLowerCase();
-		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g,"");
+		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g, "");
 		words = removeAccents(words);
-		words = words.split(/\s|'/).filter(word => word.length >= 5) || []; 
+		words = words.split(/\s|'/).filter((word) => word.length >= 5) || [];
 		const tokens = [];
 
 		// On va créer des tokens avec à chaque fois un poids associé
@@ -428,28 +456,28 @@ function showdownExtensionAdmonitions() {
 					weight = weight + bonusInTitle;
 				}
 			}
-			return {token, weight: weight};
+			return { token, weight: weight };
 		}
 
 		for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
 			const word = words[wordIndex];
 			// Premier type de token : le mot en entier ; poids le plus important
-			tokens.push({word, weight: 5});
-			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes	
+			tokens.push({ word, weight: 5 });
+			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
 			const wordLength = word.length;
 			if (wordLength >= 5) {
 				for (let i = 0; i <= wordLength - 5; i++) {
-					tokens.push(weightedToken(i,5,word));
+					tokens.push(weightedToken(i, 5, word));
 				}
 			}
 			if (wordLength >= 6) {
 				for (let i = 0; i <= wordLength - 6; i++) {
-					tokens.push(weightedToken(i,6,word));
+					tokens.push(weightedToken(i, 6, word));
 				}
 			}
 			if (wordLength >= 7) {
 				for (let i = 0; i <= wordLength - 7; i++) {
-					tokens.push(weightedToken(i,7,word));
+					tokens.push(weightedToken(i, 7, word));
 				}
 			}
 		}
@@ -460,7 +488,7 @@ function showdownExtensionAdmonitions() {
 		// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
 		const tokens = tokenize(text, indexChatBotResponse);
 		const vec = {};
-		for (const {token, weight} of tokens) {
+		for (const { token, weight } of tokens) {
 			if (token) {
 				vec[token] = (vec[token] || 0) + weight;
 			}
@@ -473,8 +501,10 @@ function showdownExtensionAdmonitions() {
 	if (yamlSearchInContent) {
 		for (let i = 0; i < chatData.length; i++) {
 			const responses = chatData[i][2];
-			let response = Array.isArray(responses) ? responses.join(" ").toLowerCase() : responses.toLowerCase();
-			response = chatData[i][0] + ' ' + response;
+			let response = Array.isArray(responses)
+				? responses.join(" ").toLowerCase()
+				: responses.toLowerCase();
+			response = chatData[i][0] + " " + response;
 			const vectorResponse = createVector(response, i);
 			vectorChatBotResponses.push(vectorResponse);
 		}
@@ -482,7 +512,7 @@ function showdownExtensionAdmonitions() {
 
 	function cosineSimilarity(str, vector) {
 		// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
-	
+
 		// Calcule le produit scalaire de deux vecteurs
 		function dotProduct(vec1, vec2) {
 			const commonWords = new Set([...Object.keys(vec1), ...Object.keys(vec2)]);
@@ -492,7 +522,7 @@ function showdownExtensionAdmonitions() {
 			}
 			return dot;
 		}
-	
+
 		// Calcule la magnitude d'un vecteur
 		function magnitude(vec) {
 			let sum = 0;
@@ -501,7 +531,7 @@ function showdownExtensionAdmonitions() {
 			}
 			return Math.sqrt(sum);
 		}
-	
+
 		// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)
 		const vectorString = createVector(str);
 
@@ -509,7 +539,7 @@ function showdownExtensionAdmonitions() {
 		const dot = dotProduct(vectorString, vector);
 		const mag1 = magnitude(vectorString);
 		const mag2 = magnitude(vector);
-	
+
 		if (mag1 === 0 || mag2 === 0) {
 			return 0; // Évitez la division par zéro
 		} else {
@@ -520,9 +550,9 @@ function showdownExtensionAdmonitions() {
 	function chatbotResponse(userInputText) {
 		// Choix de la réponse que le chatbot va envoyer
 
-		if(yamldetectBadWords === true && filterBadWords) {
+		if (yamldetectBadWords === true && filterBadWords) {
 			if (filterBadWords.check(userInputText)) {
-				createChatMessage(getRandomElement(badWordsMessage),false);
+				createChatMessage(getRandomElement(badWordsMessage), false);
 				return;
 			}
 		}
@@ -560,8 +590,11 @@ function showdownExtensionAdmonitions() {
 				let distanceScore = 0;
 				let distance = 0;
 				if (yamlSearchInContent) {
-						const cosSim = cosineSimilarity(userInputTextToLowerCase,vectorChatBotResponses[i]);
-						matchScore = matchScore + cosSim + 0.5;
+					const cosSim = cosineSimilarity(
+						userInputTextToLowerCase,
+						vectorChatBotResponses[i]
+					);
+					matchScore = matchScore + cosSim + 0.5;
 				}
 				for (let keyword of keywords) {
 					let keywordToLowerCase = keyword.toLowerCase();
@@ -570,10 +603,16 @@ function showdownExtensionAdmonitions() {
 						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 						matchScore = matchScore + MATCH_SCORE_IDENTITY;
 						// On privilégie les correspondances sur les keywords plus longs
-						matchScore =  matchScore + keywordToLowerCase.length/10;
+						matchScore = matchScore + keywordToLowerCase.length / 10;
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
-						if (hasLevenshteinDistanceLessThan(userInputTextToLowerCase, keyword, LEVENSHTEIN_THRESHOLD)) {	
+						if (
+							hasLevenshteinDistanceLessThan(
+								userInputTextToLowerCase,
+								keyword,
+								LEVENSHTEIN_THRESHOLD
+							)
+						) {
 							distanceScore++;
 						}
 					}
@@ -593,7 +632,9 @@ function showdownExtensionAdmonitions() {
 			}
 			if (bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) {
 				// On envoie le meilleur choix s'il en existe un
-				let selectedResponse = Array.isArray(bestMatch) ? bestMatch.join("\n\n") : bestMatch;
+				let selectedResponse = Array.isArray(bestMatch)
+					? bestMatch.join("\n\n")
+					: bestMatch;
 				const options = chatData[indexBestMatch][3];
 				selectedResponse = gestionOptions(selectedResponse, options);
 				createChatMessage(selectedResponse, false);
@@ -618,7 +659,53 @@ function showdownExtensionAdmonitions() {
 		}
 	}
 
+	// Une fonction pour mettre de l'aléatoire dans un tableau, en conservant cependant la position de certains éléments
+	function randomizeArrayWithFixedElements(array) {
+		let fixedElements = [];
+		let randomizableElements = [];
+
+		// On distingue les éléments fixes et les éléments à ordonner de manière aléatoire
+		array.forEach(function (element) {
+			if (!element[2]) {
+				fixedElements.push(element);
+			} else {
+				randomizableElements.push(element);
+			}
+		});
+
+		// On ordonne de manière aléatoire les éléments qui doivent l'être
+		randomizableElements.sort(function () {
+			return Math.random() - 0.5;
+		});
+
+		// On reconstruit le tableau en réinsérant les éléments fixes au bon endroit
+		var finalArray = [];
+		array.forEach(function (element) {
+			if (!element[2]) {
+				finalArray.push(element);
+			} else {
+				finalArray.push(randomizableElements.shift());
+			}
+		});
+
+		return finalArray;
+	}
+
+	// Une fonction pour tester si le tableau des options doit être réordonné avec de l'aléatoire
+	function shouldBeRandomized(array) {
+		for (let i = 0; i < array.length; i++) {
+		  if (array[i][2] === true) {
+			return true;
+		  }
+		}
+		return false;
+	  }
+
 	function gestionOptions(response, options) {
+		// On teste s'il faut mettre de l'aléatoire dans les options
+		if (shouldBeRandomized(options)) {
+			options = randomizeArrayWithFixedElements(options);
+		}
 		if (options) {
 			optionsLastResponse = options;
 			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
@@ -660,7 +747,7 @@ function showdownExtensionAdmonitions() {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			sendButton.click();
-			scrollWindow()
+			scrollWindow();
 		}
 	});
 
@@ -668,7 +755,7 @@ function showdownExtensionAdmonitions() {
 		userInput.focus();
 	});
 
-	userInput.focus({preventScroll: true});
+	userInput.focus({ preventScroll: true });
 
 	userInput.addEventListener("focus", function () {
 		this.classList.remove("placeholder");

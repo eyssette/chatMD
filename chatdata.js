@@ -410,10 +410,12 @@ function parseMarkdown(markdownContent) {
 	let currentLiItems = [];
 	let content = [];
 	let lastOrderedList = null;
-	const regexOrderedList = /^\d{1,3}\.\s\[/;
+	const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
+	const regexOrderedListRandom = /^\d{1,3}\)/;
 	let listParsed = false;
 	let initialMessageContent = [];
 	let initialMessageOptions = [];
+	let randomOrder = false;
 
 	for (let line of lines) {
 		// On parcourt le contenu du fichier ligne par ligne
@@ -425,10 +427,11 @@ function parseMarkdown(markdownContent) {
 			line = line.replace(/^>\s?/, "").trim();
 			if (line.match(regexOrderedList)) {
 				// Récupération des options dans le message initial, s'il y en a
-				const listContent = line.replace(/^\d+\.\s/, "").trim();
+				randomOrder = regexOrderedListRandom.test(line);
+				const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 				const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 				const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-				initialMessageOptions.push([text, link]);
+				initialMessageOptions.push([text, link, randomOrder]);
 			} else {
 				initialMessageContent.push(line);
 			}
@@ -457,10 +460,11 @@ function parseMarkdown(markdownContent) {
 			if (!lastOrderedList) {
 				lastOrderedList = [];
 			}
-			const listContent = line.replace(/^\d+\.\s/, "").trim();
+			randomOrder = regexOrderedListRandom.test(line);
+			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			lastOrderedList.push([text, link]);
+			lastOrderedList.push([text, link, randomOrder]);
 			/* lastOrderedList.push(listContent); */
 		} else if (line.length > 0) {
 			// Gestion du reste du contenu
