@@ -44,7 +44,7 @@ gestionGrosMots: true
 > - Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
 > - Respectez la syntaxe de ChatMD pour définir votre chatbot
 > 
-> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.forge.aeif.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
 > 
 > 1. [Qu'est-ce que le Markdown ?](Markdown)
 > 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
@@ -68,7 +68,7 @@ Pour découvrir le Markdown, vous pouvez suivre ce [tutoriel](https://www.markdo
 
 [CodiMD](https://codimd.apps.education.fr/) est un outil pour écrire du Markdown en ligne et il est disponible avec vos identifiants académiques sur le [portail Apps Edu](https://portail.apps.education.fr/).
 
-Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.aeif.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
+Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
 
 ## Syntaxe
 - syntaxe
@@ -135,8 +135,8 @@ Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [mo
 
 Voici quelques exemple de chatbot créés avec ChatMD : 
 
-- [Méthode de la dissertation en philosophie](https://eyssette.forge.aeif.fr/chatMD/#https://eyssette.forge.aeif.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
+- [Méthode de la dissertation en philosophie](https://eyssette.forge.apps.education.fr/chatMD/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
+- [Utilisation d'un microscope](https://eyssette.forge.apps.education.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
 
 ## À quoi ça sert ?
 - à quoi ça sert ?

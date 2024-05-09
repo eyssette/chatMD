@@ -2,10 +2,10 @@
 
 ChatMD est un chatbot, que vous pouvez configurer par vous-même en Markdown :
 
-- Créez un fichier en [markdown]((https://www.markdowntutorial.com/fr/)) et mettez-le en ligne : sur [CodiMD](https://codimd.apps.education.fr/), ou sur une [forge](https://forge.aeif.fr/)
+- Créez un fichier en [markdown]((https://www.markdowntutorial.com/fr/)) et mettez-le en ligne : sur [CodiMD](https://codimd.apps.education.fr/), ou sur une [forge](https://forge.apps.education.fr/)
 - Respectez la syntaxe de ChatMD pour définir votre chatbot
  
-Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.aeif.fr/chatMD/#URL](https://eyssette.forge.aeif.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
 
 
 ## Exemples
@@ -14,8 +14,8 @@ Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [mo
 
 Voici quelques exemple de chatbot créés avec ChatMD :
 
-- [Méthode de la dissertation en philosophie](https://eyssette.forge.aeif.fr/chatMD/#https://eyssette.forge.aeif.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://eyssette.forge.aeif.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
+- [Méthode de la dissertation en philosophie](https://eyssette.forge.apps.education.fr/chatMD/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
+- [Utilisation d'un microscope](https://eyssette.forge.apps.education.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
 
 
 ## Syntaxe
