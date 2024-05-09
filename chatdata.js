@@ -111,7 +111,9 @@ On peut ajouter un en-tête yaml à son fichier Markdown :
 - \`footer: false\` permet de supprimer le footer
 - \`theme: bubbles\` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
 
-Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`---\`
+Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`---\`.
+
+On peut également afficher les propositions en fin de message de manière aléatoire : si on met "1. proposition" : la proposition reste à la place indiquée, alors que si on met "1) proposition" : la proposition est réordonnée de manière aléatoire.
 
 D'autres options plus avancées dans l'en-tête yaml :
 - \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
