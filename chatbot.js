@@ -316,7 +316,7 @@ function createChatBot(chatData) {
 					return customVariables[v1] ? customVariables[v1] : "";
 				})
 				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
-				message = message.replaceAll(/\`@(.*?) ?= ?@INPUT : (.*)\`/g,function(match,v1,v2) {
+				message = message.replaceAll(/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,function(match,v1,v2) {
 					getLastMessage = match ? [v1,v2]: false;
 					return '';
 				});
@@ -646,7 +646,9 @@ function createChatBot(chatData) {
 		} else {
 			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
 			for (let i = 0; i < chatData.length; i++) {
-				const keywords = chatData[i][1];
+				const titleResponse = chatData[i][0];
+				const keywordsResponse = chatData[i][1];
+				const keywords = keywordsResponse.concat(titleResponse);
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
