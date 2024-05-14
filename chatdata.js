@@ -217,6 +217,7 @@ let yamldetectBadWords = false;
 let yamlMaths = false;
 let yamlFooter = true;
 let yamlTheme = "";
+let yamlDynamicContent = false;
 
 let chatData;
 let filterBadWords;
@@ -399,6 +400,9 @@ function parseMarkdown(markdownContent) {
 					yamlTheme = yamlData[property];
 					const cssFile = yamlTheme.endsWith('.css') ? "themes/"+yamlTheme : "themes/"+yamlTheme+".css";
 					loadCSS(cssFile);
+				}
+				if (property == "dynamicContent" || property =="contenuDynamique") {
+					yamlDynamicContent = yamlData[property];
 				}
 			}
 		} catch (e) {}

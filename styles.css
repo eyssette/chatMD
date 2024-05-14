@@ -266,7 +266,10 @@ pre {
 	color:#470302;
 }
 
-
+.hidden {
+	color:transparent;
+	font-size:0;
+}
 
 @media screen and (max-width: 500px) {
 	body {

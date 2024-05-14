@@ -1,4 +1,9 @@
 function createChatBot(chatData) {
+
+	const customVariables = {};
+	let nextMessage = '';
+	let getLastMessage = false;
+
 	const footerElement = document.getElementById("footer");
 	const controlsElement = document.getElementById("controls");
 	if (yamlFooter === false) {
@@ -128,6 +133,8 @@ function createChatBot(chatData) {
 
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
+				mutationObserver.disconnect();
+				observerConnected = false;
 				stopTypeWriter(content);
 			}
 		}
@@ -135,25 +142,19 @@ function createChatBot(chatData) {
 		let counter = 0;
 		const start = Date.now();
 		let observerConnected = true;
-		function handleMutation(mutationsList) {
-			for (const mutation of mutationsList) {
-				if (mutation.type === "childList") {
-					// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
-					counter++;
-					const executionTime = Date.now() - start;
-					if (
-						counter == 50 &&
-						executionTime > stopTypeWriterExecutionTimeThreshold &&
-						observerConnected
-					) {
-						stopTypeWriter(content);
-						observerConnected = false;
-						break;
-					}
-					// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
-					scrollWindow();
-				}
+		function handleMutation() {
+			// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
+			const executionTime = Date.now() - start;
+			if (
+				counter == 50 &&
+				executionTime > stopTypeWriterExecutionTimeThreshold &&
+				observerConnected
+			) {
+				stopTypeWriter(content);
+				observerConnected = false;
 			}
+			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
+			scrollWindow();
 		}
 
 		// Configuration de MutationObserver
@@ -173,6 +174,7 @@ function createChatBot(chatData) {
 			content = randomContentMessage(content);
 		}
 		// Effet machine à écrire
+		let mutationObserver
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: -5000,
@@ -188,7 +190,7 @@ function createChatBot(chatData) {
 				userInput.setAttribute("placeholder", messageTypeEnterToStopTypeWriter);
 
 				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
-				const mutationObserver = new MutationObserver(handleMutation);
+				mutationObserver = new MutationObserver(handleMutation);
 				function enableAutoScroll() {
 					mutationObserver.observe(conversationElement, observerConfig);
 				}
@@ -242,6 +244,7 @@ function createChatBot(chatData) {
 				) {
 					userInput.setAttribute("placeholder", "Écrivez votre message");
 				}
+				mutationObserver.disconnect();
 			},
 		});
 	}
@@ -288,6 +291,7 @@ function createChatBot(chatData) {
 	function displayMessage(html, isUser, chatMessage) {
 		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
 		// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
+		chatContainer.appendChild(chatMessage);
 		if (
 			isUser ||
 			window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -296,7 +300,6 @@ function createChatBot(chatData) {
 		} else {
 			typeWriter(html, chatMessage);
 		}
-		chatContainer.appendChild(chatMessage);
 	}
 
 	// Création du message par le bot ou l'utilisateur
@@ -304,6 +307,62 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
+
+		if (yamlDynamicContent) {
+			// Cas où le message vient du bot
+			if (!isUser) {
+				// On remplace dans le texte les variables `@nomVariable` par leur valeur
+				message = message.replaceAll(/\`@([^\s]*?)\`/g, function(match, v1) {
+					return customVariables[v1] ? customVariables[v1] : "";
+				})
+				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
+				message = message.replaceAll(/\`@(.*?) ?= ?@INPUT : (.*)\`/g,function(match,v1,v2) {
+					getLastMessage = match ? [v1,v2]: false;
+					return '';
+				});
+				// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
+				message = message.replaceAll(/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g, function(match, v1, v2) {
+					customVariables[v1]=v2;
+					return '';
+				})
+				// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
+				message = message.replaceAll(/ (@[^\s]*?\=.*?)\</g,'<span class="hidden">$1</span><')
+				message = message.replaceAll(/>(@[^\s]*?\=)/g,'><span class="hidden">$1</span>')
+				// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
+				message = message.replaceAll(/\`if @([^\s]*?) ?== ?(.*?)\`((\n|.*)*?)\`endif\`/g, function(match, v1, v2, v3) {
+					// Cas où la variable n'existe pas
+					v2 = v2 == "undefined" ? undefined : v2;
+					// On affiche le contenu seulement si la variable a la valeur attendue, sinon on supprime le contenu
+					if (customVariables[v1] == v2) {
+						return v3
+					} else {
+						return ''
+					}
+				})
+			} else {
+			// Cas où le message vient de l'utilisateur
+				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
+				message = message.replaceAll(/@([^\s]*?)\=(.*)/g, function(match, v1, v2, offset) {
+					customVariables[v1]=v2;
+					// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
+					return offset == 0 ? v2 : '';
+				})
+				
+				if (getLastMessage) {
+					// Si dans le précédent message, on avait demandé à récupérer l'input : on récupère cette input et on le met dans la variable correspondante
+					// Puis on renvoie vers le message correspondant
+					if (getLastMessage && getLastMessage.length > 0) {
+						customVariables[getLastMessage[0]] = message
+						nextMessage = getLastMessage[1];
+						getLastMessage = false;
+					} else {
+						nextMessage = '';
+					}
+				} else {
+					nextMessage = '';
+				}
+			}
+		}
 		let html = markdownToHTML(message);
 		html = processVariables(html);
 		if (yamlMaths === true) {
@@ -443,7 +502,7 @@ function createChatBot(chatData) {
 		// Si le token correspond au début du mot, le poids est plus important
 		const bonusStart = 0.2;
 		// Si le token est présent dans le titre, le poids est très important
-		const bonusInTitle = 10;
+		const bonusInTitle = nextMessage ? 100 : 10;
 
 		function weightedToken(index, tokenDimension, word) {
 			let weight = weights[tokenDimension - 1]; // Poids en fonction de la taille du token
@@ -547,11 +606,14 @@ function createChatBot(chatData) {
 		}
 	}
 
-	function chatbotResponse(userInputText) {
-		// Choix de la réponse que le chatbot va envoyer
+	function chatbotResponse(inputText) {
+		if (nextMessage !='') {
+			inputText = nextMessage
+		}
 
+		// Choix de la réponse que le chatbot va envoyer
 		if (yamldetectBadWords === true && filterBadWords) {
-			if (filterBadWords.check(userInputText)) {
+			if (filterBadWords.check(inputText)) {
 				createChatMessage(getRandomElement(badWordsMessage), false);
 				return;
 			}
@@ -560,7 +622,7 @@ function createChatBot(chatData) {
 		let bestMatch = null;
 		let bestMatchScore = 0;
 		let bestDistanceScore = 0;
-		let userInputTextToLowerCase = userInputText.toLowerCase();
+		let userInputTextToLowerCase = inputText.toLowerCase();
 		let indexBestMatch;
 
 		let optionsLastResponseKeysToLowerCase;
@@ -793,6 +855,7 @@ function createChatBot(chatData) {
 		initialMessage[0].join("\n"),
 		initialMessage[1]
 	);
+
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
 		/<span class=\"unique\">.*?<\/span>/,
