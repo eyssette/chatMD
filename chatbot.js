@@ -90,6 +90,7 @@ function createChatBot(chatData) {
 	});
 	function markdownToHTML(text) {
 		text = text.replaceAll("\n\n|", "|");
+		console.log(text)
 		const html = converter.makeHtml(text);
 		return html;
 	}

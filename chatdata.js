@@ -43,7 +43,7 @@ Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même e
 - Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
 - Respectez la syntaxe de ChatMD pour définir votre chatbot
 
-Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+Votre chatbot est alors prêt et visible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) (Mettez l'url de votre fichier à la place de URL)
 
 1. [Qu'est-ce que le Markdown ?](Markdown)
 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
@@ -76,13 +76,43 @@ Une forge est un outil plus complet qui permet d'héberger des fichiers texte et
 
 La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-être plus simple de [voir des exemples](#Exemples) ou bien de [récupérer un modèle](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both).
 
-- On définit le titre du chatbot dans un titre de niveau 1
-- Le message initial est à mettre dans un bloc de citation après le titre du chatbot
-- Les titres de niveau 2 servent à identifier les réponses possibles du chatbot
-- Sous chaque titre de niveau 2 : 
-	- On indique avec une liste non ordonnée les mots clés ou expressions qui vont déclencher la réponse. On peut éventuellement s'en passer si on guide l'utilisateur avec un choix d'options (voir ci-dessous).
-	- On écrit une réponse en Markdown.
-	- [Optionnel] On indique avec une liste ordonnée les options possibles. Chaque élément de la liste doit être un lien en Mardown de la forme suivante : \`[intitulé de l'option](identifiant de l'option, qui doit correspondre à l'un des titres de niveau 2)\`.
+\`\`\`
+​# Titre du chatbot
+​
+Message initial
+​
+1​. [Premier choix](Réponse 1)
+2​. [Deuxième choix](Réponse 2)
+​
+​## Réponse 1
+- déclencheur 1 (optionnel)
+- déclencheur 2 (optionnel)
+​
+Contenu de la réponse
+​
+1​. [Proposition 1](Titre Proposition 1)
+2​. [Proposition 2](Titre Proposition 2)
+\`\`\`
+
+Dans le message initial et le contenu de chaque réponse, **on peut utiliser toute la syntaxe Markdown** : intégrer des images, des vidéos, des iframes, et même utiliser des balises HTML.
+
+Les **titres de niveau 2** servent à identifier les réponses possibles du chatbot
+
+### Deux manières pour déclencher une réponse
+
+:::info L'utilisateur va devoir cliquer sur des propositions
+On indique alors en fin d'un message les propositions possibles, avec une liste ordonnée en Markdown.
+Chaque élément de la liste doit avoir la forme suivante :
+\`[intitulé de l'option qui s'affiche pour l'utilisateur](titre de la réponse correspondante dans le fichier en Markdown)\`.
+:::
+
+:::info L'utilisateur va poser une question
+Pour permettre au chatbot de renvoyer la réponse la plus adéquate, on indique sous le titre de la réponse les mots clés ou expressions qui vont renforcer le choix de cette réponse. On utilise une liste non ordonnée en Markdown.
+:::
+
+C'est recommandé de combiner ces 2 options pour être sûr que l'utilisateur trouve les réponses à ses questions !
+
+
 
 1. [Voir aussi les options de configuration plus avancées](Options de configuration)
 
@@ -136,8 +166,8 @@ Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [mo
 
 Voici quelques exemple de chatbot créés avec ChatMD : 
 
-- [Méthode de la dissertation en philosophie](https://eyssette.forge.apps.education.fr/chatMD/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://eyssette.forge.apps.education.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
+- [Méthode de la dissertation en philosophie](https://chatmd.forge.apps.education.fr/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
+- [Utilisation d'un microscope](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
 
 ## À quoi ça sert ?
 - à quoi ça sert ?
@@ -177,7 +207,7 @@ Vous pouvez intégrer chatMD dans une page HTML en insérant ce code en bas de p
 
 \`\`\`js
 <script id="chatmdWidgetScript"
-src="https://eyssette.forge.apps.education.fr/chatMD/widget.min.js" 
+src="https://chatmd.forge.apps.education.fr/widget.min.js" 
 data-chatbot="URL_DE_VOTRE_CHATBOT"></script>
 \`\`\`
 
@@ -200,7 +230,7 @@ On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comm
 - sympa
 - cool
 
-Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.github.io).
+Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
 
 
 `;

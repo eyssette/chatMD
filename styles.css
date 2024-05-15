@@ -208,6 +208,10 @@ footer a:hover {
 
 pre {
 	line-height: 0.5em;
+	margin: 2.5em;
+	border: 1px solid grey;
+	padding: 20px;
+	border-radius: 5px;
 }
 
 .admonition {
