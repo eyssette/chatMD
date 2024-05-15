@@ -33,26 +33,25 @@ const badWordsMessage = [
 	"Essayons de communiquer de manière civilisée !",
 ];
 
-let md = `
----
+let md = `---
 gestionGrosMots: true
 ---
 # ChatMD
 
-> Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même en Markdown :
-> 
-> - Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
-> - Respectez la syntaxe de ChatMD pour définir votre chatbot
-> 
-> Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
-> 
-> 1. [Qu'est-ce que le Markdown ?](Markdown)
-> 2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
-> 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
-> 4. [Tu peux me donner des exemples !](Exemples)
-> 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
-> 6. [À quoi ça sert ?](À quoi ça sert ?)
-> 7. [Comment utiliser ChatMD en tant que widget ?](Utilisation sous la forme d'un widget)
+Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même en Markdown :
+
+- Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
+- Respectez la syntaxe de ChatMD pour définir votre chatbot
+
+Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+
+1. [Qu'est-ce que le Markdown ?](Markdown)
+2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
+3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
+4. [Tu peux me donner des exemples !](Exemples)
+5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
+6. [À quoi ça sert ?](À quoi ça sert ?)
+7. [Comment utiliser ChatMD en tant que widget ?](Utilisation sous la forme d'un widget)
 
 ## Markdown
 - markdown
@@ -407,11 +406,8 @@ function parseMarkdown(markdownContent) {
 			}
 		} catch (e) {}
 	}
-	const lines = markdownContent.split("\n");
+	
 	let chatbotData = [];
-	let chatbotTitle = [""];
-
-	let initialMessageComputed = false;
 	let currentH2Title = null;
 	let currentLiItems = [];
 	let content = [];
@@ -419,29 +415,47 @@ function parseMarkdown(markdownContent) {
 	const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
 	const regexOrderedListRandom = /^\d{1,3}\)/;
 	let listParsed = false;
-	let initialMessageContent = [];
+	let initialMessageContentArray = [];
 	let initialMessageOptions = [];
 	let randomOrder = false;
 
-	for (let line of lines) {
-		// On parcourt le contenu du fichier ligne par ligne
-		if (line.startsWith("# ")) {
-			// Récupération du titre du chatbot
-			chatbotTitle[0] = line.replace("# ", "").trim();
-		} else if (line.startsWith(">") && !initialMessageComputed) {
-			// Récupération du message initial du chatbot, défini par un bloc citation
-			line = line.replace(/^>\s?/, "").trim();
-			if (line.match(regexOrderedList)) {
-				// Récupération des options dans le message initial, s'il y en a
-				randomOrder = regexOrderedListRandom.test(line);
-				const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-				const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-				const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-				initialMessageOptions.push([text, link, randomOrder]);
-			} else {
-				initialMessageContent.push(line);
-			}
-		} else if (startsWithAnyOf(line,responsesTitles)) {
+	// On récupère le contenu principal sans l'en-tête YAML s'il existe
+	const indexFirstH1title = markdownContent.indexOf("# ");
+	const mainContent = markdownContent.substring(indexFirstH1title);
+	const mainContentWithoutH1 = mainContent.substring(1);
+	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
+	const possibleTitles = ["# ","## ","### ","#### ","##### "]
+	const indexOfFirstTitles = possibleTitles.map(title => mainContentWithoutH1.indexOf(title)).filter(index => index > 0);
+	const indexAfterFirstMessage = Math.min(...indexOfFirstTitles);
+
+	// Gestion de la première partie des données : titre + message initial
+	const firstPart = mainContent.substring(0,indexAfterFirstMessage);
+	// Gestion du titre
+	const chatbotTitle = firstPart.match(/# .*/)[0];
+	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace('# ','').trim()] : [""];
+	const indexStartTitle = firstPart.indexOf(chatbotTitle);
+	// Gestion du message initial
+	const initialMessageContent = firstPart.substring(indexStartTitle+chatbotTitle.length);
+	const initialMessageContentLines = initialMessageContent.split("\n")
+	for (let line of initialMessageContentLines) {
+		line = line.replace(/^>\s?/, "").trim();
+		if (line.match(regexOrderedList)) {
+			// Récupération des options dans le message initial, s'il y en a
+			randomOrder = regexOrderedListRandom.test(line);
+			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
+			const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
+			initialMessageOptions.push([text, link, randomOrder]);
+		} else {
+			initialMessageContentArray.push(line);
+		}
+	}
+	
+	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
+	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
+
+	for (let line of contentAfterFirstPartLines) {
+		if (startsWithAnyOf(line,responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			initialMessageComputed = true;
 			if (currentH2Title) {
@@ -478,6 +492,7 @@ function parseMarkdown(markdownContent) {
 			listParsed = true;
 		}
 	}
+	
 	chatbotData.push([
 		currentH2Title,
 		currentLiItems,
@@ -485,9 +500,9 @@ function parseMarkdown(markdownContent) {
 		lastOrderedList,
 	]);
 
-	const initialMessage = [initialMessageContent, initialMessageOptions];
+	const initialMessage = [initialMessageContentArray, initialMessageOptions];
 	chatbotData.push(initialMessage);
-	chatbotData.push(chatbotTitle);
+	chatbotData.push(chatbotTitleArray);
 
 	return chatbotData;
 }

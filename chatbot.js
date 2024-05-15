@@ -652,7 +652,6 @@ function createChatBot(chatData) {
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
-				let distance = 0;
 				if (yamlSearchInContent) {
 					const cosSim = cosineSimilarity(
 						userInputTextToLowerCase,
