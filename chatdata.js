@@ -487,7 +487,6 @@ function parseMarkdown(markdownContent) {
 	for (let line of contentAfterFirstPartLines) {
 		if (startsWithAnyOf(line,responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
-			initialMessageComputed = true;
 			if (currentH2Title) {
 				chatbotData.push([
 					currentH2Title,
@@ -516,8 +515,8 @@ function parseMarkdown(markdownContent) {
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			lastOrderedList.push([text, link, randomOrder]);
 			/* lastOrderedList.push(listContent); */
-		} else if (line.length > 0) {
-			// Gestion du reste du contenu
+		} else if (line.length > 0 && !line.startsWith('# ')) {
+			// Gestion du reste du contenu (on supprime les éventuels titres 1 dans le contenu)
 			content.push(line + "\n");
 			listParsed = true;
 		}
