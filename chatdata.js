@@ -247,6 +247,7 @@ let yamlMaths = false;
 let yamlFooter = true;
 let yamlTheme = "";
 let yamlDynamicContent = false;
+let yamlTypeWriter = true;
 
 let chatData;
 let filterBadWords;
@@ -432,6 +433,9 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "dynamicContent" || property =="contenuDynamique") {
 					yamlDynamicContent = yamlData[property];
+				}
+				if (property == "typeWriter" || property =="effetDactylo") {
+					yamlTypeWriter = yamlData[property];
 				}
 			}
 		} catch (e) {}

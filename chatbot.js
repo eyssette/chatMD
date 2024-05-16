@@ -294,7 +294,7 @@ function createChatBot(chatData) {
 		chatContainer.appendChild(chatMessage);
 		if (
 			isUser ||
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches || yamlTypeWriter === false
 		) {
 			chatMessage.innerHTML = html;
 		} else {
