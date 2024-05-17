@@ -329,14 +329,30 @@ function createChatBot(chatData) {
 				message = message.replaceAll(/ (@[^\s]*?\=.*?)\</g,'<span class="hidden">$1</span><')
 				message = message.replaceAll(/>(@[^\s]*?\=)/g,'><span class="hidden">$1</span>')
 				// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
-				message = message.replaceAll(/\`if @([^\s]*?) ?== ?(.*?)\`((\n|.*)*?)\`endif\`/g, function(match, v1, v2, v3) {
-					// Cas où la variable n'existe pas
-					v2 = v2 == "undefined" ? undefined : v2;
-					// On affiche le contenu seulement si la variable a la valeur attendue, sinon on supprime le contenu
-					if (customVariables[v1] == v2) {
-						return v3
+				message = message.replaceAll(/\`if (.*?)\`((\n|.*)*?)\`endif\`/g, function(match, v1, v2) {
+					if(v1) {
+						const conditionalVariables = v1.split('&&');
+						let checkConditionalVariables = false;
+						// On peut avoir un conditionnement multiple en testant sur plusieurs variables
+						for (const conditionalVariable of conditionalVariables) {
+							let conditionalVariableMatch = conditionalVariable.trim().match(/@([^\s]*?) ?== ?(.*)/);
+							if (conditionalVariableMatch) {
+								const conditionalVariableMatchVariable = conditionalVariableMatch[1]
+								const conditionalVariableMatchValue = conditionalVariableMatch[2] == "undefined" ? undefined : conditionalVariableMatch[2];
+								if (customVariables[conditionalVariableMatchVariable] == conditionalVariableMatchValue) {
+									checkConditionalVariables = true;
+								} else {
+									break;
+								}
+							}
+						}
+						if (checkConditionalVariables === true) {
+							return v2;
+						} else {
+							return '';
+						}
 					} else {
-						return ''
+						return '';
 					}
 				})
 			} else {
