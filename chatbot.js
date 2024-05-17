@@ -342,6 +342,7 @@ function createChatBot(chatData) {
 								if (customVariables[conditionalVariableMatchVariable] == conditionalVariableMatchValue) {
 									checkConditionalVariables = true;
 								} else {
+									checkConditionalVariables = false;
 									break;
 								}
 							}
@@ -349,10 +350,10 @@ function createChatBot(chatData) {
 						if (checkConditionalVariables === true) {
 							return v2;
 						} else {
-							return '';
+							return '<!--'+v1+'-->';
 						}
 					} else {
-						return '';
+						return '<!--'+v1+'-->';
 					}
 				})
 			} else {
