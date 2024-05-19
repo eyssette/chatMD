@@ -390,7 +390,7 @@ function parseMarkdown(markdownContent) {
 					yamldetectBadWords = yamlData[property];
 					if (yamldetectBadWords === true) {
 						Promise.all([
-							loadScript("https://cdn.jsdelivr.net/npm/leo-profanity"),
+							loadScript("scripts/leo-profanity.js"),
 							loadScript("badWords-fr.js"),
 						])
 							.then(() => {
