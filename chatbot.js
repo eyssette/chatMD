@@ -3,6 +3,7 @@ function createChatBot(chatData) {
 	const customVariables = {};
 	let nextMessage = '';
 	let getLastMessage = false;
+	const signalGetAnswerFromLLM = '<span class="hidden">!getAnswerFromLLM</span>';
 
 	const footerElement = document.getElementById("footer");
 	const controlsElement = document.getElementById("controls");
@@ -626,6 +627,11 @@ function createChatBot(chatData) {
 	function chatbotResponse(inputText) {
 		if (nextMessage !='') {
 			inputText = nextMessage
+		}
+		//inputText = signalGetAnswerFromLLM + inputText
+		if(inputText.includes(signalGetAnswerFromLLM)){
+			getAnswerFromLLM(inputText.replace(signalGetAnswerFromLLM,''))
+			return;
 		}
 
 		// Choix de la réponse que le chatbot va envoyer
