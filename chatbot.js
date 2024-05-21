@@ -745,6 +745,13 @@ function createChatBot(chatData) {
 		}
 	}
 
+	// Une fonction pour réordonner de manière aléatoire un tableau
+	function shuffle(array) {
+		return array.sort(function () {
+			return Math.random() - 0.5;
+		});
+	}
+
 	// Une fonction pour mettre de l'aléatoire dans un tableau, en conservant cependant la position de certains éléments
 	function randomizeArrayWithFixedElements(array) {
 		let fixedElements = [];
@@ -760,9 +767,7 @@ function createChatBot(chatData) {
 		});
 
 		// On ordonne de manière aléatoire les éléments qui doivent l'être
-		randomizableElements.sort(function () {
-			return Math.random() - 0.5;
-		});
+		randomizableElements = shuffle(randomizableElements)
 
 		// On reconstruit le tableau en réinsérant les éléments fixes au bon endroit
 		var finalArray = [];
@@ -790,6 +795,13 @@ function createChatBot(chatData) {
 	  }
 
 	function gestionOptions(response, options) {
+		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
+		response = response.replaceAll(/\!Select ?: ?([0-9]*)/g, function(match, v1) {
+			if(match) {
+				options = shuffle(options).slice(0,v1);
+				return '<!--'+match+'-->'
+			}
+		})
 		// On teste s'il faut mettre de l'aléatoire dans les options
 		if (shouldBeRandomized(options)) {
 			options = randomizeArrayWithFixedElements(options);
