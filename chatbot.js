@@ -739,6 +739,10 @@ function createChatBot(chatData) {
 						bestDistanceScore = distanceScore;
 					}
 				}
+				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0 et que la réponse correspond au titre de la réponse voulue dans la directive
+				if (matchScore > 0 && nextMessageOnlyIfKeywords && titleResponse == nextMessage) {
+					matchScore = matchScore + MATCH_SCORE_IDENTITY;
+				}
 				if (matchScore > bestMatchScore) {
 					bestMatch = responses;
 					bestMatchScore = matchScore;
@@ -754,10 +758,8 @@ function createChatBot(chatData) {
 				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : '';
 				let optionsSelectedResponse =  bestMatch ? chatData[indexBestMatch][3] : [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial) 
-				if (nextMessageOnlyIfKeywords) {
-					if (titleBestMatch !== nextMessage) {
+				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
 						selectedResponse =  messageIfKeywordsNotFound + '\n\n' + lastMessageFromBot.replace(messageIfKeywordsNotFound + '\n\n','');
-					}
 				} else {
 					selectedResponse = gestionOptions(selectedResponse, optionsSelectedResponse);
 				}
