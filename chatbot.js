@@ -2,7 +2,10 @@ function createChatBot(chatData) {
 
 	const customVariables = {};
 	let nextMessage = '';
+	let nextMessageOnlyIfKeywords = false;
+	let messageIfKeywordsNotFound = '';
 	let getLastMessage = false;
+	let lastMessageFromBot = '';
 	const signalGetAnswerFromLLM = '<span class="hidden">!getAnswerFromLLM</span>';
 
 	const footerElement = document.getElementById("footer");
@@ -308,6 +311,31 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
+
+		// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
+		if (!isUser) {
+			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
+				const v1Split = v1.split('/');
+				let v2;
+				if(v1Split.length>0) {
+					v1 = v1Split[0];
+					v2 = v1Split[1]
+				} else {
+					v1 = v1Split[0];
+				}
+				if(match) {
+					lastMessageFromBot = message;
+					nextMessage = v1.trim();
+					nextMessageOnlyIfKeywords = true;
+					messageIfKeywordsNotFound = v2 ? v2.trim() : "Ce n'était pas la bonne réponse, merci de réessayer !";
+					return '<!--'+'-->';
+				} else {
+					lastMessageFromBot = '';
+					nextMessage = '';
+					nextMessageOnlyIfKeywords = false;
+				}
+			})
+		}
 
 		if (yamlDynamicContent) {
 			// Cas où le message vient du bot
@@ -625,7 +653,8 @@ function createChatBot(chatData) {
 	}
 
 	function chatbotResponse(inputText) {
-		if (nextMessage !='') {
+		// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
+		if (nextMessage !='' && !nextMessageOnlyIfKeywords) {
 			inputText = nextMessage
 		}
 		//inputText = signalGetAnswerFromLLM + inputText
@@ -716,13 +745,22 @@ function createChatBot(chatData) {
 					indexBestMatch = i;
 				}
 			}
-			if (bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) {
+			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
+			if ((bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) || nextMessageOnlyIfKeywords) {
 				// On envoie le meilleur choix s'il en existe un
-				let selectedResponse = Array.isArray(bestMatch)
+				let selectedResponse = bestMatch ? Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
-					: bestMatch;
-				const options = chatData[indexBestMatch][3];
-				selectedResponse = gestionOptions(selectedResponse, options);
+					: bestMatch : '';
+				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : '';
+				let optionsSelectedResponse =  bestMatch ? chatData[indexBestMatch][3] : [];
+				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial) 
+				if (nextMessageOnlyIfKeywords) {
+					if (titleBestMatch !== nextMessage) {
+						selectedResponse =  messageIfKeywordsNotFound + '\n\n' + lastMessageFromBot.replace(messageIfKeywordsNotFound + '\n\n','');
+					}
+				} else {
+					selectedResponse = gestionOptions(selectedResponse, optionsSelectedResponse);
+				}
 				createChatMessage(selectedResponse, false);
 			} else {
 				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
@@ -746,7 +784,7 @@ function createChatBot(chatData) {
 	}
 
 	// Une fonction pour réordonner de manière aléatoire un tableau
-	function shuffle(array) {
+	function shuffleArray(array) {
 		return array.sort(function () {
 			return Math.random() - 0.5;
 		});
@@ -767,7 +805,7 @@ function createChatBot(chatData) {
 		});
 
 		// On ordonne de manière aléatoire les éléments qui doivent l'être
-		randomizableElements = shuffle(randomizableElements)
+		randomizableElements = shuffleArray(randomizableElements)
 
 		// On reconstruit le tableau en réinsérant les éléments fixes au bon endroit
 		var finalArray = [];
@@ -798,7 +836,7 @@ function createChatBot(chatData) {
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
 		response = response.replaceAll(/\!Select ?: ?([0-9]*)/g, function(match, v1) {
 			if(match) {
-				options = shuffle(options).slice(0,v1);
+				options = shuffleArray(options).slice(0,v1);
 				return '<!--'+match+'-->'
 			}
 		})
