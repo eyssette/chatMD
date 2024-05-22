@@ -479,7 +479,8 @@ function createChatBot(chatData) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
 		if (optionLink != "") {
 			for (let i = 0; i < chatData.length; i++) {
-				const title = chatData[i][0];
+				let title = chatData[i][0];
+				title = yamlObfuscate ? btoa(title) : title;
 				if (optionLink == title) {
 					let response = chatData[i][2];
 					const options = chatData[i][3];

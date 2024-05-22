@@ -235,10 +235,14 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 
 `;
 
+
+// Raccourcis vers des chatbots particuliers
 const shortcuts = [
 	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"]
 ];
 
+
+// Paramètres dans l'en-tête YAML
 let yamlStyle = "";
 let yamlUserInput = true;
 let yamlSearchInContent = false;
@@ -248,6 +252,7 @@ let yamlFooter = true;
 let yamlTheme = "";
 let yamlDynamicContent = false;
 let yamlTypeWriter = true;
+let yamlObfuscate = false;
 
 let chatData;
 let filterBadWords;
@@ -437,6 +442,9 @@ function parseMarkdown(markdownContent) {
 				if (property == "typeWriter" || property =="effetDactylo") {
 					yamlTypeWriter = yamlData[property];
 				}
+				if (property == "obfuscate") {
+					yamlObfuscate = yamlData[property] ? true : false;
+				}
 			}
 		} catch (e) {}
 	}
@@ -477,7 +485,8 @@ function parseMarkdown(markdownContent) {
 			// Récupération des options dans le message initial, s'il y en a
 			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-			const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			link = yamlObfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			initialMessageOptions.push([text, link, randomOrder]);
 		} else {
@@ -515,7 +524,8 @@ function parseMarkdown(markdownContent) {
 			}
 			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-			const link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			link = yamlObfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			lastOrderedList.push([text, link, randomOrder]);
 			/* lastOrderedList.push(listContent); */
