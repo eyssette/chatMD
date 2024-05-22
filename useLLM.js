@@ -1,13 +1,8 @@
-let urlChatCompletions = "http://localhost:1337/v1/chat/completions";
-let model = "mistral-ins-7b-q4";
-let systemPrompt = "Tu es un assistant efficace et tu réponds en français sauf si on te demande une réponse dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
-let question = "Qui est Michael Jordan ?";
-let userPrompt = question;
-let maxTokens = 100;
 let answerFromLLM = [];
 let LLMactive = false;
-const chatContainerElement = document.getElementById("chat");
 let idAnswer = 0;
+
+const chatContainerElement = document.getElementById("chat");
 
 //getAnswerFromLLM(userPrompt);
 
@@ -71,7 +66,7 @@ document.body.addEventListener("keypress", (event) => {
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 function getAnswerFromLLM(userPrompt) {
 	idAnswer++;
-	fetch(urlChatCompletions, {
+	fetch(yamlUseLLMurl, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -79,7 +74,7 @@ function getAnswerFromLLM(userPrompt) {
 		body: JSON.stringify({
 			messages: [
 				{
-					content: systemPrompt,
+					content: yamlUseLLMsystemPrompt,
 					role: "system",
 				},
 				{
@@ -87,9 +82,9 @@ function getAnswerFromLLM(userPrompt) {
 					role: "user",
 				},
 			],
-			model: model,
+			model: yamlUseLLMmodel,
 			stream: true,
-			max_tokens: maxTokens,
+			max_tokens: yamlUseLLMmaxTokens,
 			frequency_penalty: 0,
 			presence_penalty: 0,
 			temperature: 0.7,

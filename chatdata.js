@@ -253,6 +253,14 @@ let yamlTheme = "";
 let yamlDynamicContent = false;
 let yamlTypeWriter = true;
 let yamlObfuscate = false;
+let yamlUseLLM;
+let yamlUseLLMurl;
+let yamlUseLLMmodel;
+let yamlUseLLMalways = false;
+const defaultSystemPrompt = "Tu es un assistant efficace et tu réponds en français sauf si on te demande une réponse dans une autre langue. Les phrases de réponse doivent être courtes et claires."
+let yamlUseLLMsystemPrompt = defaultSystemPrompt;
+const defaultMaxTokens = 100;
+let yamlUseLLMmaxTokens = defaultMaxTokens;
 
 let chatData;
 let filterBadWords;
@@ -444,6 +452,19 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "obfuscate") {
 					yamlObfuscate = yamlData[property] ? true : false;
+				}
+				if (property == "useLLM" || property =="utiliserLLM") {
+					Promise.all([
+						loadScript(
+							"useLLM.js"
+						)
+					]);
+					yamlUseLLM = yamlData[property];
+					yamlUseLLMurl = yamlUseLLM.url;
+					yamlUseLLMmodel = yamlUseLLM.model;
+					yamlUseLLMalways = yamlUseLLM.always;
+					yamlUseLLMsystemPrompt = yamlUseLLM.systemPrompt ? yamlUseLLM.systemPrompt : defaultSystemPrompt;
+					yamlUseLLMmaxTokens = yamlUseLLM.maxTokens ? yamlUseLLM.maxTokens : defaultMaxTokens;
 				}
 			}
 		} catch (e) {}

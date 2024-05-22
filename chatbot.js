@@ -6,7 +6,6 @@ function createChatBot(chatData) {
 	let messageIfKeywordsNotFound = '';
 	let getLastMessage = false;
 	let lastMessageFromBot = '';
-	const signalGetAnswerFromLLM = '<span class="hidden">!getAnswerFromLLM</span>';
 
 	const footerElement = document.getElementById("footer");
 	const controlsElement = document.getElementById("controls");
@@ -663,9 +662,9 @@ function createChatBot(chatData) {
 		if (nextMessage !='' && !nextMessageOnlyIfKeywords) {
 			inputText = nextMessage
 		}
-		//inputText = signalGetAnswerFromLLM + inputText
-		if(inputText.includes(signalGetAnswerFromLLM)){
-			getAnswerFromLLM(inputText.replace(signalGetAnswerFromLLM,''))
+		// Si on a dans le yaml : useLLM avec le paramètre always: true, on utilise un LLM pour répondre à la question
+		if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
+			getAnswerFromLLM(inputText.trim().replace('!useLLM',''))
 			return;
 		}
 
