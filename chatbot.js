@@ -343,7 +343,11 @@ function createChatBot(chatData) {
 			if (!isUser) {
 				// On remplace dans le texte les variables `@nomVariable` par leur valeur
 				message = message.replaceAll(/\`@([^\s]*?)\`/g, function(match, v1) {
-					return customVariables[v1] ? customVariables[v1] : "";
+					if (match.includes('=')) {
+						return match;
+					} else {
+						return customVariables[v1] ? customVariables[v1] : "";
+					}
 				})
 				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
 				message = message.replaceAll(/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,function(match,v1,v2) {
@@ -851,6 +855,28 @@ function createChatBot(chatData) {
 	  }
 
 	function gestionOptions(response, options) {
+		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE=VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
+		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
+			options = options.filter(element => {
+				for (const [key, value] of Object.entries(customVariables)) {
+					// Cas où l'option ne dépend d'aucune variable
+					if (!element[3]) {
+						return true
+					}
+					// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans customVariables
+					if (element[3] && element[3].includes(`@${key}`)) {
+						// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
+						if (element[3] === `@${key}==${value}`) {
+							return true
+						} else {
+							return false
+						}
+					}
+				}
+			})
+		}
+
+		
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
 		response = response.replaceAll(/\!Select ?: ?([0-9]*)/g, function(match, v1) {
 			if(match && v1<=options.length) {

@@ -456,6 +456,7 @@ function parseMarkdown(markdownContent) {
 	let lastOrderedList = null;
 	const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
 	const regexOrderedListRandom = /^\d{1,3}\)/;
+	const regexDynamicContentIfBlock = /\`if (.*?)\`/;
 	let listParsed = false;
 	let initialMessageContentArray = [];
 	let initialMessageOptions = [];
@@ -496,6 +497,7 @@ function parseMarkdown(markdownContent) {
 	
 	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
 	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
+	let ifCondition = '';
 
 	for (let line of contentAfterFirstPartLines) {
 		if (startsWithAnyOf(line,responsesTitles)) {
@@ -516,7 +518,16 @@ function parseMarkdown(markdownContent) {
 		} else if (line.startsWith("- ") && !listParsed) {
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
-		} else if (line.match(regexOrderedList)) {
+		} else if (yamlDynamicContent && line.match(regexDynamicContentIfBlock)) {
+			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : '';
+			content.push(line + "\n");
+			listParsed = true;
+		} else if (yamlDynamicContent && line.match('`endif`')) {
+			ifCondition = '';
+			content.push(line + "\n");
+			listParsed = true;
+		}
+			else if (line.match(regexOrderedList)) {
 			// Cas des listes ordonnées
 			listParsed = false;
 			if (!lastOrderedList) {
@@ -527,7 +538,7 @@ function parseMarkdown(markdownContent) {
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			link = yamlObfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			lastOrderedList.push([text, link, randomOrder]);
+			lastOrderedList.push([text, link, randomOrder, ifCondition]);
 			/* lastOrderedList.push(listContent); */
 		} else if (line.length > 0 && !line.startsWith('# ')) {
 			// Gestion du reste du contenu (on supprime les éventuels titres 1 dans le contenu)
