@@ -212,6 +212,7 @@ pre {
 	border: 1px solid grey;
 	padding: 20px;
 	border-radius: 5px;
+	width: fit-content;
 }
 
 .admonition {
