@@ -328,6 +328,7 @@ function createChatBot(chatData) {
 					nextMessage = v1.trim();
 					nextMessageOnlyIfKeywords = true;
 					messageIfKeywordsNotFound = v2 ? v2.trim() : "Ce n'était pas la bonne réponse, merci de réessayer !";
+					messageIfKeywordsNotFound = messageIfKeywordsNotFound + '\n\n'
 					return '<!--'+'-->';
 				} else {
 					lastMessageFromBot = '';
@@ -771,7 +772,7 @@ function createChatBot(chatData) {
 				let optionsSelectedResponse =  bestMatch ? chatData[indexBestMatch][3] : [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial) 
 				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
-						selectedResponse =  messageIfKeywordsNotFound + '\n\n' + lastMessageFromBot.replace(messageIfKeywordsNotFound + '\n\n','');
+						selectedResponse = lastMessageFromBot.includes(messageIfKeywordsNotFound) ? lastMessageFromBot : messageIfKeywordsNotFound + lastMessageFromBot;
 				} else {
 					selectedResponse = gestionOptions(selectedResponse, optionsSelectedResponse);
 				}
