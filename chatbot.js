@@ -720,6 +720,8 @@ function createChatBot(chatData) {
 						let strictIdentityMatch = false;
 						if(nextMessageOnlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
+							userInputTextToLowerCase = removeAccents(userInputTextToLowerCase)
+							keywordToLowerCase = removeAccents(keywordToLowerCase)
 							const regexStrictIdentityMatch = new RegExp(`\\b${keywordToLowerCase}\\b`);
 							if (userInputTextToLowerCase.match(regexStrictIdentityMatch)) {
 								strictIdentityMatch = true;
