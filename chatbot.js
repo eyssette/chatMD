@@ -715,10 +715,22 @@ function createChatBot(chatData) {
 					let keywordToLowerCase = keyword.toLowerCase();
 					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
 						// Test de l'identité stricte
-						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
-						matchScore = matchScore + MATCH_SCORE_IDENTITY;
-						// On privilégie les correspondances sur les keywords plus longs
-						matchScore = matchScore + keywordToLowerCase.length / 10;
+						let strictIdentityMatch = false;
+						if(nextMessageOnlyIfKeywords) {
+							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
+							const regexStrictIdentityMatch = new RegExp(`\\b${keywordToLowerCase}\\b`);
+							if (userInputTextToLowerCase.match(regexStrictIdentityMatch)) {
+								strictIdentityMatch = true;
+							}
+						} else {
+							strictIdentityMatch = true;
+						}
+						if (strictIdentityMatch) {
+							// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
+							matchScore = matchScore + MATCH_SCORE_IDENTITY;
+							// On privilégie les correspondances sur les keywords plus longs
+							matchScore = matchScore + keywordToLowerCase.length / 10;
+						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 						if (
@@ -732,8 +744,8 @@ function createChatBot(chatData) {
 						}
 					}
 				}
-				if (matchScore == 0) {
-					// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement
+				if (matchScore == 0 && !nextMessageOnlyIfKeywords) {
+					// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 					if (distanceScore > bestDistanceScore) {
 						matchScore++;
 						bestDistanceScore = distanceScore;
