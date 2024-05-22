@@ -837,9 +837,11 @@ function createChatBot(chatData) {
 	function gestionOptions(response, options) {
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
 		response = response.replaceAll(/\!Select ?: ?([0-9]*)/g, function(match, v1) {
-			if(match) {
+			if(match && v1<=options.length) {
 				options = shuffleArray(options).slice(0,v1);
 				return '<!--'+match+'-->'
+			} else {
+				return ''
 			}
 		})
 		// On teste s'il faut mettre de l'aléatoire dans les options
