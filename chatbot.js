@@ -662,7 +662,7 @@ function createChatBot(chatData) {
 		if (nextMessage !='' && !nextMessageOnlyIfKeywords) {
 			inputText = nextMessage
 		}
-		// Si on a dans le yaml : useLLM avec le paramètre always: true, on utilise un LLM pour répondre à la question
+		// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
 		if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
 			getAnswerFromLLM(inputText.trim().replace('!useLLM',''))
 			return;
@@ -799,7 +799,12 @@ function createChatBot(chatData) {
 					randomDefaultMessageIndexLastChoice.shift();
 				}
 				randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-				createChatMessage(defaultMessage[randomDefaultMessageIndex], false);
+				let messageNoAnswer = defaultMessage[randomDefaultMessageIndex];
+				if(yamlUseLLM && !yamlUseLLMalways && yamlUseLLMurl && yamlUseLLMmodel) {
+					const optionMessageNoAnswer = [['Voir une réponse générée par une IA','!useLLM '+inputText]]; 
+					messageNoAnswer = gestionOptions(messageNoAnswer, optionMessageNoAnswer)
+				}
+				createChatMessage(messageNoAnswer, false);
 			}
 		}
 	}
@@ -961,9 +966,17 @@ function createChatBot(chatData) {
 			if (link.startsWith("#")) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
-				createChatMessage(target.innerText, true);
-				const optionLink = link.substring(1);
-				responseToSelectedOption(optionLink);
+				let messageFromLink = target.innerText;
+				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
+				if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && link.includes('!useLLM')){
+					messageFromLink = link.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
+					createChatMessage(messageFromLink, true);
+					getAnswerFromLLM(messageFromLink);
+				} else {
+					createChatMessage(messageFromLink, true);
+					const optionLink = link.substring(1);
+					responseToSelectedOption(optionLink);
+				}
 				scrollWindow();
 			}
 		}
