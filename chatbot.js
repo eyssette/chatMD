@@ -489,7 +489,7 @@ function createChatBot(chatData) {
 					const options = chatData[i][3];
 					response = Array.isArray(response) ? response.join("\n\n") : response;
 					optionsLastResponse = options;
-					response = gestionOptions(response, options);
+					response = options ? gestionOptions(response, options) : response;
 					createChatMessage(response, false);
 					break;
 				}
