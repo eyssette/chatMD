@@ -543,8 +543,9 @@ function createChatBot(chatData) {
 		// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
 		let words = text.toLowerCase();
 		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g, "");
+		words = words.replaceAll("/", " ");
 		words = removeAccents(words);
-		words = words.split(/\s|'/).filter((word) => word.length >= 5) || [];
+		words = words.split(/\s|'/).map(word => word.trim()).filter((word) => word.length >= 5) || [];
 		const tokens = [];
 
 		// On va créer des tokens avec à chaque fois un poids associé
