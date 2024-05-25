@@ -64,8 +64,11 @@ document.body.addEventListener("keypress", (event) => {
 })
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
-function getAnswerFromLLM(userPrompt) {
+function getAnswerFromLLM(userPrompt, informations) {
 	idAnswer++;
+	if (informations.length>0) {
+		informations = yamluseLLMragPrompt+informations
+	}
 	fetch(yamlUseLLMurl, {
 		method: "POST",
 		headers: {
@@ -78,7 +81,7 @@ function getAnswerFromLLM(userPrompt) {
 					role: "system",
 				},
 				{
-					content: userPrompt,
+					content: yamlUseLLMpreprompt+userPrompt+yamlUseLLMpostprompt+informations,
 					role: "user",
 				},
 			],
