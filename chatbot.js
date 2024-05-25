@@ -1019,7 +1019,7 @@ function createChatBot(chatData) {
 				if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && link.includes('!useLLM')){
 					messageFromLink = link.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
 					createChatMessage(messageFromLink, true);
-					getAnswerFromLLM(messageFromLink);
+					chatbotResponse(messageFromLink);
 				} else {
 					createChatMessage(messageFromLink, true);
 					const optionLink = link.substring(1);
