@@ -253,14 +253,26 @@ let yamlTheme = "";
 let yamlDynamicContent = false;
 let yamlTypeWriter = true;
 let yamlObfuscate = false;
+
 let yamlUseLLM;
 let yamlUseLLMurl;
 let yamlUseLLMmodel;
 let yamlUseLLMalways = false;
-const defaultSystemPrompt = "Tu es un assistant efficace et tu réponds en français sauf si on te demande une réponse dans une autre langue. Les phrases de réponse doivent être courtes et claires."
+const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires."
 let yamlUseLLMsystemPrompt = defaultSystemPrompt;
 const defaultMaxTokens = 100;
 let yamlUseLLMmaxTokens = defaultMaxTokens;
+let yamlUseLLMinformations = '';
+let yamlUseLLMpreprompt = '';
+let yamlUseLLMpostprompt = "\nN'oublie pas de répondre en français.";
+const defaultRAGprompt = `
+Voici ci-dessous le contexte à partir duquel tu dois partir pour construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si l'information n'est pas dans le contexte, indique-le et essaie de répondre malgré tout.
+CONTEXTE : `
+const defaultRAGpromptStrict = `
+Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
+CONTEXTE : `
+let yamluseLLMragPrompt = defaultRAGprompt;
+let yamluseLLMragSeparator = '\n';
 
 let chatData;
 let filterBadWords;
@@ -454,11 +466,28 @@ function parseMarkdown(markdownContent) {
 					yamlObfuscate = yamlData[property] ? true : false;
 				}
 				if (property == "useLLM" || property =="utiliserLLM") {
-					Promise.all([
+					// On utilise window.useLLMpromise car on aura besoin de savoir quand la promise sera terminée dans un autre script : chatbot.js, (pour calculer les vecteurs de mot pour le RAG : on a besoin que le fichier RAG.js soit bien chargé)  
+					window.useLLMpromise = Promise.all([
 						loadScript(
-							"useLLM.js"
+							"useLLM.js",
+						),
+						loadScript(
+							"RAG.js",
 						)
-					]);
+					]).then(() => {
+						// On peut faire du RAG à partir des informations définies dans le fichier RAG.js
+						if(yamlUseLLM.informations) {
+							yamluseLLMragSeparator = yamlUseLLM.informationsSeparator ? yamlUseLLM.informationsSeparator : '\n';
+							if(yamlUseLLM.informations.toString().includes("useFile")) {
+								RAGinformations = RAGinformations.trim();
+								yamlUseLLMinformations = RAGinformations.split(yamluseLLMragSeparator);
+							} else {
+								yamlUseLLM.informations = yamlUseLLM.informations.trim();
+								yamlUseLLMinformations = RAGinformations.split(yamluseLLMragSeparator);
+							} 
+						}
+					}
+					);
 					yamlUseLLM = yamlData[property];
 					yamlUseLLMurl = yamlUseLLM.url;
 					yamlUseLLMmodel = yamlUseLLM.model;
