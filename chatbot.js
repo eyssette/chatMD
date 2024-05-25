@@ -620,6 +620,21 @@ function createChatBot(chatData) {
 			vectorChatBotResponses.push(vectorResponse);
 		}
 	}
+	let vectorRAGinformations = [];
+
+	if(window.useLLMpromise) {
+		window.useLLMpromise.then(() => {
+			if(yamlUseLLMinformations) {
+				for (let i=0 ; i< yamlUseLLMinformations.length; i++) {
+					const RAGinformation = yamlUseLLMinformations[i];
+					const vectorRAGinformation = createVector(RAGinformation);
+					vectorRAGinformations.push(vectorRAGinformation)
+				}	
+			}
+		}).catch((error) => {
+			console.error("Erreur d'accès aux données RAG : ", error);
+		});
+	}
 
 	function cosineSimilarity(str, vector) {
 		// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
