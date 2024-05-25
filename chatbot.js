@@ -703,10 +703,17 @@ function createChatBot(chatData) {
 		if (nextMessage !='' && !nextMessageOnlyIfKeywords) {
 			inputText = nextMessage
 		}
-		// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
-		if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
-			getAnswerFromLLM(inputText.trim().replace('!useLLM',''))
-			return;
+		let RAGbestMatchesInformation = '';
+		let questionToLLM;
+		if(yamlUseLLM) {
+			inputText = inputText.replace('<span class="hidden">!useLLM</span>','!useLLM');
+			questionToLLM = inputText.trim().replace('!useLLM','');
+			if(yamlUseLLMinformations) {
+				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
+				const cosSimArray = vectorRAGinformations.map(vectorRAGinformation => cosineSimilarity(questionToLLM,vectorRAGinformation))
+				const RAGbestMatchesIndexes = topElements(cosSimArray,3)
+				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(element => yamlUseLLMinformations[element[1]]).join('\n')
+			}
 		}
 
 		// Choix de la réponse que le chatbot va envoyer
