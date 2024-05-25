@@ -609,7 +609,7 @@ function createChatBot(chatData) {
 
 	let vectorChatBotResponses = [];
 	// On précalcule les vecteurs des réponses du chatbot
-	if (yamlSearchInContent) {
+	if (yamlSearchInContent || yamlUseLLM) {
 		for (let i = 0; i < chatData.length; i++) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses)
@@ -819,40 +819,51 @@ function createChatBot(chatData) {
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 			if ((bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) || nextMessageOnlyIfKeywords) {
 				// On envoie le meilleur choix s'il en existe un
-				let selectedResponse = bestMatch ? Array.isArray(bestMatch)
+				let selectedResponseWithoutOptions = bestMatch ? Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
 					: bestMatch : '';
 				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : '';
 				let optionsSelectedResponse =  bestMatch ? chatData[indexBestMatch][3] : [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial) 
 				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
-						selectedResponse = lastMessageFromBot.includes(messageIfKeywordsNotFound) ? lastMessageFromBot : messageIfKeywordsNotFound + lastMessageFromBot;
+						selectedResponseWithOptions = lastMessageFromBot.includes(messageIfKeywordsNotFound) ? lastMessageFromBot : messageIfKeywordsNotFound + lastMessageFromBot;
 				} else {
-					selectedResponse = gestionOptions(selectedResponse, optionsSelectedResponse);
+					selectedResponseWithOptions = gestionOptions(selectedResponseWithoutOptions, optionsSelectedResponse);
 				}
-				createChatMessage(selectedResponse, false);
+				// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
+				if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
+					getAnswerFromLLM(questionToLLM.trim(), selectedResponseWithoutOptions + '\n' + RAGbestMatchesInformation);
+					return;
+				} else {
+					createChatMessage(selectedResponseWithOptions, false);
+				}
 			} else {
-				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
-				// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
-				while (
-					randomDefaultMessageIndexLastChoice.includes(
-						randomDefaultMessageIndex
-					)
-				) {
-					randomDefaultMessageIndex = Math.floor(
-						Math.random() * defaultMessage.length
-					);
+				if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
+					getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
+					return;
+				} else {
+					// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
+					// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
+					while (
+						randomDefaultMessageIndexLastChoice.includes(
+							randomDefaultMessageIndex
+						)
+					) {
+						randomDefaultMessageIndex = Math.floor(
+							Math.random() * defaultMessage.length
+						);
+					}
+					if (randomDefaultMessageIndexLastChoice.length > 4) {
+						randomDefaultMessageIndexLastChoice.shift();
+					}
+					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
+					let messageNoAnswer = defaultMessage[randomDefaultMessageIndex];
+					if(yamlUseLLM && !yamlUseLLMalways && yamlUseLLMurl && yamlUseLLMmodel) {
+						const optionMessageNoAnswer = [['Voir une réponse générée par une IA','!useLLM '+inputText]]; 
+						messageNoAnswer = gestionOptions(messageNoAnswer, optionMessageNoAnswer)
+					}
+					createChatMessage(messageNoAnswer, false);
 				}
-				if (randomDefaultMessageIndexLastChoice.length > 4) {
-					randomDefaultMessageIndexLastChoice.shift();
-				}
-				randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-				let messageNoAnswer = defaultMessage[randomDefaultMessageIndex];
-				if(yamlUseLLM && !yamlUseLLMalways && yamlUseLLMurl && yamlUseLLMmodel) {
-					const optionMessageNoAnswer = [['Voir une réponse générée par une IA','!useLLM '+inputText]]; 
-					messageNoAnswer = gestionOptions(messageNoAnswer, optionMessageNoAnswer)
-				}
-				createChatMessage(messageNoAnswer, false);
 			}
 		}
 	}
