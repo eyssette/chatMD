@@ -572,7 +572,7 @@ function createChatBot(chatData) {
 		for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
 			const word = words[wordIndex];
 			// Premier type de token : le mot en entier ; poids le plus important
-			tokens.push({ word, weight: 5 });
+			tokens.push({ token: word, weight: 5 });
 			// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
 			const wordLength = word.length;
 			if (wordLength >= 5) {
