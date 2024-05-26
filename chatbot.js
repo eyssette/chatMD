@@ -711,7 +711,7 @@ function createChatBot(chatData) {
 			if(yamlUseLLMinformations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 				const cosSimArray = vectorRAGinformations.map(vectorRAGinformation => cosineSimilarity(questionToLLM,vectorRAGinformation))
-				const RAGbestMatchesIndexes = topElements(cosSimArray,3)
+				const RAGbestMatchesIndexes = topElements(cosSimArray,yamlUseLLMmaxTopElements)
 				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(element => yamlUseLLMinformations[element[1]]).join('\n')
 			}
 		}

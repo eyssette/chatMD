@@ -271,8 +271,9 @@ CONTEXTE : `
 const defaultRAGpromptStrict = `
 Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
 CONTEXTE : `
-let yamluseLLMragPrompt = defaultRAGprompt;
-let yamluseLLMragSeparator = '\n';
+let yamlUseLLMragPrompt = defaultRAGprompt;
+let yamlUseLLMragSeparator = '\n';
+let yamlUseLLMmaxTopElements = 3;
 
 let chatData;
 let filterBadWords;
@@ -477,6 +478,7 @@ function parseMarkdown(markdownContent) {
 					]).then(() => {
 						// On peut faire du RAG à partir des informations définies dans le fichier RAG.js
 						if(yamlUseLLM.informations) {
+							yamlUseLLMmaxTopElements = yamlUseLLM.maxTopElements ? yamlUseLLM.maxTopElements : 3;
 							if(yamlUseLLM.informations.toString().includes("useFile")) {
 								RAGinformations = RAGinformations.trim();
 							} else {

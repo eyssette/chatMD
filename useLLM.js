@@ -67,7 +67,7 @@ document.body.addEventListener("keypress", (event) => {
 function getAnswerFromLLM(userPrompt, informations) {
 	idAnswer++;
 	if (informations.length>0) {
-		informations = yamluseLLMragPrompt+informations
+		informations = yamlUseLLMragPrompt+informations
 	}
 	fetch(yamlUseLLMurl, {
 		method: "POST",
