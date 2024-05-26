@@ -477,14 +477,37 @@ function parseMarkdown(markdownContent) {
 					]).then(() => {
 						// On peut faire du RAG à partir des informations définies dans le fichier RAG.js
 						if(yamlUseLLM.informations) {
-							yamluseLLMragSeparator = yamlUseLLM.informationsSeparator ? yamlUseLLM.informationsSeparator : '\n';
 							if(yamlUseLLM.informations.toString().includes("useFile")) {
 								RAGinformations = RAGinformations.trim();
-								yamlUseLLMinformations = RAGinformations.split(yamluseLLMragSeparator);
 							} else {
-								yamlUseLLM.informations = yamlUseLLM.informations.trim();
-								yamlUseLLMinformations = RAGinformations.split(yamluseLLMragSeparator);
-							} 
+								RAGinformations = yamlUseLLM.informations.trim();
+							}
+							if(yamlUseLLM.separator) {
+								if(yamlUseLLM.separator == 'auto') {
+									// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
+									function splitIntoChunks(text, charLimit = 600) {
+										let chunks = [];
+										let startIndex = 0;
+										while (startIndex < text.length) {
+											let endIndex = startIndex + charLimit;
+											if (endIndex < text.length) {
+												let spaceIndex = text.lastIndexOf(' ', endIndex);
+												if (spaceIndex > startIndex) {
+													endIndex = spaceIndex;
+												}
+											}
+											chunks.push(text.slice(startIndex, endIndex).trim());
+											startIndex = endIndex + 1;
+										}
+										return chunks;
+									}
+									yamlUseLLMinformations = splitIntoChunks(RAGinformations);
+								} else {
+									yamlUseLLMinformations = yamlUseLLM.separator == 'break' ? RAGinformations.split('---').map(element => element.replaceAll('\n',' ').trim()) : RAGinformations.split(yamlUseLLM.separator);
+								}
+							} else {
+								yamlUseLLMinformations = RAGinformations.split('\n').filter(line => line.trim() !== '');
+							}
 						}
 					}
 					);
