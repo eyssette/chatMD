@@ -275,6 +275,9 @@ function createChatBot(chatData) {
 				mathInExpressionLatex = mathInExpressionLatex
 					.replace("&#92;(", "")
 					.replace("&#92;)", "");
+				mathInExpressionLatex = mathInExpressionLatex
+					.replaceAll('&lt;','\\lt')
+					.replaceAll('&gt;','\\gt');
 				// On convertit la formule mathématique en HTML avec Katex
 				stringWithLatex = katex.renderToString(mathInExpressionLatex, {
 					displayMode: inlineMaths,
