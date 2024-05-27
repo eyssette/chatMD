@@ -6,34 +6,29 @@ const chatContainerElement = document.getElementById("chat");
 
 //getAnswerFromLLM(userPrompt);
 
-// Une fonction pour lire la réponse streamée du LLM
-async function readStreamCohere(streamableObject,id, chatMessage) {
-	for await (const chunk of streamableObject) {
-		const chunkString = new TextDecoder().decode(chunk)
-		const chunkArray = chunkString.trim().split('\n');
-		chunkArray.forEach(chunkElement => {
-			const chunkObject = JSON.parse(chunkElement.trim());
-			if (chunkObject.event_type == 'text-generation') {
-				chunkMessage = chunkObject.text
-				chatMessage.innerHTML = chatMessage.innerHTML + chunkObject.text
-			}
-		});
-		window.scrollTo(0, document.body.scrollHeight);
-	}
-}
-
-async function readStream(streamableObject, id, chatMessage) {
+async function readStream(streamableObject, chatMessage, isCohere) {
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk);
 		const chunkArray = chunkString.trim().split('\n').filter(element => element.trim().length > 0);
 		chunkArray.forEach(chunkElement => {
-			const chunkObjectString = chunkElement.replace('data: ','')
-			if(!chunkObjectString.includes('[DONE]')) {
-				console.log(chunkObjectString);
-				const chunkObject = JSON.parse(chunkObjectString);
-				const chunkMessage = chunkObject.choices[0].delta.content;
-				chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
-			} 
+			if(isCohere) {
+				const chunkObject = JSON.parse(chunkElement.trim());
+				if (chunkObject.event_type == 'text-generation'  && LLMactive) {
+					const chunkMessage = chunkObject.text
+					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
+				}
+				LLMactive = chunkObject.is_finished ? false : true;
+			} else {
+				const chunkObjectString = chunkElement.replace('data: ','')
+				if(!chunkObjectString.includes('[DONE]') && LLMactive) {
+					const chunkObject = JSON.parse(chunkObjectString);
+					const chunkMessage = chunkObject.choices[0].delta.content;
+					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
+				} else {
+					LLMactive = false;
+				}
+			}
+			window.scrollTo(0, document.body.scrollHeight);
 		});
 	}
 }
@@ -94,11 +89,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 			chatMessage.classList.add("message");
 			chatMessage.classList.add("bot-message");
 			chatContainerElement.appendChild(chatMessage);
-			if (isCohere) {
-				readStreamCohere(response.body,idAnswer, chatMessage);
-			} else {
-				readStream(response.body,idAnswer, chatMessage)
-			}
+			readStream(response.body, chatMessage, isCohere)
 		})
 		.catch((error) => {
 			console.error("Erreur:", error.message);
