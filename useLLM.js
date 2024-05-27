@@ -130,6 +130,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 			if (isCohere) {
 				readStreamCohere(response.body,idAnswer, chatMessage);
 			} else {
+				readStream(response.body,idAnswer)
 			const intervalId = setInterval(() => {
 				if (LLMactive) {
 					chatMessage.innerHTML = answerFromLLM[idAnswer];
