@@ -72,6 +72,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 	fetch(yamlUseLLMurl, {
 		method: "POST",
 		headers: {
+			"Authorization": "Bearer "+yamlUseLLMapiKey,
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({

@@ -274,6 +274,7 @@ CONTEXTE : `
 let yamlUseLLMragPrompt = defaultRAGprompt;
 let yamlUseLLMragSeparator = '\n';
 let yamlUseLLMmaxTopElements = 3;
+let yamlUseLLMapiKey = '';
 
 let chatData;
 let filterBadWords;
@@ -515,6 +516,11 @@ function parseMarkdown(markdownContent) {
 					);
 					yamlUseLLM = yamlData[property];
 					yamlUseLLMurl = yamlUseLLM.url;
+					if(yamlUseLLM.askAPIkey === true) {
+						yamlUseLLMapiKey = prompt("Entrez votre clé API");
+					} else {
+						yamlUseLLMapiKey = '';
+					}
 					yamlUseLLMmodel = yamlUseLLM.model;
 					yamlUseLLMalways = yamlUseLLM.always;
 					yamlUseLLMsystemPrompt = yamlUseLLM.systemPrompt ? yamlUseLLM.systemPrompt : defaultSystemPrompt;
