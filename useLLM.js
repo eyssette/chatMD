@@ -8,8 +8,6 @@ const chatContainerElement = document.getElementById("chat");
 
 // Une fonction pour lire la réponse streamée du LLM
 async function readStreamCohere(streamableObject,id, chatMessage) {
-	answerFromLLM[id] = '';
-	let chunkMessage = "";
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk)
 		const chunkArray = chunkString.trim().split('\n');
@@ -24,50 +22,19 @@ async function readStreamCohere(streamableObject,id, chatMessage) {
 	}
 }
 
-async function readStream(streamableObject, id) {
-	const reader = streamableObject.getReader();
-	const decoder = new TextDecoder();
-	answerFromLLM[id] = '';
-	while (true && LLMactive) {
-		const { value, done } = await reader.read();
-		if (done) {
-			LLMactive = false;
-			break;
-		}
-		let chunkString = decoder.decode(value, { stream: true });
-		let chunkObject = {};
-		let chunkMessage = "";
-		if (!chunkString.includes("data: [DONE]") && chunkString.split('"choices"').length==1) {
-			// Traitement des chunks (sauf les derniers)
-			const indexStartObject = chunkString.indexOf('{"choices');
-			chunkString = chunkString.substring(indexStartObject);
-			//console.log('CAS 1')
-			//console.log(chunkString)
-			chunkObject = JSON.parse(chunkString.trim());
-			chunkMessage = chunkObject.choices[0].delta.content;
-			// on ajoute le nouveau chunk à la réponse du LLM
-			answerFromLLM[id] = answerFromLLM[id] + chunkMessage;
-			// console.log(answerFromLLM[id]);
-		} else {
-			// Traitement des derniers chunks
-			const chunkArray = chunkString.split("\n\n");
-			for (let chunkArrayElement of chunkArray) {
-				const indexStartObjectArrayElement =
-					chunkArrayElement.indexOf('{"choices');
-				if (indexStartObjectArrayElement > -1) {
-					chunkArrayElement = chunkArrayElement.substring(
-						indexStartObjectArrayElement
-					);
-					//console.log('CAS 2')
-					//console.log(chunkArrayElement)
-					chunkObject = JSON.parse(chunkArrayElement.trim());
-					chunkMessage = chunkObject.choices[0].delta.content;
-					// on ajoute le nouveau chunk à la réponse du LLM
-					answerFromLLM[id] = answerFromLLM[id] + chunkMessage;
-					// console.log(answerFromLLM[id]);
-				}
-			}
-		}
+async function readStream(streamableObject, id, chatMessage) {
+	for await (const chunk of streamableObject) {
+		const chunkString = new TextDecoder().decode(chunk);
+		const chunkArray = chunkString.trim().split('\n').filter(element => element.trim().length > 0);
+		chunkArray.forEach(chunkElement => {
+			const chunkObjectString = chunkElement.replace('data: ','')
+			if(!chunkObjectString.includes('[DONE]')) {
+				console.log(chunkObjectString);
+				const chunkObject = JSON.parse(chunkObjectString);
+				const chunkMessage = chunkObject.choices[0].delta.content;
+				chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
+			} 
+		});
 	}
 }
 
@@ -130,15 +97,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 			if (isCohere) {
 				readStreamCohere(response.body,idAnswer, chatMessage);
 			} else {
-				readStream(response.body,idAnswer)
-			const intervalId = setInterval(() => {
-				if (LLMactive) {
-					chatMessage.innerHTML = answerFromLLM[idAnswer];
-				} else {
-					chatMessage.innerHTML = answerFromLLM[idAnswer] + '…';
-					clearInterval(intervalId);
-				}
-			}, 50);
+				readStream(response.body,idAnswer, chatMessage)
 			}
 		})
 		.catch((error) => {
