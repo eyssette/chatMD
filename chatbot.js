@@ -60,8 +60,12 @@ function createChatBot(chatData) {
 									? true
 									: false;
 							if (!isInCode) {
-								const type = matchInformations[1];
+								let type = matchInformations[1];
 								let title = matchInformations[2];
+								if(type.includes('<br')) {
+									type = type.replace('<br','')
+									title = '';
+								}
 								const content = matchInformations[3];
 								if (title.includes("collapsible")) {
 									title = title.replace("collapsible", "");
