@@ -367,6 +367,59 @@ function startsWithAnyOf(string,array) {
 
 let yamlData;
 
+
+
+function prepareRAGdata(informations, separator) {
+	if(separator) {
+		if(separator == 'auto') {
+			// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
+			function splitIntoChunks(text, charLimit = 600) {
+				let chunks = [];
+				let startIndex = 0;
+				while (startIndex < text.length) {
+					let endIndex = startIndex + charLimit;
+					if (endIndex < text.length) {
+						let spaceIndex = text.lastIndexOf(' ', endIndex);
+						if (spaceIndex > startIndex) {
+							endIndex = spaceIndex;
+						}
+					}
+					chunks.push(text.slice(startIndex, endIndex).trim());
+					startIndex = endIndex + 1;
+				}
+				return chunks;
+			}
+			return splitIntoChunks(informations);
+		} else {
+			return yamlUseLLM.separator == 'break' ? informations.split('---').map(element => element.replaceAll('\n',' ').trim()) : informations.split(yamlUseLLM.separator);
+		}
+	} else {
+		return informations.split('\n').filter(line => line.trim() !== '');
+	}
+}
+
+async function getRAGcontent(informations) {
+	if(informations) {
+		yamlUseLLMmaxTopElements = yamlUseLLM.maxTopElements ? yamlUseLLM.maxTopElements : 3;
+		if(informations.includes('http')) {
+			yamlUseLLMinformations = await fetch(informations)
+				.then((response) => response.text())
+				.then((data) => {
+					return prepareRAGdata(data, yamlUseLLM.separator);
+				})
+		} else {
+			if(informations.toString().includes("useFile")) {
+				RAGinformations = RAGinformations.trim();
+				yamlUseLLMinformations = prepareRAGdata(RAGinformations, yamlUseLLM.separator);
+			} else {
+				RAGinformations = informations.trim();
+				yamlUseLLMinformations = prepareRAGdata(RAGinformations, yamlUseLLM.separator);
+			}
+			return yamlUseLLMinformations
+		}
+	}
+}
+
 function parseMarkdown(markdownContent) {
 	let responsesTitles = ["## "]; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 	if (markdownContent.split("---").length > 2) {
@@ -477,43 +530,19 @@ function parseMarkdown(markdownContent) {
 							"RAG.js",
 						)
 					]).then(() => {
-						// On peut faire du RAG à partir des informations définies dans le fichier RAG.js
-						if(yamlUseLLM.informations) {
-							yamlUseLLMmaxTopElements = yamlUseLLM.maxTopElements ? yamlUseLLM.maxTopElements : 3;
-							if(yamlUseLLM.informations.toString().includes("useFile")) {
-								RAGinformations = RAGinformations.trim();
-							} else {
-								RAGinformations = yamlUseLLM.informations.trim();
+						window.useLLMragContentPromise = new Promise((resolve, reject) => {
+							try {
+								const content = getRAGcontent(
+									yamlUseLLM.informations
+								)
+								resolve(content);
+							} catch(error) {
+								reject(error);
 							}
-							if(yamlUseLLM.separator) {
-								if(yamlUseLLM.separator == 'auto') {
-									// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
-									function splitIntoChunks(text, charLimit = 600) {
-										let chunks = [];
-										let startIndex = 0;
-										while (startIndex < text.length) {
-											let endIndex = startIndex + charLimit;
-											if (endIndex < text.length) {
-												let spaceIndex = text.lastIndexOf(' ', endIndex);
-												if (spaceIndex > startIndex) {
-													endIndex = spaceIndex;
-												}
-											}
-											chunks.push(text.slice(startIndex, endIndex).trim());
-											startIndex = endIndex + 1;
-										}
-										return chunks;
-									}
-									yamlUseLLMinformations = splitIntoChunks(RAGinformations);
-								} else {
-									yamlUseLLMinformations = yamlUseLLM.separator == 'break' ? RAGinformations.split('---').map(element => element.replaceAll('\n',' ').trim()) : RAGinformations.split(yamlUseLLM.separator);
-								}
-							} else {
-								yamlUseLLMinformations = RAGinformations.split('\n').filter(line => line.trim() !== '');
 							}
-						}
+						)
 					}
-					);
+					).catch((error) => console.error(error));
 					yamlUseLLM = yamlData[property];
 					yamlUseLLMurl = yamlUseLLM.url;
 					if(yamlUseLLM.askAPIkey === true) {

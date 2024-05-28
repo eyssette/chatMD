@@ -629,14 +629,24 @@ function createChatBot(chatData) {
 	}
 	let vectorRAGinformations = [];
 
+	function createVectorRAGinformations(informations) {
+		if(informations) {					
+			for (let i=0 ; i< informations.length; i++) {
+				const RAGinformation = informations[i];
+				const vectorRAGinformation = createVector(RAGinformation);
+				vectorRAGinformations.push(vectorRAGinformation)
+			}
+		}
+	}
+
 	if(window.useLLMpromise) {
 		window.useLLMpromise.then(() => {
-			if(yamlUseLLMinformations) {
-				for (let i=0 ; i< yamlUseLLMinformations.length; i++) {
-					const RAGinformation = yamlUseLLMinformations[i];
-					const vectorRAGinformation = createVector(RAGinformation);
-					vectorRAGinformations.push(vectorRAGinformation)
-				}	
+			if(window.useLLMragContentPromise) {
+				window.useLLMragContentPromise.then(() => {
+					createVectorRAGinformations(yamlUseLLMinformations)
+				})
+			} else {
+				createVectorRAGinformations(yamlUseLLMinformations)
 			}
 		}).catch((error) => {
 			console.error("Erreur d'accès aux données RAG : ", error);
