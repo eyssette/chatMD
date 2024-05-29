@@ -244,6 +244,8 @@ const shortcuts = [
 
 const corsProxy = "https://corsproxy.io/?";
 
+const controls = document.getElementById("controls");
+
 // Paramètres dans l'en-tête YAML
 let yamlStyle = "";
 let yamlUserInput = true;
@@ -474,7 +476,6 @@ function parseMarkdown(markdownContent) {
 				) {
 					yamlUserInput = yamlData[property];
 					if (yamlUserInput === false) {
-						const controls = document.getElementById("controls");
 						controls.style.display = "none";
 					}
 				}

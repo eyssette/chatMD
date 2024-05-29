@@ -365,6 +365,12 @@ function createChatBot(chatData) {
 					customVariables[v1]=v2;
 					return '';
 				})
+				if (customVariables['KEYBOARD'] == 'false') {
+					controls.style.display = "none";
+					customVariables['KEYBOARD'] = 'true';
+				} else {
+					controls.style.display = "block";
+				}
 				// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 				message = message.replaceAll(/ (@[^\s]*?\=.*?)\</g,'<span class="hidden">$1</span><')
 				message = message.replaceAll(/>(@[^\s]*?\=)/g,'><span class="hidden">$1</span>')
