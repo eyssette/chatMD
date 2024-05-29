@@ -279,44 +279,51 @@ let yamlUseLLMapiKey = '';
 let chatData;
 let filterBadWords;
 
-function getMarkdownContent() {
-	// Récupération du markdown externe
-	let urlMD = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
-	if (urlMD !== "") {
+function handleURL(url) {
+	if (url !== "") {
 		// Gestion des fichiers hébergés sur github
-		if (urlMD.startsWith("https://github.com")) {
-			urlMD = urlMD.replace(
+		if (url.startsWith("https://github.com")) {
+			url = url.replace(
 				"https://github.com",
 				"https://raw.githubusercontent.com"
 			);
-			urlMD = urlMD.replace("/blob/", "/");
+			url = url.replace("/blob/", "/");
 		}
 		// Gestion des fichiers hébergés sur codiMD
 		if (
-			urlMD.startsWith("https://codimd") &&
-			urlMD.indexOf("download") === -1
+			url.startsWith("https://codimd") &&
+			url.indexOf("download") === -1
 		) {
-			urlMD =
-				urlMD.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"") +
+			url =
+				url.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"") +
 				"/download";
 		}
 		// Gestion des fichiers hébergés via Hedgedoc
 		if (
-			urlMD.includes("hedgedoc") &&
-			urlMD.indexOf("download") === -1
+			url.includes("hedgedoc") &&
+			url.indexOf("download") === -1
 		) {
-			urlMD =
-				urlMD
+			url =
+				url
 					.replace("?edit", "")
 					.replace("?both", "")
 					.replace("?view", "")
 					.replace(/#$/, "") + "/download";
 		}
 		// Vérification de la présence d'un raccourci
-		shortcut = shortcuts.find(element => element[0]==urlMD);
+		shortcut = shortcuts.find(element => element[0]==url);
 		if (shortcut) {
-			urlMD = shortcut[1];
+			url = shortcut[1];
 		}
+	}
+	return url;
+}
+
+function getMarkdownContent() {
+	// Récupération du markdown externe
+	const url = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
+	if (url !== "") {
+		const urlMD = handleURL(url)
 		// Récupération du contenu du fichier
 		fetch(urlMD)
 			.then((response) => response.text())
@@ -402,7 +409,8 @@ async function getRAGcontent(informations) {
 	if(informations) {
 		yamlUseLLMmaxTopElements = yamlUseLLM.maxTopElements ? yamlUseLLM.maxTopElements : 3;
 		if(informations.includes('http')) {
-			yamlUseLLMinformations = await fetch(informations)
+			const urlRAGfile = handleURL(informations);
+			yamlUseLLMinformations = await fetch(urlRAGfile)
 				.then((response) => response.text())
 				.then((data) => {
 					return prepareRAGdata(data, yamlUseLLM.separator);
