@@ -242,6 +242,8 @@ const shortcuts = [
 ];
 
 
+const corsProxy = "https://corsproxy.io/?";
+
 // Paramètres dans l'en-tête YAML
 let yamlStyle = "";
 let yamlUserInput = true;
@@ -281,8 +283,15 @@ let filterBadWords;
 
 function handleURL(url) {
 	if (url !== "") {
+		let addCorsProxy = true;
+		// Vérification de la présence d'un raccourci
+		shortcut = shortcuts.find(element => element[0]==url);
+		if (shortcut) {
+			url = shortcut[1];
+		}
 		// Gestion des fichiers hébergés sur github
 		if (url.startsWith("https://github.com")) {
+			addCorsProxy = false;
 			url = url.replace(
 				"https://github.com",
 				"https://raw.githubusercontent.com"
@@ -294,6 +303,7 @@ function handleURL(url) {
 			url.startsWith("https://codimd") &&
 			url.indexOf("download") === -1
 		) {
+			addCorsProxy = false;
 			url =
 				url.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"") +
 				"/download";
@@ -303,6 +313,7 @@ function handleURL(url) {
 			url.includes("hedgedoc") &&
 			url.indexOf("download") === -1
 		) {
+			addCorsProxy = false;
 			url =
 				url
 					.replace("?edit", "")
@@ -310,11 +321,7 @@ function handleURL(url) {
 					.replace("?view", "")
 					.replace(/#$/, "") + "/download";
 		}
-		// Vérification de la présence d'un raccourci
-		shortcut = shortcuts.find(element => element[0]==url);
-		if (shortcut) {
-			url = shortcut[1];
-		}
+		url = addCorsProxy ? corsProxy + url: url;
 	}
 	return url;
 }
