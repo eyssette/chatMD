@@ -1,6 +1,12 @@
 function createChatBot(chatData) {
 
 	const customVariables = {};
+	const params = new URLSearchParams(document.location.search);
+	// On récupère les paramètres dans l'URL et on les place dans customVariables
+	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
+	for (const [key, value] of params.entries()) {
+		customVariables['GET'+key] = value;
+	}
 	let nextMessage = '';
 	let nextMessageOnlyIfKeywords = false;
 	let messageIfKeywordsNotFound = '';
@@ -365,7 +371,7 @@ function createChatBot(chatData) {
 					customVariables[v1]=v2;
 					return '';
 				})
-
+				// Possibilité d'activer ou de désactiver le clavier au cas par cas
 				if(yamlUserInput === false) {
 					if (customVariables['KEYBOARD'] == 'true') {
 						controls.style.display = "block";
