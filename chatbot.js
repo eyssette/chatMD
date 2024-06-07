@@ -323,9 +323,9 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-
-		// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
+		let nextSelected;
 		if (!isUser) {
+			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
 				const v1Split = v1.split('/');
 				let v2;
@@ -346,6 +346,19 @@ function createChatBot(chatData) {
 					lastMessageFromBot = '';
 					nextMessage = '';
 					nextMessageOnlyIfKeywords = false;
+				}
+			})
+			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
+			message = message.replaceAll(/!SelectNext:(.*)/g, function(match, v1) {
+				if(match) {
+					const v1Split = v1.split('/');
+					lastMessageFromBot = '';
+					nextMessage = '';
+					nextMessageOnlyIfKeywords = false;
+					nextSelected = getRandomElement(v1Split).trim();
+					return '';
+				} else {
+					nextSelected = undefined;
 				}
 			})
 		}
@@ -452,6 +465,9 @@ function createChatBot(chatData) {
 			}, 100);
 		} else {
 			displayMessage(html, isUser, chatMessage);
+		}
+		if(nextSelected) {
+				chatbotResponse(nextSelected);
 		}
 	}
 
