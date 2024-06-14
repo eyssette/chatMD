@@ -1,10 +1,12 @@
 function createChatBot(chatData) {
 
 	const customVariables = {};
-	const params = new URLSearchParams(document.location.search);
+	const params1 = Object.fromEntries(new URLSearchParams(document.location.search));
+	const params2 = Object.fromEntries(new URLSearchParams(document.location.hash.replace(/#.*\?/,'')));
+	const params = {...params1,...params2};
 	// On récupère les paramètres dans l'URL et on les place dans customVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
-	for (const [key, value] of params.entries()) {
+	for (const [key, value] of Object.entries(params)) {
 		customVariables['GET'+key] = value;
 	}
 	let nextMessage = '';

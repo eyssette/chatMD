@@ -316,7 +316,7 @@ function handleURL(url) {
 
 function getMarkdownContent() {
 	// Récupération du markdown externe
-	const url = window.location.hash.substring(1); // Récupère l'URL du hashtag sans le #
+	const url = window.location.hash.substring(1).replace(/\?.*/,''); // Récupère l'URL du hashtag sans le #
 	if (url !== "") {
 		const urlMD = handleURL(url)
 		// Récupération du contenu du fichier
