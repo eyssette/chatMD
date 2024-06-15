@@ -112,13 +112,6 @@ function createChatBot(chatData) {
 	function getRandomElement(array) {
 		return array[Math.floor(Math.random() * array.length)];
 	}
-	function randomContentMessage(contentMessage) {
-		const contentSplitHR = contentMessage.split("<hr />");
-		if (contentSplitHR.length > 1) {
-			contentMessage = getRandomElement(contentSplitHR);
-		}
-		return contentMessage;
-	}
 	const conversationElement = document.getElementById("chat");
 
 	// Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
@@ -178,15 +171,12 @@ function createChatBot(chatData) {
 			subtree: true,
 		};
 
-		// Gestion du choix d'un message au hasard quand il y a plusieurs réponses possibles
+		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
 		const optionsStart = content.lastIndexOf('<ul class="messageOptions">');
 		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
 			let contentMessage = content.substring(0, optionsStart);
-			contentMessage = randomContentMessage(contentMessage);
 			const contentOptions = content.substring(optionsStart);
 			content = contentMessage + pauseTypeWriter + "`" + contentOptions + "`";
-		} else {
-			content = randomContentMessage(content);
 		}
 		// Effet machine à écrire
 		let mutationObserver
@@ -327,6 +317,21 @@ function createChatBot(chatData) {
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		let nextSelected;
 		if (!isUser) {
+			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
+			const messageSplitHR = message.split("---");
+			if (messageSplitHR.length > 1) {
+				const messageHasOptions = message.indexOf('<ul class="messageOptions">');
+				if (messageHasOptions > -1) {
+					const messageWithoutOptions = message.substring(0,messageHasOptions);
+					const messageOptions = message.substring(messageHasOptions);
+					const messageWithoutOptionsSplitHR = messageWithoutOptions.split('---') 
+					message =
+						getRandomElement(messageWithoutOptionsSplitHR) + messageOptions
+				} else {
+					message = getRandomElement(messageSplitHR);
+				}
+			}
+
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
 				const v1Split = v1.split('/');
