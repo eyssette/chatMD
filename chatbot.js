@@ -172,12 +172,8 @@ function createChatBot(chatData) {
 		};
 
 		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
-		const optionsStart = content.lastIndexOf('<ul class="messageOptions">');
-		if (optionsStart !== -1 && content.endsWith("</a></li>\n</ul>")) {
-			let contentMessage = content.substring(0, optionsStart);
-			const contentOptions = content.substring(optionsStart);
-			content = contentMessage + pauseTypeWriter + "`" + contentOptions + "`";
-		}
+		content = content.replaceAll(/(\<ul class="messageOptions"\>(.|\n)*?\<\/ul\>)/gm,'`$1`')
+
 		// Effet machine à écrire
 		let mutationObserver
 		typed = new Typed(element, {
