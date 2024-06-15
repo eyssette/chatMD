@@ -327,6 +327,16 @@ function createChatBot(chatData) {
 					message = getRandomElement(messageSplitHR);
 				}
 			}
+			// Gestion des éléments audio autoplay
+			message = message.replaceAll(/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,function(match,v1) {
+				if (match.includes('autoplay')) {
+					const audio = new Audio(v1);
+        			audio.play();
+					return `<!--${match}-->`;
+				} else {
+					return match;
+				}
+			})
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
