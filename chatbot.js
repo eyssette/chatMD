@@ -477,7 +477,7 @@ function createChatBot(chatData) {
 						nextMessage = '';
 					}
 				} else {
-					nextMessage = '';
+					nextMessage = nextMessageOnlyIfKeywords ? nextMessage : '';
 				}
 			}
 		}
@@ -999,7 +999,7 @@ function createChatBot(chatData) {
 	  }
 
 	function gestionOptions(response, options) {
-		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE=VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
+		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
 		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
 			if (options) {
 				options = options.filter(element => {
