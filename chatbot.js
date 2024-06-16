@@ -902,6 +902,12 @@ function createChatBot(chatData) {
 			}
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 			if ((bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) || nextMessageOnlyIfKeywords) {
+				if(bestMatch && nextMessageOnlyIfKeywords) {
+					// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
+					lastMessageFromBot = '';
+					nextMessage = '';
+					nextMessageOnlyIfKeywords = false;
+				}
 				// On envoie le meilleur choix s'il en existe un
 				let selectedResponseWithoutOptions = bestMatch ? Array.isArray(bestMatch)
 					? bestMatch.join("\n\n")
