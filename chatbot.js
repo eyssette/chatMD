@@ -337,6 +337,12 @@ function createChatBot(chatData) {
 					return match;
 				}
 			})
+			// Gestion de l'audio avec la directive !Audio
+			message = message.replaceAll(/!Audio:(.*)/g, function(match,v1) {
+				const audio = new Audio(v1.trim());
+        		audio.play();
+				return '';
+			})
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
