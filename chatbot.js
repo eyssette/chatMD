@@ -438,7 +438,7 @@ function createChatBot(chatData) {
 								throw new Error('Invalid expression');
 							} else {
 								// Évaluation de la condition de manière sécurisée
-								const result = eval(condition);
+								const result = new Function('customVariables', 'return ' + condition)(customVariables)
 								return result ? content : '<!--' + condition + '-->';
 							}
 						} catch (e) {
