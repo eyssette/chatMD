@@ -1001,23 +1001,25 @@ function createChatBot(chatData) {
 	function gestionOptions(response, options) {
 		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE=VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
 		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
-			options = options.filter(element => {
-				for (const [key, value] of Object.entries(customVariables)) {
-					// Cas où l'option ne dépend d'aucune variable
-					if (!element[3]) {
-						return true
-					}
-					// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans customVariables
-					if (element[3] && element[3].includes(`@${key}`)) {
-						// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
-						if (element[3] === `@${key}==${value}`) {
+			if (options) {
+				options = options.filter(element => {
+					for (const [key, value] of Object.entries(customVariables)) {
+						// Cas où l'option ne dépend d'aucune variable
+						if (!element[3]) {
 							return true
-						} else {
-							return false
+						}
+						// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans customVariables
+						if (element[3] && element[3].includes(`@${key}`)) {
+							// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
+							if (element[3] === `@${key}==${value}`) {
+								return true
+							} else {
+								return false
+							}
 						}
 					}
-				}
-			})
+				})
+			}
 		}
 
 		
