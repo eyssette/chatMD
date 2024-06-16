@@ -314,6 +314,10 @@ function createChatBot(chatData) {
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		let nextSelected;
+		// Gestion des variables fixes prédéfinies
+		message = processVariables(message);
+
+		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
 			const messageSplitHR = message.split("---");
@@ -482,7 +486,6 @@ function createChatBot(chatData) {
 			}
 		}
 		let html = markdownToHTML(message);
-		html = processVariables(html);
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
