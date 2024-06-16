@@ -423,33 +423,32 @@ function createChatBot(chatData) {
 				message = message.replaceAll(/ (@[^\s]*?\=.*?)\</g,'<span class="hidden">$1</span><')
 				message = message.replaceAll(/>(@[^\s]*?\=)/g,'><span class="hidden">$1</span>')
 				// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
-				message = message.replaceAll(/\`if (.*?)\`((\n|.*)*?)\`endif\`/g, function(match, v1, v2) {
-					if(v1) {
-						const conditionalVariables = v1.split('&&');
-						let checkConditionalVariables = false;
-						// On peut avoir un conditionnement multiple en testant sur plusieurs variables
-						for (const conditionalVariable of conditionalVariables) {
-							let conditionalVariableMatch = conditionalVariable.trim().match(/@([^\s]*?) ?== ?(.*)/);
-							if (conditionalVariableMatch) {
-								const conditionalVariableMatchVariable = conditionalVariableMatch[1]
-								const conditionalVariableMatchValue = conditionalVariableMatch[2] == "undefined" ? undefined : conditionalVariableMatch[2];
-								if (customVariables[conditionalVariableMatchVariable] == conditionalVariableMatchValue) {
-									checkConditionalVariables = true;
-								} else {
-									checkConditionalVariables = false;
-									break;
-								}
+				message = message.replaceAll(/\`if (.*?)\`((\n|.*)*?)\`endif\`/g, function(match, condition, content) {
+					if (condition) {
+						try {
+							// Remplace les variables personnalisées dans la condition
+							condition = condition.replace(/@([^\s()&|!=]+)/g, function(match, varName) {
+								return 'customVariables["'+varName.trim()+'"]';
+							});
+							// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
+							condition = condition.replaceAll(/== ?(.*?)( |\)|$)/g,'== "$1"$2').replaceAll('""','"').replace('"undefined"','undefined')
+							// Vérifie que l'expression ne contient que les opérateurs autorisés
+							const isValid = /^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z_][a-zA-Z0-9_]*\[[^\]]+\]|\s+))*\s*$/.test(condition);
+							if (!isValid) {
+								throw new Error('Invalid expression');
+							} else {
+								// Évaluation de la condition de manière sécurisée
+								const result = eval(condition);
+								return result ? content : '<!--' + condition + '-->';
 							}
-						}
-						if (checkConditionalVariables === true) {
-							return v2;
-						} else {
-							return '<!--'+v1+'-->';
+						} catch (e) {
+							console.error('Error evaluating condition:', condition, e);
+							return '<!--' + condition + '-->';
 						}
 					} else {
-						return '<!--'+v1+'-->';
+						return '<!--' + condition + '-->';
 					}
-				})
+				});
 			} else {
 			// Cas où le message vient de l'utilisateur
 				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
