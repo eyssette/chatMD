@@ -268,7 +268,8 @@ const defaultMaxTokens = 100;
 let yamlUseLLMmaxTokens = defaultMaxTokens;
 let yamlUseLLMinformations = '';
 let yamlUseLLMpreprompt = '';
-let yamlUseLLMpostprompt = "\nN'oublie pas de répondre en français.";
+const defaultPostprompt = "\nN'oublie pas de répondre en français.";
+let yamlUseLLMpostprompt = defaultPostprompt;
 const defaultRAGprompt = `
 Voici ci-dessous le contexte à partir duquel tu dois partir pour construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si l'information n'est pas dans le contexte, indique-le et essaie de répondre malgré tout.
 CONTEXTE : `
@@ -559,6 +560,8 @@ function parseMarkdown(markdownContent) {
 					yamlUseLLMmodel = yamlUseLLM.model;
 					yamlUseLLMalways = yamlUseLLM.always;
 					yamlUseLLMsystemPrompt = yamlUseLLM.systemPrompt ? yamlUseLLM.systemPrompt : defaultSystemPrompt;
+					yamlUseLLMpostprompt = yamlUseLLM.postprompt ? yamlUseLLM.postprompt : defaultPostprompt;
+					yamlUseLLMpreprompt = yamlUseLLM.preprompt ? yamlUseLLM.preprompt : '';
 					yamlUseLLMmaxTokens = yamlUseLLM.maxTokens ? yamlUseLLM.maxTokens : defaultMaxTokens;
 				}
 			}
