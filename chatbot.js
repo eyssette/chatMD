@@ -431,7 +431,7 @@ function createChatBot(chatData) {
 								return 'customVariables["'+varName.trim()+'"]';
 							});
 							// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
-							condition = condition.replaceAll(/== ?(.*?)( |\)|$)/g,'== "$1"$2').replaceAll('""','"').replace('"undefined"','undefined')
+							condition = condition.replaceAll(/(==|!=|<|>) ?(.*?)( |\)|$)/g,'$1 "$2"$3').replaceAll('""','"').replace('"undefined"','undefined')
 							// Vérifie que l'expression ne contient que les opérateurs autorisés
 							const isValid = /^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z_][a-zA-Z0-9_]*\[[^\]]+\]|\s+))*\s*$/.test(condition);
 							if (!isValid) {
