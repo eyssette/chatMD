@@ -309,6 +309,10 @@ function handleURL(url) {
 				url.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"").replace(/\/$/,'');
 			url = url.indexOf("download") === -1 ? url + "/download" : url;
 		}
+		// gestion des fichiers hébergés sur framapad
+		if (url.includes('framapad') && !url.endsWith('/export/txt')) {
+			url = url.replace(/\?.*/,'') + '/export/txt';
+		}
 		url = addCorsProxy ? corsProxy + url : url;
 	}
 	return url;
