@@ -11,6 +11,8 @@ function createChatBot(chatData) {
 	}
 	let nextMessage = '';
 	let nextMessageOnlyIfKeywords = false;
+	let nextMessageOnlyIfKeywordsCount = 0;
+	const nextMessageOnlyIfKeywordsCountMax = 3;
 	let messageIfKeywordsNotFound = '';
 	let getLastMessage = false;
 	let lastMessageFromBot = '';
@@ -354,17 +356,23 @@ function createChatBot(chatData) {
 				} else {
 					v1 = v1Split[0];
 				}
-				if(match) {
+				if(match && nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax) {
 					lastMessageFromBot = message;
 					nextMessage = v1.trim();
 					nextMessageOnlyIfKeywords = true;
 					messageIfKeywordsNotFound = v2 ? v2.trim() : "Ce n'était pas la bonne réponse, merci de réessayer !";
 					messageIfKeywordsNotFound = messageIfKeywordsNotFound + '\n\n'
+					nextMessageOnlyIfKeywordsCount++;
 					return '<!--'+'-->';
 				} else {
 					lastMessageFromBot = '';
+					const linkToOption = nextMessage;
 					nextMessage = '';
 					nextMessageOnlyIfKeywords = false;
+					if(nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax) {
+						nextMessageOnlyIfKeywordsCount = 0;
+						return `<ul class="messageOptions"><li><a href="#${linkToOption}">Passer à la suite !</a></li></ul>`;
+					}
 				}
 			})
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
