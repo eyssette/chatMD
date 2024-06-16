@@ -286,8 +286,11 @@ function createChatBot(chatData) {
 
 	function processVariables(content) {
 		return content.replace(/@{(\S+)}/g, function (match, variableName) {
-			if (yamlData.variables[variableName]) {
-				return yamlData.variables[variableName];
+			if (yamlData.variables && yamlData.variables[variableName]) {
+				const variableValue = yamlData.variables[variableName];
+				const variableValueSplit = variableValue.split('///');
+				const variableValueChoice = getRandomElement(variableValueSplit)
+				return variableValueChoice;
 			} else {
 				return "@{" + variableName + "}";
 			}
