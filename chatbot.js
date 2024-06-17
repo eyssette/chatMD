@@ -378,7 +378,8 @@ function createChatBot(chatData) {
 					nextMessageOnlyIfKeywords = false;
 					if(nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax) {
 						nextMessageOnlyIfKeywordsCount = 0;
-						return `<ul class="messageOptions"><li><a href="#${linkToOption}">Passer à la suite !</a></li></ul>`;
+						const skipMessage = `<ul class="messageOptions"><li><a href="#${yamlObfuscate ? btoa(linkToOption) : linkToOption}">Passer à la suite !</a></li></ul>`
+						return skipMessage;
 					}
 				}
 			})
