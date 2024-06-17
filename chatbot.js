@@ -1122,8 +1122,9 @@ function createChatBot(chatData) {
 				event.preventDefault();
 				let messageFromLink = target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
-				if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && link.includes('!useLLM')){
-					messageFromLink = link.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
+				const linkDeobfuscated = yamlObfuscate ? atob(link.replace('#','')) : link;
+				if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && linkDeobfuscated.includes('!useLLM')){
+					messageFromLink = linkDeobfuscated.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
 					createChatMessage(messageFromLink, true);
 					chatbotResponse(messageFromLink);
 				} else {
