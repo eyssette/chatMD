@@ -582,7 +582,11 @@ function parseMarkdown(markdownContent) {
 	let randomOrder = false;
 
 	// On récupère le contenu principal sans l'en-tête YAML s'il existe
-	const indexFirstH1title = markdownContent.indexOf("# ");
+	let indexFirstH1title = markdownContent.indexOf("# ");
+	const indexFirstH2title = markdownContent.indexOf("## ");
+	if(indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
+		indexFirstH1title = 0;
+	}
 	const mainContent = markdownContent.substring(indexFirstH1title);
 	const mainContentWithoutH1 = mainContent.substring(1);
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
@@ -593,11 +597,11 @@ function parseMarkdown(markdownContent) {
 	// Gestion de la première partie des données : titre + message initial
 	const firstPart = mainContent.substring(0,indexAfterFirstMessage);
 	// Gestion du titre
-	const chatbotTitle = firstPart.match(/# .*/)[0];
+	const chatbotTitle = firstPart.match(/# .*/) ? firstPart.match(/# .*/)[0] : "Chatbot";
 	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace('# ','').trim()] : [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
-	const initialMessageContent = firstPart.substring(indexStartTitle+chatbotTitle.length);
+	const initialMessageContent = firstPart.match(/# .*/) ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
 	const initialMessageContentLines = initialMessageContent.split("\n")
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "").trim();
