@@ -136,7 +136,9 @@ function createChatBot(chatData) {
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
-			typed.strings = ["`" + slowContent.replace(pauseTypeWriter + "`", "")];
+			const contentArray = slowContent.split("\n");
+			const contentArrayFiltered = contentArray.map(element => '`' + element.replace(pauseTypeWriter,'').replaceAll('`','') + '`')
+			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
 			typed.destroy();
 		}
