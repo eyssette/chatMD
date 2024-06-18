@@ -104,6 +104,10 @@ main {
 	font-style: italic;
 }
 
+a {
+	color: #551A8D!important;
+}
+
 button {
 	height:2em;
 	margin-top: 0.8em;
@@ -163,7 +167,7 @@ button {
     background-color: #ffffff3d;
     padding: 5px 10px;
     display: inline-block;
-    color: black;
+    color: black!important;
     border-radius: 12px;
     font-size: 0.95em;
     margin-left: -20px;
