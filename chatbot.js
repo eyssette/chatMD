@@ -1,21 +1,24 @@
 function createChatBot(chatData) {
-
 	const customVariables = {};
-	const params1 = Object.fromEntries(new URLSearchParams(document.location.search));
-	const params2 = Object.fromEntries(new URLSearchParams(document.location.hash.replace(/#.*\?/,'')));
-	const params = {...params1,...params2};
+	const params1 = Object.fromEntries(
+		new URLSearchParams(document.location.search)
+	);
+	const params2 = Object.fromEntries(
+		new URLSearchParams(document.location.hash.replace(/#.*\?/, ""))
+	);
+	const params = { ...params1, ...params2 };
 	// On récupère les paramètres dans l'URL et on les place dans customVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
 	for (const [key, value] of Object.entries(params)) {
-		customVariables['GET'+key] = value;
+		customVariables["GET" + key] = value;
 	}
-	let nextMessage = '';
+	let nextMessage = "";
 	let nextMessageOnlyIfKeywords = false;
 	let nextMessageOnlyIfKeywordsCount = 0;
 	const nextMessageOnlyIfKeywordsCountMax = 3;
-	let messageIfKeywordsNotFound = '';
+	let messageIfKeywordsNotFound = "";
 	let getLastMessage = false;
-	let lastMessageFromBot = '';
+	let lastMessageFromBot = "";
 
 	const footerElement = document.getElementById("footer");
 	const controlsElement = document.getElementById("controls");
@@ -72,9 +75,9 @@ function createChatBot(chatData) {
 							if (!isInCode) {
 								let type = matchInformations[1];
 								let title = matchInformations[2];
-								if(type.includes('<br')) {
-									type = type.replace('<br','')
-									title = '';
+								if (type.includes("<br")) {
+									type = type.replace("<br", "");
+									title = "";
 								}
 								const content = matchInformations[3];
 								if (title.includes("collapsible")) {
@@ -137,10 +140,13 @@ function createChatBot(chatData) {
 			typed.stop();
 			typed.reset();
 			const contentArray = slowContent.split("\n");
-			const contentArrayFiltered = contentArray.map(
-				element =>
-				element.startsWith(pauseTypeWriter) ? element.replace(pauseTypeWriter,'')+ '`' : element.endsWith('`') ? '`' + element  : '`' + element + '`'
-			)
+			const contentArrayFiltered = contentArray.map((element) =>
+				element.startsWith(pauseTypeWriter)
+					? element.replace(pauseTypeWriter, "") + "`"
+					: element.endsWith("`")
+					? "`" + element
+					: "`" + element + "`"
+			);
 			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
 			typed.destroy();
@@ -179,10 +185,13 @@ function createChatBot(chatData) {
 		};
 
 		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
-		content = content.replaceAll(/(\<ul class="messageOptions"\>(.|\n)*?\<\/ul\>)/gm,pauseTypeWriter + '`$1`');
+		content = content.replaceAll(
+			/(\<ul class="messageOptions"\>(.|\n)*?\<\/ul\>)/gm,
+			pauseTypeWriter + "`$1`"
+		);
 
 		// Effet machine à écrire
-		let mutationObserver
+		let mutationObserver;
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: -5000,
@@ -277,8 +286,8 @@ function createChatBot(chatData) {
 					.replace("&#92;(", "")
 					.replace("&#92;)", "");
 				mathInExpressionLatex = mathInExpressionLatex
-					.replaceAll('&lt;','\\lt')
-					.replaceAll('&gt;','\\gt');
+					.replaceAll("&lt;", "\\lt")
+					.replaceAll("&gt;", "\\gt");
 				// On convertit la formule mathématique en HTML avec Katex
 				stringWithLatex = katex.renderToString(mathInExpressionLatex, {
 					displayMode: inlineMaths,
@@ -293,8 +302,8 @@ function createChatBot(chatData) {
 		return content.replace(/@{(\S+)}/g, function (match, variableName) {
 			if (yamlData && yamlData.variables && yamlData.variables[variableName]) {
 				const variableValue = yamlData.variables[variableName];
-				const variableValueSplit = variableValue.split('///');
-				const variableValueChoice = getRandomElement(variableValueSplit)
+				const variableValueSplit = variableValue.split("///");
+				const variableValueChoice = getRandomElement(variableValueSplit);
 				return variableValueChoice;
 			} else {
 				return "@{" + variableName + "}";
@@ -308,7 +317,8 @@ function createChatBot(chatData) {
 		chatContainer.appendChild(chatMessage);
 		if (
 			isUser ||
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches || yamlTypeWriter === false
+			window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+			yamlTypeWriter === false
 		) {
 			chatMessage.innerHTML = html;
 		} else {
@@ -330,167 +340,212 @@ function createChatBot(chatData) {
 			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
 			const messageSplitHR = message.split("---");
 			if (messageSplitHR.length > 1) {
-				const messageHasOptions = message.indexOf('<ul class="messageOptions">');
+				const messageHasOptions = message.indexOf(
+					'<ul class="messageOptions">'
+				);
 				if (messageHasOptions > -1) {
-					const messageWithoutOptions = message.substring(0,messageHasOptions);
+					const messageWithoutOptions = message.substring(0, messageHasOptions);
 					const messageOptions = message.substring(messageHasOptions);
-					const messageWithoutOptionsSplitHR = messageWithoutOptions.split('---') 
+					const messageWithoutOptionsSplitHR =
+						messageWithoutOptions.split("---");
 					message =
-						getRandomElement(messageWithoutOptionsSplitHR) + messageOptions
+						getRandomElement(messageWithoutOptionsSplitHR) + messageOptions;
 				} else {
 					message = getRandomElement(messageSplitHR);
 				}
 			}
 			// Gestion des éléments audio autoplay
-			message = message.replaceAll(/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,function(match,v1) {
-				if (match.includes('autoplay')) {
-					const audio = new Audio(v1);
-        			audio.play();
-					return `<!--${match}-->`;
-				} else {
-					return match;
+			message = message.replaceAll(
+				/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,
+				function (match, v1) {
+					if (match.includes("autoplay")) {
+						const audio = new Audio(v1);
+						audio.play();
+						return `<!--${match}-->`;
+					} else {
+						return match;
+					}
 				}
-			})
+			);
 			// Gestion de l'audio avec la directive !Audio
-			message = message.replaceAll(/!Audio:(.*)/g, function(match,v1) {
+			message = message.replaceAll(/!Audio:(.*)/g, function (match, v1) {
 				const audio = new Audio(v1.trim());
-        		audio.play();
-				return '';
-			})
+				audio.play();
+				return "";
+			});
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-			message = message.replaceAll(/!Next ?:(.*)/g, function(match,v1) {
-				const v1Split = v1.split('/');
+			message = message.replaceAll(/!Next ?:(.*)/g, function (match, v1) {
+				const v1Split = v1.split("/");
 				let v2;
-				if(v1Split.length>0) {
+				if (v1Split.length > 0) {
 					v1 = v1Split[0];
-					v2 = v1Split[1]
+					v2 = v1Split[1];
 				} else {
 					v1 = v1Split[0];
 				}
-				if(match && nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax) {
+				if (
+					match &&
+					nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax
+				) {
 					lastMessageFromBot = message;
 					nextMessage = v1.trim();
 					nextMessageOnlyIfKeywords = true;
-					messageIfKeywordsNotFound = v2 ? v2.trim() : "Ce n'était pas la bonne réponse, merci de réessayer !";
-					messageIfKeywordsNotFound = messageIfKeywordsNotFound + '\n\n'
+					messageIfKeywordsNotFound = v2
+						? v2.trim()
+						: "Ce n'était pas la bonne réponse, merci de réessayer !";
+					messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
 					nextMessageOnlyIfKeywordsCount++;
-					return '<!--'+'-->';
+					return "<!--" + "-->";
 				} else {
-					lastMessageFromBot = '';
+					lastMessageFromBot = "";
 					const linkToOption = nextMessage;
-					nextMessage = '';
+					nextMessage = "";
 					nextMessageOnlyIfKeywords = false;
-					if(nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax) {
+					if (
+						nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax
+					) {
 						nextMessageOnlyIfKeywordsCount = 0;
-						const skipMessage = `<ul class="messageOptions"><li><a href="#${yamlObfuscate ? btoa(linkToOption) : linkToOption}">Passer à la suite !</a></li></ul>`
+						const skipMessage = `<ul class="messageOptions"><li><a href="#${
+							yamlObfuscate ? btoa(linkToOption) : linkToOption
+						}">Passer à la suite !</a></li></ul>`;
 						return skipMessage;
 					}
 				}
-			})
+			});
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-			message = message.replaceAll(/!SelectNext:(.*)/g, function(match, v1) {
-				if(match) {
-					const v1Split = v1.split('/');
-					lastMessageFromBot = '';
-					nextMessage = '';
+			message = message.replaceAll(/!SelectNext:(.*)/g, function (match, v1) {
+				if (match) {
+					const v1Split = v1.split("/");
+					lastMessageFromBot = "";
+					nextMessage = "";
 					nextMessageOnlyIfKeywords = false;
 					nextSelected = getRandomElement(v1Split).trim();
-					return '';
+					return "";
 				} else {
 					nextSelected = undefined;
 				}
-			})
+			});
 		}
 
 		if (yamlDynamicContent) {
 			// Cas où le message vient du bot
 			if (!isUser) {
 				// On remplace dans le texte les variables `@nomVariable` par leur valeur
-				message = message.replaceAll(/\`@([^\s]*?)\`/g, function(match, v1) {
-					if (match.includes('=')) {
+				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, v1) {
+					if (match.includes("=")) {
 						return match;
 					} else {
 						return customVariables[v1] ? customVariables[v1] : "";
 					}
-				})
-				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
-				message = message.replaceAll(/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,function(match,v1,v2) {
-					getLastMessage = match ? [v1,v2]: false;
-					return '';
 				});
+				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
+				message = message.replaceAll(
+					/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,
+					function (match, v1, v2) {
+						getLastMessage = match ? [v1, v2] : false;
+						return "";
+					}
+				);
 				// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
-				message = message.replaceAll(/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g, function(match, v1, v2) {
-					customVariables[v1]=v2;
-					return '';
-				})
+				message = message.replaceAll(
+					/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g,
+					function (match, v1, v2) {
+						customVariables[v1] = v2;
+						return "";
+					}
+				);
 				// Possibilité d'activer ou de désactiver le clavier au cas par cas
-				if(yamlUserInput === false) {
-					if (customVariables['KEYBOARD'] == 'true') {
+				if (yamlUserInput === false) {
+					if (customVariables["KEYBOARD"] == "true") {
 						controls.style.display = "block";
-						customVariables['KEYBOARD'] = 'false';
+						customVariables["KEYBOARD"] = "false";
 					} else {
 						controls.style.display = "none";
 					}
 				} else {
-					if (customVariables['KEYBOARD'] == 'false') {
+					if (customVariables["KEYBOARD"] == "false") {
 						controls.style.display = "none";
-						customVariables['KEYBOARD'] = 'true';
+						customVariables["KEYBOARD"] = "true";
 					} else {
 						controls.style.display = "block";
 					}
 				}
 				// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
-				message = message.replaceAll(/ (@[^\s]*?\=.*?)\</g,'<span class="hidden">$1</span><')
-				message = message.replaceAll(/>(@[^\s]*?\=)/g,'><span class="hidden">$1</span>')
+				message = message.replaceAll(
+					/ (@[^\s]*?\=.*?)\</g,
+					'<span class="hidden">$1</span><'
+				);
+				message = message.replaceAll(
+					/>(@[^\s]*?\=)/g,
+					'><span class="hidden">$1</span>'
+				);
 				// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
-				message = message.replaceAll(/\`if (.*?)\`((\n|.*)*?)\`endif\`/g, function(match, condition, content) {
-					if (condition) {
-						try {
-							// Remplace les variables personnalisées dans la condition
-							condition = condition.replace(/@([^\s()&|!=]+)/g, function(match, varName) {
-								return 'customVariables["'+varName.trim()+'"]';
-							});
-							// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
-							condition = condition.replaceAll(/(==|!=|<|>) ?(.*?)( |\)|$)/g,'$1 "$2"$3').replaceAll('""','"').replace('"undefined"','undefined')
-							// Vérifie que l'expression ne contient que les opérateurs autorisés
-							const isValid = /^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z_][a-zA-Z0-9_]*\[[^\]]+\]|\s+))*\s*$/.test(condition);
-							if (!isValid) {
-								throw new Error('Invalid expression');
-							} else {
-								// Évaluation de la condition de manière sécurisée
-								const result = new Function('customVariables', 'return ' + condition)(customVariables)
-								return result ? content : '<!--' + condition + '-->';
+				message = message.replaceAll(
+					/\`if (.*?)\`((\n|.*)*?)\`endif\`/g,
+					function (match, condition, content) {
+						if (condition) {
+							try {
+								// Remplace les variables personnalisées dans la condition
+								condition = condition.replace(
+									/@([^\s()&|!=]+)/g,
+									function (match, varName) {
+										return 'customVariables["' + varName.trim() + '"]';
+									}
+								);
+								// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
+								condition = condition
+									.replaceAll(/(==|!=|<|>) ?(.*?)( |\)|$)/g, '$1 "$2"$3')
+									.replaceAll('""', '"')
+									.replace('"undefined"', "undefined");
+								// Vérifie que l'expression ne contient que les opérateurs autorisés
+								const isValid =
+									/^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z_][a-zA-Z0-9_]*\[[^\]]+\]|\s+))*\s*$/.test(
+										condition
+									);
+								if (!isValid) {
+									throw new Error("Invalid expression");
+								} else {
+									// Évaluation de la condition de manière sécurisée
+									const result = new Function(
+										"customVariables",
+										"return " + condition
+									)(customVariables);
+									return result ? content : "<!--" + condition + "-->";
+								}
+							} catch (e) {
+								console.error("Error evaluating condition:", condition, e);
+								return "<!--" + condition + "-->";
 							}
-						} catch (e) {
-							console.error('Error evaluating condition:', condition, e);
-							return '<!--' + condition + '-->';
+						} else {
+							return "<!--" + condition + "-->";
 						}
-					} else {
-						return '<!--' + condition + '-->';
 					}
-				});
+				);
 			} else {
-			// Cas où le message vient de l'utilisateur
+				// Cas où le message vient de l'utilisateur
 				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
-				message = message.replaceAll(/@([^\s]*?)\=(.*)/g, function(match, v1, v2, offset) {
-					customVariables[v1]=v2;
-					// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
-					return offset == 0 ? v2 : '';
-				})
-				
+				message = message.replaceAll(
+					/@([^\s]*?)\=(.*)/g,
+					function (match, v1, v2, offset) {
+						customVariables[v1] = v2;
+						// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
+						return offset == 0 ? v2 : "";
+					}
+				);
+
 				if (getLastMessage) {
 					// Si dans le précédent message, on avait demandé à récupérer l'input : on récupère cette input et on le met dans la variable correspondante
 					// Puis on renvoie vers le message correspondant
 					if (getLastMessage && getLastMessage.length > 0) {
-						customVariables[getLastMessage[0]] = message
+						customVariables[getLastMessage[0]] = message;
 						nextMessage = getLastMessage[1];
 						getLastMessage = false;
 					} else {
-						nextMessage = '';
+						nextMessage = "";
 					}
 				} else {
-					nextMessage = nextMessageOnlyIfKeywords ? nextMessage : '';
+					nextMessage = nextMessageOnlyIfKeywords ? nextMessage : "";
 				}
 			}
 		}
@@ -504,8 +559,8 @@ function createChatBot(chatData) {
 		} else {
 			displayMessage(html, isUser, chatMessage);
 		}
-		if(nextSelected) {
-				chatbotResponse(nextSelected);
+		if (nextSelected) {
+			chatbotResponse(nextSelected);
 		}
 	}
 
@@ -628,7 +683,11 @@ function createChatBot(chatData) {
 		words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g, "");
 		words = words.replaceAll("/", " ");
 		words = removeAccents(words);
-		words = words.split(/\s|'/).map(word => word.trim()).filter((word) => word.length >= 5) || [];
+		words =
+			words
+				.split(/\s|'/)
+				.map((word) => word.trim())
+				.filter((word) => word.length >= 5) || [];
 		const tokens = [];
 
 		// On va créer des tokens avec à chaque fois un poids associé
@@ -706,27 +765,29 @@ function createChatBot(chatData) {
 	let vectorRAGinformations = [];
 
 	function createVectorRAGinformations(informations) {
-		if(informations) {					
-			for (let i=0 ; i< informations.length; i++) {
+		if (informations) {
+			for (let i = 0; i < informations.length; i++) {
 				const RAGinformation = informations[i];
 				const vectorRAGinformation = createVector(RAGinformation);
-				vectorRAGinformations.push(vectorRAGinformation)
+				vectorRAGinformations.push(vectorRAGinformation);
 			}
 		}
 	}
 
-	if(window.useLLMpromise) {
-		window.useLLMpromise.then(() => {
-			if(window.useLLMragContentPromise) {
-				window.useLLMragContentPromise.then(() => {
-					createVectorRAGinformations(yamlUseLLMinformations)
-				})
-			} else {
-				createVectorRAGinformations(yamlUseLLMinformations)
-			}
-		}).catch((error) => {
-			console.error("Erreur d'accès aux données RAG : ", error);
-		});
+	if (window.useLLMpromise) {
+		window.useLLMpromise
+			.then(() => {
+				if (window.useLLMragContentPromise) {
+					window.useLLMragContentPromise.then(() => {
+						createVectorRAGinformations(yamlUseLLMinformations);
+					});
+				} else {
+					createVectorRAGinformations(yamlUseLLMinformations);
+				}
+			})
+			.catch((error) => {
+				console.error("Erreur d'accès aux données RAG : ", error);
+			});
 	}
 
 	function cosineSimilarity(str, vector) {
@@ -769,9 +830,9 @@ function createChatBot(chatData) {
 	// Une fonction pour ne garder que les éléments avec la valeur la plus grande dans un tableau
 	function topElements(array, maxElements) {
 		let topElements;
-		if (array.length <  maxElements) {
+		if (array.length < maxElements) {
 			// Si le tableau contient moins que maxElements : on garde tout le tableau
-			topElements = array.map((element,index) => [element,index])
+			topElements = array.map((element, index) => [element, index]);
 		} else {
 			// Sinon, on garde seulement les éléments qui ont la valeur la plus grande
 			topElements = array.reduce((acc, val, index) => {
@@ -793,19 +854,29 @@ function createChatBot(chatData) {
 
 	function chatbotResponse(inputText) {
 		// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
-		if (nextMessage !='' && !nextMessageOnlyIfKeywords) {
-			inputText = nextMessage
+		if (nextMessage != "" && !nextMessageOnlyIfKeywords) {
+			inputText = nextMessage;
 		}
-		let RAGbestMatchesInformation = '';
+		let RAGbestMatchesInformation = "";
 		let questionToLLM;
-		if(yamlUseLLM) {
-			inputText = inputText.replace('<span class="hidden">!useLLM</span>','!useLLM');
-			questionToLLM = inputText.trim().replace('!useLLM','');
-			if(yamlUseLLMinformations) {
+		if (yamlUseLLM) {
+			inputText = inputText.replace(
+				'<span class="hidden">!useLLM</span>',
+				"!useLLM"
+			);
+			questionToLLM = inputText.trim().replace("!useLLM", "");
+			if (yamlUseLLMinformations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
-				const cosSimArray = vectorRAGinformations.map(vectorRAGinformation => cosineSimilarity(questionToLLM,vectorRAGinformation))
-				const RAGbestMatchesIndexes = topElements(cosSimArray,yamlUseLLMmaxTopElements)
-				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(element => yamlUseLLMinformations[element[1]]).join('\n')
+				const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
+					cosineSimilarity(questionToLLM, vectorRAGinformation)
+				);
+				const RAGbestMatchesIndexes = topElements(
+					cosSimArray,
+					yamlUseLLMmaxTopElements
+				);
+				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
+					(element) => yamlUseLLMinformations[element[1]]
+				).join("\n");
 			}
 		}
 
@@ -862,11 +933,15 @@ function createChatBot(chatData) {
 					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
 						// Test de l'identité stricte
 						let strictIdentityMatch = false;
-						if(nextMessageOnlyIfKeywords) {
+						if (nextMessageOnlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
-							userInputTextToLowerCase = removeAccents(userInputTextToLowerCase)
-							keywordToLowerCase = removeAccents(keywordToLowerCase)
-							const regexStrictIdentityMatch = new RegExp(`\\b${keywordToLowerCase}\\b`);
+							userInputTextToLowerCase = removeAccents(
+								userInputTextToLowerCase
+							);
+							keywordToLowerCase = removeAccents(keywordToLowerCase);
+							const regexStrictIdentityMatch = new RegExp(
+								`\\b${keywordToLowerCase}\\b`
+							);
 							if (userInputTextToLowerCase.match(regexStrictIdentityMatch)) {
 								strictIdentityMatch = true;
 							}
@@ -900,7 +975,11 @@ function createChatBot(chatData) {
 					}
 				}
 				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0 et que la réponse correspond au titre de la réponse voulue dans la directive
-				if (matchScore > 0 && nextMessageOnlyIfKeywords && titleResponse == nextMessage) {
+				if (
+					matchScore > 0 &&
+					nextMessageOnlyIfKeywords &&
+					titleResponse == nextMessage
+				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				}
 				if (matchScore > bestMatchScore) {
@@ -910,34 +989,63 @@ function createChatBot(chatData) {
 				}
 			}
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
-			if ((bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) || nextMessageOnlyIfKeywords) {
-				if(bestMatch && nextMessageOnlyIfKeywords) {
+			if (
+				(bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) ||
+				nextMessageOnlyIfKeywords
+			) {
+				if (bestMatch && nextMessageOnlyIfKeywords) {
 					// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
-					lastMessageFromBot = '';
-					nextMessage = '';
+					lastMessageFromBot = "";
+					nextMessage = "";
 					nextMessageOnlyIfKeywords = false;
 				}
 				// On envoie le meilleur choix s'il en existe un
-				let selectedResponseWithoutOptions = bestMatch ? Array.isArray(bestMatch)
-					? bestMatch.join("\n\n")
-					: bestMatch : '';
-				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : '';
-				let optionsSelectedResponse =  bestMatch ? chatData[indexBestMatch][3] : [];
-				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial) 
+				let selectedResponseWithoutOptions = bestMatch
+					? Array.isArray(bestMatch)
+						? bestMatch.join("\n\n")
+						: bestMatch
+					: "";
+				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : "";
+				let optionsSelectedResponse = bestMatch
+					? chatData[indexBestMatch][3]
+					: [];
+				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
-						selectedResponseWithOptions = lastMessageFromBot.includes(messageIfKeywordsNotFound) ? lastMessageFromBot : messageIfKeywordsNotFound + lastMessageFromBot;
+					selectedResponseWithOptions = lastMessageFromBot.includes(
+						messageIfKeywordsNotFound
+					)
+						? lastMessageFromBot
+						: messageIfKeywordsNotFound + lastMessageFromBot;
 				} else {
-					selectedResponseWithOptions = gestionOptions(selectedResponseWithoutOptions, optionsSelectedResponse);
+					selectedResponseWithOptions = gestionOptions(
+						selectedResponseWithoutOptions,
+						optionsSelectedResponse
+					);
 				}
 				// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
-				if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
-					getAnswerFromLLM(questionToLLM.trim(), selectedResponseWithoutOptions + '\n' + RAGbestMatchesInformation);
+				if (
+					(yamlUseLLM &&
+						yamlUseLLMurl &&
+						yamlUseLLMmodel &&
+						yamlUseLLMalways) ||
+					inputText.includes("!useLLM")
+				) {
+					getAnswerFromLLM(
+						questionToLLM.trim(),
+						selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation
+					);
 					return;
 				} else {
 					createChatMessage(selectedResponseWithOptions, false);
 				}
 			} else {
-				if((yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && yamlUseLLMalways) || inputText.includes('!useLLM')){
+				if (
+					(yamlUseLLM &&
+						yamlUseLLMurl &&
+						yamlUseLLMmodel &&
+						yamlUseLLMalways) ||
+					inputText.includes("!useLLM")
+				) {
 					getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
 					return;
 				} else {
@@ -957,9 +1065,19 @@ function createChatBot(chatData) {
 					}
 					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
 					let messageNoAnswer = defaultMessage[randomDefaultMessageIndex];
-					if(yamlUseLLM && !yamlUseLLMalways && yamlUseLLMurl && yamlUseLLMmodel) {
-						const optionMessageNoAnswer = [['Voir une réponse générée par une IA','!useLLM '+inputText]]; 
-						messageNoAnswer = gestionOptions(messageNoAnswer, optionMessageNoAnswer)
+					if (
+						yamlUseLLM &&
+						!yamlUseLLMalways &&
+						yamlUseLLMurl &&
+						yamlUseLLMmodel
+					) {
+						const optionMessageNoAnswer = [
+							["Voir une réponse générée par une IA", "!useLLM " + inputText],
+						];
+						messageNoAnswer = gestionOptions(
+							messageNoAnswer,
+							optionMessageNoAnswer
+						);
 					}
 					createChatMessage(messageNoAnswer, false);
 				}
@@ -989,7 +1107,7 @@ function createChatBot(chatData) {
 		});
 
 		// On ordonne de manière aléatoire les éléments qui doivent l'être
-		randomizableElements = shuffleArray(randomizableElements)
+		randomizableElements = shuffleArray(randomizableElements);
 
 		// On reconstruit le tableau en réinsérant les éléments fixes au bon endroit
 		var finalArray = [];
@@ -1006,50 +1124,52 @@ function createChatBot(chatData) {
 
 	// Une fonction pour tester si le tableau des options doit être réordonné avec de l'aléatoire
 	function shouldBeRandomized(array) {
-		if(Array.isArray(array)) {
+		if (Array.isArray(array)) {
 			for (let i = 0; i < array.length; i++) {
-			if (array[i][2] === true) {
-				return true;
-			}
+				if (array[i][2] === true) {
+					return true;
+				}
 			}
 		}
 		return false;
-	  }
+	}
 
 	function gestionOptions(response, options) {
 		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
 		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
 			if (options) {
-				options = options.filter(element => {
+				options = options.filter((element) => {
 					for (const [key, value] of Object.entries(customVariables)) {
 						// Cas où l'option ne dépend d'aucune variable
 						if (!element[3]) {
-							return true
+							return true;
 						}
 						// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans customVariables
 						if (element[3] && element[3].includes(`@${key}`)) {
 							// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
 							if (element[3] === `@${key}==${value}`) {
-								return true
+								return true;
 							} else {
-								return false
+								return false;
 							}
 						}
 					}
-				})
+				});
 			}
 		}
 
-		
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
-		response = response.replaceAll(/\!Select ?: ?([0-9]*)/g, function(match, v1) {
-			if(match && v1<=options.length) {
-				options = shuffleArray(options).slice(0,v1);
-				return '<!--'+match+'-->'
-			} else {
-				return ''
+		response = response.replaceAll(
+			/\!Select ?: ?([0-9]*)/g,
+			function (match, v1) {
+				if (match && v1 <= options.length) {
+					options = shuffleArray(options).slice(0, v1);
+					return "<!--" + match + "-->";
+				} else {
+					return "";
+				}
 			}
-		})
+		);
 		// On teste s'il faut mettre de l'aléatoire dans les options
 		if (shouldBeRandomized(options)) {
 			options = randomizeArrayWithFixedElements(options);
@@ -1114,36 +1234,46 @@ function createChatBot(chatData) {
 	});
 
 	function handleClick(event) {
-			const target = event.target;
-			if (target.tagName === "A") {
-				// Gestion du cas où on clique sur un lien
-				const currentUrl = window.location.href;
-				const link = target.getAttribute("href");
-				if (link.startsWith(currentUrl)) {
-					// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
-					window.open(link);
+		const target = event.target;
+		if (target.tagName === "A") {
+			// Gestion du cas où on clique sur un lien
+			const currentUrl = window.location.href;
+			const link = target.getAttribute("href");
+			if (link.startsWith(currentUrl)) {
+				// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
+				window.open(link);
+			}
+			if (link.startsWith("#")) {
+				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
+				event.preventDefault();
+				let messageFromLink = target.innerText;
+				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
+				const linkDeobfuscated = yamlObfuscate
+					? atob(link.replace("#", ""))
+					: link;
+				if (
+					yamlUseLLM &&
+					yamlUseLLMurl &&
+					yamlUseLLMmodel &&
+					linkDeobfuscated.includes("!useLLM")
+				) {
+					messageFromLink = linkDeobfuscated
+						.replace("#", "")
+						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
+						.trim();
+					createChatMessage(messageFromLink, true);
+					chatbotResponse(messageFromLink);
+				} else {
+					createChatMessage(messageFromLink, true);
+					const optionLink = link.substring(1);
+					responseToSelectedOption(optionLink);
 				}
-				if (link.startsWith("#")) {
-					// Si le lien est vers une option, alors on envoie le message correspondant à cette option
-					event.preventDefault();
-					let messageFromLink = target.innerText;
-					// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
-					const linkDeobfuscated = yamlObfuscate ? atob(link.replace('#','')) : link;
-					if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && linkDeobfuscated.includes('!useLLM')){
-						messageFromLink = linkDeobfuscated.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
-						createChatMessage(messageFromLink, true);
-						chatbotResponse(messageFromLink);
-					} else {
-						createChatMessage(messageFromLink, true);
-						const optionLink = link.substring(1);
-						responseToSelectedOption(optionLink);
-					}
-					scrollWindow();
-				}
+				scrollWindow();
 			}
 		}
+	}
 
-	chatContainer.addEventListener("click", event => handleClick(event));
+	chatContainer.addEventListener("click", (event) => handleClick(event));
 
 	// Envoi du message d'accueil du chatbot
 	initialMessage = gestionOptions(
