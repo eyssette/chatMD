@@ -139,7 +139,7 @@ function createChatBot(chatData) {
 			const contentArray = slowContent.split("\n");
 			const contentArrayFiltered = contentArray.map(
 				element =>
-				element.startsWith(pauseTypeWriter) ? element.replace(pauseTypeWriter,'') : '`' + element + '`'
+				element.startsWith(pauseTypeWriter) ? element.replace(pauseTypeWriter,'')+ '`' : element.endsWith('`') ? '`' + element  : '`' + element + '`'
 			)
 			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
