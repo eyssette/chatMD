@@ -137,7 +137,10 @@ function createChatBot(chatData) {
 			typed.stop();
 			typed.reset();
 			const contentArray = slowContent.split("\n");
-			const contentArrayFiltered = contentArray.map(element => '`' + element.replace(pauseTypeWriter,'').replaceAll('`','') + '`')
+			const contentArrayFiltered = contentArray.map(
+				element =>
+				element.startsWith(pauseTypeWriter) ? element.replace(pauseTypeWriter,'') : '`' + element + '`'
+			)
 			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
 			typed.destroy();
