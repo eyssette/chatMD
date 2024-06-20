@@ -104,7 +104,7 @@ main {
 	font-style: italic;
 }
 
-a {
+a, a:visited {
 	color: #551A8D!important;
 }
 
