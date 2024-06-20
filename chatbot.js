@@ -179,7 +179,7 @@ function createChatBot(chatData) {
 		};
 
 		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
-		content = content.replaceAll(/(\<ul class="messageOptions"\>(.|\n)*?\<\/ul\>)/gm,pauseTypeWriter + '`$1`')
+		content = content.replaceAll(/(\<ul class="messageOptions"\>(.|\n)*?\<\/ul\>)/gm,pauseTypeWriter + '`$1`');
 
 		// Effet machine à écrire
 		let mutationObserver
@@ -1113,35 +1113,37 @@ function createChatBot(chatData) {
 		this.classList.add("placeholder");
 	});
 
-	chatContainer.addEventListener("click", function (event) {
-		const target = event.target;
-		if (target.tagName === "A") {
-			// Gestion du cas où on clique sur un lien
-			const currentUrl = window.location.href;
-			const link = target.getAttribute("href");
-			if (link.startsWith(currentUrl)) {
-				// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
-				window.open(link);
-			}
-			if (link.startsWith("#")) {
-				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
-				event.preventDefault();
-				let messageFromLink = target.innerText;
-				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
-				const linkDeobfuscated = yamlObfuscate ? atob(link.replace('#','')) : link;
-				if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && linkDeobfuscated.includes('!useLLM')){
-					messageFromLink = linkDeobfuscated.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
-					createChatMessage(messageFromLink, true);
-					chatbotResponse(messageFromLink);
-				} else {
-					createChatMessage(messageFromLink, true);
-					const optionLink = link.substring(1);
-					responseToSelectedOption(optionLink);
+	function handleClick(event) {
+			const target = event.target;
+			if (target.tagName === "A") {
+				// Gestion du cas où on clique sur un lien
+				const currentUrl = window.location.href;
+				const link = target.getAttribute("href");
+				if (link.startsWith(currentUrl)) {
+					// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
+					window.open(link);
 				}
-				scrollWindow();
+				if (link.startsWith("#")) {
+					// Si le lien est vers une option, alors on envoie le message correspondant à cette option
+					event.preventDefault();
+					let messageFromLink = target.innerText;
+					// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
+					const linkDeobfuscated = yamlObfuscate ? atob(link.replace('#','')) : link;
+					if(yamlUseLLM && yamlUseLLMurl && yamlUseLLMmodel && linkDeobfuscated.includes('!useLLM')){
+						messageFromLink = linkDeobfuscated.replace('#','').replace('!useLLM','<span class="hidden">!useLLM</span>').trim();
+						createChatMessage(messageFromLink, true);
+						chatbotResponse(messageFromLink);
+					} else {
+						createChatMessage(messageFromLink, true);
+						const optionLink = link.substring(1);
+						responseToSelectedOption(optionLink);
+					}
+					scrollWindow();
+				}
 			}
 		}
-	});
+
+	chatContainer.addEventListener("click", event => handleClick(event));
 
 	// Envoi du message d'accueil du chatbot
 	initialMessage = gestionOptions(
