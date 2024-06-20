@@ -139,13 +139,18 @@ function createChatBot(chatData) {
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
-			const contentArray = slowContent.split("\n");
+			// On doit conserver les retours à la ligne dans les blocs "pre"
+			const contentKeepReturnInCode = slowContent.replaceAll(/(<pre(.|\n)*<\/pre>)/gm,function(match){
+				return match.replaceAll('\n','RETURNCHARACTER')
+			})
+			const contentArray = contentKeepReturnInCode.split("\n");
+			// On découpe chaque paragraphe pour pouvoir ensuite l'afficher d'un coup
 			const contentArrayFiltered = contentArray.map((element) =>
 				element.startsWith(pauseTypeWriter)
-					? element.replace(pauseTypeWriter, "") + "`"
+					? element.replace(pauseTypeWriter, "").replaceAll('RETURNCHARACTER','\n') + "`"
 					: element.endsWith("`")
-					? "`" + element
-					: "`" + element + "`"
+					? "`" + element.replaceAll('RETURNCHARACTER','\n')
+					: "`" + element.replaceAll('RETURNCHARACTER','\n') + "`"
 			);
 			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
