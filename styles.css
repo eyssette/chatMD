@@ -72,6 +72,17 @@ main {
 	margin-left:-10px;
 }
 
+#controls.hideControls{
+	height:50px;
+}
+
+#controls.hideControls #input-container{
+	visibility: hidden;
+}
+#controls.hideControls #send-button {
+	visibility: hidden;
+}
+
 #input-container {
 	width:100%;
 	background-color: rgb(255, 255, 255);

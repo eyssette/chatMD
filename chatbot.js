@@ -461,17 +461,17 @@ function createChatBot(chatData) {
 				// Possibilité d'activer ou de désactiver le clavier au cas par cas
 				if (yamlUserInput === false) {
 					if (customVariables["KEYBOARD"] == "true") {
-						controls.style.display = "flex";
+						controls.classList.remove('hideControls')
 						customVariables["KEYBOARD"] = "false";
 					} else {
-						controls.style.display = "none";
+						controls.classList.add('hideControls')
 					}
 				} else {
 					if (customVariables["KEYBOARD"] == "false") {
-						controls.style.display = "none";
+						controls.classList.add('hideControls')
 						customVariables["KEYBOARD"] = "true";
 					} else {
-						controls.style.display = "flex";
+						controls.classList.remove('hideControls')
 					}
 				}
 				// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
