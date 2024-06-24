@@ -208,10 +208,10 @@ Vous pouvez intégrer chatMD dans une page HTML en insérant ce code en bas de p
 \`\`\`js
 <script id="chatmdWidgetScript"
 src="https://chatmd.forge.apps.education.fr/widget.min.js" 
-data-chatbot="URL_DE_VOTRE_CHATBOT"></script>
+data-chatbot="URL_SOURCE_CHATBOT"></script>
 \`\`\`
 
-Il faut bien sûr remplacer \`\`\`URL_DE_VOTRE_CHATBOT\`\`\` par l'URL de la source de votre chatbot.
+Il faut bien sûr remplacer \`\`\`URL_SOURCE_CHATBOT\`\`\` par l'URL de la source de votre chatbot.
 
 On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comme paramètre.
 
