@@ -292,6 +292,10 @@ function handleURL(url) {
 		if (shortcut) {
 			url = shortcut[1];
 		}
+		// Gestion des fichiers hébergés sur la forge
+		if(url.includes('forge')) {
+			addCorsProxy = false;
+		}
 		// Gestion des fichiers hébergés sur github
 		if (url.startsWith("https://github.com")) {
 			addCorsProxy = false;
