@@ -920,6 +920,14 @@ function createChatBot(chatData) {
 			for (let i = 0; i < chatData.length; i++) {
 				const titleResponse = chatData[i][0];
 				const keywordsResponse = chatData[i][1];
+				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
+				if(nextMessageOnlyIfKeywords && titleResponse != nextMessage) {
+					continue
+				}
+				// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
+				if(nextMessageOnlyIfKeywords && titleResponse == nextMessage && keywordsResponse.length == 0) {
+					userInputTextToLowerCase = nextMessage.toLowerCase();
+				}
 				const keywords = keywordsResponse.concat(titleResponse);
 				const responses = chatData[i][2];
 				let matchScore = 0;
