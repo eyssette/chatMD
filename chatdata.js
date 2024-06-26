@@ -272,10 +272,10 @@ const defaultPostprompt = "\nN'oublie pas de répondre en français.";
 let yamlUseLLMpostprompt = defaultPostprompt;
 const defaultRAGprompt = `
 Voici ci-dessous le contexte à partir duquel tu dois partir pour construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si l'information n'est pas dans le contexte, indique-le et essaie de répondre malgré tout.
-CONTEXTE : `
+CONTEXTE : `;
 const defaultRAGpromptStrict = `
 Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
-CONTEXTE : `
+CONTEXTE : `;
 let yamlUseLLMragPrompt = defaultRAGprompt;
 let yamlUseLLMragSeparator = '\n';
 let yamlUseLLMmaxTopElements = 3;
@@ -288,12 +288,12 @@ function handleURL(url) {
 	if (url !== "") {
 		let addCorsProxy = true;
 		// Vérification de la présence d'un raccourci
-		shortcut = shortcuts.find(element => element[0]==url);
+		const shortcut = shortcuts.find(element => element[0]==url);
 		if (shortcut) {
 			url = shortcut[1];
 		}
-		// Gestion des fichiers hébergés sur la forge
-		if(url.includes('forge')) {
+		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
+		if(url.includes('.forge')) {
 			addCorsProxy = false;
 		}
 		// Gestion des fichiers hébergés sur github
@@ -327,7 +327,7 @@ function getMarkdownContent() {
 	// Récupération du markdown externe
 	const url = window.location.hash.substring(1).replace(/\?.*/,''); // Récupère l'URL du hashtag sans le #
 	if (url !== "") {
-		const urlMD = handleURL(url)
+		const urlMD = handleURL(url);
 		// Récupération du contenu du fichier
 		fetch(urlMD)
 			.then((response) => response.text())
