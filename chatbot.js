@@ -435,30 +435,55 @@ function createChatBot(chatData) {
 		if (yamlDynamicContent) {
 			// Cas où le message vient du bot
 			if (!isUser) {
-				// On remplace dans le texte les variables `@nomVariable` par leur valeur
-				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, v1) {
-					if (match.includes("=")) {
-						return match;
-					} else {
-						return customVariables[v1] ? customVariables[v1] : "";
-					}
-				});
-				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
-				message = message.replaceAll(
-					/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,
-					function (match, v1, v2) {
-						getLastMessage = match ? [v1, v2] : false;
-						return "";
-					}
-				);
+
 				// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
 				message = message.replaceAll(
 					/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g,
-					function (match, v1, v2) {
-						customVariables[v1] = v2;
+					function (match, variableName, variableValue) {
+						if (!match.includes("calc(") && !match.includes("@INPUT")) {
+							customVariables[variableName] = variableValue;
+							return "";
+						} else {
+							return match
+						}
+					}
+				);
+				// On remplace dans le texte les variables `@nomVariable` par leur valeur
+				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, variableName) {
+					if (match.includes("=")) {
+						return match;
+					} else {
+						return customVariables[variableName] ? customVariables[variableName] : match;
+					}
+				});
+				// Calcul des variables qui dépendent d'autres variables
+				message = message.replaceAll(/\`@([^\s]*?) ?= calc\((.*)\)\`/g, function (match, variableName, complexExpression) {
+					calc = complexExpression.replace(/@(\w+)/g, (matchCalc, variableNameComplexExpression) => {
+						return customVariables[variableNameComplexExpression] || matchCalc;
+					});
+					customVariables[variableName] = calc;
+					return "";
+				})
+				
+				// 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (cas des variables complexes qui viennent d'être définies)
+				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, variableName) {
+					if (match.includes("=")) {
+						return match;
+					} else {
+						return customVariables[variableName] ? customVariables[variableName] : "";
+					}
+				});
+			
+				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
+				message = message.replaceAll(
+					/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,
+					function (match, variableName, nextAnswer) {
+						getLastMessage = match ? [variableName, nextAnswer] : false;
 						return "";
 					}
 				);
+				
+
 				// Possibilité d'activer ou de désactiver le clavier au cas par cas
 				if (yamlUserInput === false) {
 					if (customVariables["KEYBOARD"] == "true") {
@@ -493,8 +518,8 @@ function createChatBot(chatData) {
 								// Remplace les variables personnalisées dans la condition
 								condition = condition.replace(
 									/@([^\s()&|!=]+)/g,
-									function (match, varName) {
-										return 'customVariables["' + varName.trim() + '"]';
+									function (match, variableName) {
+										return 'customVariables["' + variableName.trim() + '"]';
 									}
 								);
 								// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
@@ -531,10 +556,10 @@ function createChatBot(chatData) {
 				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
 				message = message.replaceAll(
 					/@([^\s]*?)\=(.*)/g,
-					function (match, v1, v2, offset) {
-						customVariables[v1] = v2;
+					function (match, variableName, variableValue, offset) {
+						customVariables[variableName] = variableValue;
 						// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
-						return offset == 0 ? v2 : "";
+						return offset == 0 ? variableValue : "";
 					}
 				);
 
@@ -1233,10 +1258,6 @@ function createChatBot(chatData) {
 			// Si l'userInput est caché : on désactive l'entrée clavier (sauf pour Enter qui permet toujours d'afficher plus vite la suite)
 			event.preventDefault();
 		}
-	});
-
-	document.addEventListener("keypress", (event) => {
-		userInput.focus();
 	});
 
 	userInput.focus({ preventScroll: true });
