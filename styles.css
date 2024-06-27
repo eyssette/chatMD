@@ -77,10 +77,12 @@ main {
 }
 
 #controls.hideControls #input-container{
-	visibility: hidden;
+	opacity:0;
+	filter:alpha(opacity=0);
 }
 #controls.hideControls #send-button {
-	visibility: hidden;
+	opacity:0;
+	filter:alpha(opacity=0);
 }
 
 #input-container {

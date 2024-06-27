@@ -1223,11 +1223,15 @@ function createChatBot(chatData) {
 		}
 	});
 
-	userInput.addEventListener("keypress", (event) => {
+	document.addEventListener("keypress", (event) => {
+		userInput.focus();
 		if (event.key === "Enter") {
 			event.preventDefault();
 			sendButton.click();
 			scrollWindow();
+		} else if(userInput.parentElement.parentElement.classList.contains('hideControls')) {
+			// Si l'userInput est caché : on désactive l'entrée clavier (sauf pour Enter qui permet toujours d'afficher plus vite la suite)
+			event.preventDefault();
 		}
 	});
 
@@ -1279,6 +1283,10 @@ function createChatBot(chatData) {
 					createChatMessage(messageFromLink, true);
 					const optionLink = link.substring(1);
 					responseToSelectedOption(optionLink);
+					// Supprimer le focus sur le bouton qu'on vient de cliquer
+					document.activeElement.blur()
+					// Refocaliser sur userInput
+					userInput.focus();
 				}
 				scrollWindow();
 			}
