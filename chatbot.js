@@ -181,6 +181,7 @@ function createChatBot(chatData) {
 			}
 			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 			scrollWindow();
+			counter++;
 		}
 
 		// Configuration de MutationObserver
