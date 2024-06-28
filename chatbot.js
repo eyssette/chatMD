@@ -529,7 +529,6 @@ function createChatBot(chatData) {
 									})
 									.replaceAll('""', '"')
 									.replace('"undefined"', "undefined");
-									console.log(condition)
 								// Vérifie que l'expression ne contient que les opérateurs autorisés
 								const isValid =
 									/^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z0-9_]+\[[^\]]+\]|\s+))*\s*$/.test(
