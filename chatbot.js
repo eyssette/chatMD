@@ -1316,7 +1316,9 @@ function createChatBot(chatData) {
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur()
 					// Refocaliser sur userInput
-					userInput.focus();
+					if (autoFocus) {
+						userInput.focus();
+					}
 				}
 				scrollWindow();
 			}
