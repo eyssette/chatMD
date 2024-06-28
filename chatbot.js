@@ -457,7 +457,7 @@ function createChatBot(chatData) {
 					}
 				});
 				// Calcul des variables qui dépendent d'autres variables
-				message = message.replaceAll(/\`@([^\s]*?) ?= calc\((.*)\)\`/g, function (match, variableName, complexExpression) {
+				message = message.replaceAll(/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g, function (match, variableName, complexExpression) {
 					calc = complexExpression.replace(/@(\w+)/g, (matchCalc, variableNameComplexExpression) => {
 						return customVariables[variableNameComplexExpression] || matchCalc;
 					});
@@ -518,18 +518,21 @@ function createChatBot(chatData) {
 								// Remplace les variables personnalisées dans la condition
 								condition = condition.replace(
 									/@([^\s()&|!=]+)/g,
-									function (match, variableName) {
-										return 'customVariables["' + variableName.trim() + '"]';
+									function (match, varName) {
+										return 'customVariables["' + varName.trim() + '"]';
 									}
 								);
 								// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 								condition = condition
-									.replaceAll(/(==|!=|<|>) ?(.*?)( |\)|$)/g, '$1 "$2"$3')
+									.replaceAll(/(==|!=|<|>) ?(.*?) ?(\)|\&|\||$)/g, function(match, comparisonSignLeft,value,comparisonSignRight) {
+										return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`
+									})
 									.replaceAll('""', '"')
 									.replace('"undefined"', "undefined");
+									console.log(condition)
 								// Vérifie que l'expression ne contient que les opérateurs autorisés
 								const isValid =
-									/^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z_][a-zA-Z0-9_]*\[[^\]]+\]|\s+))*\s*$/.test(
+									/^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z0-9_]+\[[^\]]+\]|\s+))*\s*$/.test(
 										condition
 									);
 								if (!isValid) {
