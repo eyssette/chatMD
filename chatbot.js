@@ -553,6 +553,8 @@ function createChatBot(chatData) {
 						}
 					}
 				);
+				// On nettoie le message en supprimant les lignes vides en trop
+				message = message.replaceAll(/\n\n\n*/g,'\n\n')
 			} else {
 				// Cas où le message vient de l'utilisateur
 				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
@@ -648,6 +650,7 @@ function createChatBot(chatData) {
 	const BESTMATCH_THRESHOLD = 0.55; // Seuil pour que le bestMatch soit pertinent
 
 	function responseToSelectedOption(optionLink) {
+		console.log("responseToSelectedOption")
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
 		if (optionLink != "") {
 			for (let i = 0; i < chatData.length; i++) {
@@ -659,6 +662,7 @@ function createChatBot(chatData) {
 					response = Array.isArray(response) ? response.join("\n\n") : response;
 					optionsLastResponse = options;
 					response = options ? gestionOptions(response, options) : response;
+					console.log("createchatMessageResponseToSelectedOption")
 					createChatMessage(response, false);
 					break;
 				}
@@ -1303,6 +1307,7 @@ function createChatBot(chatData) {
 					createChatMessage(messageFromLink, true);
 					chatbotResponse(messageFromLink);
 				} else {
+					console.log("createchatMessageFromLink")
 					createChatMessage(messageFromLink, true);
 					const optionLink = link.substring(1);
 					responseToSelectedOption(optionLink);
