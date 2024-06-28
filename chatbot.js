@@ -158,7 +158,7 @@ function createChatBot(chatData) {
 			typed.start();
 			typed.destroy();
 		}
-
+		let mutationObserver;
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
 				mutationObserver.disconnect();
@@ -180,6 +180,7 @@ function createChatBot(chatData) {
 			) {
 				stopTypeWriter(content);
 				observerConnected = false;
+				mutationObserver.disconnect();
 			}
 			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 			scrollWindow();
@@ -197,7 +198,6 @@ function createChatBot(chatData) {
 			/(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm, pauseTypeWriter + "`$1`");
 
 		// Effet machine à écrire
-		let mutationObserver;
 		typed = new Typed(element, {
 			strings: [content],
 			typeSpeed: -5000,
@@ -652,7 +652,6 @@ function createChatBot(chatData) {
 	const BESTMATCH_THRESHOLD = 0.55; // Seuil pour que le bestMatch soit pertinent
 
 	function responseToSelectedOption(optionLink) {
-		console.log("responseToSelectedOption")
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
 		if (optionLink != "") {
 			for (let i = 0; i < chatData.length; i++) {
@@ -664,7 +663,6 @@ function createChatBot(chatData) {
 					response = Array.isArray(response) ? response.join("\n\n") : response;
 					optionsLastResponse = options;
 					response = options ? gestionOptions(response, options) : response;
-					console.log("createchatMessageResponseToSelectedOption")
 					createChatMessage(response, false);
 					break;
 				}
@@ -1309,7 +1307,6 @@ function createChatBot(chatData) {
 					createChatMessage(messageFromLink, true);
 					chatbotResponse(messageFromLink);
 				} else {
-					console.log("createchatMessageFromLink")
 					createChatMessage(messageFromLink, true);
 					const optionLink = link.substring(1);
 					responseToSelectedOption(optionLink);
