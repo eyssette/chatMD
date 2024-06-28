@@ -542,14 +542,14 @@ function createChatBot(chatData) {
 										"customVariables",
 										"return " + condition
 									)(customVariables);
-									return result ? content : "<!--" + condition + "-->";
+									return result ? content : "";
 								}
 							} catch (e) {
 								console.error("Error evaluating condition:", condition, e);
 								return "<!--" + condition + "-->";
 							}
 						} else {
-							return "<!--" + condition + "-->";
+							return "";
 						}
 					}
 				);
