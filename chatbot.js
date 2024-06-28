@@ -47,7 +47,9 @@ function createChatBot(chatData) {
 
 	// Gestion du scroll automatique vers le bas
 	function scrollWindow() {
-		window.scrollTo(0, document.body.scrollHeight);
+		setTimeout(() => {
+			window.scrollTo(0, document.body.scrollHeight);
+		}, 100);
 	}
 
 	// Extensions pour Showdown
