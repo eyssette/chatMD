@@ -601,11 +601,12 @@ function parseMarkdown(markdownContent) {
 	// Gestion de la première partie des données : titre + message initial
 	const firstPart = mainContent.substring(0,indexAfterFirstMessage);
 	// Gestion du titre
-	const chatbotTitle = firstPart.match(/# .*/) ? firstPart.match(/# .*/)[0] : "Chatbot";
+	const chatbotTitleMatch = firstPart.match(/# .*/);
+	const chatbotTitle = chatbotTitleMatch ? chatbotTitleMatch[0] : "Chatbot";
 	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace('# ','').trim()] : [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
-	const initialMessageContent = firstPart.match(/# .*/) ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
+	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
 	const initialMessageContentLines = initialMessageContent.split("\n")
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "").trim();
@@ -653,8 +654,7 @@ function parseMarkdown(markdownContent) {
 			ifCondition = '';
 			content.push(line + "\n");
 			listParsed = true;
-		}
-			else if (line.match(regexOrderedList)) {
+		} else if (line.match(regexOrderedList)) {
 			// Cas des listes ordonnées
 			listParsed = false;
 			if (!lastOrderedList) {
