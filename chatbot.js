@@ -341,13 +341,11 @@ function createChatBot(chatData) {
 		// Gestion des variables fixes prédéfinies
 		message = processVariables(message);
 
-		// Fix pour l'utilisation de --- dans les tableaux en Markdown
-		message = message.replaceAll(/(\|:?)---*(:?)/g,'$1--$2');
 
 		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
-			const messageSplitHR = message.split("---");
+			const messageSplitHR = message.split("\n---\n");
 			if (messageSplitHR.length > 1) {
 				const messageHasOptions = message.indexOf(
 					'<ul class="messageOptions">'
