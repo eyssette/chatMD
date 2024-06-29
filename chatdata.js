@@ -154,8 +154,9 @@ async function getRAGcontent(informations) {
 
 function parseMarkdown(markdownContent) {
 	let responsesTitles = ["## "]; // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
-	if (markdownContent.split("---").length > 2) {
+	if (markdownContent.split("---").length > 2 && markdownContent.startsWith("---")) {
 		try {
+			// Traitement des propriétés dans le YAML
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
 			for (const property in yamlData) {
 				if (property == "maths") {
