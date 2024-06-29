@@ -390,7 +390,7 @@ function parseMarkdown(markdownContent) {
 			/* lastOrderedList.push(listContent); */
 		} else if (line.length > 0 && !line.startsWith('# ')) {
 			// Gestion du reste du contenu (on supprime les éventuels titres 1 dans le contenu)
-			content.push(line + "\n");
+			content.push(line);
 			listParsed = true;
 		}
 	}
