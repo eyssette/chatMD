@@ -294,10 +294,10 @@ pre {
 	font-size:0;
 }
 
-.message table:first-child {
+.message table:first-child, .message pre:first-child {
 	margin-left: 60px!important;
 }
-.message table:first-child:before {
+.message table:first-child:before, .message pre:first-child:before {
 	margin-left:-70px!important;
 	position:absolute!important;
 	margin-top:-20px!important;
