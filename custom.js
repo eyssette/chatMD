@@ -1,38 +1,3 @@
-let defaultMessage = [
-	"Désolé, je ne comprends pas votre question.",
-	"Pardonnez-moi, mais je ne saisis pas votre demande.",
-	"Excusez-moi, je ne parviens pas à comprendre ce que vous demandez.",
-	"Je suis navré, mais je ne parviens pas à saisir votre question.",
-	"Malheureusement, je ne suis pas en mesure de comprendre votre question.",
-	"Je suis désolé, mais je ne saisis pas votre question.",
-	"Pardonnez-moi, mais je ne saisis pas le sens de votre question.",
-	"Je m'excuse, mais je ne parviens pas à saisir votre demande. Pouvez-vous reformuler votre question, s'il vous plaît ?",
-	"Je ne suis pas sûr de comprendre ce que vous demandez. Pouvez-vous expliquer davantage ?",
-	"Je ne peux pas répondre à votre question telle qu'elle est formulée. Pouvez-vous la poser différemment ?",
-	"Votre question ne semble pas correspondre à mes capacités actuelles. Pourriez-vous la reformuler autrement ?",
-	"Je n'ai malheureusement pas compris votre requête.",
-	"Je suis désolé, je ne suis pas capable de répondre.",
-	"Malheureusement, je ne peux pas répondre à votre question.",
-	"Malheureusement je n'arrive pas à comprendre votre requête.",
-	"Excusez-moi, je ne comprends pas votre requête.",
-	"Excusez-moi, je n'arrive pas à répondre à votre question.",
-	"Je ne parviens pas à répondre à votre requête. Veuillez m'excuser.",
-];
-
-const badWordsMessage = [
-	"Même si je ne suis qu'un chatbot, merci de vous adresser à moi avec un langage approprié",
-	"Je préférerais que nous restions courtois dans notre communication.",
-	"Les insultes ne sont pas nécessaires. Comment puis-je vous aider autrement ?",
-	"Essayons de garder une conversation respectueuse.",
-	"Je préfère une conversation respectueuse et productive.",
-	"Je vous encourage à reformuler votre question ou commentaire de manière respectueuse.",
-	"Les mots offensants ne sont pas nécessaires ici. Comment puis-je vous aider de manière constructive ?",
-	"Restons courtois dans nos échanges, s'il vous plaît.",
-	"Injures et grossièretés ne mènent nulle part. Comment puis-je vous assister ?",
-	"Je suis ouvert à la discussion, mais veuillez garder un langage respectueux.",
-	"Essayons de communiquer de manière civilisée !",
-];
-
 let md = `---
 gestionGrosMots: true
 ---
@@ -235,6 +200,40 @@ Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outil
 
 `;
 
+let defaultMessage = [
+	"Désolé, je ne comprends pas votre question.",
+	"Pardonnez-moi, mais je ne saisis pas votre demande.",
+	"Excusez-moi, je ne parviens pas à comprendre ce que vous demandez.",
+	"Je suis navré, mais je ne parviens pas à saisir votre question.",
+	"Malheureusement, je ne suis pas en mesure de comprendre votre question.",
+	"Je suis désolé, mais je ne saisis pas votre question.",
+	"Pardonnez-moi, mais je ne saisis pas le sens de votre question.",
+	"Je m'excuse, mais je ne parviens pas à saisir votre demande. Pouvez-vous reformuler votre question, s'il vous plaît ?",
+	"Je ne suis pas sûr de comprendre ce que vous demandez. Pouvez-vous expliquer davantage ?",
+	"Je ne peux pas répondre à votre question telle qu'elle est formulée. Pouvez-vous la poser différemment ?",
+	"Votre question ne semble pas correspondre à mes capacités actuelles. Pourriez-vous la reformuler autrement ?",
+	"Je n'ai malheureusement pas compris votre requête.",
+	"Je suis désolé, je ne suis pas capable de répondre.",
+	"Malheureusement, je ne peux pas répondre à votre question.",
+	"Malheureusement je n'arrive pas à comprendre votre requête.",
+	"Excusez-moi, je ne comprends pas votre requête.",
+	"Excusez-moi, je n'arrive pas à répondre à votre question.",
+	"Je ne parviens pas à répondre à votre requête. Veuillez m'excuser.",
+];
+
+const badWordsMessage = [
+	"Même si je ne suis qu'un chatbot, merci de vous adresser à moi avec un langage approprié",
+	"Je préférerais que nous restions courtois dans notre communication.",
+	"Les insultes ne sont pas nécessaires. Comment puis-je vous aider autrement ?",
+	"Essayons de garder une conversation respectueuse.",
+	"Je préfère une conversation respectueuse et productive.",
+	"Je vous encourage à reformuler votre question ou commentaire de manière respectueuse.",
+	"Les mots offensants ne sont pas nécessaires ici. Comment puis-je vous aider de manière constructive ?",
+	"Restons courtois dans nos échanges, s'il vous plaît.",
+	"Injures et grossièretés ne mènent nulle part. Comment puis-je vous assister ?",
+	"Je suis ouvert à la discussion, mais veuillez garder un langage respectueux.",
+	"Essayons de communiquer de manière civilisée !",
+];
 
 // Raccourcis vers des chatbots particuliers
 const shortcuts = [
