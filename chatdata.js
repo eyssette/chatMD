@@ -54,7 +54,6 @@ function getMarkdownContent() {
 			.then((data) => {
 				md = data;
 				chatData = parseMarkdown(md);
-				/* console.log(chatData); */
 				createChatBot(chatData);
 			})
 			.catch((error) => console.error(error));
@@ -170,6 +169,34 @@ function parseMarkdown(markdownContent) {
 								"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
 							),
 						]);
+					}
+				}
+				if (property == "addOns") {
+					// Gestion des addOns (scripts et css en plus)
+					yamlUseAddOns = yamlData[property].replace(' ','').split(",");
+					let addOnsDependenciesArray = []
+					// On ajoute aussi les dépendances pour chaque addOn
+					for (const [addOn, addOnDependencies] of Object.entries(addOnsDependencies)) {
+						if(yamlUseAddOns.includes(addOn)) {
+							for (const addOnDependencie of addOnDependencies) {
+								addOnsDependenciesArray.push(addOnDependencie)
+							}
+						}
+					}
+					yamlUseAddOns.push(...addOnsDependenciesArray)
+					// Pour chaque addOn, on charge le JS ou le CSS correspondant
+					for (const desiredAddOn of yamlUseAddOns) {
+						const addOnsPromises = [];
+						const addDesiredAddOn = allowedAddOns[desiredAddOn]
+						if (addDesiredAddOn) {
+							if (addDesiredAddOn.js) {
+								addOnsPromises.push(loadScript(addDesiredAddOn.js));
+							}
+							if (addDesiredAddOn.css) {
+								addOnsPromises.push(loadCSS(addDesiredAddOn.css));
+							}
+							Promise.all(addOnsPromises);
+						}
 					}
 				}
 				if (property == "titresRéponses" || property == "responsesTitles") {

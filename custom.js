@@ -240,8 +240,18 @@ const shortcuts = [
 	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"]
 ];
 
-
 const corsProxy = "https://corsproxy.io/?";
+
+
+// Gestion des addOns
+const allowedAddOns = {
+	pako: { js: "scripts/pako.min.js" },
+	kroki: { js: "scripts/kroki.js" },
+};
+
+const addOnsDependencies = {
+	kroki: ["pako"]
+}
 
 // Paramètres dans l'en-tête YAML
 let yamlStyle = "";
@@ -254,6 +264,7 @@ let yamlTheme = "";
 let yamlDynamicContent = false;
 let yamlTypeWriter = true;
 let yamlObfuscate = false;
+let yamlUseAddOns;
 
 // Paramètres pour l'utilisation d'un LLM
 let yamlUseLLMurl;
