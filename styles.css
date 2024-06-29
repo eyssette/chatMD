@@ -215,6 +215,7 @@ footer a:hover {
 #chat img {
 	display: block;
 	margin: 1em;
+	max-width: 100%;
 }
 
 #chat li,
