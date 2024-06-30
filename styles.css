@@ -72,15 +72,16 @@ main {
 	margin-left:-10px;
 }
 
-#controls.hideControls{
+
+.hideControls #controls{
 	height:50px;
 }
 
-#controls.hideControls #input-container{
+.hideControls #controls #input-container{
 	opacity:0;
 	filter:alpha(opacity=0);
 }
-#controls.hideControls #send-button {
+.hideControls #controls #send-button {
 	opacity:0;
 	filter:alpha(opacity=0);
 }
@@ -317,6 +318,13 @@ pre {
 		width:100%;
 		margin-left:-20px;
 	}
+	.hideControls #controls {
+		height:0px!important;
+	}
+	.hideControls #chat {
+		margin-bottom:2em!important;
+	}
+
 	#input-container {
 		width:95%;
 	}

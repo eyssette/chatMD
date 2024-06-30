@@ -228,7 +228,7 @@ function parseMarkdown(markdownContent) {
 				) {
 					yamlUserInput = yamlData[property];
 					if (yamlUserInput === false) {
-						controls.classList.add('hideControls')
+						document.body.classList.add('hideControls')
 					}
 				}
 				if (property == "searchInContent" || property == "rechercheContenu") {
