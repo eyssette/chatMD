@@ -316,7 +316,7 @@ function parseMarkdown(markdownContent) {
 					if(yamlUseLLM.askAPIkey === true) {
 						yamlUseLLMapiKey = prompt("Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.");
 					} else {
-						yamlUseLLMapiKey = '';
+						yamlUseLLMapiKey = yamlUseLLM.askAPIkey ? yamlUseLLM.askAPIkey : ""; // Attention à ne pas diffuser publiuement votre clé API
 					}
 					yamlUseLLMmodel = yamlUseLLM.model;
 					yamlUseLLMalways = yamlUseLLM.always;
