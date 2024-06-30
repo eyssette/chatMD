@@ -163,6 +163,9 @@ function parseMarkdown(markdownContent) {
 		try {
 			// Traitement des propriétés dans le YAML
 			yamlData = jsyaml.load(markdownContent.split("---")[1]);
+			if(yamlData.maths) {
+				yamlData.addOns = yamlData.addOns ? yamlData.addOns + ",textFit" : "textFit";
+			}
 			for (const property in yamlData) {
 				if (property == "maths") {
 					yamlMaths = yamlData[property];
