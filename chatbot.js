@@ -141,6 +141,7 @@ function createChatBot(chatData) {
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
+			slowContent = slowContent.replaceAll(/`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm,'$1')
 			// On doit conserver les retours à la ligne dans les blocs "pre"
 			const contentKeepReturnInCode = slowContent.replaceAll(/(<pre(.|\n)*<\/pre>)/gm,function(match){
 				return match.replaceAll('\n','RETURNCHARACTER')
