@@ -141,7 +141,9 @@ function createChatBot(chatData) {
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
+			// Cas du Latex
 			slowContent = slowContent.replaceAll(/`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm,'$1')
+			slowContent = slowContent.replaceAll(/`(<span class=".?strut">.*?<\/span>)`/g,'$1')
 			// On doit conserver les retours à la ligne dans les blocs "pre"
 			const contentKeepReturnInCode = slowContent.replaceAll(/(<pre(.|\n)*<\/pre>)/gm,function(match){
 				return match.replaceAll('\n','RETURNCHARACTER')
@@ -601,7 +603,9 @@ function createChatBot(chatData) {
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
+			// Optimisation pour le Latex
 			html = html.replaceAll(/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,'`$1`')
+			html = html.replaceAll(/(<span class=".?strut">.*?<\/span>)/g,'`$1`')
 			setTimeout(() => {
 				displayMessage(html, isUser, chatMessage);
 			}, 100);
