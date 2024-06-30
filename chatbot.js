@@ -260,6 +260,10 @@ function createChatBot(chatData) {
 				}, 1000);
 			},
 			onComplete: () => {
+				// Gestion de textFit pour les éléments en Latex
+				if(yamlUseAddOns && yamlUseAddOns.includes("textFit")) {
+					textFit(element.querySelectorAll('.katex-display'))
+				}
 				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
 				userInput.removeEventListener("keypress", keypressHandler);
 				if (

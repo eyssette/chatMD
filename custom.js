@@ -247,6 +247,7 @@ const corsProxy = "https://corsproxy.io/?";
 const allowedAddOns = {
 	pako: { js: "scripts/pako.min.js" },
 	kroki: { js: "scripts/kroki.js" },
+	textFit: {js: "scripts/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>"}
 };
 
 const addOnsDependencies = {
