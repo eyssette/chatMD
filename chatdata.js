@@ -1,4 +1,3 @@
-let chatData;
 let filterBadWords;
 let yamlUseLLM;
 
