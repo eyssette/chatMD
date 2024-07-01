@@ -19,31 +19,19 @@ function createChatBot(chatData) {
 	let getLastMessage = false;
 	let lastMessageFromBot = "";
 
-	const footerElement = document.getElementById("footer");
-	const controlsElement = document.getElementById("controls");
 	if (yamlFooter === false) {
-		footerElement.style.display = "none";
-		controlsElement.style.height = "70px";
-		const styleControls =
-			"@media screen and (max-width: 500px) { #controls {height:110px!important}}";
-		const styleSheet = document.createElement("style");
-		styleSheet.innerText = styleControls;
-		document.head.appendChild(styleSheet);
+		hideFooter();
 	}
 
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
 
-	
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
 		Math.random() * defaultMessage.length
 	);
 	let randomDefaultMessageIndexLastChoice = [];
-
-
-
 
 	// Création du message par le bot ou l'utilisateur
 	function createChatMessage(message, isUser) {
@@ -53,7 +41,6 @@ function createChatBot(chatData) {
 		let nextSelected;
 		// Gestion des variables fixes prédéfinies
 		message = processVariables(message);
-
 
 		// Cas où c'est un message du bot
 		if (!isUser) {
@@ -147,18 +134,20 @@ function createChatBot(chatData) {
 				}
 			});
 			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
-			if(yamlUseAddOns && yamlUseAddOns.includes('kroki')) {
-				message = message.replaceAll(/```(mermaid|tikz|graphviz|plantuml|excalidraw|vegalite|vega)((.|\n)*?)```/gm, function(match,type,source) {
-					source = source.replaceAll('\n\n\n','\n\n')
-					return krokiCreateImageFromSource(type, source)
-				});
+			if (yamlUseAddOns && yamlUseAddOns.includes("kroki")) {
+				message = message.replaceAll(
+					/```(mermaid|tikz|graphviz|plantuml|excalidraw|vegalite|vega)((.|\n)*?)```/gm,
+					function (match, type, source) {
+						source = source.replaceAll("\n\n\n", "\n\n");
+						return krokiCreateImageFromSource(type, source);
+					}
+				);
 			}
 		}
 
 		if (yamlDynamicContent) {
 			// Cas où le message vient du bot
 			if (!isUser) {
-
 				// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
 				message = message.replaceAll(
 					/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g,
@@ -167,36 +156,54 @@ function createChatBot(chatData) {
 							customVariables[variableName] = variableValue;
 							return "";
 						} else {
-							return match
+							return match;
 						}
 					}
 				);
 				// On remplace dans le texte les variables `@nomVariable` par leur valeur
-				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, variableName) {
-					if (match.includes("=")) {
-						return match;
-					} else {
-						return customVariables[variableName] ? customVariables[variableName] : match;
+				message = message.replaceAll(
+					/\`@([^\s]*?)\`/g,
+					function (match, variableName) {
+						if (match.includes("=")) {
+							return match;
+						} else {
+							return customVariables[variableName]
+								? customVariables[variableName]
+								: match;
+						}
 					}
-				});
+				);
 				// Calcul des variables qui dépendent d'autres variables
-				message = message.replaceAll(/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g, function (match, variableName, complexExpression) {
-					calc = complexExpression.replace(/@(\w+)/g, (matchCalc, variableNameComplexExpression) => {
-						return customVariables[variableNameComplexExpression] || matchCalc;
-					});
-					customVariables[variableName] = calc;
-					return "";
-				})
-				
-				// 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (cas des variables complexes qui viennent d'être définies)
-				message = message.replaceAll(/\`@([^\s]*?)\`/g, function (match, variableName) {
-					if (match.includes("=")) {
-						return match;
-					} else {
-						return customVariables[variableName] ? customVariables[variableName] : "";
+				message = message.replaceAll(
+					/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
+					function (match, variableName, complexExpression) {
+						calc = complexExpression.replace(
+							/@(\w+)/g,
+							(matchCalc, variableNameComplexExpression) => {
+								return (
+									customVariables[variableNameComplexExpression] || matchCalc
+								);
+							}
+						);
+						customVariables[variableName] = calc;
+						return "";
 					}
-				});
-			
+				);
+
+				// 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (cas des variables complexes qui viennent d'être définies)
+				message = message.replaceAll(
+					/\`@([^\s]*?)\`/g,
+					function (match, variableName) {
+						if (match.includes("=")) {
+							return match;
+						} else {
+							return customVariables[variableName]
+								? customVariables[variableName]
+								: "";
+						}
+					}
+				);
+
 				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
 				message = message.replaceAll(
 					/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,
@@ -205,22 +212,21 @@ function createChatBot(chatData) {
 						return "";
 					}
 				);
-				
 
 				// Possibilité d'activer ou de désactiver le clavier au cas par cas
 				if (yamlUserInput === false) {
 					if (customVariables["KEYBOARD"] == "true") {
-						document.body.classList.remove('hideControls')
+						document.body.classList.remove("hideControls");
 						customVariables["KEYBOARD"] = "false";
 					} else {
-						document.body.classList.add('hideControls')
+						document.body.classList.add("hideControls");
 					}
 				} else {
 					if (customVariables["KEYBOARD"] == "false") {
-						document.body.classList.add('hideControls')
+						document.body.classList.add("hideControls");
 						customVariables["KEYBOARD"] = "true";
 					} else {
-						document.body.classList.remove('hideControls')
+						document.body.classList.remove("hideControls");
 					}
 				}
 				// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
@@ -247,9 +253,17 @@ function createChatBot(chatData) {
 								);
 								// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 								condition = condition
-									.replaceAll(/(==|!=|<|>) ?(.*?) ?(\)|\&|\||$)/g, function(match, comparisonSignLeft,value,comparisonSignRight) {
-										return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`
-									})
+									.replaceAll(
+										/(==|!=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
+										function (
+											match,
+											comparisonSignLeft,
+											value,
+											comparisonSignRight
+										) {
+											return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
+										}
+									)
 									.replaceAll('""', '"')
 									.replace('"undefined"', "undefined");
 								// Vérifie que l'expression ne contient que les opérateurs autorisés
@@ -277,7 +291,7 @@ function createChatBot(chatData) {
 					}
 				);
 				// On nettoie le message en supprimant les lignes vides en trop
-				message = message.replaceAll(/\n\n\n*/g,'\n\n')
+				message = message.replaceAll(/\n\n\n*/g, "\n\n");
 			} else {
 				// Cas où le message vient de l'utilisateur
 				// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
@@ -310,8 +324,11 @@ function createChatBot(chatData) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
 			// Optimisation pour le Latex
-			html = html.replaceAll(/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,'`$1`')
-			html = html.replaceAll(/(<span class=".?strut">.*?<\/span>)/g,'`$1`')
+			html = html.replaceAll(
+				/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
+				"`$1`"
+			);
+			html = html.replaceAll(/(<span class=".?strut">.*?<\/span>)/g, "`$1`");
 			setTimeout(() => {
 				displayMessage(html, isUser, chatMessage);
 			}, 100);
@@ -322,8 +339,6 @@ function createChatBot(chatData) {
 			chatbotResponse(nextSelected);
 		}
 	}
-
-	
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
@@ -349,7 +364,6 @@ function createChatBot(chatData) {
 			createChatMessage(initialMessage, false);
 		}
 	}
-
 
 	let vectorChatBotResponses = [];
 	// On précalcule les vecteurs des réponses du chatbot
@@ -391,8 +405,6 @@ function createChatBot(chatData) {
 				console.error("Erreur d'accès aux données RAG : ", error);
 			});
 	}
-
-
 
 	function chatbotResponse(inputText) {
 		// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
@@ -460,11 +472,15 @@ function createChatBot(chatData) {
 				const titleResponse = chatData[i][0];
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
-				if(nextMessageOnlyIfKeywords && titleResponse != nextMessage) {
-					continue
+				if (nextMessageOnlyIfKeywords && titleResponse != nextMessage) {
+					continue;
 				}
 				// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
-				if(nextMessageOnlyIfKeywords && titleResponse == nextMessage && keywordsResponse.length == 0) {
+				if (
+					nextMessageOnlyIfKeywords &&
+					titleResponse == nextMessage &&
+					keywordsResponse.length == 0
+				) {
 					userInputTextToLowerCase = nextMessage.toLowerCase();
 				}
 				const keywords = keywordsResponse.concat(titleResponse);
@@ -635,7 +651,6 @@ function createChatBot(chatData) {
 		}
 	}
 
-
 	function gestionOptions(response, options) {
 		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
 		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
@@ -719,7 +734,9 @@ function createChatBot(chatData) {
 			event.preventDefault();
 			sendButton.click();
 			scrollWindow();
-		} else if(userInput.parentElement.parentElement.classList.contains('hideControls')) {
+		} else if (
+			userInput.parentElement.parentElement.classList.contains("hideControls")
+		) {
 			// Si l'userInput est caché : on désactive l'entrée clavier (sauf pour Enter qui permet toujours d'afficher plus vite la suite)
 			event.preventDefault();
 		}
@@ -770,7 +787,7 @@ function createChatBot(chatData) {
 					const optionLink = link.substring(1);
 					responseToSelectedOption(optionLink);
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
-					document.activeElement.blur()
+					document.activeElement.blur();
 					// Refocaliser sur userInput
 					if (autoFocus) {
 						userInput.focus();
