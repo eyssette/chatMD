@@ -12,7 +12,6 @@ function createChatBot(chatData) {
 	for (const [key, value] of Object.entries(params)) {
 		customVariables["GET" + key] = value;
 	}
-	let nextMessage = "";
 	let nextMessageOnlyIfKeywords = false;
 	let nextMessageOnlyIfKeywordsCount = 0;
 	const nextMessageOnlyIfKeywordsCountMax = 3;

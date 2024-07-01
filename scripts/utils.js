@@ -398,6 +398,7 @@ function magnitude(vec) {
 }
 
 let chatData;
+let nextMessage = "";
 
 function tokenize(text, indexChatBotResponse) {
 	// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
