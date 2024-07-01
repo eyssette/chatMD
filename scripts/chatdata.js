@@ -271,7 +271,7 @@ function parseMarkdown(markdownContent) {
 		indexFirstH1title = 0;
 	}
 	let mainContent = markdownContent.substring(indexFirstH1title);
-	if(yamlData.variables) {
+	if(yamlData && yamlData.variables) {
 		mainContent = processVariables(mainContent, true)
 	}
 	const mainContentWithoutH1 = mainContent.substring(1);
