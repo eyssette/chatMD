@@ -160,8 +160,8 @@ function parseMarkdown(markdownContent) {
 					yamldetectBadWords = yamlData[property];
 					if (yamldetectBadWords === true) {
 						Promise.all([
-							loadScript("scripts/leo-profanity.js"),
-							loadScript("badWords-fr.js"),
+							loadScript("externals/leo-profanity.js"),
+							loadScript("externals/badWords-fr.js"),
 						])
 							.then(() => {
 								// Les deux scripts sont chargés et prêts à être utilisés
@@ -214,10 +214,10 @@ function parseMarkdown(markdownContent) {
 					// On utilise window.useLLMpromise car on aura besoin de savoir quand la promise sera terminée dans un autre script : chatbot.js, (pour calculer les vecteurs de mot pour le RAG : on a besoin que le fichier RAG.js soit bien chargé)  
 					window.useLLMpromise = Promise.all([
 						loadScript(
-							"useLLM.js",
+							"LLM/useLLM.js",
 						),
 						loadScript(
-							"RAG.js",
+							"LLM/RAG.js",
 						)
 					]).then(() => {
 						window.useLLMragContentPromise = new Promise((resolve, reject) => {

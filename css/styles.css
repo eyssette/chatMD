@@ -160,7 +160,7 @@ button {
 	content: "";
 	margin-right: 15px;
 	font-size: 2em;
-	background-image: url("favicon.ico");
+	background-image: url("../favicon.ico");
 	background-size: 40px;
 	width:40px;
 	height:40px;

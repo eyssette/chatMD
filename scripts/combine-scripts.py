@@ -1,9 +1,9 @@
 # Chemin des fichiers source
-custom_js_file = "custom.js"
-utils_js_file = "utils.js"
-typewriter_js_file = "typewriter.js"
-chatbot_js_file = "chatbot.js"
-chatdata_js_file = "chatdata.js"
+custom_js_file = "scripts/custom.js"
+utils_js_file = "scripts/utils.js"
+typewriter_js_file = "scripts/typewriter.js"
+chatbot_js_file = "scripts/chatbot.js"
+chatdata_js_file = "scripts/chatdata.js"
 
 # Chemin du fichier de sortie
 output_file = "script.min.js"
