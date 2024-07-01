@@ -46,21 +46,6 @@ function createChatBot(chatData) {
 
 
 
-	function displayMessage(html, isUser, chatMessage) {
-		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
-		// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
-		chatContainer.appendChild(chatMessage);
-		if (
-			isUser ||
-			window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-			yamlTypeWriter === false
-		) {
-			chatMessage.innerHTML = html;
-		} else {
-			typeWriter(html, chatMessage);
-		}
-	}
-
 	// Création du message par le bot ou l'utilisateur
 	function createChatMessage(message, isUser) {
 		const chatMessage = document.createElement("div");
