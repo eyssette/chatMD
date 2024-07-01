@@ -101,8 +101,6 @@ function startsWithAnyOf(string,array) {
 	}
 }
 
-let yamlData;
-
 
 
 function prepareRAGdata(informations, separator) {
@@ -348,7 +346,10 @@ function parseMarkdown(markdownContent) {
 	if(indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
 		indexFirstH1title = 0;
 	}
-	const mainContent = markdownContent.substring(indexFirstH1title);
+	let mainContent = markdownContent.substring(indexFirstH1title);
+	if(yamlData.variables) {
+		mainContent = processVariables(mainContent, true)
+	}
 	const mainContentWithoutH1 = mainContent.substring(1);
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
 	const possibleTitles = ["# ","## ","### ","#### ","##### "]

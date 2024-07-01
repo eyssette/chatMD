@@ -116,9 +116,6 @@ function createChatBot(chatData) {
 		return html;
 	}
 
-	function getRandomElement(array) {
-		return array[Math.floor(Math.random() * array.length)];
-	}
 	const conversationElement = document.getElementById("chat");
 
 	// Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
@@ -311,18 +308,6 @@ function createChatBot(chatData) {
 		return string;
 	}
 
-	function processVariables(content) {
-		return content.replace(/@{(\S+)}/g, function (match, variableName) {
-			if (yamlData && yamlData.variables && yamlData.variables[variableName]) {
-				const variableValue = yamlData.variables[variableName];
-				const variableValueSplit = variableValue.split("///");
-				const variableValueChoice = getRandomElement(variableValueSplit);
-				return variableValueChoice;
-			} else {
-				return "@{" + variableName + "}";
-			}
-		});
-	}
 
 	function displayMessage(html, isUser, chatMessage) {
 		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct

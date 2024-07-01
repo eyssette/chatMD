@@ -266,6 +266,7 @@ let yamlDynamicContent = false;
 let yamlTypeWriter = true;
 let yamlObfuscate = false;
 let yamlUseAddOns;
+let yamlData;
 
 // Paramètres pour l'utilisation d'un LLM
 let yamlUseLLMurl;
