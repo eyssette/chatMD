@@ -66,7 +66,7 @@ const chatbotSRC = widgetScript.getAttribute("data-chatbot")
 	? "#" + widgetScript.getAttribute("data-chatbot")
 	: "";
 
-const imageWidget = widgetScript.getAttribute("data-image") ? widgetScript.getAttribute("data-image") : 'https://eyssette.forge.apps.education.fr/chatMD/message.svg';
+const imageWidget = widgetScript.getAttribute("data-image") ? widgetScript.getAttribute("data-image") : 'https://chatmd.forge.apps.education.fr/message.svg';
 
 // Créer un élément div avec l'id "chatmdWidget"
 let widgetContainer = document.createElement("div");
@@ -80,7 +80,7 @@ widget.innerHTML = '<img src="'+imageWidget+'"/>';
 const chatbotBox = document.createElement("div");
 
 chatbotBox.innerHTML =
-	'<iframe src="https://eyssette.github.io/chatMD' +
+	'<iframe src="https://chatmd.forge.apps.education.fr/' +
 	chatbotSRC +
 	'" width="400" height="600" style="border:none"></iframe>';
 
