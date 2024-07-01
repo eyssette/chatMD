@@ -174,6 +174,7 @@ function createChatBot(chatData) {
 					}
 				);
 				// Calcul des variables qui dépendent d'autres variables
+				const hasComplexVariable = message.includes('calc(') ? true : false
 				message = message.replaceAll(
 					/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
 					function (match, variableName, complexExpression) {
@@ -190,19 +191,21 @@ function createChatBot(chatData) {
 					}
 				);
 
-				// 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (cas des variables complexes qui viennent d'être définies)
-				message = message.replaceAll(
-					/\`@([^\s]*?)\`/g,
-					function (match, variableName) {
-						if (match.includes("=")) {
-							return match;
-						} else {
-							return customVariables[variableName]
-								? customVariables[variableName]
-								: "";
+				// Si on a des variables complexes : 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (qui vient d'être définie)
+				if(hasComplexVariable) {
+					message = message.replaceAll(
+						/\`@([^\s]*?)\`/g,
+						function (match, variableName) {
+							if (match.includes("=")) {
+								return match;
+							} else {
+								return customVariables[variableName]
+									? customVariables[variableName]
+									: "";
+							}
 						}
-					}
-				);
+					);
+				}
 
 				// On masque dans le texte les demandes de définition d'une variable par le prochain Input
 				message = message.replaceAll(
