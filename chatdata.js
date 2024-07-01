@@ -4,49 +4,12 @@ let yamlUseLLM;
 
 const controls = document.getElementById("controls");
 
-function handleURL(url) {
-	if (url !== "") {
-		let addCorsProxy = true;
-		// Vérification de la présence d'un raccourci
-		const shortcut = shortcuts.find(element => element[0]==url);
-		if (shortcut) {
-			url = shortcut[1];
-		}
-		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
-		if(url.includes('.forge')) {
-			addCorsProxy = false;
-		}
-		// Gestion des fichiers hébergés sur github
-		if (url.startsWith("https://github.com")) {
-			addCorsProxy = false;
-			url = url.replace(
-				"https://github.com",
-				"https://raw.githubusercontent.com"
-			);
-			url = url.replace("/blob/", "/");
-		}
-		// gestion des fichiers hébergés sur codiMD / hedgedoc / digipage
-		if (
-			(url.startsWith("https://codimd") || url.includes("hedgedoc") || url.includes("digipage") )
-		) {
-			addCorsProxy = false;
-			url =
-				url.replace("?edit", "").replace("?both", "").replace("?view", "").replace(/#$/,"").replace(/\/$/,'');
-			url = url.indexOf("download") === -1 ? url + "/download" : url;
-		}
-		// gestion des fichiers hébergés sur framapad
-		if (url.includes('framapad') && !url.endsWith('/export/txt')) {
-			url = url.replace(/\?.*/,'') + '/export/txt';
-		}
-		url = addCorsProxy ? corsProxy + url : url;
-	}
-	return url;
-}
 
 function getMarkdownContent() {
 	// Récupération du markdown externe
 	const url = window.location.hash.substring(1).replace(/\?.*/,''); // Récupère l'URL du hashtag sans le #
 	if (url !== "") {
+		// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
 		const urlMD = handleURL(url);
 		// Récupération du contenu du fichier
 		fetch(urlMD)
@@ -63,44 +26,6 @@ function getMarkdownContent() {
 }
 
 getMarkdownContent();
-
-function loadScript(src) {
-	// Fonction pour charger des scripts
-	return new Promise((resolve, reject) => {
-		const script = document.createElement("script");
-		script.src = src;
-		script.onload = resolve;
-		script.onerror = reject;
-		document.head.appendChild(script);
-	});
-}
-function loadCSS(src) {
-	// Fonction pour charger des CSS
-	return new Promise((resolve, reject) => {
-		let styleElement;
-		if(src.startsWith('<style>')) {
-			styleElement = document.createElement("style");
-			styleElement.textContent = src.replace('<style>','').replace('</style>','');
-		} else {
-			styleElement = document.createElement("link");
-			styleElement.href = src;
-			styleElement.rel = "stylesheet";
-			styleElement.onload = resolve;
-			styleElement.onerror = reject;
-		}
-		document.head.appendChild(styleElement);
-	});
-}
-
-function startsWithAnyOf(string,array) {
-	// Vérifie si une variable texte commence par un élément d'un tableau
-	for (const element of array) {
-		if (string.startsWith(element)) {
-		  return element;
-		}
-	}
-}
-
 
 
 function prepareRAGdata(informations, separator) {
