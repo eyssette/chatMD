@@ -151,12 +151,6 @@ function createChatBot(chatData) {
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
-			// Optimisation pour le Latex
-			html = html.replaceAll(
-				/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
-				"`$1`"
-			);
-			html = html.replaceAll(/(<span class=".?strut">.*?<\/span>)/g, "`$1`");
 			setTimeout(() => {
 				displayMessage(html, isUser, chatMessage);
 			}, 100);

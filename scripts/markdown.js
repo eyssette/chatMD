@@ -117,5 +117,13 @@ function convertLatexExpressions(string) {
 			string = string.replace(expressionLatex, stringWithLatex);
 		}
 	}
+	// Optimisation pour le Latex avec l'effet typeWriter
+	if(yamlTypeWriter === true) {
+		string = string.replaceAll(
+			/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
+			"`$1`"
+		);
+		string = string.replaceAll(/(<span class=".?strut">.*?<\/span>)/g, "`$1`");
+	}
 	return string;
 }
