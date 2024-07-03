@@ -98,7 +98,8 @@ function convertLatexExpressions(string) {
 	if (expressionsLatex) {
 		// On n'utilise Katex que s'il y a des expressions en Latex dans le Markdown
 		for (let expressionLatex of expressionsLatex) {
-			// On vérifie si le mode d'affichage de l'expression (inline ou block)
+			console.log(expressionLatex)
+			// On vérifie le mode d'affichage de l'expression (inline ou block)
 			const inlineMaths = expressionLatex.includes("&#92;[") ? true : false;
 			// On récupère la formule mathématique
 			let mathInExpressionLatex = expressionLatex
@@ -110,6 +111,9 @@ function convertLatexExpressions(string) {
 			mathInExpressionLatex = mathInExpressionLatex
 				.replaceAll("&lt;", "\\lt")
 				.replaceAll("&gt;", "\\gt");
+			mathInExpressionLatex = mathInExpressionLatex
+				.replaceAll("<em>","_")
+				.replaceAll("</em>","_");
 			// On convertit la formule mathématique en HTML avec Katex
 			stringWithLatex = katex.renderToString(mathInExpressionLatex, {
 				displayMode: inlineMaths,
