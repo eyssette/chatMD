@@ -352,7 +352,7 @@ function parseMarkdown(markdownContent) {
 		} else if (line.length > 0 && !line.startsWith('# ')) {
 			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)
 			// Possibilité de faire des liens à l'intérieur du contenu vers une réponse
-			line = line.replaceAll(/\[(.*)?\]\((#.*?)\)/g,'<a href="$2">$1</a>')
+			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g,'<a href="$2">$1</a>')
 			content.push(line);
 			listParsed = true;
 		}
