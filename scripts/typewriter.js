@@ -53,7 +53,7 @@ function typeWriter(content, element) {
 		typed.start();
 		typed.destroy();
 	}
-	let mutationObserver;
+
 	function keypressHandler(event) {
 		if (event.key === "Enter") {
 			mutationObserver.disconnect();
@@ -168,6 +168,7 @@ function typeWriter(content, element) {
 			) {
 				userInput.setAttribute("placeholder", "Écrivez votre message");
 			}
+			observerConnected = false;
 			mutationObserver.disconnect();
 		},
 	});
