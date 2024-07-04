@@ -2,6 +2,17 @@ const chatContainer = document.getElementById("chat");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 
+// Configuration de MutationObserver
+const observerConfig = {
+	childList: true,
+	subtree: true,
+	characterData: true,
+};
+function enableAutoScroll(mutationObserver) {
+	mutationObserver.observe(chatContainer, observerConfig);
+}
+let observerConnected
+
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
 const isMobile =
 	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -56,15 +67,14 @@ function typeWriter(content, element) {
 
 	function keypressHandler(event) {
 		if (event.key === "Enter") {
+			stopTypeWriter(content);
 			mutationObserver.disconnect();
 			observerConnected = false;
-			stopTypeWriter(content);
 		}
 	}
 
 	let counter = 0;
 	const start = Date.now();
-	let observerConnected = true;
 	function handleMutation() {
 		// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 		const executionTime = Date.now() - start;
@@ -81,12 +91,6 @@ function typeWriter(content, element) {
 		scrollWindow();
 		counter++;
 	}
-
-	// Configuration de MutationObserver
-	const observerConfig = {
-		childList: true,
-		subtree: true,
-	};
 
 	// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
 	content = content.replace(
@@ -111,16 +115,19 @@ function typeWriter(content, element) {
 
 			// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 			mutationObserver = new MutationObserver(handleMutation);
-			function enableAutoScroll() {
-				mutationObserver.observe(chatContainer, observerConfig);
-			}
-			enableAutoScroll();
+			observerConnected = true;
+			enableAutoScroll(mutationObserver);
 
 			setTimeout(() => {
 				// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
-				document.addEventListener("mousemove", function () {
-					observerConnected = false;
-					mutationObserver.disconnect();
+				document.addEventListener("mousemove", function (e) {
+					if (observerConnected) {
+						const thresholdMouseMovement = 5;
+						if (Math.abs(e.movementX) > thresholdMouseMovement || Math.abs(e.movementY) > thresholdMouseMovement) {
+							observerConnected = false;
+							mutationObserver.disconnect();
+						}
+					}
 				});
 				document.addEventListener("wheel", function (e) {
 					// On remet le scroll automatique si on scrolle vers le bas de la page
@@ -130,26 +137,32 @@ function typeWriter(content, element) {
 							window.scrollY + window.innerHeight >=
 							document.body.offsetHeight
 						) {
-							enableAutoScroll();
+							enableAutoScroll(mutationObserver);
 						} else {
+							if(observerConnected) {
+								observerConnected = false;
+								mutationObserver.disconnect();
+							}
+						}
+					} else {
+						if(observerConnected) {
 							observerConnected = false;
 							mutationObserver.disconnect();
 						}
-					} else {
-						observerConnected = false;
-						mutationObserver.disconnect();
 					}
 				});
 				document.addEventListener("touchstart", function () {
-					observerConnected = false;
-					mutationObserver.disconnect();
+					if (observerConnected) {
+						observerConnected = false;
+						mutationObserver.disconnect();
+					}
 					// On remet le scroll automatique si on scrolle vers le bas de la page
 					setTimeout(() => {
 						if (
 							window.scrollY + window.innerHeight + 200 >=
 							document.documentElement.scrollHeight
 						) {
-							enableAutoScroll();
+							enableAutoScroll(mutationObserver);
 						}
 					}, 5000);
 				});
@@ -168,8 +181,10 @@ function typeWriter(content, element) {
 			) {
 				userInput.setAttribute("placeholder", "Écrivez votre message");
 			}
-			observerConnected = false;
-			mutationObserver.disconnect();
+			if (observerConnected) {
+				observerConnected = false;
+				mutationObserver.disconnect();
+			}
 		},
 	});
 }
