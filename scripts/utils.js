@@ -170,8 +170,8 @@ function scrollWindow() {
 	}, 100);
 }
 
+const footerElement = document.getElementById("footer");
 function hideFooter() {
-	const footerElement = document.getElementById("footer");
 	const controlsElement = document.getElementById("controls");
 	footerElement.style.display = "none";
 	controlsElement.style.height = "70px";

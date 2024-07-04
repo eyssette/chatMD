@@ -19,6 +19,8 @@ function createChatBot(chatData) {
 
 	if (yamlFooter === false) {
 		hideFooter();
+	} else if (yamlFooter !== true) {
+		footerElement.innerHTML = yamlFooter
 	}
 
 	const chatbotName = chatData.pop();
