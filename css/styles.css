@@ -226,7 +226,7 @@ footer a:hover {
 }
 
 pre {
-	line-height: 0.5em;
+	line-height: 0.65em;
 	margin: 2.5em;
 	border: 1px solid grey;
 	padding: 20px;
@@ -350,5 +350,15 @@ pre {
 	}
 	ul ul {
 		padding-left: 25px !important;
+	}
+	pre {
+		line-height: 1em;
+		margin:0em;
+		word-break: break-all;
+		white-space: pre-line;
+		width: 95%;
+	}
+	.message>div>.admonition {
+		margin-left:0.5em;
 	}
 }
