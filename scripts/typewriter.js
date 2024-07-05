@@ -15,16 +15,20 @@ const regexKatex2 = /`(<span class=".?strut">.*?<\/span>)`/g;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
 
+// Configuration de MutationObserver
+const observerConfig = {
+	childList: true,
+	subtree: true,
+};
+
+const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
+
 let typed;
 const pauseTypeWriter = "^300 ";
 const stopTypeWriterExecutionTimeThreshold = 800;
 // Effet machine à écrire
 function typeWriter(content, element) {
-	// Gestion de "Enter" pour stopper l'effet machine à écrire
-	const messageTypeEnterToStopTypeWriter =
-		window.innerWidth > 880
-			? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
-			: "“Enter” pour stopper l'effet “machine à écrire”";
+	// Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
 	function stopTypeWriter(slowContent) {
 		typed.stop();
 		typed.reset();
@@ -88,12 +92,6 @@ function typeWriter(content, element) {
 		counter++;
 	}
 
-	// Configuration de MutationObserver
-	const observerConfig = {
-		childList: true,
-		subtree: true,
-	};
-
 	// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
 	content = content.replace(
 		regexMessageOptions,
@@ -131,13 +129,13 @@ function typeWriter(content, element) {
 					}
 				});
 				document.addEventListener("wheel", function (e) {
-					// On remet le scroll automatique si on scrolle vers le bas de la page
 					if (e.deltaY > 0) {
 						// On détecte si on a fait un mouvement vers le bas
 						if (
 							window.scrollY + window.innerHeight >=
 							document.body.offsetHeight
 						) {
+							// On remet le scroll automatique si on a scrollé jusqu'au bas de la page
 							enableAutoScroll();
 						} else {
 							observerConnected = false;
@@ -151,12 +149,12 @@ function typeWriter(content, element) {
 				document.addEventListener("touchstart", function () {
 					observerConnected = false;
 					mutationObserver.disconnect();
-					// On remet le scroll automatique si on scrolle vers le bas de la page
 					setTimeout(() => {
 						if (
 							window.scrollY + window.innerHeight + 200 >=
 							document.documentElement.scrollHeight
 						) {
+							// On remet le scroll automatique si on a scrollé jusqu'au bas de la page
 							enableAutoScroll();
 						}
 					}, 5000);
