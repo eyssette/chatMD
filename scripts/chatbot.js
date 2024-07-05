@@ -1,5 +1,5 @@
 function createChatBot(chatData) {
-	let customVariables = {};
+	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
 		new URLSearchParams(document.location.search)
 	);
@@ -7,10 +7,10 @@ function createChatBot(chatData) {
 		new URLSearchParams(document.location.hash.replace(/#.*\?/, ""))
 	);
 	const params = { ...params1, ...params2 };
-	// On récupère les paramètres dans l'URL et on les place dans customVariables
+	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
 	for (const [key, value] of Object.entries(params)) {
-		customVariables["GET" + key] = value;
+		dynamicVariables["GET" + key] = value;
 	}
 	let nextMessageOnlyIfKeywordsCount = 0;
 	const nextMessageOnlyIfKeywordsCountMax = 3;
@@ -147,7 +147,7 @@ function createChatBot(chatData) {
 
 		if (yamlDynamicContent) {
 			// On traite les variables dynamiques
-			message = processCustomVariables(message,customVariables,isUser);
+			message = processDynamicVariables(message,dynamicVariables,isUser);
 		}
 		let html = markdownToHTML(message);
 		if (yamlMaths === true) {
@@ -477,15 +477,15 @@ function createChatBot(chatData) {
 
 	function gestionOptions(response, options) {
 		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
-		if (yamlDynamicContent && Object.keys(customVariables).length > 0) {
+		if (yamlDynamicContent && Object.keys(dynamicVariables).length > 0) {
 			if (options) {
 				options = options.filter((element) => {
-					for (const [key, value] of Object.entries(customVariables)) {
+					for (const [key, value] of Object.entries(dynamicVariables)) {
 						// Cas où l'option ne dépend d'aucune variable
 						if (!element[3]) {
 							return true;
 						}
-						// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans customVariables
+						// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans dynamicVariables
 						if (element[3] && element[3].includes(`@${key}`)) {
 							// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
 							if (element[3] === `@${key}==${value}`) {

@@ -1,6 +1,6 @@
 let nextMessageOnlyIfKeywords = false;
 let getLastMessage = false;
-function processCustomVariables(message,customVariables,isUser) {
+function processDynamicVariables(message,dynamicVariables,isUser) {
 	// Cas où le message vient du bot
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
@@ -8,7 +8,7 @@ function processCustomVariables(message,customVariables,isUser) {
 			/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g,
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
-					customVariables[variableName] = variableValue;
+					dynamicVariables[variableName] = variableValue;
 					return "";
 				} else {
 					return match;
@@ -22,8 +22,8 @@ function processCustomVariables(message,customVariables,isUser) {
 				if (match.includes("=")) {
 					return match;
 				} else {
-					return customVariables[variableName]
-						? customVariables[variableName]
+					return dynamicVariables[variableName]
+						? dynamicVariables[variableName]
 						: '';
 				}
 			}
@@ -36,10 +36,10 @@ function processCustomVariables(message,customVariables,isUser) {
 				calc = complexExpression.replace(
 					/@(\w+)/g,
 					(matchCalc, variableNameComplexExpression) => {
-						return customVariables[variableNameComplexExpression] || matchCalc;
+						return dynamicVariables[variableNameComplexExpression] || matchCalc;
 					}
 				);
-				customVariables[variableName] = calc;
+				dynamicVariables[variableName] = calc;
 				return "";
 			}
 		);
@@ -52,8 +52,8 @@ function processCustomVariables(message,customVariables,isUser) {
 					if (match.includes("=")) {
 						return match;
 					} else {
-						return customVariables[variableName]
-							? customVariables[variableName]
+						return dynamicVariables[variableName]
+							? dynamicVariables[variableName]
 							: "";
 					}
 				}
@@ -71,16 +71,16 @@ function processCustomVariables(message,customVariables,isUser) {
 
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
 		if (yamlUserInput === false) {
-			if (customVariables["KEYBOARD"] == "true") {
+			if (dynamicVariables["KEYBOARD"] == "true") {
 				document.body.classList.remove("hideControls");
-				customVariables["KEYBOARD"] = "false";
+				dynamicVariables["KEYBOARD"] = "false";
 			} else {
 				document.body.classList.add("hideControls");
 			}
 		} else {
-			if (customVariables["KEYBOARD"] == "false") {
+			if (dynamicVariables["KEYBOARD"] == "false") {
 				document.body.classList.add("hideControls");
-				customVariables["KEYBOARD"] = "true";
+				dynamicVariables["KEYBOARD"] = "true";
 			} else {
 				document.body.classList.remove("hideControls");
 			}
@@ -104,7 +104,7 @@ function processCustomVariables(message,customVariables,isUser) {
 						condition = condition.replace(
 							/@([^\s()&|!=]+)/g,
 							function (match, varName) {
-								return 'customVariables["' + varName.trim() + '"]';
+								return 'dynamicVariables["' + varName.trim() + '"]';
 							}
 						);
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
@@ -132,9 +132,9 @@ function processCustomVariables(message,customVariables,isUser) {
 						} else {
 							// Évaluation de la condition de manière sécurisée
 							const result = new Function(
-								"customVariables",
+								"dynamicVariables",
 								"return " + condition
-							)(customVariables);
+							)(dynamicVariables);
 							return result ? content : "";
 						}
 					} catch (e) {
@@ -155,7 +155,7 @@ function processCustomVariables(message,customVariables,isUser) {
 		message = message.replaceAll(
 			/@([^\s]*?)\=(.*)/g,
 			function (match, variableName, variableValue, offset) {
-				customVariables[variableName] = variableValue;
+				dynamicVariables[variableName] = variableValue;
 				// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
 				return offset == 0 ? variableValue : "";
 			}
@@ -165,7 +165,7 @@ function processCustomVariables(message,customVariables,isUser) {
 			// Si dans le précédent message, on avait demandé à récupérer l'input : on récupère cette input et on le met dans la variable correspondante
 			// Puis on renvoie vers le message correspondant
 			if (getLastMessage && getLastMessage.length > 0) {
-				customVariables[getLastMessage[0]] = message;
+				dynamicVariables[getLastMessage[0]] = message;
 				nextMessage = getLastMessage[1];
 				getLastMessage = false;
 			} else {
