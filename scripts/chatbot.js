@@ -40,7 +40,7 @@ function createChatBot(chatData) {
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		let nextSelected;
 		// Gestion des variables fixes prédéfinies
-		message = processVariables(message);
+		message = processFixedVariables(message);
 
 		// Cas où c'est un message du bot
 		if (!isUser) {

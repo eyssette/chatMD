@@ -272,7 +272,7 @@ function parseMarkdown(markdownContent) {
 	}
 	let mainContent = markdownContent.substring(indexFirstH1title);
 	if(yamlData && yamlData.variables) {
-		mainContent = processVariables(mainContent, true)
+		mainContent = processFixedVariables(mainContent, true)
 	}
 	const mainContentWithoutH1 = mainContent.substring(1);
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles

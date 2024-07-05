@@ -1,5 +1,5 @@
 // Gestion des variables fixes : soit avant de parser le markdown, soit après
-function processVariables(content, preprocess = false) {
+function processFixedVariables(content, preprocess = false) {
 	// Les variables fixes qui commencent par _ sont traitées avant de parser le contenu du Markdown
 	const regex = preprocess ? /@{(_\S+)}/g : /@{(\S+)}/g;
 	return content.replaceAll(
