@@ -10,6 +10,10 @@ const isMobile =
 const autoFocus = isMobile ? false : true;
 
 const thresholdMouseMovement = 5;
+const regexKatex1 = /`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm;
+const regexKatex2 = /`(<span class=".?strut">.*?<\/span>)`/g;
+const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
+const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
 
 let typed;
 const pauseTypeWriter = "^300 ";
@@ -26,16 +30,16 @@ function typeWriter(content, element) {
 		typed.reset();
 		// Cas du Latex
 		slowContent = slowContent.replaceAll(
-			/`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm,
+			regexKatex1,
 			"$1"
 		);
 		slowContent = slowContent.replaceAll(
-			/`(<span class=".?strut">.*?<\/span>)`/g,
+			regexKatex2,
 			"$1"
 		);
 		// On doit conserver les retours à la ligne dans les blocs "pre"
 		const contentKeepReturnInCode = slowContent.replaceAll(
-			/(<pre(.|\n)*<\/pre>)/gm,
+			regexPre,
 			function (match) {
 				return match.replaceAll("\n", "RETURNCHARACTER");
 			}
@@ -92,7 +96,7 @@ function typeWriter(content, element) {
 
 	// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
 	content = content.replace(
-		/(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm,
+		regexMessageOptions,
 		pauseTypeWriter + "`$1`"
 	);
 
