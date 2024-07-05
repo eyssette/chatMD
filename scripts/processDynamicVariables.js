@@ -24,7 +24,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 				} else {
 					return dynamicVariables[variableName]
 						? dynamicVariables[variableName]
-						: '';
+						: match;
 				}
 			}
 		);
@@ -44,8 +44,8 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			}
 		);
 
-		// Si on a des variables complexes : 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (qui vient d'être définie)
-		if (hasComplexVariable) {
+		// Si on a des variables complexes ou s'il reste des variables sans assignation de valeur : 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (qui vient d'être définie)
+		if (hasComplexVariable || message.includes("`@")) {
 			message = message.replaceAll(
 				/\`@([^\s]*?)\`/g,
 				function (match, variableName) {
