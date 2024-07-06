@@ -3,7 +3,7 @@ function getRandomElement(array) {
 	return array[Math.floor(Math.random() * array.length)];
 }
 
-// Vérifie si une variable texte commence par un élément d'un tableau
+// Pour vérifier si une variable texte commence par un élément d'un tableau
 function startsWithAnyOf(string, array) {
 	for (const element of array) {
 		if (string.startsWith(element)) {
@@ -12,7 +12,7 @@ function startsWithAnyOf(string, array) {
 	}
 }
 
-// Une fonction pour ne garder que les éléments avec la valeur la plus grande dans un tableau
+// Pour ne garder que les éléments avec la valeur la plus grande dans un tableau
 function topElements(array, maxElements) {
 	let topElements;
 	if (array.length < maxElements) {
@@ -37,14 +37,14 @@ function topElements(array, maxElements) {
 	return topElements;
 }
 
-// Une fonction pour réordonner de manière aléatoire un tableau
+// Pour réordonner de manière aléatoire un tableau
 function shuffleArray(array) {
 	return array.sort(function () {
 		return Math.random() - 0.5;
 	});
 }
 
-// Une fonction pour mettre de l'aléatoire dans un tableau, en conservant cependant la position de certains éléments
+// Pour mettre de l'aléatoire dans un tableau, en conservant cependant la position de certains éléments
 function randomizeArrayWithFixedElements(array) {
 	let fixedElements = [];
 	let randomizableElements = [];
@@ -74,7 +74,7 @@ function randomizeArrayWithFixedElements(array) {
 	return finalArray;
 }
 
-// Une fonction pour tester si le tableau des options doit être réordonné avec de l'aléatoire
+// Pour tester si le tableau des options doit être réordonné avec de l'aléatoire
 function shouldBeRandomized(array) {
 	if (Array.isArray(array)) {
 		for (let i = 0; i < array.length; i++) {
@@ -170,6 +170,7 @@ function scrollWindow() {
 	}, 100);
 }
 
+// Pour cacher le footer
 const footerElement = document.getElementById("footer");
 function hideFooter() {
 	const controlsElement = document.getElementById("controls");
