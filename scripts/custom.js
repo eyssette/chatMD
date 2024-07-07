@@ -237,7 +237,8 @@ const badWordsMessage = [
 
 // Raccourcis vers des chatbots particuliers
 const shortcuts = [
-	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"]
+	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"],
+	["multiple-urls",["https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download","https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download"]]
 ];
 
 const corsProxy = "https://corsproxy.io/?";

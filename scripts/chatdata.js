@@ -9,16 +9,25 @@ function getMarkdownContent() {
 	const url = window.location.hash.substring(1).replace(/\?.*/,''); // Récupère l'URL du hashtag sans le #
 	if (url !== "") {
 		// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
-		const urlMD = handleURL(url);
-		// Récupération du contenu du fichier
-		fetch(urlMD)
+		const sourceChatBot = handleURL(url);
+		if (Array.isArray(sourceChatBot)) {
+			// Cas où la source est répartie dans plusieurs fichiers
+			const promises = sourceChatBot.map(url => fetch(url).then(data => data.text()));
+			Promise.all(promises).then(data => {
+				md = data.join("\n");
+				chatData = parseMarkdown(md);
+				createChatBot(chatData);
+			}).catch((error) => console.error(error));
+		} else {
+			// Récupération du contenu du fichier
+			fetch(sourceChatBot)
 			.then((response) => response.text())
 			.then((data) => {
 				md = data;
 				chatData = parseMarkdown(md);
 				createChatBot(chatData);
-			})
-			.catch((error) => console.error(error));
+			}).catch((error) => console.error(error));
+		}
 	} else {
 		createChatBot(parseMarkdown(md));
 	}

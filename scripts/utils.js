@@ -94,6 +94,8 @@ function handleURL(url) {
 		const shortcut = shortcuts.find((element) => element[0] == url);
 		if (shortcut) {
 			url = shortcut[1];
+			// Si on a un raccourci, on n'a pas besoin de traiter correctement l'url
+			return url
 		}
 		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
 		if (url.includes(".forge")) {
