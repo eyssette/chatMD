@@ -135,7 +135,7 @@ Que voulez-vous faire ?
 5. [Utiliser ChatMD pour faire des quiz](option : Utiliser ChatMD pour faire des quiz)
 6. [Introduire de l'aléatoire dans les réponses ou les propositions en fin de message](option : Introduire de l'aléatoire)
 7. [Utiliser des variables dynamiques et du conditionnement en fonction de ces variables](option : Variables dynamiques)
-8. [Connecter ChatMD à un LLM](option : connexion à un LLM)
+8. [Connecter ChatMD à un LLM, faire du RAG](option : Connecter ChatMD à un LLM, faire du RAG)
 9. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 
 ## Explication en-tête yaml
@@ -277,7 +277,7 @@ On peut enfin récupérer le contenu d'un message entré par un utilisateur pour
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
 
-## option : connexion à un LLM
+## option : Connecter ChatMD à un LLM, faire du RAG
 
 ChatMD peut se connecter à un LLM en ligne ou en local : on peut choisir le modèle que l'on souhaite et tout configurer (préprompt, nombre de tokens, etc.). Pour faire appel à ce LLM, on peut soit décider de toujours produire la réponse par le LLM, en prenant en compte les éléments prédéfinis, soit n'utiliser le LLM qu'à des moments bien précis, par exemple pour enrichir une réponse préprogrammée.
 
