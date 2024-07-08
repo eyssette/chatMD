@@ -120,6 +120,7 @@ main {
 
 a, a:visited {
 	color: #551A8D!important;
+	word-wrap: break-word;
 }
 
 button {
