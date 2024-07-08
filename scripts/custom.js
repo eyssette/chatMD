@@ -171,14 +171,22 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 
 ## option : Gérer des contenus particuliers
 
-Dans le contenu en Markdown, vous pouvez utiliser : 
-1. des admonitions, c'est-à-dire des encadrés pour mettre en valeur certains contenus (voir cet exemple)
-2. des iframes pour intégrer des contenus interactifs comme H5P
-3. la directive \`!​Audio : URLduFichierAudio\` pour jouer automatiquement un son lors du déclenchement d'une réponse (voir cet exemple)
+Dans le contenu en Markdown, vous pouvez utiliser des admonitions, c'est-à-dire des encadrés pour mettre en valeur certains contenus. Il faut utiliser la syntaxe suivante : 
+\`\`\`
+:​:​:info
+contenu
+:​:​:
+\`\`\`
+
+Plusieurs types d'admonitions sont disponibles (voir cet [exemple](https://codimd.apps.education.fr/9U7L4wpOSmaRFl6aRK-J9Q?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/9U7L4wpOSmaRFl6aRK-J9Q))
+
+Vous pouvez aussi utiliser :
+1. des iframes pour intégrer des contenus interactifs comme H5P.
+2. la directive \`!​Audio : URLduFichierAudio\` pour jouer automatiquement un son lors du déclenchement d'une réponse (voir cet [exemple](https://codimd.apps.education.fr/24OabQgvQ_yPd2WE3DrIEg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/24OabQgvQ_yPd2WE3DrIEg)).
 
 Pour utiliser le Latex pour les mathématiques, il faut ajouter \`maths: true\` dans le YAML. On peut alors écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`.
 
-Pour pouvoir générer des schémas et graphiques via le service Kroki, il faut ajouter \`addOns: kroki\` dans le YAML. Cela permet de générer des schémas avec la syntaxe de Tikz, GraphViz, Mermaid, PlantUML ou Excalidraw, et des graphiques avec Vega ou Vegalite (voir cet exemple).
+Pour pouvoir générer des schémas et graphiques via le service Kroki, il faut ajouter \`addOns: kroki\` dans le YAML. Cela permet de générer des schémas avec la syntaxe de Tikz, GraphViz, Mermaid, PlantUML ou Excalidraw, et des graphiques avec Vega ou Vegalite (voir cet [exemple](https://codimd.apps.education.fr/dJpCzTg0SPyPmbj24SSKbg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/dJpCzTg0SPyPmbj24SSKbg)).
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
@@ -200,13 +208,15 @@ Dans votre contenu en Markdown, vous pourrez alors utiliser vos variables ainsi 
 Les variables fixes qui ne commencent pas par \`_\` sont interprétées au moment du déclenchement de la réponse, ce qui permet d'intégrer de l'aléatoire, en séparant les contenus possibles par \`///\`.
 Les variables fixes qui commencent par \`_\` sont interprétées au moment de la génération du chatbot, ce qui permet de créer des variables fixes qui intègrent des propositions en fin de message.
 
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/WySjMI5iQKOtTSJ3XhCZBQ?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/WySjMI5iQKOtTSJ3XhCZBQ)
+
 ### Source répartie entre plusieurs fichiers
 
 Si votre chatbot est très long, vous pouvez répartir la source de votre fichier dans plusieurs fichiers. Pour cela, il faut dupliquer le projet sur la forge et utiliser la fonction “raccourci” afin d'indiquer comme source plusieurs fichiers.
 
 ### Structuration du document
 
-Si vous souhaitez pouvoir structurer les propositions en fin de message avec des titres, il faut écrire les options avec le code HTML nécessaire directement et non pas avec la syntaxe Markdown (voir un exemple).
+Si vous souhaitez pouvoir structurer les propositions en fin de message avec des titres, il faut écrire les options avec le code HTML nécessaire directement et non pas avec la syntaxe Markdown (voir cet [exemple](https://codimd.apps.education.fr/NJs77ZWnQgalVyA6nfuDLQ?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/NJs77ZWnQgalVyA6nfuDLQ)).
 
 Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres réponses, sans générer de bouton en fin de message, avec la syntaxe suivante : \`[intitulé du lien]​(#titre de la réponse)\`
 
@@ -220,9 +230,9 @@ Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres répo
 
 Un chatbot sert souvent à répondre à des questions, mais on peut aussi utiliser ChatMD pour poser des questions !
 
-Si on veut que l'utilisateur réponde avec le clavier, la directive \`!​Next: Titreréponse\`, dans le contenu du Markdown, va forcer la redirection vers une réponse particulière : le message de l'utilisateur sera alors comparé aux déclencheurs choisis pour cette réponse. Si le message correspond à l'un des déclencheurs, alors la réponse de l'utilisateur est considérée comme juste (voir un exemple).
+Si on veut que l'utilisateur réponde avec le clavier, la directive \`!​Next: Titreréponse\`, dans le contenu du Markdown, va forcer la redirection vers une réponse particulière : le message de l'utilisateur sera alors comparé aux déclencheurs choisis pour cette réponse ou même au contenu entier de la réponse si on a ajouté \`rechercheContenu: true\` dans le YAML. Si le message correspond, alors la réponse de l'utilisateur est considérée comme juste (voir cet [exemple](https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A)).
 
-Si on veut que l'utilisateur réponde en cliquant sur des propositions, on peut utiliser la propriété \`yamlObfuscate: true\` dans l'en-tête YAML pour cacher le titre des liens, afin d'éviter de donner un indice en survolant un lien.
+Si on veut que l'utilisateur réponde en cliquant sur des propositions, on peut utiliser la propriété \`obfuscate: true\` dans l'en-tête YAML pour cacher le titre des liens, afin d'éviter de donner un indice en survolant un lien (voir cet [exemple](https://codimd.apps.education.fr/hWgravuHTTmfRydTUfjgWQ?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/hWgravuHTTmfRydTUfjgWQ)).
 
 On peut aussi introduire de l'aléatoire dans le choix des propositions (voir ci-dessous).
 
@@ -236,7 +246,9 @@ Dans le contenu du Markdown, on peut indiquer plusieurs versions d'une même ré
 
 On peut également choisir d'afficher seulement les propositions en fin de message de manière aléatoire. Si on met "1. [intitulé]​(lien)" : la proposition reste à la place indiquée, alors que si on met "1) [intitulé]​(lien)" : la proposition est réordonnée de manière aléatoire.
 
-Enfin, dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste.
+Dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste (voir cet [exemple](https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg)).
+
+Enfin, la directive \`!SelectNext : titre question 1 / titre question 2 / titre question 3\` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
@@ -244,17 +256,21 @@ Enfin, dans le contenu du Markdown, la directive : \`!​Select: x\` peut être 
 
 ## option : Variables dynamiques
 
+Pour utiliser les variables dynamiques, il faut ajouter \`contenuDynamique: true\` dans le YAML.
+
 On peut avoir des variables dynamiques définies selon le parcours de l'utilisateur, et conditionner du contenu en fonction de ces variables.
 
-On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse, soit directement dans l'intitulé du lien du bouton de réponse (voir un exemple).
+On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse, soit directement dans l'intitulé du lien du bouton de réponse.
 
 Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble des conditions (par exemple \`i​f @​mavariable1 == valeur1 && @​mavariable == valeur2\`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code \`end​if\`.
+
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg)
 
 On peut également récupérer des paramètres dans l'URL pour assigner une valeur à ces variables. Chaque paramètre peut être récupéré avec la syntaxe suivante : \`GE​Tnomduparamètre\`
 
 On peut enfin récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : \`@​mavariable  = @​INPUT : Titre réponse\`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
 
-Le plus simple est de voir un exemple pour comprendre comment cela fonctionne !
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw)
 
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
@@ -268,7 +284,9 @@ ChatMD peut se connecter à un LLM en ligne ou en local : on peut choisir le mod
 ChatMD permet également de faire du RAG de manière simplifiée : on peut indiquer des sources d'informations, qui seront utilisées par le LLM pour produire sa réponse.
 Ce RAG ne repose pas sur une vectorisation préalable de l'information. On pourrait le faire, mais l'intérêt est ici de ne pas multiplier les appels à une API externe, afin d'avoir un usage plus sobre de l'IA.
 
-Pour comprendre comment tout cela fonctionne, le mieux est de regarder cet exemple.
+Pour comprendre comment tout cela fonctionne, le mieux est de regarder ces deux exemples :
+- [Utiliser ChatMD avec un LLM en local](https://codimd.apps.education.fr/unR-D6xRSMOnvySa5-kCdg?both)
+- [Utiliser ChatMD avec un LLM en ligne](https://codimd.apps.education.fr/nVOl6sQKTfqq_OWAUmxcYg?both)
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
