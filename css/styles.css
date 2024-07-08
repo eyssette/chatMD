@@ -226,15 +226,18 @@ footer a:hover {
 }
 
 pre {
-	line-height: 0.65em;
+	line-height: 1em;
 	margin: 2.5em;
 	border: 1px solid grey;
 	padding: 20px;
 	border-radius: 5px;
 	width: fit-content;
+	word-break: break-all;
+	white-space: pre-line;
 }
 
 .admonition {
+	margin-top:1em;
 	border:1px solid black;
 	border-radius: 5px;
 	padding:0.5em 1em;
@@ -352,10 +355,7 @@ pre {
 		padding-left: 25px !important;
 	}
 	pre {
-		line-height: 1em;
 		margin:0em;
-		word-break: break-all;
-		white-space: pre-line;
 		width: 95%;
 	}
 	.message>div>.admonition {
