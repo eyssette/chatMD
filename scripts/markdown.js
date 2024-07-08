@@ -30,7 +30,7 @@ function showdownExtensionAdmonitions() {
 		{
 			type: "output",
 			filter: (text) => {
-				text = text.replaceAll("<p>:::", ":::");
+				text = text.replaceAll(/<p>:::(.*?)<\/p>/g, ":::$1");
 				const regex = /:::(.*?)\n(.*?):::/gs;
 				const matches = text.match(regex);
 				if (matches) {
