@@ -3,36 +3,69 @@ gestionGrosMots: true
 ---
 # ChatMD
 
-Bonjour, je suis ChatMD, un chatbot, que vous pouvez configurer par vous-même en Markdown :
+Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
-- Créez un fichier en Markdown et mettez-le en ligne : sur CodiMD, ou sur une forge
-- Respectez la syntaxe de ChatMD pour définir votre chatbot
+:::info C'est très simple !
+1. Créez un fichier en Markdown accessible en ligne.
+2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
+3. Votre chatbot est alors accessible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) <br>(Mettez l'url de votre fichier à la place de URL) !
+:::
 
-Votre chatbot est alors prêt et visible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) (Mettez l'url de votre fichier à la place de URL)
+On peut imaginer **de nombreux usages** :
+- Tutoriel pour un outil informatique
+- Guide méthodologique
+- Soutien pour la révision d'un cours, quiz interactif,
+- Discussion avec un personnage historique,
+- Histoire dont vous êtes le héros …
+
+La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usages plus complexes** : utilisation de variables, de choix aléatoires, intégration avec un LLM …
 
 1. [Qu'est-ce que le Markdown ?](Markdown)
-2. [CodiMD, une forge : qu'est-ce que c'est ?](CodiMD et forge)
+2. [Comment créer un fichier en Markdown accessible en ligne ?](Comment créer un fichier en Markdown accessible en ligne ?)
 3. [Quelle syntaxe faut-il respecter pour ChatMD ?](Syntaxe)
-4. [Tu peux me donner des exemples !](Exemples)
+4. [Donne-moi des exemples !](Exemples)
 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
-6. [À quoi ça sert ?](À quoi ça sert ?)
-7. [Comment utiliser ChatMD en tant que widget ?](Utilisation sous la forme d'un widget)
+6. [Comment intégrer mon chatbot dans un site ?](Comment intégrer mon chatbot sur un site ?)
 
 ## Markdown
 - markdown
+
 Le Markdown est un format de balisage très léger qui permet d'écrire rapidement du texte formaté.
+
+Par exemple on écrit \`**texte en gras**\` pour écrire du **texte en gras**, ou alors \`_texte en italique_\` pour écrire du _texte en italique_.
 
 Pour découvrir le Markdown, vous pouvez suivre ce [tutoriel](https://www.markdowntutorial.com/fr/).
 
-## CodiMD et forge
+1. [OK, j'ai compris ce qu'est le Markdown, mais comment créer un fichier en Markdown accessible en ligne ?](Comment créer un fichier en Markdown accessible en ligne ?)
+2. [J'ai compris la syntaxe du Markdown, mais quelle est la syntaxe à respecter pour ChatMD ?](Syntaxe)
+
+## Comment créer un fichier en Markdown accessible en ligne ?
 - codimd
 - codi
 - forge
 - en ligne
+- digipage
+- hedgedoc
+- framapd
 
-[CodiMD](https://codimd.apps.education.fr/) est un outil pour écrire du Markdown en ligne et il est disponible avec vos identifiants académiques sur le [portail Apps Edu](https://portail.apps.education.fr/).
+Il existe plusieurs services pour créer un fichier Markdown accessible en ligne.
 
-Une forge est un outil plus complet qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
+Si vous êtes prof en France et que avez des identifiants académiques, vous pouvez utiliser [CodiMD](https://codimd.apps.education.fr/) sur le [portail Apps Edu](https://portail.apps.education.fr/).
+
+D'autres outils fonctionnent avec ChatMD et notamment : [Digipage](https://digipage.app/) de La Digitale et [Framapad](https://framapad.org/) de Framasoft
+
+Il est également possible d'utiliser la [Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/).
+
+1. [Qu'est-ce qu'une forge ?](forge)
+2. [J'ai compris comment créer mon fichier, mais quelle est la syntaxe à respecter pour ChatMD ?](Syntaxe)
+
+## forge
+
+Une forge est un outil qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
+
+Si vous êtes prof en France et que vous souhaitez utiliser la forge, rejoignez le [groupe Tchap de LaForgeÉdu](https://www.tchap.gouv.fr/#/room/!fnVhKrpqraWfsSirBK:agent.education.tchap.gouv.fr) pour plus d'explications !
+
+1. [J'ai compris comment créer mon fichier, mais quelle est la syntaxe à respecter pour ChatMD ?](Syntaxe)
 
 ## Syntaxe
 - syntaxe
@@ -43,19 +76,15 @@ La syntaxe pour écrire un chatbot avec chatMD est la suivante, mais c'est peut-
 
 \`\`\`
 ​# Titre du chatbot
-​
-Message initial
-​
-1​. [Premier choix](Réponse 1)
+​Message initial
+​1​. [Premier choix](Réponse 1)
 2​. [Deuxième choix](Réponse 2)
 ​
 ​## Réponse 1
 - déclencheur 1 (optionnel)
 - déclencheur 2 (optionnel)
-​
 Contenu de la réponse
-​
-1​. [Proposition 1](Titre Proposition 1)
+​1​. [Proposition 1](Titre Proposition 1)
 2​. [Proposition 2](Titre Proposition 2)
 \`\`\`
 
@@ -65,59 +94,186 @@ Les **titres de niveau 2** servent à identifier les réponses possibles du chat
 
 ### Deux manières pour déclencher une réponse
 
-:::info L'utilisateur va devoir cliquer sur des propositions
-On indique alors en fin d'un message les propositions possibles, avec une liste ordonnée en Markdown.
-Chaque élément de la liste doit avoir la forme suivante :
-\`[intitulé de l'option qui s'affiche pour l'utilisateur](titre de la réponse correspondante dans le fichier en Markdown)\`.
+:::info Avec la souris, l'utilisateur clique sur une proposition
+Pour créer des boutons qui déclenchent des réponses quand on clique dessus, il faut utiliser une liste ordonnée en Markdown, qui doit avoir la forme suivante : 
+\` 1. [intitulé de l'option qui s'affiche pour l'utilisateur](titre de la réponse correspondante dans le fichier en Markdown)\`
 :::
 
-:::info L'utilisateur va poser une question
-Pour permettre au chatbot de renvoyer la réponse la plus adéquate, on indique sous le titre de la réponse les mots clés ou expressions qui vont renforcer le choix de cette réponse. On utilise une liste non ordonnée en Markdown.
+:::info Avec le clavier, l'utilisateur pose une question
+Pour permettre au chatbot de renvoyer la réponse la plus adéquate, on indique sous le titre de la réponse des déclencheurs (mots clés ou expressions) qui vont renforcer le choix de cette réponse. On utilise une liste non ordonnée en Markdown.
 :::
 
 C'est recommandé de combiner ces 2 options pour être sûr que l'utilisateur trouve les réponses à ses questions !
 
+1. [J'ai compris la syntaxe de base, mais quelles sont les options de configuration plus avancées](Options de configuration)
+2. [Si on utilise des déclencheurs, comment fonctionne le choix de la réponse la plus adéquate ?](explication choix réponse adéquate)
 
+## explication choix réponse adéquate
 
-1. [Voir aussi les options de configuration plus avancées](Options de configuration)
+Si on utilise des déclencheurs, ChatMD calcule la réponse la plus adéquate.
+
+Ce n'est pas une simple recherche d'occurrences : le calcul intègre une décomposition en tokens et un calcul de distance lexicale.
+
+La décomposition en tokens permet de retrouver des racines communes et la distance lexicale permet de trouver une réponse malgré des fautes d'orthographe.
 
 ## Options de configuration
-- yaml
-- en-tête
-- en-tête yaml
 - options
+- configuration
 - avancé
-- avatar
-- mathématiques
-- gros mots
-- insulte
-- style
-- apparence
+- personnalisation
+- personnaliser
 
-On peut ajouter un en-tête yaml à son fichier Markdown :
+Plusieurs options de configuration sont disponibles !
+La plupart des options reposent sur l'ajout de paramètres dans l'en-tête YAML du fichier Markdown.
 
-- \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
-- \`rechercheContenu: true\` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
+Que voulez-vous faire ?
+
+1. [Améliorer l'algorithme de choix d'une réponse](option : Améliorer l'algorithme)
+2. [Personnaliser l'apparence du chatbot](option : Personnaliser l'apparence)
+3. [Gérer des contenus particuliers <span>(admonitions, mathématiques, schémas, sons …)</span>](option : Gérer des contenus particuliers)
+4. [Organiser mon fichier source](option : Organiser son fichier source)
+5. [Utiliser ChatMD pour faire des quiz](option : Utiliser ChatMD pour faire des quiz)
+6. [Introduire de l'aléatoire dans les réponses ou les propositions en fin de message](option : Introduire de l'aléatoire)
+7. [Utiliser des variables dynamiques et du conditionnement en fonction de ces variables](option : Variables dynamiques)
+8. [Connecter ChatMD à un LLM](option : connexion à un LLM)
+9. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+
+## Explication en-tête yaml
+
+Un en-tête YAML est une section spéciale dans laquelle on déclare certaines variables, qu'un programme comme ChatMD peut ensuite utiliser.
+Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et terminer l'en-tête par trois tirets \`-​-​-\`.
+
+## option : Améliorer l'algorithme
+
+Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces paramètres dans l'en-tête YAML : 
+
+- si on ajoute \`rechercheContenu: true\`, alors l'algorithme ne se contente pas de comparer le message de l'utilisateur avec le titre de la réponse et les déclencheurs, mais il compare aussi ce message avec le contenu entier de la réponse.
+- \`gestionGrosMots: true\` permet de détecter les gros mots et les insultes envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise.
+- \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente.
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+## option : Personnaliser l'apparence
+
+Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres dans l'en-tête YAML :
+
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
-- \`gestionGrosMots: true\` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
-- \`maths: true\` permet d'écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`
 - \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
 - \`footer: false\` permet de supprimer le footer
+- \`footer: 'Mon footer'\` permet de customiser ce qui apparaît dans le footer
 - \`theme: bubbles\` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
+- \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
+- \`typewriter: false\` désactive l'effet “machine à écrire”
 
-Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur \`-​-​-\`.
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
 
-On peut également afficher les propositions en fin de message de manière aléatoire : si on met "1. proposition" : la proposition reste à la place indiquée, alors que si on met "1) proposition" : la proposition est réordonnée de manière aléatoire.
+## option : Gérer des contenus particuliers
 
-D'autres options plus avancées dans l'en-tête yaml :
-- \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
-- \`titresRéponses: ["### ", "#### "]\` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
-- On peut aussi définir des variables que l'on peut utiliser dans son chatbot ainsi : &#64;{maVariable1}
+Dans le contenu en Markdown, vous pouvez utiliser : 
+1. des admonitions, c'est-à-dire des encadrés pour mettre en valeur certains contenus (voir cet exemple)
+2. des iframes pour intégrer des contenus interactifs comme H5P
+3. la directive \`!​Audio : URLduFichierAudio\` pour jouer automatiquement un son lors du déclenchement d'une réponse (voir cet exemple)
+
+Pour utiliser le Latex pour les mathématiques, il faut ajouter \`maths: true\` dans le YAML. On peut alors écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`.
+
+Pour pouvoir générer des schémas et graphiques via le service Kroki, il faut ajouter \`addOns: kroki\` dans le YAML. Cela permet de générer des schémas avec la syntaxe de Tikz, GraphViz, Mermaid, PlantUML ou Excalidraw, et des graphiques avec Vega ou Vegalite (voir cet exemple).
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+## option : Organiser son fichier source
+
+### Variables fixes
+
+Si votre chatbot devient un peu long et complexe, vous pouvez définir des variables fixes dans le YAML.
+
 \`\`\`
 variables:
 	maVariable1: "Ceci est ma variable 1"
 	maVariable2: "Ceci est ma variable 2"
 \`\`\`
+
+Dans votre contenu en Markdown, vous pourrez alors utiliser vos variables ainsi : &#64;{maVariable1}
+
+Les variables fixes qui ne commencent pas par \`_\` sont interprétées au moment du déclenchement de la réponse, ce qui permet d'intégrer de l'aléatoire, en séparant les contenus possibles par \`///\`.
+Les variables fixes qui commencent par \`_\` sont interprétées au moment de la génération du chatbot, ce qui permet de créer des variables fixes qui intègrent des propositions en fin de message.
+
+### Source répartie entre plusieurs fichiers
+
+Si votre chatbot est très long, vous pouvez répartir la source de votre fichier dans plusieurs fichiers. Pour cela, il faut dupliquer le projet sur la forge et utiliser la fonction “raccourci” afin d'indiquer comme source plusieurs fichiers.
+
+### Structuration du document
+
+Si vous souhaitez pouvoir structurer les propositions en fin de message avec des titres, il faut écrire les options avec le code HTML nécessaire directement et non pas avec la syntaxe Markdown (voir un exemple).
+
+Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres réponses, sans générer de bouton en fin de message, avec la syntaxe suivante : \`[intitulé du lien]​(#titre de la réponse)\`
+
+\`titresRéponses: ["### ", "#### "]\` dans le YAML permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer autrement les réponses du chatbot dans son document
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+
+## option : Utiliser ChatMD pour faire des quiz
+
+Un chatbot sert souvent à répondre à des questions, mais on peut aussi utiliser ChatMD pour poser des questions !
+
+Si on veut que l'utilisateur réponde avec le clavier, la directive \`!​Next: Titreréponse\`, dans le contenu du Markdown, va forcer la redirection vers une réponse particulière : le message de l'utilisateur sera alors comparé aux déclencheurs choisis pour cette réponse. Si le message correspond à l'un des déclencheurs, alors la réponse de l'utilisateur est considérée comme juste (voir un exemple).
+
+Si on veut que l'utilisateur réponde en cliquant sur des propositions, on peut utiliser la propriété \`yamlObfuscate: true\` dans l'en-tête YAML pour cacher le titre des liens, afin d'éviter de donner un indice en survolant un lien.
+
+On peut aussi introduire de l'aléatoire dans le choix des propositions (voir ci-dessous).
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Comment introduire de l'aléatoire ?](option : Introduire de l'aléatoire)
+3. [Je veux voir les autres options de configurations](Options de configuration)
+
+
+## option : Introduire de l'aléatoire
+Dans le contenu du Markdown, on peut indiquer plusieurs versions d'une même réponse en les séparant avec le séparateur \`-​-​-\`. Le chatbot sélectionnera aléatoirement l'une de ces versions.
+
+On peut également choisir d'afficher seulement les propositions en fin de message de manière aléatoire. Si on met "1. [intitulé]​(lien)" : la proposition reste à la place indiquée, alors que si on met "1) [intitulé]​(lien)" : la proposition est réordonnée de manière aléatoire.
+
+Enfin, dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste.
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+
+## option : Variables dynamiques
+
+On peut avoir des variables dynamiques définies selon le parcours de l'utilisateur, et conditionner du contenu en fonction de ces variables.
+
+On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse, soit directement dans l'intitulé du lien du bouton de réponse (voir un exemple).
+
+Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble des conditions (par exemple \`i​f @​mavariable1 == valeur1 && @​mavariable == valeur2\`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code \`end​if\`.
+
+On peut également récupérer des paramètres dans l'URL pour assigner une valeur à ces variables. Chaque paramètre peut être récupéré avec la syntaxe suivante : \`GE​Tnomduparamètre\`
+
+On peut enfin récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : \`@​mavariable  = @​INPUT : Titre réponse\`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
+
+Le plus simple est de voir un exemple pour comprendre comment cela fonctionne !
+
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+
+## option : connexion à un LLM
+
+ChatMD peut se connecter à un LLM en ligne ou en local : on peut choisir le modèle que l'on souhaite et tout configurer (préprompt, nombre de tokens, etc.). Pour faire appel à ce LLM, on peut soit décider de toujours produire la réponse par le LLM, en prenant en compte les éléments prédéfinis, soit n'utiliser le LLM qu'à des moments bien précis, par exemple pour enrichir une réponse préprogrammée.
+
+ChatMD permet également de faire du RAG de manière simplifiée : on peut indiquer des sources d'informations, qui seront utilisées par le LLM pour produire sa réponse.
+Ce RAG ne repose pas sur une vectorisation préalable de l'information. On pourrait le faire, mais l'intérêt est ici de ne pas multiplier les appels à une API externe, afin d'avoir un usage plus sobre de l'IA.
+
+Pour comprendre comment tout cela fonctionne, le mieux est de regarder cet exemple.
+
+1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+2. [Je veux voir les autres options de configurations](Options de configuration)
+
+
 
 ## Exemples
 - exemple
@@ -134,41 +290,29 @@ Voici quelques exemple de chatbot créés avec ChatMD :
 - [Méthode de la dissertation en philosophie](https://chatmd.forge.apps.education.fr/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
 - [Utilisation d'un microscope](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
 
-## À quoi ça sert ?
-- à quoi ça sert ?
-- pourquoi
-- sert
-- intérêt
-- servir
-- objectif
-- but
-- en faire
-- tutoriel
-- histoire
-- méthod
-- révision
-- utilité
-- utile
+N'hésitez pas à partager vos exemples de chatbot avec moi ! Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
 
-On peut imaginer plusieurs usages de chatMD :
-- Tutoriel pour un outil informatique
-- Histoire dont vous êtes le héros
-- Guide méthodologique
-- Soutien pour la révision d'un cours
-- Discussion avec un personnage historique …
-
-On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
-
-Si vous avez trouvé des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
-
-## Utilisation sous la forme d'un widget
+## Comment intégrer mon chatbot sur un site ?
 - widget
 - dans son site
 - dans mon site
 - intégrer
 - intégration
+- sur mon site
+- sur son site
+- iframe
 
-Vous pouvez intégrer chatMD dans une page HTML en insérant ce code en bas de page dans l'élément \`\`\`body\`\`\`.
+Vous pouvez intégrer chatMD dans votre site de deux manières : soit avec une balise iframe, soit en tant que widget.
+
+### Iframe
+Pour utiliser ChatMD avec une balise iframe, vous pouvez utiliser le code suivant (en modifiant le style CSS si nécessaire) :
+
+\`\`\`html
+<iframe src=https://chatmd.forge.apps.education.fr/#URLDEVOTRECHATBOT" style="border:0; width:100%; height:700px"></iframe>
+\`\`\`
+
+### Widget
+Pour utiliser ChatMD en tant que widget, il faut avoir accès au HTML et insérer ce code (en bas de page dans l'élément \`body\`).
 
 \`\`\`js
 <script id="chatmdWidgetScript"
@@ -176,7 +320,7 @@ src="https://chatmd.forge.apps.education.fr/widget.min.js"
 data-chatbot="URL_SOURCE_CHATBOT"></script>
 \`\`\`
 
-Il faut bien sûr remplacer \`\`\`URL_SOURCE_CHATBOT\`\`\` par l'URL de la source de votre chatbot.
+Il faut bien sûr remplacer \`URL_SOURCE_CHATBOT\` par l'URL de la source de votre chatbot.
 
 On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comme paramètre.
 
@@ -196,7 +340,6 @@ On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comm
 - cool
 
 Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
-
 
 `;
 
