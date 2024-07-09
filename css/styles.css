@@ -234,7 +234,7 @@ pre {
 	border-radius: 5px;
 	width: fit-content;
 	word-break: break-all;
-	white-space: pre-line;
+	white-space: pre-wrap;
 }
 
 .admonition {
