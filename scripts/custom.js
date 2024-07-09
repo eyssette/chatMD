@@ -103,7 +103,7 @@ Pour créer des boutons qui déclenchent des réponses quand on clique dessus, i
 Pour permettre au chatbot de renvoyer la réponse la plus adéquate, on indique sous le titre de la réponse des déclencheurs (mots clés ou expressions) qui vont renforcer le choix de cette réponse. On utilise une liste non ordonnée en Markdown.
 :::
 
-C'est recommandé de combiner ces 2 options pour être sûr que l'utilisateur trouve les réponses à ses questions !
+Il est préférable de combiner ces 2 options pour être sûr que l'utilisateur trouve les réponses à ses questions !
 
 1. [J'ai compris la syntaxe de base, mais quelles sont les options de configuration plus avancées](Options de configuration)
 2. [Si on utilise des déclencheurs, comment fonctionne le choix de la réponse la plus adéquate ?](explication choix réponse adéquate)
@@ -303,7 +303,7 @@ Pour comprendre comment tout cela fonctionne, le mieux est de regarder ces deux 
 
 Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
 
-Voici quelques exemple de chatbot créés avec ChatMD : 
+Voici quelques exemples de chatbot créés avec ChatMD : 
 
 - [Méthode de la dissertation en philosophie](https://chatmd.forge.apps.education.fr/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
 - [Utilisation d'un microscope](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
