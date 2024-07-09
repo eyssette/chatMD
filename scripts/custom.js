@@ -250,7 +250,7 @@ On peut également choisir d'afficher seulement les propositions en fin de messa
 
 Dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste (voir cet [exemple](https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg)).
 
-Enfin, la directive \`!SelectNext: titre question 1 / titre question 2 / titre question 3\` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
+Enfin, la directive \`!​SelectNext: titre question 1 / titre question 2 / titre question 3\` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
