@@ -250,7 +250,7 @@ On peut également choisir d'afficher seulement les propositions en fin de messa
 
 Dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste (voir cet [exemple](https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg)).
 
-Enfin, la directive \`!SelectNext : titre question 1 / titre question 2 / titre question 3\` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
+Enfin, la directive \`!SelectNext: titre question 1 / titre question 2 / titre question 3\` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
@@ -268,9 +268,9 @@ Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble
 
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg)
 
-On peut également récupérer des paramètres dans l'URL pour assigner une valeur à ces variables. Chaque paramètre peut être récupéré avec la syntaxe suivante : \`GE​Tnomduparamètre\`
+On peut également récupérer des paramètres dans l'URL pour les utiliser ensuite. Chaque paramètre peut être récupéré avec la syntaxe suivante : \`GE​Tnomduparamètre\`
 
-On peut enfin récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : \`@​mavariable  = @​INPUT : Titre réponse\`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
+On peut récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : \`@​mavariable  = @​INPUT : Titre réponse\`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
 
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw)
 
