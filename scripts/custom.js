@@ -163,8 +163,10 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 - \`footer: false\` permet de supprimer le footer
 - \`footer: 'Mon footer'\` permet de customiser ce qui apparaît dans le footer
 - \`theme: bubbles\` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
-- \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 - \`typewriter: false\` désactive l'effet “machine à écrire”
+- \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
+
+Si on veut activer ou désactiver le clavier pour certaines réponses, on met \`@​KEYBOARD = true\` ou \`@​KEYBOARD = false\` dans un bloc code à l'intérieur de son code markdown pour les réponses en question..
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
