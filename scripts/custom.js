@@ -143,6 +143,14 @@ Que voulez-vous faire ?
 Un en-tête YAML est une section spéciale dans laquelle on déclare certaines variables, qu'un programme comme ChatMD peut ensuite utiliser.
 Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et terminer l'en-tête par trois tirets \`-​-​-\`.
 
+Voici un exemple d'en-tête YAML :
+
+\`\`\`
+-​-​-
+gestionGrosMots: true
+-​-​-
+\`\`\`
+
 ## option : Améliorer l'algorithme
 
 Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces paramètres dans l'en-tête YAML : 
@@ -166,12 +174,16 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 - \`typewriter: false\` désactive l'effet “machine à écrire”
 - \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 
-Si on veut activer ou désactiver le clavier pour certaines réponses, on met \`@​KEYBOARD = true\` ou \`@​KEYBOARD = false\` dans un bloc code à l'intérieur de son code markdown pour les réponses en question..
+Si on veut activer ou désactiver le clavier pour certaines réponses, on met \`&#96@​KEYBOARD = true&#96\` ou \`&#96@​KEYBOARD = false&#96\` à l'intérieur de son code markdown pour les réponses en question..
+
+Si on veut désactiver l'effet typewriter pour un passage seulement de son texte, on utilise la syntaxe suivante dans son code markdown : \`\\&#96texte sans effet typewriter\\&#96\`
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
 ## option : Gérer des contenus particuliers
+
+### Admonitions
 
 Dans le contenu en Markdown, vous pouvez utiliser des admonitions, c'est-à-dire des encadrés pour mettre en valeur certains contenus. Il faut utiliser la syntaxe suivante : 
 \`\`\`
@@ -182,11 +194,17 @@ contenu
 
 Plusieurs types d'admonitions sont disponibles (voir cet [exemple](https://codimd.apps.education.fr/9U7L4wpOSmaRFl6aRK-J9Q?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/9U7L4wpOSmaRFl6aRK-J9Q))
 
+### iframes et audio
+
 Vous pouvez aussi utiliser :
-1. des iframes pour intégrer des contenus interactifs comme H5P.
+1. des iframes pour intégrer des contenus interactifs comme H5P. Attention, il vaut mieux que le contenu en iframe soit le dernier contenu de votre réponse, car sinon votre iframe risque de mettre du temps à s'afficher.
 2. la directive \`!​Audio : URLduFichierAudio\` pour jouer automatiquement un son lors du déclenchement d'une réponse (voir cet [exemple](https://codimd.apps.education.fr/24OabQgvQ_yPd2WE3DrIEg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/24OabQgvQ_yPd2WE3DrIEg)).
 
-Pour utiliser le Latex pour les mathématiques, il faut ajouter \`maths: true\` dans le YAML. On peut alors écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` ou \`$$Latex$$\`.
+### Latex
+
+Pour utiliser le Latex pour les mathématiques, il faut ajouter \`maths: true\` dans le YAML. On peut alors écrire des formules mathématiques en Latex avec la syntaxe \`$Latex$\` (à l'intérieur d'un paragraphe) ou \`$$Latex$$\` (pour un paragraphe à part).
+	
+### Schémas & graphiques
 
 Pour pouvoir générer des schémas et graphiques via le service Kroki, il faut ajouter \`addOns: kroki\` dans le YAML. Cela permet de générer des schémas avec la syntaxe de Tikz, GraphViz, Mermaid, PlantUML ou Excalidraw, et des graphiques avec Vega ou Vegalite (voir cet [exemple](https://codimd.apps.education.fr/dJpCzTg0SPyPmbj24SSKbg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/dJpCzTg0SPyPmbj24SSKbg)).
 
@@ -246,7 +264,7 @@ On peut aussi introduire de l'aléatoire dans le choix des propositions (voir ci
 ## option : Introduire de l'aléatoire
 Dans le contenu du Markdown, on peut indiquer plusieurs versions d'une même réponse en les séparant avec le séparateur \`-​-​-\`. Le chatbot sélectionnera aléatoirement l'une de ces versions.
 
-On peut également choisir d'afficher seulement les propositions en fin de message de manière aléatoire. Si on met "1. [intitulé]​(lien)" : la proposition reste à la place indiquée, alors que si on met "1) [intitulé]​(lien)" : la proposition est réordonnée de manière aléatoire.
+On peut également choisir d'afficher seulement les propositions en fin de message de manière aléatoire. Si on met \`1. [intitulé]​(lien)\` : la proposition reste à la place indiquée, alors que si on met \`1) [intitulé]​(lien)\` : la proposition est réordonnée de manière aléatoire.
 
 Dans le contenu du Markdown, la directive : \`!​Select: x\` peut être ajoutée juste avant la liste des propositions en fin de message, afin de sélectionner aléatoirement x propositions parmi cette liste (voir cet [exemple](https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/f6QP57QNT2S-crAjOwdahg)).
 
@@ -262,13 +280,13 @@ Pour utiliser les variables dynamiques, il faut ajouter \`contenuDynamique: true
 
 On peut avoir des variables dynamiques définies selon le parcours de l'utilisateur, et conditionner du contenu en fonction de ces variables.
 
-On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse, soit directement dans l'intitulé du lien du bouton de réponse.
+On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse : \`&#96@​mavariable = contenu de ma variable&#96\`, soit directement dans l'intitulé du lien du bouton de réponse : \`1. [intitulé @​mavariable = contenu de ma variable](titre réponse)\`.
 
-Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble des conditions (par exemple \`i​f @​mavariable1 == valeur1 && @​mavariable == valeur2\`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code \`end​if\`.
+Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble des conditions (par exemple \`&#96i​f @​mavariable1 == valeur1 && @​mavariable == valeur2&#96\`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code :  \`&#96end​if&#96\`.
 
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/1l7Md8q-SjG0yLGHfH4wbg)
 
-On peut également récupérer des paramètres dans l'URL pour les utiliser ensuite. Chaque paramètre peut être récupéré avec la syntaxe suivante : \`GE​Tnomduparamètre\`
+On peut également récupérer des paramètres dans l'URL pour les utiliser ensuite. Chaque paramètre est récupéré dans une variable : \`@​GE​Tnomduparamètre\` que l'on peut utiliser comme les autres variables dynamiques.
 
 On peut récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : \`@​mavariable  = @​INPUT : Titre réponse\`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
 
