@@ -1,32 +1,18 @@
-# Chemin des fichiers source
-custom_js_file = "scripts/custom.js"
-utils_js_file = "scripts/utils.js"
-markdown_js_file = "scripts/markdown.js"
-nlp_js_file = "scripts/nlp.js"
-typewriter_js_file = "scripts/typewriter.js"
-processDynamicVariables_js_file = "scripts/processDynamicVariables.js"
-chatbot_js_file = "scripts/chatbot.js"
-chatdata_js_file = "scripts/chatdata.js"
+# Fichiers source
+file_list = ["scripts/custom.js", "scripts/utils.js", "scripts/markdown.js", "scripts/nlp.js", "scripts/typewriter.js", "scripts/processDynamicVariables.js", "scripts/chatbot.js", "scripts/chatdata.js"]
 
-# Chemin du fichier de sortie
-output_file = "script.min.js"
+# Fichier de sortie
+combined_file = "script.min.js"
 
-# Lire le contenu des fichiers source
-with open(chatbot_js_file, "r") as chatbot_file, open(chatdata_js_file, "r") as chatdata_file, open(custom_js_file, "r") as custom_file, open(utils_js_file, "r") as utils_file, open(typewriter_js_file, "r") as typewriter_file, open(markdown_js_file, "r") as markdown_file, open(nlp_js_file, "r") as nlp_file, open(processDynamicVariables_js_file, "r") as processDynamicVariables_file:
-    custom_content = custom_file.read()
-    utils_content = utils_file.read()
-    markdown_content = markdown_file.read()
-    nlp_content = nlp_file.read()
-    typewriter_content = typewriter_file.read()
-    processDynamicVariables_content = processDynamicVariables_file.read()
-    chatbot_content = chatbot_file.read()
-    chatdata_content = chatdata_file.read()
+# Combiner les fichiers source
+def combine_files(file_list, output_file):
+	with open(output_file, 'w') as final_file:
+		for file in file_list:
+			with open(file, 'r') as f:
+				content = f.read()
+				final_file.write(content)
+				
+				final_file.write('\n')
 
-# Concaténer le contenu des fichiers source
-combined_content = custom_content + utils_content + markdown_content + nlp_content + typewriter_content + processDynamicVariables_content + chatbot_content + chatdata_content
 
-# Écrire le contenu minifié dans le fichier de sortie
-with open(output_file, "w") as output:
-    output.write(combined_content)
-
-print(f"Le fichier {output_file} a été créé avec succès.")
+combine_files(file_list, combined_file)
