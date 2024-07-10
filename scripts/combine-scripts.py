@@ -11,7 +11,6 @@ def combine_files(file_list, output_file):
 			with open(file, 'r') as f:
 				content = f.read()
 				final_file.write(content)
-				
 				final_file.write('\n')
 
 
