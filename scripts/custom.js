@@ -147,7 +147,7 @@ Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et ter
 
 Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces paramètres dans l'en-tête YAML : 
 
-- si on ajoute \`rechercheContenu: true\`, alors l'algorithme ne se contente pas de comparer le message de l'utilisateur avec le titre de la réponse et les déclencheurs, mais il compare aussi ce message avec le contenu entier de la réponse.
+- si on ajoute \`rechercheContenu: true\`, alors l'algorithme ne se contente pas de comparer le message de l'utilisateur avec le titre de la réponse et les déclencheurs, mais il compare aussi ce message avec le contenu entier de la réponse. Attention, dans ce cas, le chatbot peut mettre un peu plus de temps à se charger.
 - \`gestionGrosMots: true\` permet de détecter les gros mots et les insultes envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise.
 - \`messageParDéfaut: ["message 1", "message 2", "message 3"]\` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente.
 
