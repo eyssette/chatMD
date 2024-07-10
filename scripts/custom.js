@@ -160,8 +160,8 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 
 - \`style: a{color:red}\` permet d'ajouter des styles CSS personnalisés.
 - \`avatar: URL\` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
-- \`footer: false\` permet de supprimer le footer
-- \`footer: 'Mon footer'\` permet de customiser ce qui apparaît dans le footer
+- \`footer: false\` permet de supprimer le pied de page
+- \`footer: 'Mon footer'\` permet de customiser ce qui apparaît dans le pied de page
 - \`theme: bubbles\` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
 - \`typewriter: false\` désactive l'effet “machine à écrire”
 - \`clavier: false\` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
