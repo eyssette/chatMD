@@ -10,12 +10,9 @@ const isMobile =
 const autoFocus = isMobile ? false : true;
 
 const thresholdMouseMovement = 5;
-const regexKatex1 = /`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm;
-const regexKatex2 = /`(<span class=".?strut">.*?<\/span>)`/g;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
 const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm
-const regexIframeSlowContent = /`(<iframe(.|\n)*<\/iframe>)`/gm
 
 // Configuration de MutationObserver
 const observerConfig = {
@@ -34,16 +31,11 @@ function typeWriter(content, element) {
 	function stopTypeWriter(slowContent) {
 		typed.stop();
 		typed.reset();
-		// Cas du Latex
-		slowContent = slowContent.replaceAll(
-			regexKatex1,
-			"$1"
+		slowContent = slowContent.replaceAll('`','')
+		slowContent = slowContent.replace(
+			regexMessageOptions,
+			"`$1`"
 		);
-		slowContent = slowContent.replaceAll(
-			regexKatex2,
-			"$1"
-		);
-		slowContent = slowContent.replaceAll(regexIframeSlowContent,"$1")
 		// On doit conserver les retours à la ligne dans les blocs "pre"
 		const contentKeepReturnInCode = slowContent.replaceAll(
 			regexPre,
