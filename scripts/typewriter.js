@@ -14,6 +14,8 @@ const regexKatex1 = /`(<span class="katex-mathml">(.|\n)*?<\/span>)`/gm;
 const regexKatex2 = /`(<span class=".?strut">.*?<\/span>)`/g;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
+const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm
+const regexIframeSlowContent = /`(<iframe(.|\n)*<\/iframe>)`/gm
 
 // Configuration de MutationObserver
 const observerConfig = {
@@ -41,6 +43,7 @@ function typeWriter(content, element) {
 			regexKatex2,
 			"$1"
 		);
+		slowContent = slowContent.replaceAll(regexIframeSlowContent,"$1")
 		// On doit conserver les retours à la ligne dans les blocs "pre"
 		const contentKeepReturnInCode = slowContent.replaceAll(
 			regexPre,
@@ -97,6 +100,9 @@ function typeWriter(content, element) {
 		regexMessageOptions,
 		pauseTypeWriter + "`$1`"
 	);
+
+	// On fait apparaître d'un coup les iframes
+	content = content.replaceAll(regexIframe,"`$1`")
 
 	// Effet machine à écrire
 	typed = new Typed(element, {
