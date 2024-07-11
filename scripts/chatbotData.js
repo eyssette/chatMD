@@ -185,6 +185,10 @@ function parseMarkdown(markdownContent) {
 							});
 					}
 				}
+				if (property == "favicon") {
+					const faviconElement = document.getElementById("favicon");
+					faviconElement.href=yamlData[property];
+				}
 				if (property == "avatar") {
 					yamlAvatar = yamlData[property];
 					const avatarCSS = `
