@@ -26,6 +26,7 @@ function createChatBot(chatData) {
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
 	document.getElementById("chatbot-name").textContent = chatbotName;
+	document.title = chatbotName;
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
