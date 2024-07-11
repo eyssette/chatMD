@@ -42,6 +42,11 @@ function createChatBot(chatData) {
 		// Gestion des variables fixes prédéfinies
 		message = processFixedVariables(message);
 
+		if (yamlDynamicContent) {
+			// On traite les variables dynamiques
+			message = processDynamicVariables(message,dynamicVariables,isUser);
+		}
+
 		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
@@ -145,10 +150,6 @@ function createChatBot(chatData) {
 			}
 		}
 
-		if (yamlDynamicContent) {
-			// On traite les variables dynamiques
-			message = processDynamicVariables(message,dynamicVariables,isUser);
-		}
 		let html = markdownToHTML(message);
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
