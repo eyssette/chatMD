@@ -33,22 +33,27 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 		message = message.replaceAll(
 			/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
 			function (match, variableName, complexExpression) {
-				// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
-				calc = complexExpression.replace(
-					/@(\w+)/g,
-					function (match, varName) {
-						return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-					}
-				);
-				// Sanitize code
-				calc = sanitizeCode(calc);
-				// Évalue le résultat
-				const calcResult = new Function(
-					"dynamicVariables",
-					"return " + calc
-				)(dynamicVariables);
-				dynamicVariables[variableName] = calcResult;
-				return "";
+				try {
+					// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
+					calc = complexExpression.replace(
+						/@(\w+)/g,
+						function (match, varName) {
+							return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
+						}
+					);
+					// Sanitize code
+					calc = sanitizeCode(calc);
+					// Évalue le résultat
+					const calcResult = new Function(
+						"dynamicVariables",
+						"return " + calc
+					)(dynamicVariables);
+					dynamicVariables[variableName] = calcResult;
+					return "";
+				} catch (e) {
+					console.error("Error evaluating :", match, e);
+					return "<!--" + match + "-->";
+				}
 			}
 		);
 
@@ -164,22 +169,27 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			/@([^\s]*?)\=(.*)/g,
 			function (match, variableName, variableValue, offset) {
 				if(match.includes('calc(')) {
-					// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
-					complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
-					calc = complexExpression.replace(
-						/@(\w+)/g,
-						function (match, varName) {
-							return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-						}
-					);
-					// Sanitize code
-					calc = sanitizeCode(calc);
-					// Évalue le résultat
-					const calcResult = new Function(
-						"dynamicVariables",
-						"return " + calc
-					)(dynamicVariables);
-					dynamicVariables[variableName] = calcResult;
+					try {
+						// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
+						complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
+						calc = complexExpression.replace(
+							/@(\w+)/g,
+							function (match, varName) {
+								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
+							}
+						);
+						// Sanitize code
+						calc = sanitizeCode(calc);
+						// Évalue le résultat
+						const calcResult = new Function(
+							"dynamicVariables",
+							"return " + calc
+						)(dynamicVariables);
+						dynamicVariables[variableName] = calcResult;
+					} catch (e) {
+						console.error("Error evaluating :", match, e);
+						return "<!--" + match + "-->";
+					}
 				} else {
 					dynamicVariables[variableName] = variableValue;
 				}
