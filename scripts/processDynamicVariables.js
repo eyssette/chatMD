@@ -40,6 +40,8 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 						return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
 					}
 				);
+				// Sanitize code
+				calc = sanitizeCode(calc);
 				// Évalue le résultat
 				const calcResult = new Function(
 					"dynamicVariables",

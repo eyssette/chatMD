@@ -194,3 +194,24 @@ function tryConvertStringToNumber(input) {
 		return input;
 	}
 }
+
+const sanitizeCodeAllowedOperations = [
+	'+','-','*','/',
+	'<=', '>=',
+	'<', '>',
+	'==', '!=', 
+	'&&', '||', '!',
+];
+
+function sanitizeCode(code) {
+	codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,'');
+	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
+		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
+	})
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'')
+	forbiddenExpressions = codeWithoutAllowedOperations.split('///')
+	forbiddenExpressions.forEach((forbiddenExpression) => {
+		code = code.replaceAll(forbiddenExpression,'')
+	})
+	return code;
+}
