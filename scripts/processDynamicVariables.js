@@ -118,7 +118,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 						condition = condition
 							.replaceAll(
-								/(==|!=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
+								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
 								function (
 									match,
 									comparisonSignLeft,
