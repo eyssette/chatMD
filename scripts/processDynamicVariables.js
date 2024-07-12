@@ -33,13 +33,19 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 		message = message.replaceAll(
 			/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
 			function (match, variableName, complexExpression) {
+				// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
 				calc = complexExpression.replace(
 					/@(\w+)/g,
-					(matchCalc, variableNameComplexExpression) => {
-						return dynamicVariables[variableNameComplexExpression] || matchCalc;
+					function (match, varName) {
+						return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
 					}
 				);
-				dynamicVariables[variableName] = calc;
+				// Évalue le résultat
+				const calcResult = new Function(
+					"dynamicVariables",
+					"return " + calc
+				)(dynamicVariables);
+				dynamicVariables[variableName] = calcResult;
 				return "";
 			}
 		);
