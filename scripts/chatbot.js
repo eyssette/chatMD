@@ -43,12 +43,6 @@ function createChatBot(chatData) {
 		// Gestion des variables fixes prédéfinies
 		message = processFixedVariables(message);
 
-		if (yamlDynamicContent) {
-			// On traite les variables dynamiques
-			message = processDynamicVariables(message,dynamicVariables,isUser);
-		}
-
-		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
 			const messageSplitHR = message.split("\n---\n");
@@ -67,6 +61,15 @@ function createChatBot(chatData) {
 					message = getRandomElement(messageSplitHR);
 				}
 			}
+		}
+
+		if (yamlDynamicContent) {
+			// On traite les variables dynamiques
+			message = processDynamicVariables(message,dynamicVariables,isUser);
+		}
+
+		// Cas où c'est un message du bot
+		if (!isUser) {
 			// Gestion des éléments audio autoplay
 			message = message.replaceAll(
 				/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,
