@@ -188,7 +188,7 @@ function hideFooter() {
 
 function tryConvertStringToNumber(input) {
 	const number = parseFloat(input);
-	if (!isNaN(number) && number.toString() === input.trim()) {
+	if (!isNaN(number) && number.toString() === input.toString().trim()) {
 		return number;
 	} else {
 		return input;
