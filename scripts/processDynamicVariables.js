@@ -163,7 +163,26 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 		message = message.replaceAll(
 			/@([^\s]*?)\=(.*)/g,
 			function (match, variableName, variableValue, offset) {
-				dynamicVariables[variableName] = variableValue;
+				if(match.includes('calc(')) {
+					// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
+					complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
+					calc = complexExpression.replace(
+						/@(\w+)/g,
+						function (match, varName) {
+							return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
+						}
+					);
+					// Sanitize code
+					calc = sanitizeCode(calc);
+					// Évalue le résultat
+					const calcResult = new Function(
+						"dynamicVariables",
+						"return " + calc
+					)(dynamicVariables);
+					dynamicVariables[variableName] = calcResult;
+				} else {
+					dynamicVariables[variableName] = variableValue;
+				}
 				// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
 				return offset == 0 ? variableValue : "";
 			}
