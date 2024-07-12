@@ -184,3 +184,13 @@ function hideFooter() {
 	styleSheet.innerText = styleControls;
 	document.head.appendChild(styleSheet);
 }
+
+
+function tryConvertStringToNumber(input) {
+	const number = parseFloat(input);
+	if (!isNaN(number) && number.toString() === input.trim()) {
+		return number;
+	} else {
+		return input;
+	}
+}
