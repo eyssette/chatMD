@@ -208,7 +208,9 @@ function parseMarkdown(markdownContent) {
 				}
 				if (property == "footer") {
 					yamlFooter = yamlData[property];
-					document.body.classList.add('hideFooter')
+					if(yamlFooter === true) {
+						document.body.classList.add('hideFooter')
+					}
 				}
 				if (property == "theme") {
 					yamlTheme = yamlData[property];
