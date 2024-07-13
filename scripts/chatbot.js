@@ -554,6 +554,13 @@ function createChatBot(chatData) {
 				scrollWindow();
 			}, 100);
 			userInput.innerText = "";
+		} else {
+			const enterEvent = new KeyboardEvent("keypress", {
+				key: "Enter",
+				keyCode: 13,
+				which: 13
+			  });
+			userInput.dispatchEvent(enterEvent);
 		}
 	});
 
