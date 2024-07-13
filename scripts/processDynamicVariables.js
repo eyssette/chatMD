@@ -55,12 +55,29 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
 					dynamicVariables[variableName] = variableValue;
-					return "";
+					return match.includes("KEYBOARD") ? "<!--"+match+"-->" : "";
 				} else {
 					return match;
 				}
 			}
 		);
+		message = message.replaceAll('<!--<!--','<!--').replaceAll('-->-->','-->')
+		// Possibilité d'activer ou de désactiver le clavier au cas par cas
+		if (yamlUserInput === false) {
+			if (dynamicVariables["KEYBOARD"] == "true") {
+				document.body.classList.remove("hideControls");
+				dynamicVariables["KEYBOARD"] = "false";
+			} else {
+				document.body.classList.add("hideControls");
+			}
+		} else {
+			if (dynamicVariables["KEYBOARD"] == "false") {
+				document.body.classList.add("hideControls");
+				dynamicVariables["KEYBOARD"] = "true";
+			} else {
+				document.body.classList.remove("hideControls");
+			}
+		}
 		// On remplace dans le texte les variables `@nomVariable` par leur valeur
 		message = message.replaceAll(
 			/\`@([^\s]*?)\`/g,
@@ -116,22 +133,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			}
 		);
 
-		// Possibilité d'activer ou de désactiver le clavier au cas par cas
-		if (yamlUserInput === false) {
-			if (dynamicVariables["KEYBOARD"] == "true") {
-				document.body.classList.remove("hideControls");
-				dynamicVariables["KEYBOARD"] = "false";
-			} else {
-				document.body.classList.add("hideControls");
-			}
-		} else {
-			if (dynamicVariables["KEYBOARD"] == "false") {
-				document.body.classList.add("hideControls");
-				dynamicVariables["KEYBOARD"] = "true";
-			} else {
-				document.body.classList.remove("hideControls");
-			}
-		}
+		
 		// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 		message = message.replaceAll(
 			/ (@[^\s]*?\=.*?)\</g,
