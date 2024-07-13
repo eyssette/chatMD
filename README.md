@@ -1,100 +1,21 @@
 # ChatMD
 
-ChatMD est un chatbot, que vous pouvez configurer par vous-même en Markdown :
+ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
-- Créez un fichier en [markdown]((https://www.markdowntutorial.com/fr/)) et mettez-le en ligne : sur [CodiMD](https://codimd.apps.education.fr/), ou sur une [forge](https://forge.apps.education.fr/)
-- Respectez la syntaxe de ChatMD pour définir votre chatbot
- 
-Votre chatbot est alors prêt et visible à l'adresse suivante : [https://eyssette.forge.apps.education.fr/chatMD/#URL](https://eyssette.forge.apps.education.fr/chatMD/#URL) (Mettez l'url de votre fichier à la place de URL)
+1. Créez un fichier en Markdown accessible en ligne.
+2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
+3. Votre chatbot est alors accessible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) (Mettez l'url de votre fichier à la place de URL) !
 
-
-## Exemples
-
-Voici un modèle que vous pouvez récupérer pour construire votre chatbot : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
-
-Voici quelques exemple de chatbot créés avec ChatMD :
-
-- [Méthode de la dissertation en philosophie](https://eyssette.forge.apps.education.fr/chatMD/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://eyssette.forge.apps.education.fr/chatMD/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat ([voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g))
-
-
-## Syntaxe
-
-La syntaxe pour écrire un chatbot avec chatMD est la suivante :
-
-- On définit le titre du chatbot dans un titre de niveau 1
-- Le message initial est à mettre dans un bloc de citation après le titre du chatbot
-- Les titres de niveau 2 servent à identifier les réponses possibles du chatbot
-- Sous chaque titre de niveau 2 : 
-	- On indique avec une liste non ordonnée les mots clés ou expressions qui vont déclencher la réponse. On peut éventuellement s'en passer si on guide l'utilisateur avec un choix d'options (voir ci-dessous).
-	- On écrit une réponse en Markdown.
-	- [Optionnel] On indique avec une liste ordonnée les options possibles. Chaque élément de la liste doit être un lien en Mardown de la forme suivante : \`[intitulé de l'option](identifiant de l'option, qui doit correspondre à l'un des titres de niveau 2)\`.
-
-## Options de configuration plus avancées
-
-On peut ajouter un en-tête ```yaml``` à son fichier Markdown.  
-Par exemple :
-
-```yaml
-clavier: false
-rechercheContenu: true
-gestionsGrosMots: true
-style: a{color:red}
-maths: true
-titresRéponses: ["### ", "#### "]
-footer: false
-theme: bubbles
-```
-
-- `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
-- `rechercheContenu: true` permet d'ajouter une recherche de comparaison de l'entrée de l'utilisateur avec le contenu de chaque réponse
-- `gestionGrosMots: true` permet de détecter les gros mots envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise
-- `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
-- `maths: true` permet d'écrire des formules mathématiques en Latex avec la syntaxe `$Latex$` ou `$$Latex$$`
-- `avatar: URL` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
-- `footer: false` permet de supprimer le footer
-- `theme: bubbles` permet d'utiliser un thème CSS particulier (ici le thème "bubbles")
-
-Le chatbot peut aussi sélectionner de manière aléatoire plusieurs versions d'une même réponse si on sépare ces différentes versions avec le séparateur `---`.
-
-On peut également afficher les propositions en fin de message de manière aléatoire : si on met "1. proposition" : la proposition reste à la place indiquée, alors que si on met "1) proposition" : la proposition est réordonnée de manière aléatoire.
-
-D'autres options plus avancées dans l'en-tête yaml :
-- `messageParDéfaut: ["message 1", "message 2", "message 3"]` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente 
-- `titresRéponses: ["### ", "#### "]` permet de changer les identifiants possibles des réponses du chatbot si on veut pouvoir structurer les réponses du chatbot dans son document
-- On peut aussi définir des variables que l'on peut utiliser dans son chatbot ainsi : @{maVariable1}
-```
-variables:
-	maVariable1: "Ceci est ma variable 1"
-	maVariable2: "Ceci est ma variable 2"
-```
-
-## À quoi ça sert ?
-
-On peut imaginer plusieurs usages de chatMD :
+On peut imaginer de nombreux usages :
 - Tutoriel pour un outil informatique
-- Histoire dont vous êtes le héros
 - Guide méthodologique
-- Soutien pour la révision d'un cours
-- Discussion avec un personnage historique …
+- Soutien pour la révision d'un cours, quiz interactif,
+- Discussion avec un personnage historique,
+- Histoire dont vous êtes le héros …
 
-On peut faire travailler des élèves ensemble sur un CodiMD, ou bien travailler collaborativement entre collègues, en tant que prof ou dans le cadre d'une formation.
+La syntaxe de base est simple, mais ChatMD peut être configuré pour des usages plus complexes : personnalisation de l'interface, utilisation de variables, de choix aléatoires, intégration avec un LLM, possibilité de faire du RAG …
 
-Si vous avez trouvé des idées intéressantes, n'hésitez pas à les partager avec moi. Vous pouvez me contacter sur [Mastodon](https://scholar.social/@eyssette).
-
-## Utilisation sous la forme d'un widget
-
-Vous pouvez intégrer chatMD dans une page HTML en insérant ce code en bas de page dans l'élément ```body```.
-
-```js
-<script id="chatmdWidgetScript"
-src="https://eyssette.forge.apps.education.fr/chatMD/widget.min.js" 
-data-chatbot="URL_DE_VOTRE_CHATBOT"></script>
-```
-
-Il faut bien sûr remplacer ```URL_DE_VOTRE_CHATBOT``` par l'URL de la source de votre chatbot.
-
-On peut customiser l'image du widget en ajoutant `data-image="URL_IMAGE"` comme paramètre.
+Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://chatmd.forge.apps.education.fr/).
 
 ## Crédits
 
