@@ -322,11 +322,11 @@ pre {
 		width:100%;
 		margin-left:-20px;
 	}
-	.hideControls #controls {
-		height:0px!important;
-	}
 	.hideControls #chat {
 		margin-bottom:2em!important;
+	}
+	.hideFooter #controls{
+		height:0px!important;
 	}
 
 	#input-container {
