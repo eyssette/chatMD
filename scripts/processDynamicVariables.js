@@ -1,5 +1,51 @@
 let nextMessageOnlyIfKeywords = false;
 let getLastMessage = false;
+
+// Opérations autorisées pour le calcul des expressions complexes
+const sanitizeCodeAllowedOperations = [
+	'+','-','*','/',
+	'<=', '>=',
+	'<', '>',
+	'==', '!=', 
+	'&&', '||', '!',
+];
+
+// Sanitize le code avant d'utiliser new Function
+function sanitizeCode(code) {
+	// On supprime d'abord dans l'expression les variables dynamiques
+	codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,'');
+	// On supprime ensuite les opérations autorisées
+	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
+		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
+	})
+	// On supprime aussi tous les nombres (ils sont autorisés)
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'')
+	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
+	forbiddenExpressions = codeWithoutAllowedOperations.split('///')
+	forbiddenExpressions.forEach((forbiddenExpression) => {
+		code = code.replaceAll(forbiddenExpression,'')
+	})
+	return code;
+}
+
+function processComplexDynamicVariables(complexExpression,dynamicVariables) {
+	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
+	let calc = complexExpression.replace(
+		/@(\w+)/g,
+		function (match, varName) {
+			return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
+		}
+	);
+	// Sanitize code
+	calc = sanitizeCode(calc);
+	// Évalue le résultat
+	const calcResult = new Function(
+		"dynamicVariables",
+		"return " + calc
+	)(dynamicVariables);
+	return calcResult;
+}
+
 function processDynamicVariables(message,dynamicVariables,isUser) {
 	// Cas où le message vient du bot
 	if (!isUser) {
@@ -34,20 +80,8 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
 			function (match, variableName, complexExpression) {
 				try {
-					// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
-					calc = complexExpression.replace(
-						/@(\w+)/g,
-						function (match, varName) {
-							return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-						}
-					);
-					// Sanitize code
-					calc = sanitizeCode(calc);
-					// Évalue le résultat
-					const calcResult = new Function(
-						"dynamicVariables",
-						"return " + calc
-					)(dynamicVariables);
+					// Calcule l'expression complexe
+					const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables)
 					dynamicVariables[variableName] = calcResult;
 					return "";
 				} catch (e) {
@@ -170,21 +204,9 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			function (match, variableName, variableValue, offset) {
 				if(match.includes('calc(')) {
 					try {
-						// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
-						complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
-						calc = complexExpression.replace(
-							/@(\w+)/g,
-							function (match, varName) {
-								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-							}
-						);
-						// Sanitize code
-						calc = sanitizeCode(calc);
-						// Évalue le résultat
-						const calcResult = new Function(
-							"dynamicVariables",
-							"return " + calc
-						)(dynamicVariables);
+						// Calcule l'expression complexe
+						const complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
+						const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables)
 						dynamicVariables[variableName] = calcResult;
 					} catch (e) {
 						console.error("Error evaluating :", match, e);
