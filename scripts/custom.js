@@ -130,7 +130,7 @@ Que voulez-vous faire ?
 
 1. [Améliorer l'algorithme de choix d'une réponse](option : Améliorer l'algorithme)
 2. [Personnaliser l'apparence du chatbot](option : Personnaliser l'apparence)
-3. [Gérer des contenus particuliers <span>(admonitions, mathématiques, schémas, sons …)</span>](option : Gérer des contenus particuliers)
+3. [Gérer des contenus particuliers : admonitions, mathématiques, schémas, sons …](option : Gérer des contenus particuliers)
 4. [Organiser mon fichier source](option : Organiser son fichier source)
 5. [Utiliser ChatMD pour faire des quiz](option : Utiliser ChatMD pour faire des quiz)
 6. [Introduire de l'aléatoire dans les réponses ou les propositions en fin de message](option : Introduire de l'aléatoire)
