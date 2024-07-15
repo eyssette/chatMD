@@ -127,6 +127,7 @@ function handleURL(url) {
 		}
 		// gestion des fichiers hébergés sur framapad
 		if ((url.includes("framapad") || url.includes("digidoc")) && !url.endsWith("/export/txt")) {
+			addCorsProxy = false;
 			url = url.replace(/\?.*/, "") + "/export/txt";
 		}
 		url = addCorsProxy ? corsProxy + url : url;
