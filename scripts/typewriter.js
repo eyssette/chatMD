@@ -20,7 +20,7 @@ const observerConfig = {
 	subtree: true,
 };
 
-const messageTypeEnterToStopTypeWriter = window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
+const messageTypeEnterToStopTypeWriter = isMobile ? "Clic sur “Envoyer” pour stopper l'effet “machine à écrire”" : window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
 
 let typed;
 const pauseTypeWriter = "^300 ";

@@ -366,4 +366,7 @@ pre {
 	.message>div>.admonition {
 		margin-left:0.5em;
 	}
+	[contenteditable="true"]:empty:before {
+		font-size:0.9em;
+	}
 }
