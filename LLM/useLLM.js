@@ -74,25 +74,33 @@ function getAnswerFromLLM(userPrompt, informations) {
 			},
 		]
 	}
-
-	fetch(yamlUseLLMurl, {
-		method: "POST",
-		headers: {
-			"Authorization": "Bearer "+yamlUseLLMapiKey,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(bodyObject),
-	})
-		.then((response) => {
-			LLMactive = true;
-			const chatMessage = document.createElement("div");
-			chatMessage.classList.add("message");
-			chatMessage.classList.add("bot-message");
-			chatContainerElement.appendChild(chatMessage);
-			readStream(response.body, chatMessage, isCohere)
+	try {
+		fetch(yamlUseLLMurl, {
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer "+yamlUseLLMapiKey,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(bodyObject),
 		})
-		.catch((error) => {
-			console.error("Erreur:", error.message);
-			console.log("Une erreur s'est produite : " + error);
-		});
+			.then((response) => {
+				if (response.ok) {
+					LLMactive = true;
+					const chatMessage = document.createElement("div");
+					chatMessage.classList.add("message");
+					chatMessage.classList.add("bot-message");
+					chatContainerElement.appendChild(chatMessage);
+					readStream(response.body, chatMessage, isCohere)
+				} else {
+					const errorMessageElement = document.createElement("div");
+					errorMessageElement.classList.add("message");
+					errorMessageElement.classList.add("bot-message");
+					chatContainerElement.appendChild(errorMessageElement);
+					errorMessageElement.textContent = "L'accès à un LLM n'a pas été configuré, je ne peux pas vous répondre";
+				}
+		})
+	} catch(error) {
+		console.error("Erreur:", error.message);
+		console.log("Une erreur s'est produite : " + error);
+	};
 }
