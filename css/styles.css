@@ -370,3 +370,9 @@ pre {
 		font-size:0.9em;
 	}
 }
+
+@media screen and (max-width: 400px) {
+	[contenteditable="true"]:empty:before {
+		font-size:0.75em;
+	}
+}
