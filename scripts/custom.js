@@ -295,7 +295,7 @@ On peut récupérer le contenu d'un message entré par un utilisateur pour l'ass
 
 On peut enfin utiliser des opérations élémentaires pour calculer la valeur d'une variable (afin de calculer un score par exemple). Par exemple, on pourrait écrire : \`@​mavariable  = c​alc(@​score+1)\` soit dans un bloc code, soit dans un bouton en fin de message. À la place de \`c​alc(@​score+1)\`, on peut mettre une expression plus complexes avec plusieurs variables dynamiques. Les opérations utilisées sont l'addition, la soustraction, la multiplication, la division, la concaténation (avec le même signe que pour l'addition).
 
-&rArr; Voir cet [exemple](https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow)
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow)
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
