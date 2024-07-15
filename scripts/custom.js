@@ -60,6 +60,7 @@ Il est également possible d'utiliser la [Forge des Communs Numériques Éducati
 2. [J'ai compris comment créer mon fichier, mais quelle est la syntaxe à respecter pour ChatMD ?](Syntaxe)
 
 ## forge
+- forge
 
 Une forge est un outil qui permet d'héberger des fichiers texte et de les transformer en site web, en carte mentale, ou encore ici en chatbot ! ChatMD est présent sur la [Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/) et vous pouvez aussi mettre vos fichiers sur cette forge.
 
@@ -152,6 +153,10 @@ gestionGrosMots: true
 \`\`\`
 
 ## option : Améliorer l'algorithme
+- algorithme
+- gros mot
+- insulte
+- message par défaut
 
 Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces paramètres dans l'en-tête YAML : 
 
@@ -163,6 +168,16 @@ Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces p
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
 ## option : Personnaliser l'apparence
+- personnaliser l'apparence
+- modifier l'apparence
+- changer l'apparence
+- avatar
+- effet
+- clavier
+- style
+- css
+- thème
+- favicon
 
 Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres dans l'en-tête YAML :
 
@@ -183,6 +198,14 @@ Si on veut désactiver l'effet typewriter pour un passage seulement de son texte
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
 ## option : Gérer des contenus particuliers
+- admonition
+- iframe
+- audio
+- son
+- latex
+- mathématiques
+- schémas
+- h5p
 
 ### Admonitions
 
@@ -213,6 +236,9 @@ Pour pouvoir générer des schémas et graphiques via le service Kroki, il faut 
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
 ## option : Organiser son fichier source
+- organiser
+- variables fixes
+- plusieurs fichiers
 
 ### Variables fixes
 
@@ -248,6 +274,7 @@ Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres répo
 
 
 ## option : Utiliser ChatMD pour faire des quiz
+- quiz
 
 Un chatbot sert souvent à répondre à des questions, mais on peut aussi utiliser ChatMD pour poser des questions !
 
@@ -263,6 +290,8 @@ On peut aussi introduire de l'aléatoire dans le choix des propositions (voir ci
 
 
 ## option : Introduire de l'aléatoire
+- aléatoire
+
 Dans le contenu du Markdown, on peut indiquer plusieurs versions d'une même réponse en les séparant avec le séparateur \`-​-​-\`. Le chatbot sélectionnera aléatoirement l'une de ces versions.
 
 On peut également choisir d'afficher seulement les propositions en fin de message de manière aléatoire. Si on met \`1. [intitulé]​(lien)\` : la proposition reste à la place indiquée, alors que si on met \`1) [intitulé]​(lien)\` : la proposition est réordonnée de manière aléatoire.
@@ -276,6 +305,11 @@ Enfin, la directive \`!​SelectNext: titre question 1 / titre question 2 / titr
 
 
 ## option : Variables dynamiques
+- variables dynamiques
+- conditionnement
+- conditionner
+- paramètres dans l'URL
+- paramètres URL
 
 Pour utiliser les variables dynamiques, il faut ajouter \`contenuDynamique: true\` dans le YAML.
 
@@ -302,6 +336,8 @@ On peut enfin utiliser des opérations élémentaires pour calculer la valeur d'
 
 
 ## option : Connecter ChatMD à un LLM, faire du RAG
+- LLM
+- RAG
 
 ChatMD peut se connecter à un LLM en ligne ou en local : on peut choisir le modèle que l'on souhaite et tout configurer (préprompt, nombre de tokens, etc.). Pour faire appel à ce LLM, on peut soit décider de toujours produire la réponse par le LLM, en prenant en compte les éléments prédéfinis, soit n'utiliser le LLM qu'à des moments bien précis, par exemple pour enrichir une réponse préprogrammée.
 
