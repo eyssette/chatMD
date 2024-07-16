@@ -12,10 +12,6 @@ function createChatBot(chatData) {
 	for (const [key, value] of Object.entries(params)) {
 		dynamicVariables["GET" + key] = value;
 	}
-	let nextMessageOnlyIfKeywordsCount = 0;
-	const nextMessageOnlyIfKeywordsCountMax = 3;
-	let messageIfKeywordsNotFound = "";
-	let lastMessageFromBot = "";
 
 	if (yamlFooter === false) {
 		hideFooter();
@@ -39,28 +35,12 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		let nextSelected;
+		nextSelected = undefined;
 		// Gestion des variables fixes prédéfinies
 		message = processFixedVariables(message);
 
 		if (!isUser) {
-			// Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
-			const messageSplitHR = message.split("\n---\n");
-			if (messageSplitHR.length > 1) {
-				const messageHasOptions = message.indexOf(
-					'<ul class="messageOptions">'
-				);
-				if (messageHasOptions > -1) {
-					const messageWithoutOptions = message.substring(0, messageHasOptions);
-					const messageOptions = message.substring(messageHasOptions);
-					const messageWithoutOptionsSplitHR =
-						messageWithoutOptions.split("---");
-					message =
-						getRandomElement(messageWithoutOptionsSplitHR) + messageOptions;
-				} else {
-					message = getRandomElement(messageSplitHR);
-				}
-			}
+			message = processRandomMessage(message)
 		}
 
 		if (yamlDynamicContent) {
@@ -70,88 +50,17 @@ function createChatBot(chatData) {
 
 		// Cas où c'est un message du bot
 		if (!isUser) {
-			// Gestion des éléments audio autoplay
-			message = message.replaceAll(
-				/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,
-				function (match, v1) {
-					if (match.includes("autoplay")) {
-						const audio = new Audio(v1);
-						audio.play();
-						return `<!--${match}-->`;
-					} else {
-						return match;
-					}
-				}
-			);
-			// Gestion de l'audio avec la directive !Audio
-			message = message.replaceAll(/!Audio:(.*)/g, function (match, v1) {
-				const audio = new Audio(v1.trim());
-				audio.play();
-				return "";
-			});
+			// Gestion de l'audio
+			message = processAudio(message)
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-			message = message.replaceAll(/!Next ?:(.*)/g, function (match, v1) {
-				const v1Split = v1.split("/");
-				let v2;
-				if (v1Split.length > 0) {
-					v1 = v1Split[0];
-					v2 = v1Split[1];
-				} else {
-					v1 = v1Split[0];
-				}
-				if (
-					match &&
-					nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax
-				) {
-					lastMessageFromBot = message;
-					nextMessage = v1.trim();
-					nextMessageOnlyIfKeywords = true;
-					messageIfKeywordsNotFound = v2
-						? v2.trim()
-						: "Ce n'était pas la bonne réponse, merci de réessayer !";
-					messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
-					nextMessageOnlyIfKeywordsCount++;
-					return "<!--" + "-->";
-				} else {
-					lastMessageFromBot = "";
-					const linkToOption = nextMessage;
-					nextMessage = "";
-					nextMessageOnlyIfKeywords = false;
-					if (
-						nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax
-					) {
-						nextMessageOnlyIfKeywordsCount = 0;
-						const skipMessage = `<ul class="messageOptions"><li><a href="#${
-							yamlObfuscate ? btoa(linkToOption) : linkToOption
-						}">Passer à la suite !</a></li></ul>`;
-						return skipMessage;
-					}
-				}
-			});
+			message = processDirectiveNext(message)
+			
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-			message = message.replaceAll(/!SelectNext:(.*)/g, function (match, v1) {
-				if (match) {
-					const v1Split = v1.split("/");
-					lastMessageFromBot = "";
-					nextMessage = "";
-					nextMessageOnlyIfKeywords = false;
-					nextSelected = getRandomElement(v1Split).trim();
-					return "";
-				} else {
-					nextSelected = undefined;
-				}
-			});
+			message = processDirectiveSelectNext(message)
+			
 			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
-			if (yamlUseAddOns && yamlUseAddOns.includes("kroki")) {
-				message = message.replaceAll(
-					/```(mermaid|tikz|graphviz|plantuml|excalidraw|vegalite|vega)((.|\n)*?)```/gm,
-					function (match, type, source) {
-						source = source.replaceAll("\n\n\n", "\n\n");
-						return krokiCreateImageFromSource(type, source);
-					}
-				);
-			}
+			message = processKroki(message)
 		}
 
 		let html = markdownToHTML(message);
@@ -505,17 +414,8 @@ function createChatBot(chatData) {
 		}
 
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
-		response = response.replaceAll(
-			/\!Select ?: ?([0-9]*)/g,
-			function (match, v1) {
-				if (match && v1 <= options.length) {
-					options = shuffleArray(options).slice(0, v1);
-					return "<!--" + match + "-->";
-				} else {
-					return "";
-				}
-			}
-		);
+		[response, options] = processDirectiveSelect(response, options)
+
 		// On teste s'il faut mettre de l'aléatoire dans les options
 		if (shouldBeRandomized(options)) {
 			options = randomizeArrayWithFixedElements(options);

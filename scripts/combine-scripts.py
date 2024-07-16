@@ -1,5 +1,5 @@
 # Fichiers source
-file_list = ["scripts/custom.js", "scripts/utils.js", "scripts/processFixedVariables.js", "scripts/markdown.js", "scripts/convertLatex.js", "scripts/nlp.js", "scripts/typewriter.js", "scripts/processDynamicVariables.js", "scripts/chatbot.js", "LLM/processRAG.js", "scripts/yaml.js", "scripts/chatbotData.js"]
+file_list = ["scripts/custom.js", "scripts/utils.js", "scripts/processFixedVariables.js", "scripts/markdown.js", "scripts/convertLatex.js", "scripts/nlp.js", "scripts/typewriter.js", "scripts/processDynamicVariables.js", "scripts/directivesAndSpecialContents.js", "scripts/chatbot.js", "LLM/processRAG.js", "scripts/yaml.js", "scripts/chatbotData.js"]
 
 # Fichier de sortie
 combined_file = "script.min.js"
