@@ -464,6 +464,8 @@ const shortcuts = [
 
 const corsProxy = "https://corsproxy.io/?";
 
+// Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
+let responsesTitles = ["## "];
 
 // Gestion des addOns
 const allowedAddOns = {
@@ -491,6 +493,7 @@ let yamlUseAddOns;
 let yamlData;
 
 // Paramètres pour l'utilisation d'un LLM
+let yamlUseLLM;
 let yamlUseLLMurl;
 let yamlUseLLMapiKey = ''; // Attention à ne pas mettre votre apiKey en public !
 let yamlUseLLMmodel;
