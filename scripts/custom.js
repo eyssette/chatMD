@@ -315,7 +315,7 @@ Pour utiliser les variables dynamiques, il faut ajouter \`contenuDynamique: true
 
 On peut avoir des variables dynamiques définies selon le parcours de l'utilisateur, et conditionner du contenu en fonction de ces variables.
 
-On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable = contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse : \`&#96@​mavariable = contenu de ma variable&#96\`, soit directement dans l'intitulé du lien du bouton de réponse : \`1. [intitulé @​mavariable = contenu de ma variable](titre réponse)\`.
+On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : \`@​mavariable=contenu de ma variable\` que l'on place soit dans un bloc code dans le contenu de sa réponse : \`&#96@​mavariable=contenu de ma variable&#96\`, soit directement dans l'intitulé du lien du bouton de réponse : \`1. [intitulé @​mavariable=contenu de ma variable](titre réponse)\`.
 
 Pour le conditionnement, on commence un bloc code avec \`i​f\` puis l'ensemble des conditions (par exemple \`&#96i​f @​mavariable1 == valeur1 && @​mavariable == valeur2&#96\`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code :  \`&#96end​if&#96\`.
 
