@@ -301,6 +301,7 @@ function createChatBot(chatData) {
 					// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
 					lastMessageFromBot = "";
 					nextMessage = "";
+					nextMessageOnlyIfKeywordsCount = 0;
 					nextMessageOnlyIfKeywords = false;
 				}
 				// On envoie le meilleur choix s'il en existe un

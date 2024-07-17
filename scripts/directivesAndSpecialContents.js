@@ -6,24 +6,24 @@ let nextSelected;
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 function processDirectiveNext(message) {
-	message = message.replaceAll(/!Next ?:(.*)/g, function (match, v1) {
-		const v1Split = v1.split("/");
-		let v2;
-		if (v1Split.length > 0) {
-			v1 = v1Split[0];
-			v2 = v1Split[1];
+	message = message.replaceAll(/!Next ?:(.*)/g, function (match, nextDirectiveContent) {
+		const nextDirectiveContentSplit = nextDirectiveContent.split("/");
+		let messageIfError;
+		if (nextDirectiveContentSplit.length > 0) {
+			nextDirectiveContent = nextDirectiveContentSplit[0];
+			messageIfError = nextDirectiveContentSplit[1];
 		} else {
-			v1 = v1Split[0];
+			nextDirectiveContent = nextDirectiveContentSplit[0];
 		}
 		if (
 			match &&
 			nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax
 		) {
 			lastMessageFromBot = message;
-			nextMessage = v1.trim();
+			nextMessage = nextDirectiveContent.trim();
 			nextMessageOnlyIfKeywords = true;
-			messageIfKeywordsNotFound = v2
-				? v2.trim()
+			messageIfKeywordsNotFound = messageIfError
+				? messageIfError.trim()
 				: "Ce n'était pas la bonne réponse, merci de réessayer !";
 			messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
 			nextMessageOnlyIfKeywordsCount++;
