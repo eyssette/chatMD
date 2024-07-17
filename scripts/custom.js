@@ -137,7 +137,8 @@ Que voulez-vous faire ?
 6. [Introduire de l'aléatoire dans les réponses ou les propositions en fin de message](option : Introduire de l'aléatoire)
 7. [Utiliser des variables dynamiques et du conditionnement en fonction de ces variables](option : Variables dynamiques)
 8. [Connecter ChatMD à un LLM, faire du RAG](option : Connecter ChatMD à un LLM, faire du RAG)
-9. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
+9. [Avoir plusieurs bots différents](option: Avoir plusieurs bots différents)
+10. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 
 ## Explication en-tête yaml
 
@@ -351,6 +352,33 @@ Pour comprendre comment tout cela fonctionne, le mieux est de regarder ces deux 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
+## option: Avoir plusieurs bots différents
+- plusieurs bots
+- plusieurs chatbots
+- plusieurs avatars
+- différents bots
+- différents chatbots
+- différents avatars
+
+On peut utiliser ChatMD pour gérer plusieurs bots différents.
+
+Il faut d'abord déclarer les bots dans le yaml ainsi :
+
+\`\`\`
+bots:
+	nomBot1:
+		avatar: URLimageBot1
+		cssAvatar: "CSS particulier pour l'avatar du Bot1"
+		cssMessage: "CSS particulier pour les messages du Bot1"
+	nomBot2:
+		avatar: URLimageBot2
+		cssAvatar: "CSS particulier pour l'avatar du Bot2"
+		cssMessage: "CSS particulier pour les messages du Bot2"
+\`\`\`
+
+Pour utiliser un bot, on utilise la directive \`!​Bot: botName\` pour indiquer que la réponse doit être faite par le bot qui a pour nom \`botName\`.
+
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/pKXavCOeTfityYVTTS6aMA?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/pKXavCOeTfityYVTTS6aMA)
 
 
 ## Exemples
