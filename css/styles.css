@@ -156,6 +156,10 @@ button {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+.bot-message .bot-message {
+	margin-top: -20px;
+	margin-bottom: 0px;
+}
 
 .bot-message > :first-child:before {
 	content: "";
