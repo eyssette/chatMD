@@ -378,6 +378,8 @@ bots:
 
 Pour utiliser un bot, on utilise la directive \`!​Bot: botName\` pour indiquer que la réponse doit être faite par le bot qui a pour nom \`botName\`.
 
+On peut même avoir plusieurs bots qui se répondent successivement dans un même message.
+
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/pKXavCOeTfityYVTTS6aMA?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/pKXavCOeTfityYVTTS6aMA)
 
 
