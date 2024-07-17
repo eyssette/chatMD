@@ -9,7 +9,7 @@ const isMobile =
 	);
 const autoFocus = isMobile ? false : true;
 
-const thresholdMouseMovement = 5;
+const thresholdMouseMovement = 10;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
 const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm
