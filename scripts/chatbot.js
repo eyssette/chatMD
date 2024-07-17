@@ -67,6 +67,7 @@ function createChatBot(chatData) {
 		}
 
 		let html = markdownToHTML(message);
+		html = processMultipleBots(html)
 		if (yamlMaths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
