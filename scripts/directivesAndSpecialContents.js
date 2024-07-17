@@ -81,6 +81,18 @@ function processDirectiveSelect(response, options) {
 	return [response, options]
 }
 
+// Gestion de la directive !Bot: botName pour pouvoir avoir différents bots possibles
+function processDirectiveBot(message,chatMessage) {
+	message = message.replace(/!Bot:(.*)/, function(match, botName) {
+		if(match && botName) {
+			botName = botName.trim().replaceAll(' ','');
+			chatMessage.classList.add('botName-'+botName)
+		}
+		return ''
+	})
+	return message
+} 
+
 // Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
 function processRandomMessage(message) {
 	const messageSplitHR = message.split("\n---\n");

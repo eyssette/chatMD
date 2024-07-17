@@ -491,6 +491,7 @@ let yamlTypeWriter = true;
 let yamlObfuscate = false;
 let yamlUseAddOns;
 let yamlData;
+let yamlBots;
 
 // Paramètres pour l'utilisation d'un LLM
 let yamlUseLLM;

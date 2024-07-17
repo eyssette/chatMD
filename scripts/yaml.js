@@ -136,6 +136,19 @@ function processYAML(markdownContent) {
 				if (property == "obfuscate") {
 					yamlObfuscate = yamlData[property] ? true : false;
 				}
+				if (property == "bots") {
+					yamlBots = yamlData[property];
+					for (const [botName,botProperties] of Object.entries(yamlBots)) {
+						const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : '';  
+						const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : ''
+						const botAvatarCSS =  '.botName-'+botName+'>:first-child:before {'+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +'}'
+						const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : '';
+						const botCSS = '<style>'+botAvatarCSS+' .botName-'+botName+'{'+botCSSmessage+'}</style>'
+						Promise.all([
+							loadCSS(botCSS)
+						])
+					}
+				}
 				if (property == "useLLM" || property =="utiliserLLM") {
 					// On utilise window.useLLMpromise car on aura besoin de savoir quand la promise sera terminée dans un autre script : chatbot.js, (pour calculer les vecteurs de mot pour le RAG : on a besoin que le fichier RAG.js soit bien chargé)  
 					window.useLLMpromise = Promise.all([
