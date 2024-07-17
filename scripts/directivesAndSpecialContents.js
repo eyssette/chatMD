@@ -104,7 +104,7 @@ function processMultipleBots(html) {
 			const botNameMatch = botMessageContent.match(/(.*?)<\/p>((.|\n)*)/);
 			const botName = botNameMatch[1].trim();
 			const botMessage = botNameMatch[2].trim();
-			newHtml = newHtml + '<div class="message bot-message botName-'+botName+'">'+botMessage+'</div>';
+			newHtml = newHtml + pauseTypeWriterMultipleBots + '<div class="message bot-message botName-'+botName+'">'+botMessage+'</div>';
 		}
 		html = newHtml;
 	}

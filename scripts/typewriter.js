@@ -24,6 +24,7 @@ const messageTypeEnterToStopTypeWriter = isMobile ? "Clic sur “Envoyer” pour
 
 let typed;
 const pauseTypeWriter = "^300 ";
+const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 const stopTypeWriterExecutionTimeThreshold = 800;
 // Effet machine à écrire
 function typeWriter(content, element) {
@@ -52,7 +53,7 @@ function typeWriter(content, element) {
 						.replaceAll("RETURNCHARACTER", "\n") + "`"
 				: element.endsWith("`")
 				? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-				: "`" + element.replaceAll("RETURNCHARACTER", "\n") + "`"
+				: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots,'') + "`"
 		);
 		typed.strings = [contentArrayFiltered.join(" ")];
 		typed.start();
