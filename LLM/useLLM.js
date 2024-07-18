@@ -4,8 +4,7 @@ let idAnswer = 0;
 
 const chatContainerElement = document.getElementById("chat");
 
-//getAnswerFromLLM(userPrompt);
-
+// Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk);
@@ -33,6 +32,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 	}
 }
 
+// On utilise une variable LLMactive pour indiquer l'état d'activité du LLM
 document.body.addEventListener("click", () => {
 	LLMactive = false;
 })
@@ -42,6 +42,7 @@ document.body.addEventListener("keypress", (event) => {
 	}
 })
 
+// Configuration de l'accès au LLM
 let bodyObject = {
 	model: yamlUseLLMmodel,
 	stream: true,
@@ -50,6 +51,19 @@ let bodyObject = {
 	presence_penalty: 0,
 	temperature: 0.7,
 	top_p: 0.95,
+}
+
+// Pour envoyer un message d'erreur si la connexion au LLM n'a pas été correctement configurée ou bien si cette connexion ne fonctionne pas
+function messageIfErrorWithGetAnswerFromLLM(error) {
+	const errorMessageElement = document.createElement("div");
+	errorMessageElement.classList.add("message");
+	errorMessageElement.classList.add("bot-message");
+	chatContainerElement.appendChild(errorMessageElement);
+	errorMessageElement.textContent = "Pour répondre à cette question, je dois faire appel à une IA générative : la connexion à cette IA n'a pas été correctement configurée ou bien ne fonctionne pas";
+	if(error) {
+		console.error("Erreur:", error.message);
+		console.log("Une erreur s'est produite : " + error);
+	}
 }
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
@@ -92,15 +106,12 @@ function getAnswerFromLLM(userPrompt, informations) {
 					chatContainerElement.appendChild(chatMessage);
 					readStream(response.body, chatMessage, isCohere)
 				} else {
-					const errorMessageElement = document.createElement("div");
-					errorMessageElement.classList.add("message");
-					errorMessageElement.classList.add("bot-message");
-					chatContainerElement.appendChild(errorMessageElement);
-					errorMessageElement.textContent = "L'accès à un LLM n'a pas été configuré, je ne peux pas vous répondre";
+					messageIfErrorWithGetAnswerFromLLM()
 				}
+		}).catch((error) => {
+			messageIfErrorWithGetAnswerFromLLM(error)
 		})
 	} catch(error) {
-		console.error("Erreur:", error.message);
-		console.log("Une erreur s'est produite : " + error);
+		messageIfErrorWithGetAnswerFromLLM(error)
 	};
 }
