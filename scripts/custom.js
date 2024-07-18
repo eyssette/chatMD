@@ -423,9 +423,7 @@ Pour utiliser ChatMD avec une balise iframe, vous pouvez utiliser le code suivan
 Pour utiliser ChatMD en tant que widget, il faut avoir accès au HTML et insérer ce code (en bas de page dans l'élément \`body\`).
 
 \`\`\`js
-<script id="chatmdWidgetScript"
-src="https://chatmd.forge.apps.education.fr/widget.min.js" 
-data-chatbot="URL_SOURCE_CHATBOT"></script>
+<script id="chatmdWidgetScript" src="https://chatmd.forge.apps.education.fr/widget.min.js" data-chatbot="URL_SOURCE_CHATBOT"></script>
 \`\`\`
 
 Il faut bien sûr remplacer \`URL_SOURCE_CHATBOT\` par l'URL de la source de votre chatbot.
