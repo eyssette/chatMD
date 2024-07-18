@@ -26,6 +26,7 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 4. [Donne-moi des exemples !](Exemples)
 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
 6. [Comment intégrer mon chatbot dans un site ?](Comment intégrer mon chatbot sur un site ?)
+7. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
 
 ## Markdown
 - markdown
@@ -430,22 +431,24 @@ Il faut bien sûr remplacer \`URL_SOURCE_CHATBOT\` par l'URL de la source de vot
 
 On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comme paramètre.
 
-## Merci
-- merci
-- remercier
-- remercie
-- félicitations
-- félicit
-- bravo
-- super
-- excellent
-- génial
-- wow
-- chouette
-- sympa
-- cool
+## Qui a créé ChatMD ?
+- qui
 
-Merci ! Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
+ChatMD a été créé par Cédric Eyssette, professeur de philosophie et chargé de projet à la DRANE à Lyon.
+
+ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE.
+
+Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
+
+ChatMD est un logiciel libre qui repose également sur d'autres logiciels libres :
+- [js-yaml](https://github.com/nodeca/js-yaml) pour la gestion des en-têtes yaml
+- [typed.js](https://github.com/mattboldt/typed.js) pour l'effet "machine à écrire"
+- [showdown](https://github.com/showdownjs/showdown) pour la conversion du markdown en html
+- [leo-profanity](https://github.com/jojoee/leo-profanity) et [french-badwords-list](https://github.com/darwiin/french-badwords-list/) pour la gestion des gros mots
+- [katex](https://katex.org/) pour la gestion des mathématiques en Latex
+- [textFit](https://github.com/STRML/textFit) pour la gestion du redimensionnement automatique (ici : des formules mathématiques en Latex).
+
+Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
 
 `;
 
