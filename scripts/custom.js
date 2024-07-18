@@ -47,7 +47,7 @@ Pour découvrir le Markdown, vous pouvez suivre ce [tutoriel](https://www.markdo
 - en ligne
 - digipage
 - hedgedoc
-- framapd
+- framapad
 
 Il existe plusieurs services pour créer un fichier Markdown accessible en ligne.
 
