@@ -436,7 +436,9 @@ On peut customiser l'image du widget en ajoutant \`data-image="URL_IMAGE"\` comm
 
 ChatMD a été créé par Cédric Eyssette, professeur de philosophie et chargé de projet à la DRANE à Lyon.
 
-ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE.
+C'est un logiciel libre sous licence MIT. Les sources sont disponibles sur [la Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr).
+
+ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
 
 Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
 
