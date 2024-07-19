@@ -151,7 +151,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 					try {
 						// Remplace les variables personnalisées dans la condition
 						condition = condition.replace(
-							/@([^\s()&|!=]+)/g,
+							/@([^\s()&|!=<>]+)/g,
 							function (match, varName) {
 								return 'dynamicVariables["' + varName.trim() + '"]';
 							}
