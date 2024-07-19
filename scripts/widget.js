@@ -11,6 +11,7 @@ const widgetStyle = `
 	bottom:40px;
 	right:40px;
 	font-family:sans-serif;
+	z-index:999;
 }
 
 #chatmdWidget div:nth-of-type(1) {
