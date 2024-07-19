@@ -395,24 +395,37 @@ function createChatBot(chatData) {
 	}
 
 	function gestionOptions(response, options) {
-		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR --> on filtre d'abord les options si elles dépendent d'une variable
+		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
 		if (yamlDynamicContent && Object.keys(dynamicVariables).length > 0) {
 			if (options) {
 				options = options.filter((element) => {
-					for (const [key, value] of Object.entries(dynamicVariables)) {
-						// Cas où l'option ne dépend d'aucune variable
-						if (!element[3]) {
-							return true;
-						}
-						// Cas où l'option dépend d'une variable et où l'option inclut une variable qui est présente dans dynamicVariables
-						if (element[3] && element[3].includes(`@${key}`)) {
-							// On regarde alors si l'option doit être gardée ou pas en fonction de la valeur de la variable
-							if (element[3] === `@${key}==${value}`) {
-								return true;
-							} else {
-								return false;
+					let condition = element[3];
+					if (!condition) {
+						return true;
+					} else {
+						// Remplace les variables personnalisées dans la condition
+						condition = condition.replace(
+							/@([^\s()&|!=<>]+)/g,
+							function (match, varName) {
+								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
 							}
-						}
+						);
+						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
+						condition = condition
+							.replaceAll(
+								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
+								function (
+									match,
+									comparisonSignLeft,
+									value,
+									comparisonSignRight
+								) {
+									return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
+								}
+							)
+							.replaceAll('""', '"')
+							.replace('"undefined"', "undefined");
+						return evaluateExpression(condition,dynamicVariables)
 					}
 				});
 			}
