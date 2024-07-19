@@ -20,12 +20,20 @@ function sanitizeCode(code) {
 	})
 	// On supprime aussi tous les nombres (ils sont autorisés)
 	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'')
+	// On supprime les chaînes de caractères entre guillemets
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,'///')
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
 	forbiddenExpressions = codeWithoutAllowedOperations.split('///')
 	forbiddenExpressions.forEach((forbiddenExpression) => {
 		code = code.replaceAll(forbiddenExpression,'')
 	})
 	return code;
+}
+
+function evaluateExpression(expression,dynamicVariables) {
+	expression = sanitizeCode(expression)
+	const result = new Function("dynamicVariables", "return " + expression)(dynamicVariables);
+	return result
 }
 
 function processComplexDynamicVariables(complexExpression,dynamicVariables) {
@@ -36,13 +44,8 @@ function processComplexDynamicVariables(complexExpression,dynamicVariables) {
 			return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
 		}
 	);
-	// Sanitize code
-	calc = sanitizeCode(calc);
-	// Évalue le résultat
-	const calcResult = new Function(
-		"dynamicVariables",
-		"return " + calc
-	)(dynamicVariables);
+	// Évalue l'expression de manière sécurisée
+	calcResult = evaluateExpression(calc,dynamicVariables)
 	return calcResult;
 }
 
@@ -153,7 +156,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 						condition = condition.replace(
 							/@([^\s()&|!=<>]+)/g,
 							function (match, varName) {
-								return 'dynamicVariables["' + varName.trim() + '"]';
+								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
 							}
 						);
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
@@ -171,21 +174,9 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 							)
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
-						// Vérifie que l'expression ne contient que les opérateurs autorisés
-						const isValid =
-							/^(\s*(!|\(|\)|&&|\|\||==|!=|===|!==|<=|>=|<|>|true|false|null|undefined|[0-9]+|[+-]?([0-9]*[.])?[0-9]+|"[^"]*"|'[^']*'|`[^`]*`|[a-zA-Z0-9_]+\[[^\]]+\]|\s+))*\s*$/.test(
-								condition
-							);
-						if (!isValid) {
-							throw new Error("Invalid expression");
-						} else {
-							// Évaluation de la condition de manière sécurisée
-							const result = new Function(
-								"dynamicVariables",
-								"return " + condition
-							)(dynamicVariables);
-							return result ? content : "";
-						}
+						// Évalue l'expression de manière sécurisée
+						const result = evaluateExpression(condition,dynamicVariables)
+						return result ? content : ""
 					} catch (e) {
 						console.error("Error evaluating condition:", condition, e);
 						return "<!--" + condition + "-->";
