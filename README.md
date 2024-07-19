@@ -19,13 +19,18 @@ Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://c
 
 ## Crédits
 
-Chat MD est un outil libre et gratuit sous licence MIT.
+Chat MD est un outil libre et gratuit sous licence MIT. Les sources sont disponibles sur [la Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr).
 
-Il utilise d'autres logiciels libres :
+ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
+
+Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
+
+ChatMD est un logiciel libre qui repose également sur d'autres logiciels libres :
 - [js-yaml](https://github.com/nodeca/js-yaml) pour la gestion des en-têtes yaml
 - [typed.js](https://github.com/mattboldt/typed.js) pour l'effet "machine à écrire"
 - [showdown](https://github.com/showdownjs/showdown) pour la conversion du markdown en html
 - [leo-profanity](https://github.com/jojoee/leo-profanity) et [french-badwords-list](https://github.com/darwiin/french-badwords-list/) pour la gestion des gros mots
 - [katex](https://katex.org/) pour la gestion des mathématiques en Latex
+- [textFit](https://github.com/STRML/textFit) pour la gestion du redimensionnement automatique (ici : des formules mathématiques en Latex).
 
-Merci à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil !
+Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
