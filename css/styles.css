@@ -211,11 +211,12 @@ footer {
 	width:100%;
 }
 
-footer a {
-	text-decoration: none;
+footer a, footer a:visited {
+	color: black!important;
+	text-decoration: underline #999;
 }
 footer a:hover {
-	text-decoration: underline;
+	text-decoration: underline black;
 }
 
 #chat img {
