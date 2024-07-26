@@ -1,11 +1,12 @@
 const controls = document.getElementById("controls");
 
+// Pour récupérer le markdown externe via le hash dans l'URL
 function getMarkdownContent() {
-	// Récupération du markdown externe
-	const url = window.location.hash.substring(1).replace(/\?.*/,''); // Récupère l'URL du hashtag sans le #
-	if (url !== "") {
-		// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
-		const sourceChatBot = handleURL(url);
+	// On récupère l'URL du hashtag sans le #
+	const url = window.location.hash.substring(1).replace(/\?.*/,'');
+	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
+	const sourceChatBot = handleURL(url);
+	if (sourceChatBot !== "") {
 		if (Array.isArray(sourceChatBot)) {
 			// Cas où la source est répartie dans plusieurs fichiers
 			const promises = sourceChatBot.map(url => fetch(url).then(data => data.text()));

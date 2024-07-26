@@ -1,3 +1,8 @@
+const secureMode = false;
+// Si on utilise le mode sécurisé, il faut indiquer les chatbots qui sont autorisés, soit en utilisant 'authorizedChatbots', soit en utilisant les raccourcis ci-dessous
+// Les raccourcis définis plus bas sont également ajoutés aux chatbots autorisés si on utilise le mode sécurisé
+const authorizedChatbots = ["https://codimd.apps.education.fr/d3yEseF3RtWzeW3vcgn4MQ"];
+
 let defaultMessage = [
 	"Désolé, je ne comprends pas votre question.",
 	"Pardonnez-moi, mais je ne saisis pas votre demande.",

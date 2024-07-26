@@ -97,6 +97,14 @@ function handleURL(url) {
 			// Si on a un raccourci, on n'a pas besoin de traiter correctement l'url
 			return url
 		}
+		if (secureMode) {
+			const authorizedChatbot = authorizedChatbots.find((element) => element == url);
+			if(authorizedChatbot) {
+				url = authorizedChatbot;
+			} else {
+				return '';
+			}
+		}
 		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
 		if (url.includes(".forge")) {
 			addCorsProxy = false;

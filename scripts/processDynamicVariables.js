@@ -31,7 +31,8 @@ function sanitizeCode(code) {
 }
 
 function evaluateExpression(expression,dynamicVariables) {
-	expression = sanitizeCode(expression)
+	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
+	expression = secureMode ? expression : sanitizeCode(expression)
 	const result = new Function("dynamicVariables", "return " + expression)(dynamicVariables);
 	return result
 }
