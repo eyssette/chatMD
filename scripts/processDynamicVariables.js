@@ -13,7 +13,7 @@ const sanitizeCodeAllowedOperations = [
 // Sanitize le code avant d'utiliser new Function
 function sanitizeCode(code) {
 	// On supprime d'abord dans l'expression les variables dynamiques
-	codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,'');
+	let codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,'');
 	// On supprime ensuite les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
@@ -23,7 +23,7 @@ function sanitizeCode(code) {
 	// On supprime les chaînes de caractères entre guillemets
 	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,'///')
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
-	forbiddenExpressions = codeWithoutAllowedOperations.split('///')
+	const forbiddenExpressions = codeWithoutAllowedOperations.split('///')
 	forbiddenExpressions.forEach((forbiddenExpression) => {
 		code = code.replaceAll(forbiddenExpression,'')
 	})
@@ -46,7 +46,7 @@ function processComplexDynamicVariables(complexExpression,dynamicVariables) {
 		}
 	);
 	// Évalue l'expression de manière sécurisée
-	calcResult = evaluateExpression(calc,dynamicVariables)
+	const calcResult = evaluateExpression(calc,dynamicVariables)
 	return calcResult;
 }
 

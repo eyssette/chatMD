@@ -319,6 +319,7 @@ function createChatBot(chatData) {
 					? chatData[indexBestMatch][3]
 					: [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
+				let selectedResponseWithOptions;
 				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
 					selectedResponseWithOptions = lastMessageFromBot.includes(
 						messageIfKeywordsNotFound

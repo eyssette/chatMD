@@ -26,7 +26,7 @@ function convertLatexExpressions(string) {
 				.replaceAll("&amp;","&")
 				.replaceAll("\ ","\\ ");
 			// On convertit la formule mathématique en HTML avec Katex
-			stringWithLatex = katex.renderToString(mathInExpressionLatex, {
+			const stringWithLatex = katex.renderToString(mathInExpressionLatex, {
 				displayMode: inlineMaths,
 			});
 			string = string.replace(expressionLatex, stringWithLatex);

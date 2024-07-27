@@ -95,8 +95,8 @@ function processDirectiveBot(message,chatMessage) {
 
 // Possibilité d'avoir plusieurs bots qui répondent dans un même message
 function processMultipleBots(html) {
-	htmlSplitDirectiveBot = html.split("<p>!Bot:");
-	numberOfBots = htmlSplitDirectiveBot.length;
+	const htmlSplitDirectiveBot = html.split("<p>!Bot:");
+	const numberOfBots = htmlSplitDirectiveBot.length;
 	if(numberOfBots>1) {
 		let newHtml = htmlSplitDirectiveBot[0];
 		for (let index = 1; index < numberOfBots; index++) {

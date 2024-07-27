@@ -15,6 +15,7 @@ const regexMessageOptions = /(<ul class="messageOptions"\>[\s\S]*<\/ul>)/gm
 const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm
 
 // Configuration de MutationObserver
+let mutationObserver
 const observerConfig = {
 	childList: true,
 	subtree: true,
