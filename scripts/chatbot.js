@@ -1,4 +1,5 @@
 function createChatBot(chatData) {
+	const chatDataLength = chatData.length;
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
 		new URLSearchParams(document.location.search)
@@ -89,7 +90,7 @@ function createChatBot(chatData) {
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
 		if (optionLink != "") {
-			for (let i = 0; i < chatData.length; i++) {
+			for (let i = 0; i < chatDataLength; i++) {
 				let title = chatData[i][0];
 				title = yamlObfuscate ? btoa(title) : title;
 				if (optionLink == title) {
@@ -110,7 +111,7 @@ function createChatBot(chatData) {
 	let vectorChatBotResponses = [];
 	// On précalcule les vecteurs des réponses du chatbot
 	if (yamlSearchInContent || yamlUseLLM) {
-		for (let i = 0; i < chatData.length; i++) {
+		for (let i = 0; i < chatDataLength; i++) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses)
 				? responses.join(" ").toLowerCase()
@@ -210,7 +211,7 @@ function createChatBot(chatData) {
 			responseToSelectedOption(optionLink);
 		} else {
 			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
-			for (let i = 0; i < chatData.length; i++) {
+			for (let i = 0; i < chatDataLength; i++) {
 				const titleResponse = chatData[i][0];
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
