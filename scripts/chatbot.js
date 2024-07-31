@@ -520,6 +520,10 @@ function createChatBot(chatData) {
 			if (link.startsWith("#")) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
+				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage et nextMessageOnlyIfKeywords
+				lastMessageFromBot = '';
+				nextMessage = '';
+				nextMessageOnlyIfKeywords = false;
 				let messageFromLink = target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yamlObfuscate
@@ -548,6 +552,8 @@ function createChatBot(chatData) {
 						userInput.focus();
 					}
 				}
+				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs 
+				nextMessageOnlyIfKeywordsCount = 0;
 				scrollWindow();
 			}
 		}

@@ -15,33 +15,25 @@ function processDirectiveNext(message) {
 		} else {
 			nextDirectiveContent = nextDirectiveContentSplit[0];
 		}
+
+		lastMessageFromBot = message;
+		nextMessage = nextDirectiveContent.trim();
+		nextMessageOnlyIfKeywords = true;
+		messageIfKeywordsNotFound = messageIfError
+			? messageIfError.trim()
+			: "Ce n'était pas la bonne réponse, merci de réessayer !";
+		messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
+		nextMessageOnlyIfKeywordsCount++;
 		if (
 			match &&
 			nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax
 		) {
-			lastMessageFromBot = message;
-			nextMessage = nextDirectiveContent.trim();
-			nextMessageOnlyIfKeywords = true;
-			messageIfKeywordsNotFound = messageIfError
-				? messageIfError.trim()
-				: "Ce n'était pas la bonne réponse, merci de réessayer !";
-			messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
-			nextMessageOnlyIfKeywordsCount++;
-			return "<!--" + "-->";
+			return "";
 		} else {
-			lastMessageFromBot = "";
-			const linkToOption = nextMessage;
-			nextMessage = "";
-			nextMessageOnlyIfKeywords = false;
-			if (
-				nextMessageOnlyIfKeywordsCount == nextMessageOnlyIfKeywordsCountMax
-			) {
-				nextMessageOnlyIfKeywordsCount = 0;
-				const skipMessage = `<ul class="messageOptions"><li><a href="#${
-					yamlObfuscate ? btoa(linkToOption) : linkToOption
-				}">Passer à la suite !</a></li></ul>`;
-				return skipMessage;
-			}
+			const skipMessage = `<ul class="messageOptions"><li><a href="#${
+				yamlObfuscate ? btoa(nextMessage) : nextMessage
+			}">Passer à la suite !</a></li></ul>`;
+			return skipMessage;
 		}
 	});
 	return message
