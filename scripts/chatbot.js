@@ -125,7 +125,8 @@ function createChatBot(chatData) {
 
 	function createVectorRAGinformations(informations) {
 		if (informations) {
-			for (let i = 0; i < informations.length; i++) {
+			const informationsLength = informations.length
+			for (let i = 0; i < informationsLength; i++) {
 				const RAGinformation = informations[i];
 				const vectorRAGinformation = createVector(RAGinformation);
 				vectorRAGinformations.push(vectorRAGinformation);
