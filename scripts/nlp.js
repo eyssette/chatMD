@@ -145,7 +145,8 @@ function tokenize(text, indexChatBotResponse) {
 		return { token, weight: weight };
 	}
 
-	for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+	const wordsLength = words.length;
+	for (let wordIndex = 0; wordIndex < wordsLength; wordIndex++) {
 		const word = words[wordIndex];
 		// Premier type de token : le mot en entier ; poids le plus important
 		tokens.push({ token: word, weight: 5 });
