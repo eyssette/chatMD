@@ -250,7 +250,7 @@ function createChatBot(chatData) {
 							const regexStrictIdentityMatch = new RegExp(
 								`\\b${keywordToLowerCase}\\b`
 							);
-							if (userInputTextToLowerCase.match(regexStrictIdentityMatch)) {
+							if (regexStrictIdentityMatch.test(userInputTextToLowerCase)) {
 								strictIdentityMatch = true;
 							}
 						} else {

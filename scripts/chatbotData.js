@@ -76,7 +76,7 @@ function parseMarkdown(markdownContent) {
 	const initialMessageContentLines = initialMessageContent.split("\n")
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "").trim();
-		if (line.match(regexOrderedList)) {
+		if (regexOrderedList.test(line)) {
 			// Récupération des options dans le message initial, s'il y en a
 			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
@@ -112,15 +112,15 @@ function parseMarkdown(markdownContent) {
 		} else if (line.startsWith("- ") && !listParsed) {
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
-		} else if (yamlDynamicContent && line.match(regexDynamicContentIfBlock)) {
+		} else if (yamlDynamicContent && regexDynamicContentIfBlock.test(line)) {
 			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : '';
 			content.push(line + "\n");
 			listParsed = true;
-		} else if (yamlDynamicContent && line.match('`endif`')) {
+		} else if (yamlDynamicContent && line.includes('`endif`')) {
 			ifCondition = '';
 			content.push(line + "\n");
 			listParsed = true;
-		} else if (line.match(regexOrderedList)) {
+		} else if (regexOrderedList.test(line)) {
 			// Cas des listes ordonnées
 			listParsed = false;
 			if (!lastOrderedList) {
