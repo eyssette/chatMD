@@ -445,7 +445,8 @@ function createChatBot(chatData) {
 			optionsLastResponse = options;
 			// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
 			let messageOptions = '\n<ul class="messageOptions">';
-			for (let i = 0; i < options.length; i++) {
+			const optionsLength = options.length;
+			for (let i = 0; i < optionsLength; i++) {
 				const option = options[i];
 				const optionText = option[0];
 				const optionLink = option[1];
