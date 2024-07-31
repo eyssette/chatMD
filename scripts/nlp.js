@@ -1,19 +1,21 @@
 function levenshteinDistance(a, b) {
 	/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */
-	if (a.length === 0) return b.length;
-	if (b.length === 0) return a.length;
+	const aLength = a.length;
+	const bLength = b.length;
+	if (aLength === 0) return bLength;
+	if (bLength === 0) return aLength;
 
 	const matrix = [];
-	for (let i = 0; i <= b.length; i++) {
+	for (let i = 0; i <= bLength; i++) {
 		matrix[i] = [i];
 	}
 
-	for (let j = 0; j <= a.length; j++) {
+	for (let j = 0; j <= aLength; j++) {
 		matrix[0][j] = j;
 	}
 
-	for (let i = 1; i <= b.length; i++) {
-		for (let j = 1; j <= a.length; j++) {
+	for (let i = 1; i <= bLength; i++) {
+		for (let j = 1; j <= aLength; j++) {
 			const cost = a[j - 1] === b[i - 1] ? 0 : 1;
 			matrix[i][j] = Math.min(
 				matrix[i - 1][j] + 1,
@@ -23,7 +25,7 @@ function levenshteinDistance(a, b) {
 		}
 	}
 
-	return matrix[b.length][a.length];
+	return matrix[bLength][aLength];
 }
 
 function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
