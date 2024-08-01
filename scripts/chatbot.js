@@ -1,5 +1,4 @@
 function createChatBot(chatData) {
-	const chatDataLength = chatData.length;
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
 		new URLSearchParams(document.location.search)
@@ -22,6 +21,7 @@ function createChatBot(chatData) {
 
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
+	const chatDataLength = chatData.length;
 	document.getElementById("chatbot-name").textContent = chatbotName;
 	document.title = chatbotName;
 
