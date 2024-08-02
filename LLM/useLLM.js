@@ -69,8 +69,6 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(userPrompt, informations) {
-	console.log("informations")
-	console.log(informations)
 	idAnswer++;
 	if (informations.length>0) {
 		informations = yaml.useLLM.RAGprompt+informations
@@ -92,7 +90,6 @@ export function getAnswerFromLLM(userPrompt, informations) {
 		]
 	}
 	try {
-		console.log(bodyObject)
 		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {

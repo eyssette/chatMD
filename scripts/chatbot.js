@@ -163,13 +163,9 @@ export async function createChatBot(chatData) {
 					cosSimArray,
 					yaml.useLLM.RAGmaxTopElements
 				);
-				console.log("RAGcontent")
-				console.log(RAGcontent);
 				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
 					(element) => RAGcontent[element[1]]
 				).join("\n");
-				console.log("RAGbestMatchesInformation")
-				console.log(RAGbestMatchesInformation)
 			}
 		}
 
