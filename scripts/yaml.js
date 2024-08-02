@@ -1,6 +1,6 @@
 import { config } from "./config";
 import jsYaml from "../externals/js-yaml.js"
-import { loadScript, loadCSS } from "./utils.js";
+import { loadScript, loadCSS, deepMerge } from "./utils.js";
 
 export let yaml = {
 	'maths': config.yaml.maths,
@@ -27,7 +27,7 @@ export function processYAML(markdownContent) {
 		try {
 			// Traitement des propriétés dans le YAML
 			const yamlData = jsYaml.load(markdownContent.split("---")[1]);
-			yaml = yamlData ? Object.assign(yaml,yamlData) : yaml;
+			yaml = yamlData ? deepMerge(yaml,yamlData) : yaml;
 			if (yaml.maths === true) {
 				yaml.addOns = yaml.addOns ? yaml.addOns + ",textFit" : "textFit";
 				Promise.all([
