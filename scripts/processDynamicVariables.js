@@ -12,6 +12,7 @@ const sanitizeCodeAllowedOperations = [
 	'<', '>',
 	'==', '!=', 
 	'&&', '||', '!',
+	'(',')',
 ];
 
 // Sanitize le code avant d'utiliser new Function
