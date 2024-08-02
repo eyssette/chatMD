@@ -1,3 +1,5 @@
+import Showdown from "../externals/showdown.js";
+
 // Extensions pour Showdown
 
 // Gestion des admonitions
@@ -48,7 +50,7 @@ function showdownExtensionAdmonitions() {
 }
 
 // Gestion du markdown dans les réponses du chatbot
-const converter = new window.showdown.Converter({
+const converter = new Showdown.Converter({
 	emoji: true,
 	parseImgDimensions: true,
 	simpleLineBreaks: true,
