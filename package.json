@@ -1,0 +1,31 @@
+{
+  "name": "chatmd",
+  "version": "1.0.0",
+  "description": "Un outil libre et gratuit pour créer un chatbot à partir d'un simple fichier en Markdown",
+  "main": "bundle.js",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.19.2",
+    "rollup-plugin-string": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup --config"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eyssette/chatMD.git"
+  },
+  "keywords": [
+    "chatbot",
+    "Markdown",
+    "LLM",
+    "RAG"
+  ],
+  "author": "Cédric Eyssette",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eyssette/chatMD/issues"
+  },
+  "homepage": "https://github.com/eyssette/chatMD#readme"
+}

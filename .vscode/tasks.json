@@ -4,17 +4,13 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Minify js & css",
-			"dependsOn": ["Combine Scripts", "Minify JS"],
+			"label": "Build",
+			"type": "shell",
+			"command": "npm run build",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
-		},
-		{
-			"label": "Combine Scripts",
-			"type": "shell",
-			"command": "python3 scripts/combine-scripts.py"
 		},
 		{
 			"label": "Minify CSS",
