@@ -1,6 +1,7 @@
 import { config } from "./config";
 import { yaml } from "./yaml";
 import { nextMessage } from "./directivesAndSpecialContents";
+import { tryConvertStringToNumber } from "./utils";
 
 let getLastMessage = false;
 
@@ -36,7 +37,7 @@ function sanitizeCode(code) {
 export function evaluateExpression(expression,dynamicVariables) {
 	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
 	expression = config.secureMode ? expression : sanitizeCode(expression)
-	const result = new Function("dynamicVariables", "return " + expression)(dynamicVariables);
+	const result = new Function("dynamicVariables", "tryConvertStringToNumber", "return " + expression)(dynamicVariables, tryConvertStringToNumber);
 	return result
 }
 

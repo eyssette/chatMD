@@ -1,5 +1,5 @@
 import { config } from "./config"
-import { yaml } from "./yaml"
+import { yaml, filterBadWords } from "./yaml"
 import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow, footerElement, hideFooter } from "./utils"
 import { nextMessage } from "./directivesAndSpecialContents"
 import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents"
@@ -195,8 +195,8 @@ export function createChatBot(chatData) {
 		}
 
 		// Choix de la réponse que le chatbot va envoyer
-		if (yaml.detectBadWords === true && window.filterBadWords) {
-			if (window.filterBadWords.check(inputText)) {
+		if (yaml.detectBadWords === true && filterBadWords) {
+			if (filterBadWords.check(inputText)) {
 				createChatMessage(getRandomElement(config.badWordsMessage), false);
 				return;
 			}

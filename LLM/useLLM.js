@@ -1,6 +1,5 @@
 import { yaml } from "../scripts/yaml";
 
-let answerFromLLM = [];
 let LLMactive = false;
 let idAnswer = 0;
 

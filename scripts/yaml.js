@@ -21,7 +21,7 @@ export let yaml = {
 	'variables': config.yaml.variables,
 }
 
-let filterBadWords;
+export let filterBadWords;
 export function processYAML(markdownContent) {
 	if (markdownContent.split("---").length > 2 && markdownContent.startsWith("---")) {
 		try {
@@ -102,7 +102,8 @@ export function processYAML(markdownContent) {
 						.then(() => {
 							// Les deux scripts sont chargés et prêts à être utilisés
 							filterBadWords = window.LeoProfanity;
-							filterBadWords.add(window.badWordsFR);
+							filterBadWords.add(badWordsFR);
+							console.log(window)
 						})
 						.catch((error) => {
 							console.error(
@@ -131,10 +132,8 @@ export function processYAML(markdownContent) {
 					config.defaultMessage.push(...config.defaultMessage);
 				}
 			}
-			if (yaml.footer) {
-				if(yaml.footer === true) {
-					document.body.classList.add('hideFooter')
-				}
+			if(yaml.footer === false) {
+				document.body.classList.add('hideFooter')
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith('.css') ? "themes/"+yaml.theme : "themes/"+yaml.theme+".css";

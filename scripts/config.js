@@ -71,7 +71,7 @@ config.yaml = {
 	'searchInContent': false,
 	'detectBadWords': false,
 	'maths': false,
-	'footer': true,
+	//'footer': true,
 	'theme': "",
 	'dynamicContent': false,
 	'typeWriter': true,
