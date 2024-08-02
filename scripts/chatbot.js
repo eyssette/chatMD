@@ -10,10 +10,12 @@ import { markdownToHTML } from "./markdown"
 import { displayMessage, autoFocus } from "./typewriter"
 import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp"
 import { chatContainer, userInput } from "./typewriter"
+import { getAnswerFromLLM } from "../LLM/useLLM"
+import { getRAGcontent, vectorRAGinformations, RAGcontent } from "../LLM/processRAG"
 
 const sendButton = document.getElementById("send-button");
 
-export function createChatBot(chatData) {
+export async function createChatBot(chatData) {
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
 		new URLSearchParams(document.location.search)
@@ -125,7 +127,7 @@ export function createChatBot(chatData) {
 
 	let vectorChatBotResponses = [];
 	// On précalcule les vecteurs des réponses du chatbot
-	if (yaml.searchInContent || yaml.useLLM.ok) {
+	if (yaml.searchInContent || yaml.useLLM.url) {
 		for (let i = 0; i < chatDataLength; i++) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses)
@@ -137,33 +139,35 @@ export function createChatBot(chatData) {
 			vectorChatBotResponses.push(vectorResponse);
 		}
 	}
-	let vectorRAGinformations = [];
 
-	function createVectorRAGinformations(informations) {
-		if (informations) {
-			const informationsLength = informations.length
-			for (let i = 0; i < informationsLength; i++) {
-				const RAGinformation = informations[i];
-				const vectorRAGinformation = createVector(RAGinformation);
-				vectorRAGinformations.push(vectorRAGinformation);
-			}
-		}
-	}
+	// if (window.useLLMpromise) {
+	// 	window.useLLMpromise
+	// 		.then(() => {
+	// 			if (window.useLLMragContentPromise) {
+	// 				window.useLLMragContentPromise.then(() => {
+	// 					createVectorRAGinformations(yaml.useLLM.RAGinformations);
+	// 				});
+	// 			} else {
+	// 				createVectorRAGinformations(yaml.useLLM.RAGinformations);
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error("Erreur d'accès aux données RAG : ", error);
+	// 		});
+	// }
 
-	if (window.useLLMpromise) {
-		window.useLLMpromise
-			.then(() => {
-				if (window.useLLMragContentPromise) {
-					window.useLLMragContentPromise.then(() => {
-						createVectorRAGinformations(yaml.useLLM.RAG.informations);
-					});
-				} else {
-					createVectorRAGinformations(yaml.useLLM.RAG.informations);
-				}
-			})
-			.catch((error) => {
-				console.error("Erreur d'accès aux données RAG : ", error);
-			});
+	// if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
+	// 	const RAGcontent = await getRAGcontent(
+	// 		yaml.useLLM.RAGinformations
+	// 	)
+	// 	console.log(RAGcontent)
+	// 	createVectorRAGinformations(RAGcontent)
+	// }
+
+	if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
+		getRAGcontent(
+			yaml.useLLM.RAGinformations
+		)
 	}
 
 	function chatbotResponse(inputText) {
@@ -173,24 +177,28 @@ export function createChatBot(chatData) {
 		}
 		let RAGbestMatchesInformation = "";
 		let questionToLLM;
-		if (yaml.useLLM.ok) {
+		if (yaml.useLLM.url) {
 			inputText = inputText.replace(
 				'<span class="hidden">!useLLM</span>',
 				"!useLLM"
 			);
 			questionToLLM = inputText.trim().replace("!useLLM", "");
-			if (yaml.useLLM.RAG.informations) {
+			if (yaml.useLLM.RAGinformations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 				const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
 					cosineSimilarity(questionToLLM, vectorRAGinformation)
 				);
 				const RAGbestMatchesIndexes = topElements(
 					cosSimArray,
-					yaml.useLLM.RAG.maxTopElements
+					yaml.useLLM.RAGmaxTopElements
 				);
+				console.log("RAGcontent")
+				console.log(RAGcontent);
 				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
-					(element) => yaml.useLLM.RAG.informations[element[1]]
+					(element) => RAGcontent[element[1]]
 				).join("\n");
+				console.log("RAGbestMatchesInformation")
+				console.log(RAGbestMatchesInformation)
 			}
 		}
 
@@ -352,13 +360,12 @@ export function createChatBot(chatData) {
 				}
 				// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
 				if (
-					(yaml.useLLM.ok &&
-						yaml.useLLM.url &&
+					(	yaml.useLLM.url &&
 						yaml.useLLM.model &&
 						yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
-					window.getAnswerFromLLM(
+					getAnswerFromLLM(
 						questionToLLM.trim(),
 						selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation
 					);
@@ -368,13 +375,12 @@ export function createChatBot(chatData) {
 				}
 			} else {
 				if (
-					(yaml.useLLM.ok &&
-						yaml.useLLM.url &&
+					(	yaml.useLLM.url &&
 						yaml.useLLM.model &&
 						yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
-					window.getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
+					getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
 					return;
 				} else {
 					// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
@@ -394,13 +400,12 @@ export function createChatBot(chatData) {
 					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
 					let messageNoAnswer = config.defaultMessage[randomDefaultMessageIndex];
 					if (
-						yaml.useLLM.ok &&
-						!yaml.useLLM.always &&
 						yaml.useLLM.url &&
-						yaml.useLLM.model
+						yaml.useLLM.model &&
+						!yaml.useLLM.always
 					) {
 						const optionMessageNoAnswer = [
-							["Voir une réponse générée par une IA", "!useLLM " + inputText],
+							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"','“')],
 						];
 						messageNoAnswer = gestionOptions(
 							messageNoAnswer,
@@ -549,7 +554,6 @@ export function createChatBot(chatData) {
 					? atob(link.replace("#", ""))
 					: link;
 				if (
-					yaml.useLLM.ok &&
 					yaml.useLLM.url &&
 					yaml.useLLM.model &&
 					linkDeobfuscated.includes("!useLLM")

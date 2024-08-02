@@ -1,3 +1,7 @@
+import { yaml } from "../scripts/yaml";
+import { handleURL } from "../scripts/utils";
+import { createVector } from "../scripts/nlp";
+
 function prepareRAGdata(informations, separator) {
 	if(separator) {
 		if(separator == 'auto') {
@@ -20,32 +24,50 @@ function prepareRAGdata(informations, separator) {
 			}
 			return splitIntoChunks(informations);
 		} else {
-			return yamlUseLLM.separator == 'break' ? informations.split('---').map(element => element.replaceAll('\n',' ').trim()) : informations.split(yamlUseLLM.separator);
+			return yaml.useLLM.RAGseparator == 'break' ? informations.split('---').map(element => element.replaceAll('\n',' ').trim()) : informations.split(yaml.useLLM.RAGseparator);
 		}
 	} else {
 		return informations.split('\n').filter(line => line.trim() !== '');
 	}
 }
 
-async function getRAGcontent(informations) {
+export let RAGcontent = [];
+export let vectorRAGinformations = [];
+
+function createVectorRAGinformations(informations) {
+	if (informations) {
+		const informationsLength = informations.length
+		for (let i = 0; i < informationsLength; i++) {
+			const RAGinformation = informations[i];
+			const vectorRAGinformation = createVector(RAGinformation);
+			vectorRAGinformations.push(vectorRAGinformation);
+		}
+		return vectorRAGinformations
+	}
+}
+
+
+export function getRAGcontent(informations) {
 	if(informations) {
-		yamlUseLLMmaxTopElements = yamlUseLLM.maxTopElements ? yamlUseLLM.maxTopElements : 3;
 		if(informations.includes('http')) {
 			const urlRAGfile = handleURL(informations);
-			yamlUseLLMinformations = await fetch(urlRAGfile)
+			fetch(urlRAGfile)
 				.then((response) => response.text())
 				.then((data) => {
-					return prepareRAGdata(data, yamlUseLLM.separator);
+					RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator)
+					const RAGvectors = createVectorRAGinformations(RAGcontent)
+					return RAGvectors;
 				})
 		} else {
+			let RAGinformations;
 			if(informations.toString().includes("useFile")) {
 				RAGinformations = RAGinformations.trim();
-				yamlUseLLMinformations = prepareRAGdata(RAGinformations, yamlUseLLM.separator);
+				yaml.useLLM.RAGinformations = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
 			} else {
 				RAGinformations = informations.trim();
-				yamlUseLLMinformations = prepareRAGdata(RAGinformations, yamlUseLLM.separator);
+				yaml.useLLM.RAGinformations = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
 			}
-			return yamlUseLLMinformations
+			return yaml.useLLM.RAGinformations
 		}
 	}
 }

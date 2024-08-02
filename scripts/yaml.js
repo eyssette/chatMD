@@ -103,7 +103,6 @@ export function processYAML(markdownContent) {
 							// Les deux scripts sont chargés et prêts à être utilisés
 							filterBadWords = window.LeoProfanity;
 							filterBadWords.add(badWordsFR);
-							console.log(window)
 						})
 						.catch((error) => {
 							console.error(
@@ -160,31 +159,11 @@ export function processYAML(markdownContent) {
 					])
 				}
 			}
-			if (yaml.useLLM.ok || yaml.utiliserLLM) {
+			if (yaml.useLLM.url || yaml.utiliserLLM.url) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM
-				// On utilise window.useLLMpromise car on aura besoin de savoir quand la promise sera terminée dans un autre script : chatbot.js, (pour calculer les vecteurs de mot pour le RAG : on a besoin que le fichier RAG.js soit bien chargé)  
-				window.useLLMpromise = Promise.all([
-					loadScript(
-						"LLM/useLLM.js",
-					),
-					loadScript(
-						"LLM/RAG.js",
-					)
-				]).then(() => {
-					window.useLLMragContentPromise = new Promise((resolve, reject) => {
-						try {
-							const content = window.getRAGcontent(
-								yaml.useLLM.RAG.informations
-							)
-							resolve(content);
-						} catch(error) {
-							reject(error);
-						}
-						}
-					)
-				}
-				).catch((error) => console.error(error));
-				yaml.useLLM.ok = true;
+				yaml.useLLM.RAGinformations = yaml.useLLM.informations ? yaml.useLLM.informations : yaml.useLLM.RAGinformations; 
+				yaml.useLLM.RAGmaxTopElements = yaml.useLLM.maxTopElements ? yaml.useLLM.maxTopElements: yaml.useLLM.RAGmaxTopElements;
+				yaml.useLLM.RAGseparator = yaml.useLLM.separator ? yaml.useLLM.separator : yaml.useLLM.RAGseparator;
 				if(yaml.useLLM.askAPIkey === true) {
 					yaml.useLLM.apiKey = prompt("Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.");
 				} else {

@@ -87,7 +87,6 @@ const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en frança
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
 
 config.yaml.useLLM = {
-	'ok': false,
 	'url': '',
 	'askAPIkey': false,
 	'apiKey': '', // Attention à ne pas mettre votre apiKey en public !
@@ -102,16 +101,16 @@ config.yaml.useLLM = {
 
 // Paramètres pour le RAG
 const defaultRAGprompt = `
-Voici ci-dessous le contexte à partir duquel tu dois partir pour construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si l'information n'est pas dans le contexte, indique-le et essaie de répondre malgré tout.
+Voici ci-dessous le contexte à partir duquel tu dois prioritairement partir pour construire ta réponse, tu dois sélectionner dans ce contexte l'information qui est en lien avec la question et ne pas parler du reste. Si l'information n'est pas dans le contexte, indique-le et essaie de répondre malgré tout.
 CONTEXTE : `;
 const defaultRAGpromptStrict = `
 Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
 CONTEXTE : `;
-config.yaml.useLLM.RAG = {
-	'informations': '',
-	'separator': '\n',
-	'maxTopElements': 3,
-	'prompt': defaultRAGprompt,
+const RAG = {
+	'RAGinformations': '',
+	'RAGseparator': '\n',
+	'RAGmaxTopElements': 3,
+	'RAGprompt': defaultRAGprompt,
 }
 
-
+config.yaml.useLLM = {...config.yaml.useLLM, ...RAG}

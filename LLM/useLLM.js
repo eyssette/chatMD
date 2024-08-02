@@ -1,9 +1,9 @@
+import { chatContainer } from "../scripts/typewriter";
 import { yaml } from "../scripts/yaml";
 
 let LLMactive = false;
 let idAnswer = 0;
 
-const chatContainerElement = document.getElementById("chat");
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
@@ -59,7 +59,7 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 	const errorMessageElement = document.createElement("div");
 	errorMessageElement.classList.add("message");
 	errorMessageElement.classList.add("bot-message");
-	chatContainerElement.appendChild(errorMessageElement);
+	chatContainer.appendChild(errorMessageElement);
 	errorMessageElement.textContent = "Pour répondre à cette question, je dois faire appel à une IA générative : la connexion à cette IA n'a pas été correctement configurée ou bien ne fonctionne pas";
 	if(error) {
 		console.error("Erreur:", error.message);
@@ -68,10 +68,12 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 }
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
-function getAnswerFromLLM(userPrompt, informations) {
+export function getAnswerFromLLM(userPrompt, informations) {
+	console.log("informations")
+	console.log(informations)
 	idAnswer++;
 	if (informations.length>0) {
-		informations = yaml.useLLM.RAG.prompt+informations
+		informations = yaml.useLLM.RAGprompt+informations
 	}
 	const isCohere = yaml.useLLM.url.includes('cohere');
 
@@ -90,6 +92,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 		]
 	}
 	try {
+		console.log(bodyObject)
 		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {
@@ -104,7 +107,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 					const chatMessage = document.createElement("div");
 					chatMessage.classList.add("message");
 					chatMessage.classList.add("bot-message");
-					chatContainerElement.appendChild(chatMessage);
+					chatContainer.appendChild(chatMessage);
 					readStream(response.body, chatMessage, isCohere)
 				} else {
 					messageIfErrorWithGetAnswerFromLLM()
