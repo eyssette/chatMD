@@ -36,7 +36,7 @@ createCombinedMdFile();
 export default {
 	input: "scripts/chatbotData.js",
 	output: {
-		file: "bundle.js",
+		file: "script.min.js",
 		format: "iife",
 		plugins: [terser()],
 	},
