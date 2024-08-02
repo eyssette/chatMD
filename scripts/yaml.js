@@ -1,6 +1,6 @@
 import { config } from "./config";
 import jsYaml from "../externals/js-yaml.js"
-import { loadScript, loadCSS, deepMerge } from "./utils.js";
+import { loadScript, loadCSS, deepMerge, footerElement, hideFooter } from "./utils.js";
 
 export let yaml = {
 	'maths': config.yaml.maths,
@@ -132,7 +132,9 @@ export function processYAML(markdownContent) {
 				}
 			}
 			if(yaml.footer === false) {
-				document.body.classList.add('hideFooter')
+				hideFooter();
+			} else if (typeof yaml.footer == 'string') {
+				footerElement.innerHTML = yaml.footer
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith('.css') ? "themes/"+yaml.theme : "themes/"+yaml.theme+".css";

@@ -1,6 +1,6 @@
 import { config } from "./config"
 import { yaml, filterBadWords } from "./yaml"
-import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow, footerElement, hideFooter } from "./utils"
+import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow } from "./utils"
 import { nextMessage } from "./directivesAndSpecialContents"
 import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents"
 import { processFixedVariables } from "./processFixedVariables"
@@ -30,11 +30,6 @@ export async function createChatBot(chatData) {
 		dynamicVariables["GET" + key] = value;
 	}
 
-	if (yaml.footer === false) {
-		hideFooter();
-	} else if (yaml.footer !== true) {
-		footerElement.innerHTML = yaml.footer
-	}
 
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
@@ -139,30 +134,6 @@ export async function createChatBot(chatData) {
 			vectorChatBotResponses.push(vectorResponse);
 		}
 	}
-
-	// if (window.useLLMpromise) {
-	// 	window.useLLMpromise
-	// 		.then(() => {
-	// 			if (window.useLLMragContentPromise) {
-	// 				window.useLLMragContentPromise.then(() => {
-	// 					createVectorRAGinformations(yaml.useLLM.RAGinformations);
-	// 				});
-	// 			} else {
-	// 				createVectorRAGinformations(yaml.useLLM.RAGinformations);
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error("Erreur d'accès aux données RAG : ", error);
-	// 		});
-	// }
-
-	// if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
-	// 	const RAGcontent = await getRAGcontent(
-	// 		yaml.useLLM.RAGinformations
-	// 	)
-	// 	console.log(RAGcontent)
-	// 	createVectorRAGinformations(RAGcontent)
-	// }
 
 	if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
 		getRAGcontent(
