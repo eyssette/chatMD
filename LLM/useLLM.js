@@ -1,3 +1,5 @@
+import { yaml } from "../scripts/yaml";
+
 let answerFromLLM = [];
 let LLMactive = false;
 let idAnswer = 0;
@@ -44,9 +46,9 @@ document.body.addEventListener("keypress", (event) => {
 
 // Configuration de l'accès au LLM
 let bodyObject = {
-	model: yamlUseLLMmodel,
+	model: yaml.useLLM.model,
 	stream: true,
-	max_tokens: yamlUseLLMmaxTokens,
+	max_tokens: yaml.useLLM.maxTokens,
 	frequency_penalty: 0,
 	presence_penalty: 0,
 	temperature: 0.7,
@@ -70,29 +72,29 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 function getAnswerFromLLM(userPrompt, informations) {
 	idAnswer++;
 	if (informations.length>0) {
-		informations = yamlUseLLMragPrompt+informations
+		informations = yaml.useLLM.RAG.prompt+informations
 	}
-	const isCohere = yamlUseLLMurl.includes('cohere');
+	const isCohere = yaml.useLLM.url.includes('cohere');
 
 	if (isCohere) {
-		bodyObject.message = yamlUseLLMpreprompt+userPrompt+yamlUseLLMpostprompt+informations;
+		bodyObject.message = yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations;
 	} else {
 		bodyObject.messages = [
 			{
-				content: yamlUseLLMsystemPrompt,
+				content: yaml.useLLM.systemPrompt,
 				role: "system",
 			},
 			{
-				content: yamlUseLLMpreprompt+userPrompt+yamlUseLLMpostprompt+informations,
+				content: yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations,
 				role: "user",
 			},
 		]
 	}
 	try {
-		fetch(yamlUseLLMurl, {
+		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {
-				"Authorization": "Bearer "+yamlUseLLMapiKey,
+				"Authorization": "Bearer "+yaml.useLLM.apiKey,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(bodyObject),

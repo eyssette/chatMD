@@ -1,3 +1,5 @@
+import { nextMessage } from "./directivesAndSpecialContents";
+
 function levenshteinDistance(a, b) {
 	/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */
 	const aLength = a.length;
@@ -105,10 +107,7 @@ function magnitude(vec) {
 	return Math.sqrt(sum);
 }
 
-let chatData;
-let nextMessage = "";
-
-function tokenize(text, indexChatBotResponse) {
+function tokenize(text, titleResponse) {
 	// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 
 	// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
@@ -129,14 +128,14 @@ function tokenize(text, indexChatBotResponse) {
 	// Si le token correspond au début du mot, le poids est plus important
 	const bonusStart = 0.2;
 	// Si le token est présent dans le titre, le poids est très important
-	const bonusInTitle = nextMessage ? 100 : 10;
+	const bonusInTitle = nextMessage.goto ? 100 : 10;
 
 	function weightedToken(index, tokenDimension, word) {
 		let weight = weights[tokenDimension - 1]; // Poids en fonction de la taille du token
 		weight = index === 0 ? weight + bonusStart : weight; // Bonus si le token est en début du mot
 		const token = word.substring(index, index + tokenDimension);
-		if (indexChatBotResponse) {
-			const titleResponse = chatData[indexChatBotResponse][0].toLowerCase();
+		if (titleResponse) {
+			titleResponse = titleResponse.toLowerCase();
 			// Bonus si le token est dans le titre
 			if (titleResponse.includes(token)) {
 				weight = weight + bonusInTitle;
@@ -171,9 +170,9 @@ function tokenize(text, indexChatBotResponse) {
 	return tokens;
 }
 
-export function createVector(text, indexChatBotResponse) {
+export function createVector(text, titleResponse) {
 	// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
-	const tokens = tokenize(text, indexChatBotResponse);
+	const tokens = tokenize(text, titleResponse);
 	const vec = {};
 	for (const { token, weight } of tokens) {
 		if (token) {

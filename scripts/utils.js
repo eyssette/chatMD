@@ -40,7 +40,7 @@ export function topElements(array, maxElements) {
 }
 
 // Pour réordonner de manière aléatoire un tableau
-function shuffleArray(array) {
+export function shuffleArray(array) {
 	return array.sort(function () {
 		return Math.random() - 0.5;
 	});

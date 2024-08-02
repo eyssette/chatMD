@@ -14,7 +14,6 @@ import { chatContainer, userInput } from "./typewriter"
 const sendButton = document.getElementById("send-button");
 
 export function createChatBot(chatData) {
-	const chatDataLength = chatData.length;
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
 		new URLSearchParams(document.location.search)
@@ -37,6 +36,7 @@ export function createChatBot(chatData) {
 
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
+	const chatDataLength = chatData.length;
 	document.getElementById("chatbot-name").textContent = chatbotName;
 	document.title = chatbotName;
 
@@ -131,8 +131,9 @@ export function createChatBot(chatData) {
 			let response = Array.isArray(responses)
 				? responses.join(" ").toLowerCase()
 				: responses.toLowerCase();
-			response = chatData[i][0] + " " + response;
-			const vectorResponse = createVector(response, i);
+			const titleResponse = chatData[i][0];
+			response = titleResponse + " " + response;
+			const vectorResponse = createVector(response, titleResponse);
 			vectorChatBotResponses.push(vectorResponse);
 		}
 	}

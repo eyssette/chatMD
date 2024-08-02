@@ -1,5 +1,5 @@
 import { config } from "./config";
-import {jsyaml} from "../externals/js-yaml.min.js"
+import jsYaml from "../externals/js-yaml.js"
 import { loadScript, loadCSS } from "./utils.js";
 
 export let yaml = {
@@ -26,7 +26,7 @@ export function processYAML(markdownContent) {
 	if (markdownContent.split("---").length > 2 && markdownContent.startsWith("---")) {
 		try {
 			// Traitement des propriétés dans le YAML
-			const yamlData = jsyaml.load(markdownContent.split("---")[1]);
+			const yamlData = jsYaml.load(markdownContent.split("---")[1]);
 			yaml = yamlData ? Object.assign(yaml,yamlData) : yaml;
 			if (yaml.maths === true) {
 				yaml.addOns = yaml.addOns ? yaml.addOns + ",textFit" : "textFit";
@@ -161,7 +161,8 @@ export function processYAML(markdownContent) {
 					])
 				}
 			}
-			if (yaml.useLLM || yaml.utiliserLLM) {
+			if (yaml.useLLM.ok || yaml.utiliserLLM) {
+				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM
 				// On utilise window.useLLMpromise car on aura besoin de savoir quand la promise sera terminée dans un autre script : chatbot.js, (pour calculer les vecteurs de mot pour le RAG : on a besoin que le fichier RAG.js soit bien chargé)  
 				window.useLLMpromise = Promise.all([
 					loadScript(
