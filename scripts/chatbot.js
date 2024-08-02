@@ -1,4 +1,19 @@
-function createChatBot(chatData) {
+import { config } from "./config"
+import { yaml } from "./yaml"
+import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow, footerElement, hideFooter } from "./utils"
+import { nextMessage } from "./directivesAndSpecialContents"
+import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents"
+import { processFixedVariables } from "./processFixedVariables"
+import { processDynamicVariables, evaluateExpression } from "./processDynamicVariables"
+import { convertLatexExpressions } from "./convertLatex"
+import { markdownToHTML } from "./markdown"
+import { displayMessage, autoFocus } from "./typewriter"
+import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp"
+import { chatContainer, userInput } from "./typewriter"
+
+const sendButton = document.getElementById("send-button");
+
+export function createChatBot(chatData) {
 	const chatDataLength = chatData.length;
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
@@ -14,10 +29,10 @@ function createChatBot(chatData) {
 		dynamicVariables["GET" + key] = value;
 	}
 
-	if (yamlFooter === false) {
+	if (yaml.footer === false) {
 		hideFooter();
-	} else if (yamlFooter !== true) {
-		footerElement.innerHTML = yamlFooter
+	} else if (yaml.footer !== true) {
+		footerElement.innerHTML = yaml.footer
 	}
 
 	const chatbotName = chatData.pop();
@@ -27,7 +42,7 @@ function createChatBot(chatData) {
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
-		Math.random() * defaultMessage.length
+		Math.random() * config.defaultMessage.length
 	);
 	let randomDefaultMessageIndexLastChoice = [];
 
@@ -36,7 +51,7 @@ function createChatBot(chatData) {
 		const chatMessage = document.createElement("div");
 		chatMessage.classList.add("message");
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-		nextSelected = undefined;
+		nextMessage.selected = undefined;
 		// Gestion des variables fixes prédéfinies
 		message = processFixedVariables(message);
 
@@ -44,7 +59,7 @@ function createChatBot(chatData) {
 			message = processRandomMessage(message)
 		}
 
-		if (yamlDynamicContent) {
+		if (yaml.dynamicContent) {
 			// On traite les variables dynamiques
 			message = processDynamicVariables(message,dynamicVariables,isUser);
 		}
@@ -69,7 +84,7 @@ function createChatBot(chatData) {
 
 		let html = markdownToHTML(message);
 		html = processMultipleBots(html)
-		if (yamlMaths === true) {
+		if (yaml.maths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 			html = convertLatexExpressions(html);
 			setTimeout(() => {
@@ -78,8 +93,8 @@ function createChatBot(chatData) {
 		} else {
 			displayMessage(html, isUser, chatMessage);
 		}
-		if (nextSelected) {
-			chatbotResponse(nextSelected);
+		if (nextMessage.selected) {
+			chatbotResponse(nextMessage.selected);
 		}
 	}
 
@@ -92,7 +107,7 @@ function createChatBot(chatData) {
 		if (optionLink != "") {
 			for (let i = 0; i < chatDataLength; i++) {
 				let title = chatData[i][0];
-				title = yamlObfuscate ? btoa(title) : title;
+				title = yaml.obfuscate ? btoa(title) : title;
 				if (optionLink == title) {
 					let response = chatData[i][2];
 					const options = chatData[i][3];
@@ -110,7 +125,7 @@ function createChatBot(chatData) {
 
 	let vectorChatBotResponses = [];
 	// On précalcule les vecteurs des réponses du chatbot
-	if (yamlSearchInContent || yamlUseLLM) {
+	if (yaml.searchInContent || yaml.useLLM.ok) {
 		for (let i = 0; i < chatDataLength; i++) {
 			const responses = chatData[i][2];
 			let response = Array.isArray(responses)
@@ -139,10 +154,10 @@ function createChatBot(chatData) {
 			.then(() => {
 				if (window.useLLMragContentPromise) {
 					window.useLLMragContentPromise.then(() => {
-						createVectorRAGinformations(yamlUseLLMinformations);
+						createVectorRAGinformations(yaml.useLLM.RAG.informations);
 					});
 				} else {
-					createVectorRAGinformations(yamlUseLLMinformations);
+					createVectorRAGinformations(yaml.useLLM.RAG.informations);
 				}
 			})
 			.catch((error) => {
@@ -152,36 +167,36 @@ function createChatBot(chatData) {
 
 	function chatbotResponse(inputText) {
 		// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
-		if (nextMessage != "" && !nextMessageOnlyIfKeywords) {
-			inputText = nextMessage;
+		if (nextMessage.goto != "" && !nextMessage.onlyIfKeywords) {
+			inputText = nextMessage.goto;
 		}
 		let RAGbestMatchesInformation = "";
 		let questionToLLM;
-		if (yamlUseLLM) {
+		if (yaml.useLLM.ok) {
 			inputText = inputText.replace(
 				'<span class="hidden">!useLLM</span>',
 				"!useLLM"
 			);
 			questionToLLM = inputText.trim().replace("!useLLM", "");
-			if (yamlUseLLMinformations) {
+			if (yaml.useLLM.RAG.informations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 				const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
 					cosineSimilarity(questionToLLM, vectorRAGinformation)
 				);
 				const RAGbestMatchesIndexes = topElements(
 					cosSimArray,
-					yamlUseLLMmaxTopElements
+					yaml.useLLM.RAG.maxTopElements
 				);
 				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
-					(element) => yamlUseLLMinformations[element[1]]
+					(element) => yaml.useLLM.RAG.informations[element[1]]
 				).join("\n");
 			}
 		}
 
 		// Choix de la réponse que le chatbot va envoyer
-		if (yamldetectBadWords === true && filterBadWords) {
-			if (filterBadWords.check(inputText)) {
-				createChatMessage(getRandomElement(badWordsMessage), false);
+		if (yaml.detectBadWords === true && window.filterBadWords) {
+			if (window.filterBadWords.check(inputText)) {
+				createChatMessage(getRandomElement(config.badWordsMessage), false);
 				return;
 			}
 		}
@@ -216,22 +231,22 @@ function createChatBot(chatData) {
 				const titleResponse = chatData[i][0];
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
-				if (nextMessageOnlyIfKeywords && titleResponse != nextMessage) {
+				if (nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) {
 					continue;
 				}
 				// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
 				if (
-					nextMessageOnlyIfKeywords &&
-					titleResponse == nextMessage &&
+					nextMessage.onlyIfKeywords &&
+					titleResponse == nextMessage.goto &&
 					keywordsResponse.length == 0
 				) {
-					userInputTextToLowerCase = nextMessage.toLowerCase();
+					userInputTextToLowerCase = nextMessage.goto.toLowerCase();
 				}
 				const keywords = keywordsResponse.concat(titleResponse);
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
-				if (yamlSearchInContent) {
+				if (yaml.searchInContent) {
 					const cosSim = cosineSimilarity(
 						userInputTextToLowerCase,
 						vectorChatBotResponses[i]
@@ -243,7 +258,7 @@ function createChatBot(chatData) {
 					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
 						// Test de l'identité stricte
 						let strictIdentityMatch = false;
-						if (nextMessageOnlyIfKeywords) {
+						if (nextMessage.onlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
 							userInputTextToLowerCase = removeAccents(
 								userInputTextToLowerCase
@@ -277,7 +292,7 @@ function createChatBot(chatData) {
 						}
 					}
 				}
-				if (matchScore == 0 && !nextMessageOnlyIfKeywords) {
+				if (matchScore == 0 && !nextMessage.onlyIfKeywords) {
 					// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 					if (distanceScore > bestDistanceScore) {
 						matchScore++;
@@ -287,8 +302,8 @@ function createChatBot(chatData) {
 				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0 et que la réponse correspond au titre de la réponse voulue dans la directive
 				if (
 					matchScore > 0 &&
-					nextMessageOnlyIfKeywords &&
-					titleResponse == nextMessage
+					nextMessage.onlyIfKeywords &&
+					titleResponse == nextMessage.goto
 				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				}
@@ -301,14 +316,14 @@ function createChatBot(chatData) {
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 			if (
 				(bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) ||
-				nextMessageOnlyIfKeywords
+				nextMessage.onlyIfKeywords
 			) {
-				if (bestMatch && nextMessageOnlyIfKeywords) {
+				if (bestMatch && nextMessage.onlyIfKeywords) {
 					// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
-					lastMessageFromBot = "";
-					nextMessage = "";
-					nextMessageOnlyIfKeywordsCount = 0;
-					nextMessageOnlyIfKeywords = false;
+					nextMessage.lastMessageFromBot = "";
+					nextMessage.goto = "";
+					nextMessage.errorsCounter = 0;
+					nextMessage.onlyIfKeywords = false;
 				}
 				// On envoie le meilleur choix s'il en existe un
 				let selectedResponseWithoutOptions = bestMatch
@@ -322,12 +337,12 @@ function createChatBot(chatData) {
 					: [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 				let selectedResponseWithOptions;
-				if (nextMessageOnlyIfKeywords && titleBestMatch !== nextMessage) {
-					selectedResponseWithOptions = lastMessageFromBot.includes(
-						messageIfKeywordsNotFound
+				if (nextMessage.onlyIfKeywords && titleBestMatch !== nextMessage.goto) {
+					selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
+						nextMessage.messageIfKeywordsNotFound
 					)
-						? lastMessageFromBot
-						: messageIfKeywordsNotFound + lastMessageFromBot;
+						? nextMessage.lastMessageFromBot
+						: nextMessage.messageIfKeywordsNotFound + nextMessage.lastMessageFromBot;
 				} else {
 					selectedResponseWithOptions = gestionOptions(
 						selectedResponseWithoutOptions,
@@ -336,13 +351,13 @@ function createChatBot(chatData) {
 				}
 				// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
 				if (
-					(yamlUseLLM &&
-						yamlUseLLMurl &&
-						yamlUseLLMmodel &&
-						yamlUseLLMalways) ||
+					(yaml.useLLM.ok &&
+						yaml.useLLM.url &&
+						yaml.useLLM.model &&
+						yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
-					getAnswerFromLLM(
+					window.getAnswerFromLLM(
 						questionToLLM.trim(),
 						selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation
 					);
@@ -352,13 +367,13 @@ function createChatBot(chatData) {
 				}
 			} else {
 				if (
-					(yamlUseLLM &&
-						yamlUseLLMurl &&
-						yamlUseLLMmodel &&
-						yamlUseLLMalways) ||
+					(yaml.useLLM.ok &&
+						yaml.useLLM.url &&
+						yaml.useLLM.model &&
+						yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
-					getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
+					window.getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
 					return;
 				} else {
 					// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
@@ -369,19 +384,19 @@ function createChatBot(chatData) {
 						)
 					) {
 						randomDefaultMessageIndex = Math.floor(
-							Math.random() * defaultMessage.length
+							Math.random() * config.defaultMessage.length
 						);
 					}
 					if (randomDefaultMessageIndexLastChoice.length > 4) {
 						randomDefaultMessageIndexLastChoice.shift();
 					}
 					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-					let messageNoAnswer = defaultMessage[randomDefaultMessageIndex];
+					let messageNoAnswer = config.defaultMessage[randomDefaultMessageIndex];
 					if (
-						yamlUseLLM &&
-						!yamlUseLLMalways &&
-						yamlUseLLMurl &&
-						yamlUseLLMmodel
+						yaml.useLLM.ok &&
+						!yaml.useLLM.always &&
+						yaml.useLLM.url &&
+						yaml.useLLM.model
 					) {
 						const optionMessageNoAnswer = [
 							["Voir une réponse générée par une IA", "!useLLM " + inputText],
@@ -399,7 +414,7 @@ function createChatBot(chatData) {
 
 	function gestionOptions(response, options) {
 		// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
-		if (yamlDynamicContent && Object.keys(dynamicVariables).length > 0) {
+		if (yaml.dynamicContent && Object.keys(dynamicVariables).length > 0) {
 			if (options) {
 				options = options.filter((element) => {
 					let condition = element[3];
@@ -523,19 +538,19 @@ function createChatBot(chatData) {
 			if (link.startsWith("#")) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
-				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage et nextMessageOnlyIfKeywords
-				lastMessageFromBot = '';
-				nextMessage = '';
-				nextMessageOnlyIfKeywords = false;
+				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
+				nextMessage.lastMessageFromBot = '';
+				nextMessage.goto = '';
+				nextMessage.onlyIfKeywords = false;
 				let messageFromLink = target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
-				const linkDeobfuscated = yamlObfuscate
+				const linkDeobfuscated = yaml.obfuscate
 					? atob(link.replace("#", ""))
 					: link;
 				if (
-					yamlUseLLM &&
-					yamlUseLLMurl &&
-					yamlUseLLMmodel &&
+					yaml.useLLM.ok &&
+					yaml.useLLM.url &&
+					yaml.useLLM.model &&
 					linkDeobfuscated.includes("!useLLM")
 				) {
 					messageFromLink = linkDeobfuscated
@@ -556,7 +571,7 @@ function createChatBot(chatData) {
 					}
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs 
-				nextMessageOnlyIfKeywordsCount = 0;
+				nextMessage.errorsCounter = 0;
 				scrollWindow();
 			}
 		}
@@ -570,7 +585,7 @@ function createChatBot(chatData) {
 		initialMessage[1]
 	);
 
-	if (yamlDynamicContent) {
+	if (yaml.dynamicContent) {
 		// S'il y a des variables dynamiques dans le message initial, on les traite
 		initialMessage = processDynamicVariables(initialMessage,dynamicVariables,false);
 	}

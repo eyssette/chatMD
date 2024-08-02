@@ -1,9 +1,11 @@
-const secureMode = false;
+export let config = {}
+
+config.secureMode = false;
 // Si on utilise le mode sécurisé, il faut indiquer les chatbots qui sont autorisés, soit en utilisant 'authorizedChatbots', soit en utilisant les raccourcis ci-dessous
 // Les raccourcis définis plus bas sont également ajoutés aux chatbots autorisés si on utilise le mode sécurisé
-const authorizedChatbots = ["https://codimd.apps.education.fr/d3yEseF3RtWzeW3vcgn4MQ"];
+config.authorizedChatbots = ["https://codimd.apps.education.fr/d3yEseF3RtWzeW3vcgn4MQ"];
 
-let defaultMessage = [
+config.defaultMessage = [
 	"Désolé, je ne comprends pas votre question.",
 	"Pardonnez-moi, mais je ne saisis pas votre demande.",
 	"Excusez-moi, je ne parviens pas à comprendre ce que vous demandez.",
@@ -24,7 +26,7 @@ let defaultMessage = [
 	"Je ne parviens pas à répondre à votre requête. Veuillez m'excuser.",
 ];
 
-const badWordsMessage = [
+config.badWordsMessage = [
 	"Même si je ne suis qu'un chatbot, merci de vous adresser à moi avec un langage approprié",
 	"Je préférerais que nous restions courtois dans notre communication.",
 	"Les insultes ne sont pas nécessaires. Comment puis-je vous aider autrement ?",
@@ -39,57 +41,63 @@ const badWordsMessage = [
 ];
 
 // Raccourcis vers des chatbots particuliers
-const shortcuts = [
+config.shortcuts = [
 	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"],
 	["multiple-urls",["https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download","https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download"]]
 ];
 
-const corsProxy = "https://corsproxy.io/?";
+config.corsProxy = "https://corsproxy.io/?";
 
 // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
-let responsesTitles = ["## "];
+config.responsesTitles = ["## "];
 
 // Gestion des addOns
-const allowedAddOns = {
+config.allowedAddOns = {
 	pako: { js: "externals/pako.min.js" },
 	kroki: { js: "externals/kroki.js" },
 	textFit: {js: "externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>"}
 };
 
-const addOnsDependencies = {
+config.addOnsDependencies = {
 	kroki: ["pako"]
 }
 
 // Paramètres dans l'en-tête YAML
-let yamlStyle = "";
-let yamlUserInput = true;
-let yamlSearchInContent = false;
-let yamldetectBadWords = false;
-let yamlMaths = false;
-let yamlFooter = true;
-let yamlTheme = "";
-let yamlDynamicContent = false;
-let yamlTypeWriter = true;
-let yamlObfuscate = false;
-let yamlUseAddOns;
-let yamlData;
-let yamlBots;
+config.yaml = {
+	// 'style': "",
+	// 'favicon': "",
+	// 'avatar': "",
+	'userInput': true,
+	'searchInContent': false,
+	'detectBadWords': false,
+	'maths': false,
+	'footer': true,
+	'theme': "",
+	'dynamicContent': false,
+	'typeWriter': true,
+	'obfuscate': false,
+	'addOns': '',
+	'bots': '',
+	'variables': '',
+}
 
 // Paramètres pour l'utilisation d'un LLM
-let yamlUseLLM;
-let yamlUseLLMurl;
-let yamlUseLLMapiKey = ''; // Attention à ne pas mettre votre apiKey en public !
-let yamlUseLLMmodel;
-let yamlUseLLMalways = false;
-
 const defaultMaxTokens = 100;
 const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires."
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
-let yamlUseLLMsystemPrompt = defaultSystemPrompt;
-let yamlUseLLMmaxTokens = defaultMaxTokens;
-let yamlUseLLMinformations = '';
-let yamlUseLLMpreprompt = '';
-let yamlUseLLMpostprompt = defaultPostprompt;
+
+config.yaml.useLLM = {
+	'ok': false,
+	'url': '',
+	'askAPIkey': false,
+	'apiKey': '', // Attention à ne pas mettre votre apiKey en public !
+	'model': '',
+	'always': false,
+	'systemPrompt': defaultSystemPrompt,
+	'maxTokens': defaultMaxTokens,
+	'preprompt': '',
+	'postprompt': defaultPostprompt,
+};
 
 
 // Paramètres pour le RAG
@@ -99,8 +107,11 @@ CONTEXTE : `;
 const defaultRAGpromptStrict = `
 Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
 CONTEXTE : `;
-let yamlUseLLMragSeparator = '\n';
-let yamlUseLLMmaxTopElements = 3;
-let yamlUseLLMragPrompt = defaultRAGprompt;
+config.yaml.useLLM.RAG = {
+	'informations': '',
+	'separator': '\n',
+	'maxTopElements': 3,
+	'prompt': defaultRAGprompt,
+}
 
 

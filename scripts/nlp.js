@@ -28,7 +28,7 @@ function levenshteinDistance(a, b) {
 	return matrix[bLength][aLength];
 }
 
-function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
+export function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
 	// Teste la présence d'un mot dans une chaîne de caractère qui a une distance de Levenshstein inférieure à une distance donnée
 
 	const words = string.split(" ");
@@ -48,7 +48,7 @@ function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
 	return false;
 }
 
-function removeAccents(str) {
+export function removeAccents(str) {
 	const accentMap = {
 		à: "a",
 		â: "a",
@@ -171,7 +171,7 @@ function tokenize(text, indexChatBotResponse) {
 	return tokens;
 }
 
-function createVector(text, indexChatBotResponse) {
+export function createVector(text, indexChatBotResponse) {
 	// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
 	const tokens = tokenize(text, indexChatBotResponse);
 	const vec = {};
@@ -183,7 +183,7 @@ function createVector(text, indexChatBotResponse) {
 	return vec;
 }
 
-function cosineSimilarity(str, vector) {
+export function cosineSimilarity(str, vector) {
 	// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
 
 	// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)

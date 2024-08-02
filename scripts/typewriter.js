@@ -1,13 +1,16 @@
-const chatContainer = document.getElementById("chat");
-const userInput = document.getElementById("user-input");
-const sendButton = document.getElementById("send-button");
+import { scrollWindow } from "./utils";
+import { yaml } from "./yaml";
+import Typed from "../externals/typed.js"
+
+export const chatContainer = document.getElementById("chat");
+export const userInput = document.getElementById("user-input");
 
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
 const isMobile =
 	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
 		navigator.userAgent
 	);
-const autoFocus = isMobile ? false : true;
+export const autoFocus = isMobile ? false : true;
 
 const thresholdMouseMovement = 10;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
@@ -25,7 +28,7 @@ const messageTypeEnterToStopTypeWriter = isMobile ? "Clic sur “Envoyer” pour
 
 let typed;
 const pauseTypeWriter = "^300 ";
-const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
+export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 const stopTypeWriterExecutionTimeThreshold = 800;
 // Effet machine à écrire
 function typeWriter(content, element) {
@@ -163,8 +166,8 @@ function typeWriter(content, element) {
 		},
 		onComplete: () => {
 			// Gestion de textFit pour les éléments en Latex
-			if (yamlUseAddOns && yamlUseAddOns.includes("textFit")) {
-				textFit(element.querySelectorAll(".katex-display"));
+			if (yaml.addOns && yaml.addOns.includes("textFit")) {
+				window.textFit(element.querySelectorAll(".katex-display"));
 			}
 			// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
 			userInput.removeEventListener("keypress", keypressHandler);
@@ -181,14 +184,14 @@ function typeWriter(content, element) {
 }
 
 
-function displayMessage(html, isUser, chatMessage) {
+export function displayMessage(html, isUser, chatMessage) {
 	// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
 	// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
 	chatContainer.appendChild(chatMessage);
 	if (
 		isUser ||
 		window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-		yamlTypeWriter === false
+		yaml.typeWriter === false
 	) {
 		chatMessage.innerHTML = html;
 	} else {

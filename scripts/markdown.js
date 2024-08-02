@@ -48,7 +48,7 @@ function showdownExtensionAdmonitions() {
 }
 
 // Gestion du markdown dans les réponses du chatbot
-const converter = new showdown.Converter({
+const converter = new window.showdown.Converter({
 	emoji: true,
 	parseImgDimensions: true,
 	simpleLineBreaks: true,
@@ -59,7 +59,7 @@ const converter = new showdown.Converter({
 });
 
 // Conversion du Markdown en HTML
-function markdownToHTML(text) {
+export function markdownToHTML(text) {
 	text = text.replaceAll("\n\n|", "|");
 	const html = converter.makeHtml(text).replaceAll('&amp;#96','\`&#96\`');
 	return html;

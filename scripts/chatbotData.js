@@ -1,3 +1,13 @@
+import { handleURL } from "./utils";
+import {defaultMD} from '../data/testMD' 
+import { createChatBot } from "./chatbot";
+import { processYAML, yaml} from "./yaml";
+import { processFixedVariables } from "./processFixedVariables";
+import { startsWithAnyOf } from "./utils";
+
+let md = defaultMD;
+let chatData;
+
 const controls = document.getElementById("controls");
 
 // Pour récupérer le markdown externe via le hash dans l'URL
@@ -55,7 +65,7 @@ function parseMarkdown(markdownContent) {
 		indexFirstH1title = 0;
 	}
 	let mainContent = markdownContent.substring(indexFirstH1title);
-	if(yamlData && yamlData.variables) {
+	if(yaml.variables) {
 		mainContent = processFixedVariables(mainContent, true)
 	}
 	const mainContentWithoutH1 = mainContent.substring(1);
@@ -81,7 +91,7 @@ function parseMarkdown(markdownContent) {
 			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-			link = yamlObfuscate ? btoa(link) : link;
+			link = yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			initialMessageOptions.push([text, link, randomOrder]);
 		} else {
@@ -94,7 +104,7 @@ function parseMarkdown(markdownContent) {
 	let ifCondition = '';
 
 	for (let line of contentAfterFirstPartLines) {
-		if (startsWithAnyOf(line,responsesTitles)) {
+		if (startsWithAnyOf(line,yaml.responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			if (currentH2Title) {
 				chatbotData.push([
@@ -104,7 +114,7 @@ function parseMarkdown(markdownContent) {
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line.replace(startsWithAnyOf(line,responsesTitles), "").trim(); // Titre h2
+			currentH2Title = line.replace(startsWithAnyOf(line,yaml.responsesTitles), "").trim(); // Titre h2
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
@@ -112,11 +122,11 @@ function parseMarkdown(markdownContent) {
 		} else if (line.startsWith("- ") && !listParsed) {
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
-		} else if (yamlDynamicContent && regexDynamicContentIfBlock.test(line)) {
+		} else if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
 			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : '';
 			content.push(line + "\n");
 			listParsed = true;
-		} else if (yamlDynamicContent && line.includes('`endif`')) {
+		} else if (yaml.dynamicContent && line.includes('`endif`')) {
 			ifCondition = '';
 			content.push(line + "\n");
 			listParsed = true;
@@ -129,7 +139,7 @@ function parseMarkdown(markdownContent) {
 			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-			link = yamlObfuscate ? btoa(link) : link;
+			link = yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			lastOrderedList.push([text, link, randomOrder, ifCondition]);
 			/* lastOrderedList.push(listContent); */

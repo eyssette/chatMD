@@ -1,10 +1,12 @@
+import { config } from "./config";
+
 // Pour tirer au hasard un élément dans un tableau
-function getRandomElement(array) {
+export function getRandomElement(array) {
 	return array[Math.floor(Math.random() * array.length)];
 }
 
 // Pour vérifier si une variable texte commence par un élément d'un tableau
-function startsWithAnyOf(string, array) {
+export function startsWithAnyOf(string, array) {
 	for (const element of array) {
 		if (string.startsWith(element)) {
 			return element;
@@ -13,7 +15,7 @@ function startsWithAnyOf(string, array) {
 }
 
 // Pour ne garder que les éléments avec la valeur la plus grande dans un tableau
-function topElements(array, maxElements) {
+export function topElements(array, maxElements) {
 	let topElements;
 	if (array.length < maxElements) {
 		// Si le tableau contient moins que maxElements : on garde tout le tableau
@@ -45,7 +47,7 @@ function shuffleArray(array) {
 }
 
 // Pour mettre de l'aléatoire dans un tableau, en conservant cependant la position de certains éléments
-function randomizeArrayWithFixedElements(array) {
+export function randomizeArrayWithFixedElements(array) {
 	let fixedElements = [];
 	let randomizableElements = [];
 
@@ -75,7 +77,7 @@ function randomizeArrayWithFixedElements(array) {
 }
 
 // Pour tester si le tableau des options doit être réordonné avec de l'aléatoire
-function shouldBeRandomized(array) {
+export function shouldBeRandomized(array) {
 	if (Array.isArray(array)) {
 		const arrayLength = array.length;
 		for (let i = 0; i < arrayLength; i++) {
@@ -88,18 +90,18 @@ function shouldBeRandomized(array) {
 }
 
 // Pour gérer l'URL de la source du chatbot
-function handleURL(url) {
+export function handleURL(url) {
 	if (url !== "") {
 		let addCorsProxy = true;
 		// Vérification de la présence d'un raccourci
-		const shortcut = shortcuts.find((element) => element[0] == url);
+		const shortcut = config.shortcuts.find((element) => element[0] == url);
 		if (shortcut) {
 			url = shortcut[1];
 			// Si on a un raccourci, on n'a pas besoin de traiter correctement l'url
 			return url
 		}
-		if (secureMode) {
-			const authorizedChatbot = authorizedChatbots.find((element) => element == url);
+		if (config.secureMode) {
+			const authorizedChatbot = config.authorizedChatbots.find((element) => element == url);
 			if(authorizedChatbot) {
 				url = authorizedChatbot;
 			} else {
@@ -139,13 +141,13 @@ function handleURL(url) {
 			addCorsProxy = false;
 			url = url.replace(/\?.*/, "") + "/export/txt";
 		}
-		url = addCorsProxy ? corsProxy + url : url;
+		url = addCorsProxy ? config.corsProxy + url : url;
 	}
 	return url;
 }
 
 // Pour charger des scripts
-function loadScript(src) {
+export function loadScript(src) {
 	return new Promise((resolve, reject) => {
 		const script = document.createElement("script");
 		script.src = src;
@@ -156,7 +158,7 @@ function loadScript(src) {
 }
 
 // Pour charger des CSS
-function loadCSS(src) {
+export function loadCSS(src) {
 	return new Promise((resolve, reject) => {
 		let styleElement;
 		if (src.startsWith("<style>")) {
@@ -176,15 +178,15 @@ function loadCSS(src) {
 }
 
 // Gestion du scroll automatique vers le bas
-function scrollWindow() {
+export function scrollWindow() {
 	setTimeout(() => {
 		window.scrollTo(0, document.body.scrollHeight);
 	}, 100);
 }
 
 // Pour cacher le footer
-const footerElement = document.getElementById("footer");
-function hideFooter() {
+export const footerElement = document.getElementById("footer");
+export function hideFooter() {
 	const controlsElement = document.getElementById("controls");
 	footerElement.style.display = "none";
 	controlsElement.style.height = "70px";
@@ -196,7 +198,7 @@ function hideFooter() {
 }
 
 
-function tryConvertStringToNumber(input) {
+export function tryConvertStringToNumber(input) {
 	const number = parseFloat(input);
 	if (!isNaN(number) && number.toString() === input.toString().trim()) {
 		return number;
