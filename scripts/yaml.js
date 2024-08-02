@@ -68,7 +68,7 @@ export function processYAML(markdownContent) {
 				}
 			}
 			if (yaml.titresRéponses || yaml.responsesTitles) {
-				yaml.responsesTitles = yaml.responsesTitles ? yaml.responsesTitles : yaml.titresRéponses;
+				yaml.responsesTitles = yaml.titresRéponses ? yaml.titresRéponses : yaml.responsesTitles;
 				if (typeof yaml.responsesTitles === 'string') {
 					// Cas où le yaml pour les titres des réponses ne contient pas un tableau, mais un seul élément
 					yaml.responsesTitles = [yaml.responsesTitles];
@@ -84,16 +84,16 @@ export function processYAML(markdownContent) {
 				yaml.clavier ||
 				yaml.keyboard
 			) {
-				yaml.userInput = yaml.userInput ? yaml.userInput : (yaml.keyboard ? yaml.keyboard : yaml.clavier);
+				yaml.userInput = yaml.clavier ? yaml.clavier : (yaml.keyboard ? yaml.keyboard : yaml.userInput);
 				if (yaml.userInput === false) {
 					document.body.classList.add('hideControls')
 				}
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
-				yaml.searchInContent = yaml.searchInContent ? yaml.searchInContent : yaml.rechercheContenu;
+				yaml.searchInContent = yaml.rechercheContenu ? yaml.rechercheContenu : yaml.searchInContent;
 			}
 			if (yaml.gestionGrosMots || yaml.detectBadWords) {
-				yaml.detectBadWords = yaml.detectBadWords ? yaml.detectBadWords : yaml.gestionGrosMots;
+				yaml.detectBadWords = yaml.gestionGrosMots ? yaml.gestionGrosMots : yaml.detectBadWords;
 				if (yaml.detectBadWords === true) {
 					Promise.all([
 						loadScript("externals/leo-profanity.js"),
@@ -126,7 +126,7 @@ export function processYAML(markdownContent) {
 				document.head.appendChild(avatarStyleElement);
 			}
 			if (yaml.defaultMessage || yaml.messageParDéfaut) {
-				config.defaultMessage = yaml.defaultMessage ? yaml.defaultMessage : yaml.messageParDéfaut;
+				config.defaultMessage = yaml.messageParDéfaut ? yaml.messageParDéfaut : yaml.defaultMessage;
 				while (config.defaultMessage.length<5) {
 					config.defaultMessage.push(...config.defaultMessage);
 				}
@@ -141,10 +141,10 @@ export function processYAML(markdownContent) {
 				loadCSS(cssFile);
 			}
 			if (yaml.dynamicContent || yaml.contenuDynamique) {
-				yaml.dynamicContent = yaml.dynamicContent ? yaml.dynamicContent : yaml.contenuDynamique;
+				yaml.dynamicContent = yaml.contenuDynamique ? yaml.contenuDynamique : yaml.dynamicContent;
 			}
 			if (yaml.typeWriter || yaml.effetDactylo) {
-				yaml.typeWriter = yaml.typeWriter ? yaml.typeWriter : yaml.effetDactylo;
+				yaml.typeWriter = yaml.effetDactylo ? yaml.effetDactylo : yaml.typeWriter;
 			}
 			if (yaml.obfuscate) {
 				yaml.obfuscate = yaml.obfuscate ? true : false;
