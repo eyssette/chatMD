@@ -9,7 +9,7 @@ let md = defaultMD;
 let chatData;
 
 // Pour récupérer le markdown externe via le hash dans l'URL
-function getMarkdownContent() {
+export function getMarkdownContentandCreateChatbot() {
 	// On récupère l'URL du hashtag sans le #
 	const url = window.location.hash.substring(1).replace(/\?.*/,'');
 	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
@@ -37,8 +37,6 @@ function getMarkdownContent() {
 		createChatBot(parseMarkdown(md));
 	}
 }
-
-getMarkdownContent();
 
 function parseMarkdown(markdownContent) {
 	processYAML(markdownContent)

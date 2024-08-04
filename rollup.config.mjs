@@ -34,7 +34,7 @@ function createCombinedMdFile() {
 createCombinedMdFile();
 
 export default {
-	input: "js/chatbotData.js",
+	input: "js/main.js",
 	output: {
 		file: "script.min.js",
 		format: "iife",
