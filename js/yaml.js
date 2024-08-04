@@ -137,7 +137,7 @@ export function processYAML(markdownContent) {
 				footerElement.innerHTML = yaml.footer
 			}
 			if (yaml.theme) {
-				const cssFile = yaml.theme.endsWith('.css') ? "themes/"+yaml.theme : "themes/"+yaml.theme+".css";
+				const cssFile = yaml.theme.endsWith('.css') ? "css/themes/"+yaml.theme : "css/themes/"+yaml.theme+".css";
 				loadCSS(cssFile);
 			}
 			if (yaml.dynamicContent || yaml.contenuDynamique) {
