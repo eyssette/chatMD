@@ -64,20 +64,23 @@ config.addOnsDependencies = {
 
 // Paramètres dans l'en-tête YAML
 config.yaml = {
-	// 'style': "",
-	// 'favicon': "",
-	// 'avatar': "",
-	'userInput': true,
-	'searchInContent': false,
-	'detectBadWords': false,
-	'maths': false,
-	'footer': true,
-	'theme': "",
-	'dynamicContent': false,
-	'typeWriter': true,
-	'obfuscate': false,
 	'addOns': '',
-	'bots': '',
+	'avatar': "",
+	'bots': {},
+	'detectBadWords': false,
+	'defaultMessage': config.defaultMessage,
+	'dynamicContent': false,
+	'favicon': "",
+	'footer': true,
+	'maths': false,
+	'obfuscate': false,
+	'responsesTitles': config.responsesTitles,
+	'searchInContent': false,
+	'style': "",
+	'theme': "",
+	//useLLM : défini plus bas
+	'typeWriter': true,
+	'userInput': true,
 	'variables': '',
 }
 
