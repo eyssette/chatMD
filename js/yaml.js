@@ -3,21 +3,21 @@ import jsYaml from "./externals/js-yaml.js"
 import { loadScript, loadCSS, deepMerge, footerElement, hideFooter } from "./utils.js";
 
 export let yaml = {
-	'maths': config.yaml.maths,
 	'addOns': config.yaml.addOns,
-	'style': config.yaml.style,
-	'userInput': config.yaml.userInput,
+	'avatar': config.yaml.avatar,
+	'bots': config.yaml.bots,
+	'detectBadWords': config.yaml.detectBadWords,
+	'dynamicContent': config.yaml.dynamicContent,
+	'footer': config.yaml.footer,
+	'maths': config.yaml.maths,
+	'obfuscate': config.yaml.obfuscate,
 	'responsesTitles': config.responsesTitles,
 	'searchInContent': config.yaml.searchInContent,
-	'detectBadWords': config.yaml.detectBadWords,
-	'avatar': config.yaml.avatar,
-	'footer': config.yaml.footer,
+	'style': config.yaml.style,
 	'theme': config.yaml.theme,
-	'dynamicContent': config.yaml.dynamicContent,
 	'typeWriter': config.yaml.typeWriter,
-	'obfuscate': config.yaml.obfuscate,
-	'bots': config.yaml.bots,
 	'useLLM': config.yaml.useLLM,
+	'userInput': config.yaml.userInput,
 	'variables': config.yaml.variables,
 }
 
