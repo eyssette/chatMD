@@ -13,15 +13,9 @@
 			}
 		},
 		{
-			"label": "Minify CSS",
+			"label": "Minify Widget",
 			"type": "shell",
-			"command": "minifyall css/styles.css -s .min"
-		},
-		{
-			"label": "Minify JS widget",
-			"type": "shell",
-			"linux": {"command": "node-minify --compressor terser --input js/widget.js --output widget.min.js"},
-			"osx": {"command": "npx node-minify --compressor terser --input js/widget.js --output widget.min.js"}
+			"command": "rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
 		}
 	]
 }
