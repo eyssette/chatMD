@@ -1,5 +1,5 @@
-import { config } from "./config";
-import jsYaml from "../externals/js-yaml.js"
+import { config } from "./config.js";
+import jsYaml from "./externals/js-yaml.js"
 import { loadScript, loadCSS, deepMerge, footerElement, hideFooter } from "./utils.js";
 
 export let yaml = {
@@ -96,8 +96,8 @@ export function processYAML(markdownContent) {
 				yaml.detectBadWords = yaml.gestionGrosMots ? yaml.gestionGrosMots : yaml.detectBadWords;
 				if (yaml.detectBadWords === true) {
 					Promise.all([
-						loadScript("externals/leo-profanity.js"),
-						loadScript("externals/badWords-fr.js"),
+						loadScript("js/externals/leo-profanity.js"),
+						loadScript("js/externals/badWords-fr.js"),
 					])
 						.then(() => {
 							// Les deux scripts sont chargés et prêts à être utilisés

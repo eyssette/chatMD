@@ -10,8 +10,8 @@ import { markdownToHTML } from "./markdown"
 import { displayMessage, autoFocus } from "./typewriter"
 import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp"
 import { chatContainer, userInput } from "./typewriter"
-import { getAnswerFromLLM } from "../LLM/useLLM"
-import { getRAGcontent, vectorRAGinformations, RAGcontent } from "../LLM/processRAG"
+import { getAnswerFromLLM } from "./LLM/useLLM"
+import { getRAGcontent, vectorRAGinformations, RAGcontent } from "./LLM/processRAG"
 
 const sendButton = document.getElementById("send-button");
 

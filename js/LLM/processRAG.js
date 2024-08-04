@@ -1,6 +1,6 @@
-import { yaml } from "../scripts/yaml";
-import { handleURL } from "../scripts/utils";
-import { createVector } from "../scripts/nlp";
+import { yaml } from "../yaml";
+import { handleURL } from "../utils";
+import { createVector } from "../nlp";
 
 function prepareRAGdata(informations, separator) {
 	if(separator) {

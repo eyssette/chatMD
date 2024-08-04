@@ -1,5 +1,5 @@
-import { chatContainer } from "../scripts/typewriter";
-import { yaml } from "../scripts/yaml";
+import { chatContainer } from "../typewriter";
+import { yaml } from "../yaml";
 
 let LLMactive = false;
 let idAnswer = 0;

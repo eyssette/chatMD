@@ -1,4 +1,4 @@
-import Showdown from "../externals/showdown.js";
+import Showdown from "./externals/showdown.js";
 
 // Extensions pour Showdown
 

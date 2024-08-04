@@ -18,17 +18,10 @@
 			"command": "minifyall css/styles.css -s .min"
 		},
 		{
-			"label": "Minify JS",
-			"type": "shell",
-			"linux": {"command": "node-minify --compressor terser --input script.min.js --output script.min.js"},
-			"osx": {"command": "npx node-minify --compressor terser --input script.min.js --output script.min.js"}
-		},
-		{
 			"label": "Minify JS widget",
 			"type": "shell",
-			"linux": {"command": "node-minify --compressor terser --input scripts/widget.js --output widget.min.js"},
-			"osx": {"command": "npx node-minify --compressor terser --input scripts/widget.js --output widget.min.js"}
+			"linux": {"command": "node-minify --compressor terser --input js/widget.js --output widget.min.js"},
+			"osx": {"command": "npx node-minify --compressor terser --input js/widget.js --output widget.min.js"}
 		}
-
 	]
 }

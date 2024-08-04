@@ -53,9 +53,9 @@ config.responsesTitles = ["## "];
 
 // Gestion des addOns
 config.allowedAddOns = {
-	pako: { js: "externals/pako.min.js" },
-	kroki: { js: "externals/kroki.js" },
-	textFit: {js: "externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>"}
+	pako: { js: "js/externals/pako.min.js" },
+	kroki: { js: "js/externals/kroki.js" },
+	textFit: {js: "js/externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>"}
 };
 
 config.addOnsDependencies = {

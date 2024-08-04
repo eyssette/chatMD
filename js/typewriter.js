@@ -1,6 +1,6 @@
-import { scrollWindow } from "./utils";
-import { yaml } from "./yaml";
-import Typed from "../externals/typed.js"
+import { scrollWindow } from "./utils.js";
+import { yaml } from "./yaml.js";
+import Typed from "./externals/typed.js"
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
