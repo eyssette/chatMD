@@ -8,8 +8,6 @@ import defaultMD from "../data.md";
 let md = defaultMD;
 let chatData;
 
-const controls = document.getElementById("controls");
-
 // Pour récupérer le markdown externe via le hash dans l'URL
 function getMarkdownContent() {
 	// On récupère l'URL du hashtag sans le #
