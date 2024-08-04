@@ -79,7 +79,9 @@ export async function createChatBot(chatData) {
 			message = processDirectiveSelectNext(message)
 			
 			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
-			message = processKroki(message)
+			if (yaml.addOns && yaml.addOns.includes("kroki")) {
+				message = processKroki(message)
+			}
 		}
 
 		let html = markdownToHTML(message);
