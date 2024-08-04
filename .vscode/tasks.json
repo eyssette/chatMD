@@ -4,35 +4,18 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Minify js & css",
-			"dependsOn": ["Combine Scripts", "Minify JS"],
+			"label": "Build",
+			"type": "shell",
+			"command": "npm run build",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
 		},
 		{
-			"label": "Combine Scripts",
+			"label": "Minify Widget",
 			"type": "shell",
-			"command": "python3 scripts/combine-scripts.py"
-		},
-		{
-			"label": "Minify CSS",
-			"type": "shell",
-			"command": "minifyall css/styles.css -s .min"
-		},
-		{
-			"label": "Minify JS",
-			"type": "shell",
-			"linux": {"command": "node-minify --compressor terser --input script.min.js --output script.min.js"},
-			"osx": {"command": "npx node-minify --compressor terser --input script.min.js --output script.min.js"}
-		},
-		{
-			"label": "Minify JS widget",
-			"type": "shell",
-			"linux": {"command": "node-minify --compressor terser --input scripts/widget.js --output widget.min.js"},
-			"osx": {"command": "npx node-minify --compressor terser --input scripts/widget.js --output widget.min.js"}
+			"command": "rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
 		}
-
 	]
 }

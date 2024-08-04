@@ -1,4 +1,6 @@
-function convertLatexExpressions(string) {
+import { yaml } from "./yaml";
+
+export function convertLatexExpressions(string) {
 	string = string
 		.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
 		.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
@@ -26,14 +28,14 @@ function convertLatexExpressions(string) {
 				.replaceAll("&amp;","&")
 				.replaceAll("\ ","\\ ");
 			// On convertit la formule mathématique en HTML avec Katex
-			const stringWithLatex = katex.renderToString(mathInExpressionLatex, {
+			const stringWithLatex = window.katex.renderToString(mathInExpressionLatex, {
 				displayMode: inlineMaths,
 			});
 			string = string.replace(expressionLatex, stringWithLatex);
 		}
 	}
 	// Optimisation pour le Latex avec l'effet typeWriter
-	if(yamlTypeWriter === true) {
+	if(yaml.typeWriter === true) {
 		string = string.replaceAll(
 			/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
 			"`$1`"

@@ -1,4 +1,8 @@
-let nextMessageOnlyIfKeywords = false;
+import { config } from "./config";
+import { yaml } from "./yaml";
+import { nextMessage } from "./directivesAndSpecialContents";
+import { tryConvertStringToNumber } from "./utils";
+
 let getLastMessage = false;
 
 // Opérations autorisées pour le calcul des expressions complexes
@@ -8,6 +12,7 @@ const sanitizeCodeAllowedOperations = [
 	'<', '>',
 	'==', '!=', 
 	'&&', '||', '!',
+	'(',')',
 ];
 
 // Sanitize le code avant d'utiliser new Function
@@ -30,10 +35,10 @@ function sanitizeCode(code) {
 	return code;
 }
 
-function evaluateExpression(expression,dynamicVariables) {
+export function evaluateExpression(expression,dynamicVariables) {
 	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
-	expression = secureMode ? expression : sanitizeCode(expression)
-	const result = new Function("dynamicVariables", "return " + expression)(dynamicVariables);
+	expression = config.secureMode ? expression : sanitizeCode(expression)
+	const result = new Function("dynamicVariables", "tryConvertStringToNumber", "return " + expression)(dynamicVariables, tryConvertStringToNumber);
 	return result
 }
 
@@ -50,7 +55,7 @@ function processComplexDynamicVariables(complexExpression,dynamicVariables) {
 	return calcResult;
 }
 
-function processDynamicVariables(message,dynamicVariables,isUser) {
+export function processDynamicVariables(message,dynamicVariables,isUser) {
 	// Cas où le message vient du bot
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
@@ -67,7 +72,7 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 		);
 		message = message.replaceAll('<!--<!--','<!--').replaceAll('-->-->','-->')
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
-		if (yamlUserInput === false) {
+		if (yaml.userInput === false) {
 			if (dynamicVariables["KEYBOARD"] == "true") {
 				document.body.classList.remove("hideControls");
 				dynamicVariables["KEYBOARD"] = "false";
@@ -219,13 +224,13 @@ function processDynamicVariables(message,dynamicVariables,isUser) {
 			// Puis on renvoie vers le message correspondant
 			if (getLastMessage && getLastMessage.length > 0) {
 				dynamicVariables[getLastMessage[0]] = message;
-				nextMessage = getLastMessage[1];
+				nextMessage.goto = getLastMessage[1];
 				getLastMessage = false;
 			} else {
-				nextMessage = "";
+				nextMessage.goto = "";
 			}
 		} else {
-			nextMessage = nextMessageOnlyIfKeywords ? nextMessage : "";
+			nextMessage.goto = nextMessage.onlyIfKeywords ? nextMessage.goto : "";
 		}
 	}
 	return message;

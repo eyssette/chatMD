@@ -1,8 +1,9 @@
-let answerFromLLM = [];
+import { chatContainer } from "../typewriter";
+import { yaml } from "../yaml";
+
 let LLMactive = false;
 let idAnswer = 0;
 
-const chatContainerElement = document.getElementById("chat");
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
@@ -44,9 +45,9 @@ document.body.addEventListener("keypress", (event) => {
 
 // Configuration de l'accès au LLM
 let bodyObject = {
-	model: yamlUseLLMmodel,
+	model: yaml.useLLM.model,
 	stream: true,
-	max_tokens: yamlUseLLMmaxTokens,
+	max_tokens: yaml.useLLM.maxTokens,
 	frequency_penalty: 0,
 	presence_penalty: 0,
 	temperature: 0.7,
@@ -58,7 +59,7 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 	const errorMessageElement = document.createElement("div");
 	errorMessageElement.classList.add("message");
 	errorMessageElement.classList.add("bot-message");
-	chatContainerElement.appendChild(errorMessageElement);
+	chatContainer.appendChild(errorMessageElement);
 	errorMessageElement.textContent = "Pour répondre à cette question, je dois faire appel à une IA générative : la connexion à cette IA n'a pas été correctement configurée ou bien ne fonctionne pas";
 	if(error) {
 		console.error("Erreur:", error.message);
@@ -67,32 +68,32 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 }
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
-function getAnswerFromLLM(userPrompt, informations) {
+export function getAnswerFromLLM(userPrompt, informations) {
 	idAnswer++;
 	if (informations.length>0) {
-		informations = yamlUseLLMragPrompt+informations
+		informations = yaml.useLLM.RAGprompt+informations
 	}
-	const isCohere = yamlUseLLMurl.includes('cohere');
+	const isCohere = yaml.useLLM.url.includes('cohere');
 
 	if (isCohere) {
-		bodyObject.message = yamlUseLLMpreprompt+userPrompt+yamlUseLLMpostprompt+informations;
+		bodyObject.message = yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations;
 	} else {
 		bodyObject.messages = [
 			{
-				content: yamlUseLLMsystemPrompt,
+				content: yaml.useLLM.systemPrompt,
 				role: "system",
 			},
 			{
-				content: yamlUseLLMpreprompt+userPrompt+yamlUseLLMpostprompt+informations,
+				content: yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations,
 				role: "user",
 			},
 		]
 	}
 	try {
-		fetch(yamlUseLLMurl, {
+		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {
-				"Authorization": "Bearer "+yamlUseLLMapiKey,
+				"Authorization": "Bearer "+yaml.useLLM.apiKey,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(bodyObject),
@@ -103,7 +104,7 @@ function getAnswerFromLLM(userPrompt, informations) {
 					const chatMessage = document.createElement("div");
 					chatMessage.classList.add("message");
 					chatMessage.classList.add("bot-message");
-					chatContainerElement.appendChild(chatMessage);
+					chatContainer.appendChild(chatMessage);
 					readStream(response.body, chatMessage, isCohere)
 				} else {
 					messageIfErrorWithGetAnswerFromLLM()

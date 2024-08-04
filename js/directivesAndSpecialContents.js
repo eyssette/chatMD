@@ -1,11 +1,19 @@
-let nextMessageOnlyIfKeywordsCount = 0;
-const nextMessageOnlyIfKeywordsCountMax = 3;
-let messageIfKeywordsNotFound = "";
-let lastMessageFromBot = "";
-let nextSelected;
+import { getRandomElement, shuffleArray } from "./utils";
+import { pauseTypeWriterMultipleBots } from "./typewriter";
+import { yaml } from "./yaml";
+
+export let nextMessage = {
+	'goto': '',
+	'lastMessageFromBot': '',
+	'selected': '',
+	'onlyIfKeywords': false,
+	'errorsCounter': 0,
+	'maxErrors': 3,
+	'messageIfKeywordsNotFound': '',
+}
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-function processDirectiveNext(message) {
+export function processDirectiveNext(message) {
 	message = message.replaceAll(/!Next ?:(.*)/g, function (match, nextDirectiveContent) {
 		const nextDirectiveContentSplit = nextDirectiveContent.split("/");
 		let messageIfError;
@@ -16,22 +24,22 @@ function processDirectiveNext(message) {
 			nextDirectiveContent = nextDirectiveContentSplit[0];
 		}
 
-		lastMessageFromBot = message;
-		nextMessage = nextDirectiveContent.trim();
-		nextMessageOnlyIfKeywords = true;
-		messageIfKeywordsNotFound = messageIfError
+		nextMessage.lastMessageFromBot = message;
+		nextMessage.goto = nextDirectiveContent.trim();
+		nextMessage.onlyIfKeywords = true;
+		nextMessage.messageIfKeywordsNotFound = messageIfError
 			? messageIfError.trim()
 			: "Ce n'était pas la bonne réponse, merci de réessayer !";
-		messageIfKeywordsNotFound = messageIfKeywordsNotFound + "\n\n";
-		nextMessageOnlyIfKeywordsCount++;
+		nextMessage.messageIfKeywordsNotFound = nextMessage.messageIfKeywordsNotFound + "\n\n";
+		nextMessage.errorsCounter++
 		if (
 			match &&
-			nextMessageOnlyIfKeywordsCount < nextMessageOnlyIfKeywordsCountMax
+			nextMessage.errorsCounter < nextMessage.maxErrors
 		) {
 			return "";
 		} else {
 			const skipMessage = `<ul class="messageOptions"><li><a href="#${
-				yamlObfuscate ? btoa(nextMessage) : nextMessage
+				yaml.obfuscate ? btoa(nextMessage.goto) : nextMessage.goto
 			}">Passer à la suite !</a></li></ul>`;
 			return skipMessage;
 		}
@@ -41,24 +49,24 @@ function processDirectiveNext(message) {
 
 
 // Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-function processDirectiveSelectNext(message) {
+export function processDirectiveSelectNext(message) {
 	message = message.replaceAll(/!SelectNext:(.*)/g, function (match, v1) {
 		if (match) {
 			const v1Split = v1.split("/");
-			lastMessageFromBot = "";
-			nextMessage = "";
-			nextMessageOnlyIfKeywords = false;
-			nextSelected = getRandomElement(v1Split).trim();
+			nextMessage.lastMessageFromBot = "";
+			nextMessage.goto = "";
+			nextMessage.onlyIfKeywords = false;
+			nextMessage.selected = getRandomElement(v1Split).trim();
 			return "";
 		} else {
-			nextSelected = undefined;
+			nextMessage.selected = '';
 		}
 	});
 	return message
 }
 
 // Gestion de la directive "!Select: x" : on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
-function processDirectiveSelect(response, options) {
+export function processDirectiveSelect(response, options) {
 	response = response.replaceAll(
 		/\!Select ?: ?([0-9]*)/g,
 		function (match, v1) {
@@ -74,7 +82,7 @@ function processDirectiveSelect(response, options) {
 }
 
 // Gestion de la directive !Bot: botName pour pouvoir avoir différents bots possibles
-function processDirectiveBot(message,chatMessage) {
+export function processDirectiveBot(message,chatMessage) {
 	message = message.replace(/!Bot:(.*)/, function(match, botName) {
 		if(match && botName) {
 			botName = botName.trim().replaceAll(' ','');
@@ -86,7 +94,7 @@ function processDirectiveBot(message,chatMessage) {
 } 
 
 // Possibilité d'avoir plusieurs bots qui répondent dans un même message
-function processMultipleBots(html) {
+export function processMultipleBots(html) {
 	const htmlSplitDirectiveBot = html.split("<p>!Bot:");
 	const numberOfBots = htmlSplitDirectiveBot.length;
 	if(numberOfBots>1) {
@@ -104,7 +112,7 @@ function processMultipleBots(html) {
 }
 
 // Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
-function processRandomMessage(message) {
+export function processRandomMessage(message) {
 	const messageSplitHR = message.split("\n---\n");
 	if (messageSplitHR.length > 1) {
 		const messageHasOptions = message.indexOf(
@@ -125,7 +133,7 @@ function processRandomMessage(message) {
 }
 
 // Gestion de l'audio
-function processAudio(message) {
+export function processAudio(message) {
 	// Gestion des éléments audio autoplay
 	message = message.replaceAll(
 		/<audio[\s\S]*?src="([^"]+)"[\s\S]*?<\/audio>/gm,
@@ -152,15 +160,13 @@ function processAudio(message) {
 
 // Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
 
-function processKroki(message) {
-	if (yamlUseAddOns && yamlUseAddOns.includes("kroki")) {
-		message = message.replaceAll(
-			/```(mermaid|tikz|graphviz|plantuml|excalidraw|vegalite|vega)((.|\n)*?)```/gm,
-			function (match, type, source) {
-				source = source.replaceAll("\n\n\n", "\n\n");
-				return krokiCreateImageFromSource(type, source);
-			}
-		);
-	}
+export function processKroki(message) {
+	message = message.replaceAll(
+		/```(mermaid|tikz|graphviz|plantuml|excalidraw|vegalite|vega)((.|\n)*?)```/gm,
+		function (match, type, source) {
+			source = source.replaceAll("\n\n\n", "\n\n");
+			return window.krokiCreateImageFromSource(type, source);
+		}
+	);
 	return message
 }
