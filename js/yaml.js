@@ -82,14 +82,12 @@ export function processYAML(markdownContent) {
 				document.body.appendChild(styleElement);
 			}
 			if (
-				yaml.userInput ||
-				yaml.clavier ||
-				yaml.keyboard
+				yaml.userInput === false ||
+				yaml.clavier === false ||
+				yaml.keyboard === false
 			) {
-				yaml.userInput = yaml.clavier ? yaml.clavier : (yaml.keyboard ? yaml.keyboard : yaml.userInput);
-				if (yaml.userInput === false) {
-					document.body.classList.add('hideControls')
-				}
+				yaml.userInput = false;
+				document.body.classList.add('hideControls')
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
 				yaml.searchInContent = yaml.rechercheContenu ? yaml.rechercheContenu : yaml.searchInContent;
@@ -145,8 +143,8 @@ export function processYAML(markdownContent) {
 			if (yaml.dynamicContent || yaml.contenuDynamique) {
 				yaml.dynamicContent = yaml.contenuDynamique ? yaml.contenuDynamique : yaml.dynamicContent;
 			}
-			if (yaml.typeWriter || yaml.effetDactylo) {
-				yaml.typeWriter = yaml.effetDactylo ? yaml.effetDactylo : yaml.typeWriter;
+			if (yaml.typeWriter === false || yaml.effetDactylo === false) {
+				yaml.typeWriter = false
 			}
 			if (yaml.obfuscate) {
 				yaml.obfuscate = yaml.obfuscate ? true : false;
