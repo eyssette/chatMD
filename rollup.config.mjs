@@ -41,6 +41,7 @@ export default {
 		file: "script.min.js",
 		format: "iife",
 		plugins: [terser()],
+		sourcemap: true,
 	},
 	plugins: [
 		string({
