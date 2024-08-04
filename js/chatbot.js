@@ -50,8 +50,9 @@ export async function createChatBot(chatData) {
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		nextMessage.selected = undefined;
 		// Gestion des variables fixes prédéfinies
-		message = processFixedVariables(message);
-
+		if(yaml.variables) {
+			message = processFixedVariables(message);
+		}
 		if (!isUser) {
 			message = processRandomMessage(message)
 		}
