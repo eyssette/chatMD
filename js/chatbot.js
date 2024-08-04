@@ -65,7 +65,9 @@ export async function createChatBot(chatData) {
 		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion de la directive !Bot: botName
-			message = processDirectiveBot(message,chatMessage)
+			if(yaml.bots) {
+				message = processDirectiveBot(message,chatMessage)
+			}
 
 			// Gestion de l'audio
 			message = processAudio(message)
