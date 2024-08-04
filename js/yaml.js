@@ -128,7 +128,7 @@ export function processYAML(markdownContent) {
 				document.head.appendChild(avatarStyleElement);
 			}
 			if (yaml.defaultMessage || yaml.messageParDéfaut) {
-				config.defaultMessage = yaml.messageParDéfaut ? yaml.messageParDéfaut : yaml.defaultMessage;
+				config.defaultMessage = yaml.messageParDéfaut ? Object.values(yaml.messageParDéfaut) : yaml.defaultMessage;
 				while (config.defaultMessage.length<5) {
 					config.defaultMessage.push(...config.defaultMessage);
 				}
