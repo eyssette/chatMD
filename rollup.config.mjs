@@ -2,6 +2,8 @@ import terser from "@rollup/plugin-terser";
 import { string } from "rollup-plugin-string";
 import fs from "fs";
 import path from "path";
+import postcss from 'rollup-plugin-postcss';
+import cssnano from "cssnano";
 
 const mainMdPath = "data/main.md";
 const mainMdContent = fs.readFileSync(mainMdPath, "utf8");
@@ -58,5 +60,15 @@ export default {
 				});
 			},
 		},
+		postcss({
+			extensions: ['.css'],
+			extract: 'css/styles.min.css',
+			minimize: true,
+			plugins: [
+				cssnano({
+					preset: 'default',
+				}),
+			],
+		}),
 	],
 };
