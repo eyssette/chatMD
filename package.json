@@ -4,8 +4,11 @@
   "description": "Un outil libre et gratuit pour créer un chatbot à partir d'un simple fichier en Markdown",
   "main": "bundle.js",
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
     "@rollup/plugin-terser": "^0.4.4",
     "cssnano": "^7.0.4",
+    "eslint": "^9.8.0",
+    "globals": "^15.9.0",
     "postcss": "^8.4.40",
     "rollup": "^4.19.2",
     "rollup-plugin-postcss": "^4.0.2",
