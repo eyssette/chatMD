@@ -23,11 +23,11 @@ export function convertLatexExpressions(string) {
 				.replaceAll("&lt;", "\\lt")
 				.replaceAll("&gt;", "\\gt");
 			mathInExpressionLatex = mathInExpressionLatex
-				.replaceAll("<em>","_")
-				.replaceAll("</em>","_")
-				.replaceAll("&amp;","&")
+				.replaceAll("<em>", "_")
+				.replaceAll("</em>", "_")
+				.replaceAll("&amp;", "&")
 				// eslint-disable-next-line no-useless-escape
-				.replaceAll("\ ","\\ ");
+				.replaceAll("\ ", "\\ ");
 			// On convertit la formule mathématique en HTML avec Katex
 			const stringWithLatex = window.katex.renderToString(mathInExpressionLatex, {
 				displayMode: inlineMaths,

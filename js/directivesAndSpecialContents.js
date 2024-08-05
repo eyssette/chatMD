@@ -82,10 +82,10 @@ export function processDirectiveSelect(response, options) {
 }
 
 // Gestion de la directive !Bot: botName pour pouvoir avoir différents bots possibles
-export function processDirectiveBot(message,chatMessage) {
+export function processDirectiveBot(message, chatMessage) {
 	message = message.replace(/!Bot:(.*)/, function(match, botName) {
 		if(match && botName) {
-			botName = botName.trim().replaceAll(" ","");
+			botName = botName.trim().replaceAll(" ", "");
 			chatMessage.classList.add("botName-"+botName);
 		}
 		return "";

@@ -1,6 +1,6 @@
 import { handleURL } from "./utils";
 import { createChatBot } from "./chatbot";
-import { processYAML, yaml} from "./yaml";
+import { processYAML, yaml } from "./yaml";
 import { processFixedVariables } from "./processFixedVariables";
 import { startsWithAnyOf } from "./utils";
 import defaultMD from "../data.md";
@@ -11,7 +11,7 @@ let chatData;
 // Pour récupérer le markdown externe via le hash dans l'URL
 export function getMarkdownContentandCreateChatbot() {
 	// On récupère l'URL du hashtag sans le #
-	const url = window.location.hash.substring(1).replace(/\?.*/,"");
+	const url = window.location.hash.substring(1).replace(/\?.*/, "");
 	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
 	const sourceChatBot = handleURL(url);
 	if (sourceChatBot !== "") {
@@ -66,16 +66,16 @@ function parseMarkdown(markdownContent) {
 	}
 	const mainContentWithoutH1 = mainContent.substring(1);
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
-	const possibleTitles = ["# ","## ","### ","#### ","##### "];
+	const possibleTitles = ["# ", "## ", "### ", "#### ", "##### "];
 	const indexOfFirstTitles = possibleTitles.map(title => mainContentWithoutH1.indexOf(title)).filter(index => index > 0);
 	const indexAfterFirstMessage = Math.min(...indexOfFirstTitles);
 
 	// Gestion de la première partie des données : titre + message initial
-	const firstPart = mainContent.substring(0,indexAfterFirstMessage);
+	const firstPart = mainContent.substring(0, indexAfterFirstMessage);
 	// Gestion du titre
 	const chatbotTitleMatch = firstPart.match(/# .*/);
 	const chatbotTitle = chatbotTitleMatch ? chatbotTitleMatch[0] : "Chatbot";
-	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace("# ","").trim()] : [""];
+	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace("# ", "").trim()] : [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
 	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
@@ -100,7 +100,7 @@ function parseMarkdown(markdownContent) {
 	let ifCondition = "";
 
 	for (let line of contentAfterFirstPartLines) {
-		if (startsWithAnyOf(line,yaml.responsesTitles)) {
+		if (startsWithAnyOf(line, yaml.responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			if (currentH2Title) {
 				chatbotData.push([
@@ -110,7 +110,7 @@ function parseMarkdown(markdownContent) {
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line.replace(startsWithAnyOf(line,yaml.responsesTitles), "").trim(); // Titre h2
+			currentH2Title = line.replace(startsWithAnyOf(line, yaml.responsesTitles), "").trim(); // Titre h2
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
@@ -142,7 +142,7 @@ function parseMarkdown(markdownContent) {
 		} else if (line.length > 0 && !line.startsWith("# ")) {
 			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)
 			// Possibilité de faire des liens à l'intérieur du contenu vers une réponse
-			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g,'<a href="$2">$1</a>');
+			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g, '<a href="$2">$1</a>');
 			content.push(line);
 			listParsed = true;
 		}

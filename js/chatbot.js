@@ -59,14 +59,14 @@ export async function createChatBot(chatData) {
 
 		if (yaml.dynamicContent) {
 			// On traite les variables dynamiques
-			message = processDynamicVariables(message,dynamicVariables,isUser);
+			message = processDynamicVariables(message, dynamicVariables, isUser);
 		}
 
 		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion de la directive !Bot: botName
 			if(yaml.bots) {
-				message = processDirectiveBot(message,chatMessage);
+				message = processDirectiveBot(message, chatMessage);
 			}
 
 			// Gestion de l'audio
@@ -379,7 +379,7 @@ export async function createChatBot(chatData) {
 						!yaml.useLLM.always
 					) {
 						const optionMessageNoAnswer = [
-							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"',"“")],
+							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"', "“")],
 						];
 						messageNoAnswer = gestionOptions(
 							messageNoAnswer,
@@ -423,7 +423,7 @@ export async function createChatBot(chatData) {
 							)
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
-						return evaluateExpression(condition,dynamicVariables);
+						return evaluateExpression(condition, dynamicVariables);
 					}
 				});
 			}
@@ -566,7 +566,7 @@ export async function createChatBot(chatData) {
 
 	if (yaml.dynamicContent) {
 		// S'il y a des variables dynamiques dans le message initial, on les traite
-		initialMessage = processDynamicVariables(initialMessage,dynamicVariables,false);
+		initialMessage = processDynamicVariables(initialMessage, dynamicVariables, false);
 	}
 
 	createChatMessage(initialMessage, false);

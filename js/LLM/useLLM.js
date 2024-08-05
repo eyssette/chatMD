@@ -17,7 +17,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 				}
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
-				const chunkObjectString = chunkElement.replace("data: ","");
+				const chunkObjectString = chunkElement.replace("data: ", "");
 				if(!chunkObjectString.includes("[DONE]") && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
 					const chunkMessage = chunkObject.choices[0].delta.content;

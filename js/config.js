@@ -42,8 +42,8 @@ config.badWordsMessage = [
 
 // Raccourcis vers des chatbots particuliers
 config.shortcuts = [
-	["dissertation-philo","https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"],
-	["multiple-urls",["https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download","https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download"]]
+	["dissertation-philo", "https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"],
+	["multiple-urls", ["https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download", "https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download"]]
 ];
 
 config.corsProxy = "https://corsproxy.io/?";
@@ -55,7 +55,7 @@ config.responsesTitles = ["## "];
 config.allowedAddOns = {
 	pako: { js: "js/externals/pako.min.js" },
 	kroki: { js: "js/externals/kroki.js" },
-	textFit: {js: "js/externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>"}
+	textFit: { js: "js/externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>" }
 };
 
 config.addOnsDependencies = {
@@ -116,4 +116,4 @@ const RAG = {
 	"RAGprompt": defaultRAGprompt,
 };
 
-config.yaml.useLLM = {...config.yaml.useLLM, ...RAG};
+config.yaml.useLLM = { ...config.yaml.useLLM, ...RAG };

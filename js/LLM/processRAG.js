@@ -24,7 +24,7 @@ function prepareRAGdata(informations, separator) {
 			}
 			return splitIntoChunks(informations);
 		} else {
-			return yaml.useLLM.RAGseparator == "break" ? informations.split("---").map(element => element.replaceAll("\n"," ").trim()) : informations.split(yaml.useLLM.RAGseparator);
+			return yaml.useLLM.RAGseparator == "break" ? informations.split("---").map(element => element.replaceAll("\n", " ").trim()) : informations.split(yaml.useLLM.RAGseparator);
 		}
 	} else {
 		return informations.split("\n").filter(line => line.trim() !== "");

@@ -29,7 +29,7 @@ export function processYAML(markdownContent) {
 		try {
 			// Traitement des propriétés dans le YAML
 			const yamlData = jsYaml.load(markdownContent.split("---")[1]);
-			yaml = yamlData ? deepMerge(yaml,yamlData) : yaml;
+			yaml = yamlData ? deepMerge(yaml, yamlData) : yaml;
 			if (yaml.maths === true) {
 				yaml.addOns = yaml.addOns ? yaml.addOns + ",textFit" : "textFit";
 				Promise.all([
@@ -43,7 +43,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.addOns) {
 				// Gestion des addOns (scripts et css en plus)
-				yaml.addOns = yaml.addOns.replace(" ","").split(",");
+				yaml.addOns = yaml.addOns.replace(" ", "").split(",");
 				let addOnsDependenciesArray = [];
 				// On ajoute aussi les dépendances pour chaque addOn
 				for (const [addOn, addOnDependencies] of Object.entries(config.addOnsDependencies)) {
@@ -151,7 +151,7 @@ export function processYAML(markdownContent) {
 				yaml.obfuscate = yaml.obfuscate ? true : false;
 			}
 			if (yaml.bots) {
-				for (const [botName,botProperties] of Object.entries(yaml.bots)) {
+				for (const [botName, botProperties] of Object.entries(yaml.bots)) {
 					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : "";
 					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : "";
 					const botAvatarCSS = ".botName-"+botName+">:first-child:before {"+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +"}";

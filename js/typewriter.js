@@ -36,7 +36,7 @@ function typeWriter(content, element) {
 	function stopTypeWriter(slowContent) {
 		typed.stop();
 		typed.reset();
-		slowContent = slowContent.replaceAll("`","");
+		slowContent = slowContent.replaceAll("`", "");
 		slowContent = slowContent.replace(
 			regexMessageOptions,
 			"`$1`"
@@ -57,7 +57,7 @@ function typeWriter(content, element) {
 					.replaceAll("RETURNCHARACTER", "\n") + "`"
 				: element.endsWith("`")
 					? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-					: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots,"") + "`"
+					: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots, "") + "`"
 		);
 		typed.strings = [contentArrayFiltered.join(" ")];
 		typed.start();
@@ -99,7 +99,7 @@ function typeWriter(content, element) {
 	);
 
 	// On fait apparaître d'un coup les iframes
-	content = content.replaceAll(regexIframe,"`$1`");
+	content = content.replaceAll(regexIframe, "`$1`");
 
 	// Effet machine à écrire
 	typed = new Typed(element, {
