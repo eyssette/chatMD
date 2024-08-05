@@ -2,7 +2,7 @@ import terser from "@rollup/plugin-terser";
 import { string } from "rollup-plugin-string";
 import fs from "fs";
 import path from "path";
-import postcss from 'rollup-plugin-postcss';
+import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
 const mainMdPath = "data/main.md";
@@ -49,7 +49,7 @@ export default {
 		}),
 		{
 			name: "concat-md-files",
-			generateBundle(options, bundle) {
+			concatMDfiles() {
 				const filesContent = otherMdFiles.map((file) =>
 					fs.readFileSync(file, "utf8")
 				);
@@ -62,12 +62,12 @@ export default {
 			},
 		},
 		postcss({
-			extensions: ['.css'],
-			extract: 'css/styles.min.css',
+			extensions: [".css"],
+			extract: "css/styles.min.css",
 			minimize: true,
 			plugins: [
 				cssnano({
-					preset: 'default',
+					preset: "default",
 				}),
 			],
 		}),
