@@ -7,18 +7,18 @@ let LLMactive = false;
 async function readStream(streamableObject, chatMessage, isCohere) {
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk);
-		const chunkArray = chunkString.trim().split('\n').filter(element => element.trim().length > 0);
+		const chunkArray = chunkString.trim().split("\n").filter(element => element.trim().length > 0);
 		chunkArray.forEach(chunkElement => {
 			if(isCohere) {
 				const chunkObject = JSON.parse(chunkElement.trim());
-				if (chunkObject.event_type == 'text-generation'  && LLMactive) {
+				if (chunkObject.event_type == "text-generation"  && LLMactive) {
 					const chunkMessage = chunkObject.text;
 					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
 				}
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
-				const chunkObjectString = chunkElement.replace('data: ','');
-				if(!chunkObjectString.includes('[DONE]') && LLMactive) {
+				const chunkObjectString = chunkElement.replace("data: ","");
+				if(!chunkObjectString.includes("[DONE]") && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
 					const chunkMessage = chunkObject.choices[0].delta.content;
 					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
@@ -70,7 +70,7 @@ export function getAnswerFromLLM(userPrompt, informations) {
 	if (informations.length>0) {
 		informations = yaml.useLLM.RAGprompt+informations;
 	}
-	const isCohere = yaml.useLLM.url.includes('cohere');
+	const isCohere = yaml.useLLM.url.includes("cohere");
 
 	if (isCohere) {
 		bodyObject.message = yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations;

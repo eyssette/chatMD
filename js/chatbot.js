@@ -379,7 +379,7 @@ export async function createChatBot(chatData) {
 						!yaml.useLLM.always
 					) {
 						const optionMessageNoAnswer = [
-							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"','“')],
+							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"',"“")],
 						];
 						messageNoAnswer = gestionOptions(
 							messageNoAnswer,
@@ -519,8 +519,8 @@ export async function createChatBot(chatData) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
 				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
-				nextMessage.lastMessageFromBot = '';
-				nextMessage.goto = '';
+				nextMessage.lastMessageFromBot = "";
+				nextMessage.goto = "";
 				nextMessage.onlyIfKeywords = false;
 				let messageFromLink = target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM

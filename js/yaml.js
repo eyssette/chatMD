@@ -3,24 +3,24 @@ import jsYaml from "./externals/js-yaml.js";
 import { loadScript, loadCSS, deepMerge, footerElement, hideFooter } from "./utils.js";
 
 export let yaml = {
-	'addOns': config.yaml.addOns,
-	'avatar': config.yaml.avatar,
-	'bots': config.yaml.bots,
-	'detectBadWords': config.yaml.detectBadWords,
-	'defaultMessage': config.yaml.defaultMessage,
-	'dynamicContent': config.yaml.dynamicContent,
-	'favicon': config.yaml.favicon,
-	'footer': config.yaml.footer,
-	'maths': config.yaml.maths,
-	'obfuscate': config.yaml.obfuscate,
-	'responsesTitles': config.yaml.responsesTitles,
-	'searchInContent': config.yaml.searchInContent,
-	'style': config.yaml.style,
-	'theme': config.yaml.theme,
-	'typeWriter': config.yaml.typeWriter,
-	'useLLM': config.yaml.useLLM,
-	'userInput': config.yaml.userInput,
-	'variables': config.yaml.variables,
+	"addOns": config.yaml.addOns,
+	"avatar": config.yaml.avatar,
+	"bots": config.yaml.bots,
+	"detectBadWords": config.yaml.detectBadWords,
+	"defaultMessage": config.yaml.defaultMessage,
+	"dynamicContent": config.yaml.dynamicContent,
+	"favicon": config.yaml.favicon,
+	"footer": config.yaml.footer,
+	"maths": config.yaml.maths,
+	"obfuscate": config.yaml.obfuscate,
+	"responsesTitles": config.yaml.responsesTitles,
+	"searchInContent": config.yaml.searchInContent,
+	"style": config.yaml.style,
+	"theme": config.yaml.theme,
+	"typeWriter": config.yaml.typeWriter,
+	"useLLM": config.yaml.useLLM,
+	"userInput": config.yaml.userInput,
+	"variables": config.yaml.variables,
 };
 
 export let filterBadWords;
@@ -43,7 +43,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.addOns) {
 				// Gestion des addOns (scripts et css en plus)
-				yaml.addOns = yaml.addOns.replace(' ','').split(",");
+				yaml.addOns = yaml.addOns.replace(" ","").split(",");
 				let addOnsDependenciesArray = [];
 				// On ajoute aussi les dépendances pour chaque addOn
 				for (const [addOn, addOnDependencies] of Object.entries(config.addOnsDependencies)) {
@@ -71,7 +71,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.titresRéponses || yaml.responsesTitles) {
 				yaml.responsesTitles = yaml.titresRéponses ? yaml.titresRéponses : yaml.responsesTitles;
-				if (typeof yaml.responsesTitles === 'string') {
+				if (typeof yaml.responsesTitles === "string") {
 					// Cas où le yaml pour les titres des réponses ne contient pas un tableau, mais un seul élément
 					yaml.responsesTitles = [yaml.responsesTitles];
 				}
@@ -87,7 +87,7 @@ export function processYAML(markdownContent) {
 				yaml.keyboard === false
 			) {
 				yaml.userInput = false;
-				document.body.classList.add('hideControls');
+				document.body.classList.add("hideControls");
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
 				yaml.searchInContent = yaml.rechercheContenu ? yaml.rechercheContenu : yaml.searchInContent;
@@ -121,7 +121,7 @@ export function processYAML(markdownContent) {
 					.bot-message > :first-child:before {
 					background-image: url("${yaml.avatar}");
 				`;
-				const avatarStyleElement = document.createElement('style');
+				const avatarStyleElement = document.createElement("style");
 				avatarStyleElement.textContent = avatarCSS;
 				document.head.appendChild(avatarStyleElement);
 			}
@@ -133,11 +133,11 @@ export function processYAML(markdownContent) {
 			}
 			if(yaml.footer === false) {
 				hideFooter();
-			} else if (typeof yaml.footer == 'string') {
+			} else if (typeof yaml.footer == "string") {
 				footerElement.innerHTML = yaml.footer;
 			}
 			if (yaml.theme) {
-				const cssFile = yaml.theme.endsWith('.css') ? "css/themes/"+yaml.theme : "css/themes/"+yaml.theme+".css";
+				const cssFile = yaml.theme.endsWith(".css") ? "css/themes/"+yaml.theme : "css/themes/"+yaml.theme+".css";
 				loadCSS(cssFile);
 			}
 			if (yaml.dynamicContent || yaml.contenuDynamique) {
@@ -151,11 +151,11 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.bots) {
 				for (const [botName,botProperties] of Object.entries(yaml.bots)) {
-					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : '';  
-					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : '';
-					const botAvatarCSS =  '.botName-'+botName+'>:first-child:before {'+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +'}';
-					const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : '';
-					const botCSS = '<style>'+botAvatarCSS+' .botName-'+botName+'{'+botCSSmessage+'}</style>';
+					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : "";  
+					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : "";
+					const botAvatarCSS =  ".botName-"+botName+">:first-child:before {"+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +"}";
+					const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : "";
+					const botCSS = "<style>"+botAvatarCSS+" .botName-"+botName+"{"+botCSSmessage+"}</style>";
 					Promise.all([
 						loadCSS(botCSS)
 					]);

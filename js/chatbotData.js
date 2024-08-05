@@ -11,7 +11,7 @@ let chatData;
 // Pour récupérer le markdown externe via le hash dans l'URL
 export function getMarkdownContentandCreateChatbot() {
 	// On récupère l'URL du hashtag sans le #
-	const url = window.location.hash.substring(1).replace(/\?.*/,'');
+	const url = window.location.hash.substring(1).replace(/\?.*/,"");
 	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
 	const sourceChatBot = handleURL(url);
 	if (sourceChatBot !== "") {
@@ -75,7 +75,7 @@ function parseMarkdown(markdownContent) {
 	// Gestion du titre
 	const chatbotTitleMatch = firstPart.match(/# .*/);
 	const chatbotTitle = chatbotTitleMatch ? chatbotTitleMatch[0] : "Chatbot";
-	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace('# ','').trim()] : [""];
+	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace("# ","").trim()] : [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
 	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
@@ -97,7 +97,7 @@ function parseMarkdown(markdownContent) {
 	
 	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
 	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
-	let ifCondition = '';
+	let ifCondition = "";
 
 	for (let line of contentAfterFirstPartLines) {
 		if (startsWithAnyOf(line,yaml.responsesTitles)) {
@@ -119,11 +119,11 @@ function parseMarkdown(markdownContent) {
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
 		} else if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
-			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : '';
+			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : "";
 			content.push(line + "\n");
 			listParsed = true;
-		} else if (yaml.dynamicContent && line.includes('`endif`')) {
-			ifCondition = '';
+		} else if (yaml.dynamicContent && line.includes("`endif`")) {
+			ifCondition = "";
 			content.push(line + "\n");
 			listParsed = true;
 		} else if (regexOrderedList.test(line)) {
@@ -139,7 +139,7 @@ function parseMarkdown(markdownContent) {
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			lastOrderedList.push([text, link, randomOrder, ifCondition]);
 			/* lastOrderedList.push(listContent); */
-		} else if (line.length > 0 && !line.startsWith('# ')) {
+		} else if (line.length > 0 && !line.startsWith("# ")) {
 			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)
 			// Possibilité de faire des liens à l'intérieur du contenu vers une réponse
 			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g,'<a href="$2">$1</a>');

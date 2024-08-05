@@ -67,7 +67,7 @@ const chatbotSRC = widgetScript.getAttribute("data-chatbot")
 	? "#" + widgetScript.getAttribute("data-chatbot")
 	: "";
 
-const imageWidget = widgetScript.getAttribute("data-image") ? widgetScript.getAttribute("data-image") : 'https://chatmd.forge.apps.education.fr/widget/message.svg';
+const imageWidget = widgetScript.getAttribute("data-image") ? widgetScript.getAttribute("data-image") : "https://chatmd.forge.apps.education.fr/widget/message.svg";
 
 // Créer un élément div avec l'id "chatmdWidget"
 let widgetContainer = document.createElement("div");

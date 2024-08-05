@@ -63,6 +63,6 @@ const converter = new Showdown.Converter({
 // Conversion du Markdown en HTML
 export function markdownToHTML(text) {
 	text = text.replaceAll("\n\n|", "|");
-	const html = converter.makeHtml(text).replaceAll('&amp;#96','\`&#96\`');
+	const html = converter.makeHtml(text).replaceAll("&amp;#96","\`&#96\`");
 	return html;
 }

@@ -3,13 +3,13 @@ import { pauseTypeWriterMultipleBots } from "./typewriter";
 import { yaml } from "./yaml";
 
 export let nextMessage = {
-	'goto': '',
-	'lastMessageFromBot': '',
-	'selected': '',
-	'onlyIfKeywords': false,
-	'errorsCounter': 0,
-	'maxErrors': 3,
-	'messageIfKeywordsNotFound': '',
+	"goto": "",
+	"lastMessageFromBot": "",
+	"selected": "",
+	"onlyIfKeywords": false,
+	"errorsCounter": 0,
+	"maxErrors": 3,
+	"messageIfKeywordsNotFound": "",
 };
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
@@ -59,7 +59,7 @@ export function processDirectiveSelectNext(message) {
 			nextMessage.selected = getRandomElement(v1Split).trim();
 			return "";
 		} else {
-			nextMessage.selected = '';
+			nextMessage.selected = "";
 		}
 	});
 	return message;
@@ -85,10 +85,10 @@ export function processDirectiveSelect(response, options) {
 export function processDirectiveBot(message,chatMessage) {
 	message = message.replace(/!Bot:(.*)/, function(match, botName) {
 		if(match && botName) {
-			botName = botName.trim().replaceAll(' ','');
-			chatMessage.classList.add('botName-'+botName);
+			botName = botName.trim().replaceAll(" ","");
+			chatMessage.classList.add("botName-"+botName);
 		}
-		return '';
+		return "";
 	});
 	return message;
 } 
@@ -104,7 +104,7 @@ export function processMultipleBots(html) {
 			const botNameMatch = botMessageContent.match(/(.*?)<\/p>((.|\n)*)/);
 			const botName = botNameMatch[1].trim();
 			const botMessage = botNameMatch[2].trim();
-			newHtml = newHtml + pauseTypeWriterMultipleBots + '<div class="message bot-message botName-'+botName+'">'+botMessage+'</div>';
+			newHtml = newHtml + pauseTypeWriterMultipleBots + '<div class="message bot-message botName-'+botName+'">'+botMessage+"</div>";
 		}
 		html = newHtml;
 	}

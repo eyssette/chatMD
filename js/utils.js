@@ -105,7 +105,7 @@ export function handleURL(url) {
 			if(authorizedChatbot) {
 				url = authorizedChatbot;
 			} else {
-				return '';
+				return "";
 			}
 		}
 		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
@@ -208,7 +208,7 @@ export function tryConvertStringToNumber(input) {
 }
 
 export function deepMerge(target, source) {
-	const isObject = obj => obj && typeof obj === 'object';
+	const isObject = obj => obj && typeof obj === "object";
 
 	for (const key in source) {
 		if (isObject(source[key])) {

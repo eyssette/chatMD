@@ -64,24 +64,24 @@ config.addOnsDependencies = {
 
 // Paramètres dans l'en-tête YAML
 config.yaml = {
-	'addOns': '',
-	'avatar': "",
-	'bots': {},
-	'detectBadWords': false,
-	'defaultMessage': config.defaultMessage,
-	'dynamicContent': false,
-	'favicon': "",
-	'footer': true,
-	'maths': false,
-	'obfuscate': false,
-	'responsesTitles': config.responsesTitles,
-	'searchInContent': false,
-	'style': "",
-	'theme': "",
+	"addOns": "",
+	"avatar": "",
+	"bots": {},
+	"detectBadWords": false,
+	"defaultMessage": config.defaultMessage,
+	"dynamicContent": false,
+	"favicon": "",
+	"footer": true,
+	"maths": false,
+	"obfuscate": false,
+	"responsesTitles": config.responsesTitles,
+	"searchInContent": false,
+	"style": "",
+	"theme": "",
 	//useLLM : défini plus bas
-	'typeWriter': true,
-	'userInput': true,
-	'variables': '',
+	"typeWriter": true,
+	"userInput": true,
+	"variables": "",
 };
 
 // Paramètres pour l'utilisation d'un LLM
@@ -90,15 +90,15 @@ const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en frança
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
 
 config.yaml.useLLM = {
-	'url': '',
-	'askAPIkey': false,
-	'apiKey': '', // Attention à ne pas mettre votre apiKey en public !
-	'model': '',
-	'always': false,
-	'systemPrompt': defaultSystemPrompt,
-	'maxTokens': defaultMaxTokens,
-	'preprompt': '',
-	'postprompt': defaultPostprompt,
+	"url": "",
+	"askAPIkey": false,
+	"apiKey": "", // Attention à ne pas mettre votre apiKey en public !
+	"model": "",
+	"always": false,
+	"systemPrompt": defaultSystemPrompt,
+	"maxTokens": defaultMaxTokens,
+	"preprompt": "",
+	"postprompt": defaultPostprompt,
 };
 
 
@@ -110,10 +110,10 @@ CONTEXTE : `;
 // Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas. 
 // CONTEXTE : `;
 const RAG = {
-	'RAGinformations': '',
-	'RAGseparator': '\n',
-	'RAGmaxTopElements': 3,
-	'RAGprompt': defaultRAGprompt,
+	"RAGinformations": "",
+	"RAGseparator": "\n",
+	"RAGmaxTopElements": 3,
+	"RAGprompt": defaultRAGprompt,
 };
 
 config.yaml.useLLM = {...config.yaml.useLLM, ...RAG};

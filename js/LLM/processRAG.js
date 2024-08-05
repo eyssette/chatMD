@@ -4,7 +4,7 @@ import { createVector } from "../nlp";
 
 function prepareRAGdata(informations, separator) {
 	if(separator) {
-		if(separator == 'auto') {
+		if(separator == "auto") {
 			// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
 			function splitIntoChunks(text, charLimit = 600) {
 				let chunks = [];
@@ -12,7 +12,7 @@ function prepareRAGdata(informations, separator) {
 				while (startIndex < text.length) {
 					let endIndex = startIndex + charLimit;
 					if (endIndex < text.length) {
-						let spaceIndex = text.lastIndexOf(' ', endIndex);
+						let spaceIndex = text.lastIndexOf(" ", endIndex);
 						if (spaceIndex > startIndex) {
 							endIndex = spaceIndex;
 						}
@@ -24,10 +24,10 @@ function prepareRAGdata(informations, separator) {
 			}
 			return splitIntoChunks(informations);
 		} else {
-			return yaml.useLLM.RAGseparator == 'break' ? informations.split('---').map(element => element.replaceAll('\n',' ').trim()) : informations.split(yaml.useLLM.RAGseparator);
+			return yaml.useLLM.RAGseparator == "break" ? informations.split("---").map(element => element.replaceAll("\n"," ").trim()) : informations.split(yaml.useLLM.RAGseparator);
 		}
 	} else {
-		return informations.split('\n').filter(line => line.trim() !== '');
+		return informations.split("\n").filter(line => line.trim() !== "");
 	}
 }
 
@@ -49,7 +49,7 @@ function createVectorRAGinformations(informations) {
 
 export function getRAGcontent(informations) {
 	if(informations) {
-		if(informations.includes('http')) {
+		if(informations.includes("http")) {
 			const urlRAGfile = handleURL(informations);
 			fetch(urlRAGfile)
 				.then((response) => response.text())

@@ -7,30 +7,30 @@ let getLastMessage = false;
 
 // Opérations autorisées pour le calcul des expressions complexes
 const sanitizeCodeAllowedOperations = [
-	'+','-','*','/',
-	'<=', '>=',
-	'<', '>',
-	'==', '!=', 
-	'&&', '||', '!',
-	'(',')',
+	"+","-","*","/",
+	"<=", ">=",
+	"<", ">",
+	"==", "!=", 
+	"&&", "||", "!",
+	"(",")",
 ];
 
 // Sanitize le code avant d'utiliser new Function
 function sanitizeCode(code) {
 	// On supprime d'abord dans l'expression les variables dynamiques
-	let codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,'');
+	let codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g,"");
 	// On supprime ensuite les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
 	});
 	// On supprime aussi tous les nombres (ils sont autorisés)
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'');
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,"");
 	// On supprime les chaînes de caractères entre guillemets
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,'///');
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,"///");
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
-	const forbiddenExpressions = codeWithoutAllowedOperations.split('///');
+	const forbiddenExpressions = codeWithoutAllowedOperations.split("///");
 	forbiddenExpressions.forEach((forbiddenExpression) => {
-		code = code.replaceAll(forbiddenExpression,'');
+		code = code.replaceAll(forbiddenExpression,"");
 	});
 	return code;
 }
@@ -70,7 +70,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 				}
 			}
 		);
-		message = message.replaceAll('<!--<!--','<!--').replaceAll('-->-->','-->');
+		message = message.replaceAll("<!--<!--","<!--").replaceAll("-->-->","-->");
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
 		if (yaml.userInput === false) {
 			if (dynamicVariables["KEYBOARD"] == "true") {
@@ -201,10 +201,10 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 		message = message.replaceAll(
 			/@([^\s]*?)=(.*)/g,
 			function (match, variableName, variableValue, offset) {
-				if(match.includes('calc(')) {
+				if(match.includes("calc(")) {
 					try {
 						// Calcule l'expression complexe
-						const complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
+						const complexExpression = variableValue.replace("calc(","").trim().slice(0, -1);
 						const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables);
 						dynamicVariables[variableName] = calcResult;
 					} catch (e) {
