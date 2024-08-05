@@ -53,11 +53,11 @@ function typeWriter(content, element) {
 		const contentArrayFiltered = contentArray.map((element) =>
 			element.startsWith(pauseTypeWriter)
 				? element
-						.replace(pauseTypeWriter, "")
-						.replaceAll("RETURNCHARACTER", "\n") + "`"
+					.replace(pauseTypeWriter, "")
+					.replaceAll("RETURNCHARACTER", "\n") + "`"
 				: element.endsWith("`")
-				? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-				: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots,'') + "`"
+					? "`" + element.replaceAll("RETURNCHARACTER", "\n")
+					: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots,'') + "`"
 		);
 		typed.strings = [contentArrayFiltered.join(" ")];
 		typed.start();

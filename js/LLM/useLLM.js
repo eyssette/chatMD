@@ -106,9 +106,9 @@ export function getAnswerFromLLM(userPrompt, informations) {
 				} else {
 					messageIfErrorWithGetAnswerFromLLM();
 				}
-		}).catch((error) => {
-			messageIfErrorWithGetAnswerFromLLM(error);
-		});
+			}).catch((error) => {
+				messageIfErrorWithGetAnswerFromLLM(error);
+			});
 	} catch(error) {
 		messageIfErrorWithGetAnswerFromLLM(error);
 	};

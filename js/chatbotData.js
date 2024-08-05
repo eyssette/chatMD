@@ -26,12 +26,12 @@ export function getMarkdownContentandCreateChatbot() {
 		} else {
 			// Récupération du contenu du fichier
 			fetch(sourceChatBot)
-			.then((response) => response.text())
-			.then((data) => {
-				md = data;
-				chatData = parseMarkdown(md);
-				createChatBot(chatData);
-			}).catch((error) => console.error(error));
+				.then((response) => response.text())
+				.then((data) => {
+					md = data;
+					chatData = parseMarkdown(md);
+					createChatBot(chatData);
+				}).catch((error) => console.error(error));
 		}
 	} else {
 		createChatBot(parseMarkdown(md));
