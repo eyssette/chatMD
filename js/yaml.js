@@ -172,6 +172,6 @@ export function processYAML(markdownContent) {
 					yaml.useLLM.apiKey = yaml.useLLM.askAPIkey ? yaml.useLLM.askAPIkey : ""; // Attention à ne pas diffuser publiuement votre clé API
 				}
 			}
-		} catch (e) {}
+		} catch (e) {console.log("erreur processYAML : "+e)}
 	}
 }
