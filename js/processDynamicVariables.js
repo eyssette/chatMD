@@ -60,7 +60,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
 		message = message.replaceAll(
-			/\`@([^\s]*?) ?= ?(?<!@)(.*?)\`/g,
+			/`@([^\s]*?) ?= ?(?<!@)(.*?)`/g,
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
 					dynamicVariables[variableName] = variableValue;
@@ -89,7 +89,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 		}
 		// On remplace dans le texte les variables `@nomVariable` par leur valeur
 		message = message.replaceAll(
-			/\`@([^\s]*?)\`/g,
+			/`@([^\s]*?)`/g,
 			function (match, variableName) {
 				if (match.includes("=")) {
 					return match;
@@ -103,7 +103,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 		// Calcul des variables qui dépendent d'autres variables
 		const hasComplexVariable = message.includes("calc(") ? true : false;
 		message = message.replaceAll(
-			/\`@([^\s]*?) ?= ?calc\((.*)\)\`/g,
+			/`@([^\s]*?) ?= ?calc\((.*)\)`/g,
 			function (match, variableName, complexExpression) {
 				try {
 					// Calcule l'expression complexe
@@ -120,7 +120,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 		// Si on a des variables complexes ou s'il reste des variables sans assignation de valeur : 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (qui vient d'être définie)
 		if (hasComplexVariable || message.includes("`@")) {
 			message = message.replaceAll(
-				/\`@([^\s]*?)\`/g,
+				/`@([^\s]*?)`/g,
 				function (match, variableName) {
 					if (match.includes("=")) {
 						return match;
@@ -135,7 +135,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 
 		// On masque dans le texte les demandes de définition d'une variable par le prochain Input
 		message = message.replaceAll(
-			/\`@([^\s]*?) ?= ?@INPUT : (.*)\`/g,
+			/`@([^\s]*?) ?= ?@INPUT : (.*)`/g,
 			function (match, variableName, nextAnswer) {
 				getLastMessage = match ? [variableName, nextAnswer] : false;
 				return "";
@@ -145,16 +145,16 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 		
 		// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 		message = message.replaceAll(
-			/ (@[^\s]*?\=.*?)\</g,
+			/ (@[^\s]*?=.*?)</g,
 			'<span class="hidden">$1</span><'
 		);
 		message = message.replaceAll(
-			/>(@[^\s]*?\=)/g,
+			/>(@[^\s]*?=)/g,
 			'><span class="hidden">$1</span>'
 		);
 		// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
 		message = message.replaceAll(
-			/\`if (.*?)\`((\n|.*)*?)\`endif\`/g,
+			/`if (.*?)`((\n|.*)*?)`endif`/g,
 			function (match, condition, content) {
 				if (condition) {
 					try {
@@ -168,7 +168,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 						condition = condition
 							.replaceAll(
-								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
+								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|&|\||$)/g,
 								function (
 									match,
 									comparisonSignLeft,
@@ -199,7 +199,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 
 		// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
 		message = message.replaceAll(
-			/@([^\s]*?)\=(.*)/g,
+			/@([^\s]*?)=(.*)/g,
 			function (match, variableName, variableValue, offset) {
 				if(match.includes('calc(')) {
 					try {

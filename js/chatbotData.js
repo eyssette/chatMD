@@ -48,7 +48,7 @@ function parseMarkdown(markdownContent) {
 	let lastOrderedList = null;
 	const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
 	const regexOrderedListRandom = /^\d{1,3}\)/;
-	const regexDynamicContentIfBlock = /\`if (.*?)\`/;
+	const regexDynamicContentIfBlock = /`if (.*?)`/;
 	let listParsed = false;
 	let initialMessageContentArray = [];
 	let initialMessageOptions = [];

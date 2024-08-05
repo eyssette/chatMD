@@ -411,7 +411,7 @@ export async function createChatBot(chatData) {
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 						condition = condition
 							.replaceAll(
-								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|\&|\||$)/g,
+								/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|&|\||$)/g,
 								function (
 									match,
 									comparisonSignLeft,
@@ -571,7 +571,7 @@ export async function createChatBot(chatData) {
 
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
-		/<span class=\"unique\">.*?<\/span>/,
+		/<span class="unique">.*?<\/span>/,
 		""
 	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }

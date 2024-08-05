@@ -112,7 +112,7 @@ function tokenize(text, titleResponse) {
 
 	// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
 	let words = text.toLowerCase();
-	words = words.replace(/,|\.|\:|\?|\!|\(|\)|\[|\||\/\]/g, "");
+	words = words.replace(/,|\.|:|\?|!|\(|\)|\[|\||\/\]/g, "");
 	words = words.replaceAll("/", " ");
 	words = removeAccents(words);
 	words =
