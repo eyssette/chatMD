@@ -2,8 +2,6 @@ import { chatContainer } from "../typewriter";
 import { yaml } from "../yaml";
 
 let LLMactive = false;
-let idAnswer = 0;
-
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
@@ -69,7 +67,6 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(userPrompt, informations) {
-	idAnswer++;
 	if (informations.length>0) {
 		informations = yaml.useLLM.RAGprompt+informations
 	}
