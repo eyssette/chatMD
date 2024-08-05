@@ -9,7 +9,9 @@ export default [
 		"rules": {
 			"semi": ["error", "always"],
 			"indent": ["error", "tab"],
-			"quotes": ["error", "double", {"avoidEscape": true}]
+			"quotes": ["error", "double", {"avoidEscape": true}],
+			"no-multi-spaces": ["error"],
+			"no-trailing-spaces": ["error"],
 		}
 	}
 ];

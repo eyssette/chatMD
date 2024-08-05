@@ -40,7 +40,7 @@ export function getMarkdownContentandCreateChatbot() {
 
 function parseMarkdown(markdownContent) {
 	processYAML(markdownContent);
-	
+
 	let chatbotData = [];
 	let currentH2Title = null;
 	let currentLiItems = [];
@@ -94,7 +94,7 @@ function parseMarkdown(markdownContent) {
 			initialMessageContentArray.push(line);
 		}
 	}
-	
+
 	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
 	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
 	let ifCondition = "";
@@ -147,7 +147,7 @@ function parseMarkdown(markdownContent) {
 			listParsed = true;
 		}
 	}
-	
+
 	chatbotData.push([
 		currentH2Title,
 		currentLiItems,

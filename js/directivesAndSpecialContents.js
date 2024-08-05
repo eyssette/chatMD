@@ -91,7 +91,7 @@ export function processDirectiveBot(message,chatMessage) {
 		return "";
 	});
 	return message;
-} 
+}
 
 // Possibilité d'avoir plusieurs bots qui répondent dans un même message
 export function processMultipleBots(html) {

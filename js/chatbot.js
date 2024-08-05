@@ -74,10 +74,10 @@ export async function createChatBot(chatData) {
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 			message = processDirectiveNext(message);
-			
+
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
 			message = processDirectiveSelectNext(message);
-			
+
 			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
 			if (yaml.addOns && yaml.addOns.includes("kroki")) {
 				message = processKroki(message);
@@ -549,7 +549,7 @@ export async function createChatBot(chatData) {
 						userInput.focus();
 					}
 				}
-				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs 
+				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
 				nextMessage.errorsCounter = 0;
 				scrollWindow();
 			}

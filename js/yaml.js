@@ -152,9 +152,9 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.bots) {
 				for (const [botName,botProperties] of Object.entries(yaml.bots)) {
-					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : "";  
+					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : "";
 					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : "";
-					const botAvatarCSS =  ".botName-"+botName+">:first-child:before {"+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +"}";
+					const botAvatarCSS = ".botName-"+botName+">:first-child:before {"+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +"}";
 					const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : "";
 					const botCSS = "<style>"+botAvatarCSS+" .botName-"+botName+"{"+botCSSmessage+"}</style>";
 					Promise.all([
@@ -164,7 +164,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.useLLM.url || yaml.utiliserLLM.url) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
-				yaml.useLLM.RAGinformations = yaml.useLLM.informations ? yaml.useLLM.informations : yaml.useLLM.RAGinformations; 
+				yaml.useLLM.RAGinformations = yaml.useLLM.informations ? yaml.useLLM.informations : yaml.useLLM.RAGinformations;
 				yaml.useLLM.RAGmaxTopElements = yaml.useLLM.maxTopElements ? yaml.useLLM.maxTopElements: yaml.useLLM.RAGmaxTopElements;
 				yaml.useLLM.RAGseparator = yaml.useLLM.separator ? yaml.useLLM.separator : yaml.useLLM.RAGseparator;
 				if(yaml.useLLM.askAPIkey === true) {

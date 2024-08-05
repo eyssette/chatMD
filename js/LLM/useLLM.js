@@ -11,7 +11,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 		chunkArray.forEach(chunkElement => {
 			if(isCohere) {
 				const chunkObject = JSON.parse(chunkElement.trim());
-				if (chunkObject.event_type == "text-generation"  && LLMactive) {
+				if (chunkObject.event_type == "text-generation" && LLMactive) {
 					const chunkMessage = chunkObject.text;
 					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
 				}

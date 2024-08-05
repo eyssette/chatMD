@@ -10,7 +10,7 @@ const sanitizeCodeAllowedOperations = [
 	"+","-","*","/",
 	"<=", ">=",
 	"<", ">",
-	"==", "!=", 
+	"==", "!=",
 	"&&", "||", "!",
 	"(",")",
 ];
@@ -142,7 +142,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 			}
 		);
 
-		
+
 		// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 		message = message.replaceAll(
 			/ (@[^\s]*?=.*?)</g,
