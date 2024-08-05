@@ -10,7 +10,7 @@ export let nextMessage = {
 	'errorsCounter': 0,
 	'maxErrors': 3,
 	'messageIfKeywordsNotFound': '',
-}
+};
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 export function processDirectiveNext(message) {
@@ -31,7 +31,7 @@ export function processDirectiveNext(message) {
 			? messageIfError.trim()
 			: "Ce n'était pas la bonne réponse, merci de réessayer !";
 		nextMessage.messageIfKeywordsNotFound = nextMessage.messageIfKeywordsNotFound + "\n\n";
-		nextMessage.errorsCounter++
+		nextMessage.errorsCounter++;
 		if (
 			match &&
 			nextMessage.errorsCounter < nextMessage.maxErrors
@@ -44,7 +44,7 @@ export function processDirectiveNext(message) {
 			return skipMessage;
 		}
 	});
-	return message
+	return message;
 }
 
 
@@ -62,7 +62,7 @@ export function processDirectiveSelectNext(message) {
 			nextMessage.selected = '';
 		}
 	});
-	return message
+	return message;
 }
 
 // Gestion de la directive "!Select: x" : on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
@@ -78,7 +78,7 @@ export function processDirectiveSelect(response, options) {
 			}
 		}
 	);
-	return [response, options]
+	return [response, options];
 }
 
 // Gestion de la directive !Bot: botName pour pouvoir avoir différents bots possibles
@@ -86,11 +86,11 @@ export function processDirectiveBot(message,chatMessage) {
 	message = message.replace(/!Bot:(.*)/, function(match, botName) {
 		if(match && botName) {
 			botName = botName.trim().replaceAll(' ','');
-			chatMessage.classList.add('botName-'+botName)
+			chatMessage.classList.add('botName-'+botName);
 		}
-		return ''
-	})
-	return message
+		return '';
+	});
+	return message;
 } 
 
 // Possibilité d'avoir plusieurs bots qui répondent dans un même message
@@ -108,7 +108,7 @@ export function processMultipleBots(html) {
 		}
 		html = newHtml;
 	}
-	return html
+	return html;
 }
 
 // Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
@@ -129,7 +129,7 @@ export function processRandomMessage(message) {
 			message = getRandomElement(messageSplitHR);
 		}
 	}
-	return message
+	return message;
 }
 
 // Gestion de l'audio
@@ -154,7 +154,7 @@ export function processAudio(message) {
 		return "";
 	});
 
-	return message
+	return message;
 }
 
 
@@ -168,5 +168,5 @@ export function processKroki(message) {
 			return window.krokiCreateImageFromSource(type, source);
 		}
 	);
-	return message
+	return message;
 }
