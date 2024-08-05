@@ -26,6 +26,7 @@ export function convertLatexExpressions(string) {
 				.replaceAll("<em>","_")
 				.replaceAll("</em>","_")
 				.replaceAll("&amp;","&")
+				// eslint-disable-next-line no-useless-escape
 				.replaceAll("\ ","\\ ");
 			// On convertit la formule mathématique en HTML avec Katex
 			const stringWithLatex = window.katex.renderToString(mathInExpressionLatex, {

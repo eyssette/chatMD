@@ -102,6 +102,7 @@ export function processYAML(markdownContent) {
 						.then(() => {
 							// Les deux scripts sont chargés et prêts à être utilisés
 							filterBadWords = window.LeoProfanity;
+							// eslint-disable-next-line no-undef
 							filterBadWords.add(badWordsFR);
 						})
 						.catch((error) => {
