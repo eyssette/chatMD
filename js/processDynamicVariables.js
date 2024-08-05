@@ -22,24 +22,24 @@ function sanitizeCode(code) {
 	// On supprime ensuite les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
-	})
+	});
 	// On supprime aussi tous les nombres (ils sont autorisés)
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'')
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g,'');
 	// On supprime les chaînes de caractères entre guillemets
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,'///')
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g,'///');
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
-	const forbiddenExpressions = codeWithoutAllowedOperations.split('///')
+	const forbiddenExpressions = codeWithoutAllowedOperations.split('///');
 	forbiddenExpressions.forEach((forbiddenExpression) => {
-		code = code.replaceAll(forbiddenExpression,'')
-	})
+		code = code.replaceAll(forbiddenExpression,'');
+	});
 	return code;
 }
 
 export function evaluateExpression(expression,dynamicVariables) {
 	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
-	expression = config.secureMode ? expression : sanitizeCode(expression)
+	expression = config.secureMode ? expression : sanitizeCode(expression);
 	const result = new Function("dynamicVariables", "tryConvertStringToNumber", "return " + expression)(dynamicVariables, tryConvertStringToNumber);
-	return result
+	return result;
 }
 
 function processComplexDynamicVariables(complexExpression,dynamicVariables) {
@@ -51,7 +51,7 @@ function processComplexDynamicVariables(complexExpression,dynamicVariables) {
 		}
 	);
 	// Évalue l'expression de manière sécurisée
-	const calcResult = evaluateExpression(calc,dynamicVariables)
+	const calcResult = evaluateExpression(calc,dynamicVariables);
 	return calcResult;
 }
 
@@ -70,7 +70,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 				}
 			}
 		);
-		message = message.replaceAll('<!--<!--','<!--').replaceAll('-->-->','-->')
+		message = message.replaceAll('<!--<!--','<!--').replaceAll('-->-->','-->');
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
 		if (yaml.userInput === false) {
 			if (dynamicVariables["KEYBOARD"] == "true") {
@@ -107,7 +107,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 			function (match, variableName, complexExpression) {
 				try {
 					// Calcule l'expression complexe
-					const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables)
+					const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables);
 					dynamicVariables[variableName] = calcResult;
 					return "";
 				} catch (e) {
@@ -181,8 +181,8 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
 						// Évalue l'expression de manière sécurisée
-						const result = evaluateExpression(condition,dynamicVariables)
-						return result ? content : ""
+						const result = evaluateExpression(condition,dynamicVariables);
+						return result ? content : "";
 					} catch (e) {
 						console.error("Error evaluating condition:", condition, e);
 						return "<!--" + condition + "-->";
@@ -205,7 +205,7 @@ export function processDynamicVariables(message,dynamicVariables,isUser) {
 					try {
 						// Calcule l'expression complexe
 						const complexExpression = variableValue.replace('calc(','').trim().slice(0, -1);
-						const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables)
+						const calcResult = processComplexDynamicVariables(complexExpression,dynamicVariables);
 						dynamicVariables[variableName] = calcResult;
 					} catch (e) {
 						console.error("Error evaluating :", match, e);

@@ -1,6 +1,6 @@
 import { scrollWindow } from "./utils.js";
 import { yaml } from "./yaml.js";
-import Typed from "./externals/typed.js"
+import Typed from "./externals/typed.js";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
@@ -14,11 +14,11 @@ export const autoFocus = isMobile ? false : true;
 
 const thresholdMouseMovement = 10;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
-const regexMessageOptions = /(<ul class="messageOptions">[\s\S]*<\/ul>)/gm
-const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm
+const regexMessageOptions = /(<ul class="messageOptions">[\s\S]*<\/ul>)/gm;
+const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm;
 
 // Configuration de MutationObserver
-let mutationObserver
+let mutationObserver;
 const observerConfig = {
 	childList: true,
 	subtree: true,
@@ -36,7 +36,7 @@ function typeWriter(content, element) {
 	function stopTypeWriter(slowContent) {
 		typed.stop();
 		typed.reset();
-		slowContent = slowContent.replaceAll('`','')
+		slowContent = slowContent.replaceAll('`','');
 		slowContent = slowContent.replace(
 			regexMessageOptions,
 			"`$1`"
@@ -99,7 +99,7 @@ function typeWriter(content, element) {
 	);
 
 	// On fait apparaître d'un coup les iframes
-	content = content.replaceAll(regexIframe,"`$1`")
+	content = content.replaceAll(regexIframe,"`$1`");
 
 	// Effet machine à écrire
 	typed = new Typed(element, {

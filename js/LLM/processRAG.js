@@ -36,13 +36,13 @@ export let vectorRAGinformations = [];
 
 function createVectorRAGinformations(informations) {
 	if (informations) {
-		const informationsLength = informations.length
+		const informationsLength = informations.length;
 		for (let i = 0; i < informationsLength; i++) {
 			const RAGinformation = informations[i];
 			const vectorRAGinformation = createVector(RAGinformation);
 			vectorRAGinformations.push(vectorRAGinformation);
 		}
-		return vectorRAGinformations
+		return vectorRAGinformations;
 	}
 }
 
@@ -54,10 +54,10 @@ export function getRAGcontent(informations) {
 			fetch(urlRAGfile)
 				.then((response) => response.text())
 				.then((data) => {
-					RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator)
-					const RAGvectors = createVectorRAGinformations(RAGcontent)
+					RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator);
+					const RAGvectors = createVectorRAGinformations(RAGcontent);
 					return RAGvectors;
-				})
+				});
 		} else {
 			let RAGinformations;
 			if(informations.toString().includes("useFile")) {
@@ -67,7 +67,7 @@ export function getRAGcontent(informations) {
 				RAGinformations = informations.trim();
 				yaml.useLLM.RAGinformations = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
 			}
-			return yaml.useLLM.RAGinformations
+			return yaml.useLLM.RAGinformations;
 		}
 	}
 }

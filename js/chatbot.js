@@ -1,17 +1,17 @@
-import { config } from "./config"
-import { yaml, filterBadWords } from "./yaml"
-import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow } from "./utils"
-import { nextMessage } from "./directivesAndSpecialContents"
-import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents"
-import { processFixedVariables } from "./processFixedVariables"
-import { processDynamicVariables, evaluateExpression } from "./processDynamicVariables"
-import { convertLatexExpressions } from "./convertLatex"
-import { markdownToHTML } from "./markdown"
-import { displayMessage, autoFocus } from "./typewriter"
-import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp"
-import { chatContainer, userInput } from "./typewriter"
-import { getAnswerFromLLM } from "./LLM/useLLM"
-import { getRAGcontent, vectorRAGinformations, RAGcontent } from "./LLM/processRAG"
+import { config } from "./config";
+import { yaml, filterBadWords } from "./yaml";
+import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow } from "./utils";
+import { nextMessage } from "./directivesAndSpecialContents";
+import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents";
+import { processFixedVariables } from "./processFixedVariables";
+import { processDynamicVariables, evaluateExpression } from "./processDynamicVariables";
+import { convertLatexExpressions } from "./convertLatex";
+import { markdownToHTML } from "./markdown";
+import { displayMessage, autoFocus } from "./typewriter";
+import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp";
+import { chatContainer, userInput } from "./typewriter";
+import { getAnswerFromLLM } from "./LLM/useLLM";
+import { getRAGcontent, vectorRAGinformations, RAGcontent } from "./LLM/processRAG";
 
 const sendButton = document.getElementById("send-button");
 
@@ -54,7 +54,7 @@ export async function createChatBot(chatData) {
 			message = processFixedVariables(message);
 		}
 		if (!isUser) {
-			message = processRandomMessage(message)
+			message = processRandomMessage(message);
 		}
 
 		if (yaml.dynamicContent) {
@@ -66,27 +66,27 @@ export async function createChatBot(chatData) {
 		if (!isUser) {
 			// Gestion de la directive !Bot: botName
 			if(yaml.bots) {
-				message = processDirectiveBot(message,chatMessage)
+				message = processDirectiveBot(message,chatMessage);
 			}
 
 			// Gestion de l'audio
-			message = processAudio(message)
+			message = processAudio(message);
 
 			// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-			message = processDirectiveNext(message)
+			message = processDirectiveNext(message);
 			
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-			message = processDirectiveSelectNext(message)
+			message = processDirectiveSelectNext(message);
 			
 			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
 			if (yaml.addOns && yaml.addOns.includes("kroki")) {
-				message = processKroki(message)
+				message = processKroki(message);
 			}
 		}
 
 		let html = markdownToHTML(message);
 		if(yaml.bots) {
-			html = processMultipleBots(html)
+			html = processMultipleBots(html);
 		}
 		if (yaml.maths === true) {
 			// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
@@ -145,7 +145,7 @@ export async function createChatBot(chatData) {
 	if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
 		getRAGcontent(
 			yaml.useLLM.RAGinformations
-		)
+		);
 	}
 
 	function chatbotResponse(inputText) {
@@ -423,14 +423,14 @@ export async function createChatBot(chatData) {
 							)
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
-						return evaluateExpression(condition,dynamicVariables)
+						return evaluateExpression(condition,dynamicVariables);
 					}
 				});
 			}
 		}
 
 		// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
-		[response, options] = processDirectiveSelect(response, options)
+		[response, options] = processDirectiveSelect(response, options);
 
 		// On teste s'il faut mettre de l'aléatoire dans les options
 		if (shouldBeRandomized(options)) {

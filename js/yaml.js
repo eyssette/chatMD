@@ -1,5 +1,5 @@
 import { config } from "./config.js";
-import jsYaml from "./externals/js-yaml.js"
+import jsYaml from "./externals/js-yaml.js";
 import { loadScript, loadCSS, deepMerge, footerElement, hideFooter } from "./utils.js";
 
 export let yaml = {
@@ -21,7 +21,7 @@ export let yaml = {
 	'useLLM': config.yaml.useLLM,
 	'userInput': config.yaml.userInput,
 	'variables': config.yaml.variables,
-}
+};
 
 export let filterBadWords;
 export function processYAML(markdownContent) {
@@ -44,20 +44,20 @@ export function processYAML(markdownContent) {
 			if (yaml.addOns) {
 				// Gestion des addOns (scripts et css en plus)
 				yaml.addOns = yaml.addOns.replace(' ','').split(",");
-				let addOnsDependenciesArray = []
+				let addOnsDependenciesArray = [];
 				// On ajoute aussi les dépendances pour chaque addOn
 				for (const [addOn, addOnDependencies] of Object.entries(config.addOnsDependencies)) {
 					if(yaml.addOns.includes(addOn)) {
 						for (const addOnDependencie of addOnDependencies) {
-							addOnsDependenciesArray.push(addOnDependencie)
+							addOnsDependenciesArray.push(addOnDependencie);
 						}
 					}
 				}
-				yaml.addOns.push(...addOnsDependenciesArray)
+				yaml.addOns.push(...addOnsDependenciesArray);
 				// Pour chaque addOn, on charge le JS ou le CSS correspondant
 				for (const desiredAddOn of yaml.addOns) {
 					const addOnsPromises = [];
-					const addDesiredAddOn = config.allowedAddOns[desiredAddOn]
+					const addDesiredAddOn = config.allowedAddOns[desiredAddOn];
 					if (addDesiredAddOn) {
 						if (addDesiredAddOn.js) {
 							addOnsPromises.push(loadScript(addDesiredAddOn.js));
@@ -87,7 +87,7 @@ export function processYAML(markdownContent) {
 				yaml.keyboard === false
 			) {
 				yaml.userInput = false;
-				document.body.classList.add('hideControls')
+				document.body.classList.add('hideControls');
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
 				yaml.searchInContent = yaml.rechercheContenu ? yaml.rechercheContenu : yaml.searchInContent;
@@ -134,7 +134,7 @@ export function processYAML(markdownContent) {
 			if(yaml.footer === false) {
 				hideFooter();
 			} else if (typeof yaml.footer == 'string') {
-				footerElement.innerHTML = yaml.footer
+				footerElement.innerHTML = yaml.footer;
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith('.css') ? "css/themes/"+yaml.theme : "css/themes/"+yaml.theme+".css";
@@ -144,7 +144,7 @@ export function processYAML(markdownContent) {
 				yaml.dynamicContent = yaml.contenuDynamique ? yaml.contenuDynamique : yaml.dynamicContent;
 			}
 			if (yaml.typeWriter === false || yaml.effetDactylo === false) {
-				yaml.typeWriter = false
+				yaml.typeWriter = false;
 			}
 			if (yaml.obfuscate) {
 				yaml.obfuscate = yaml.obfuscate ? true : false;
@@ -152,17 +152,17 @@ export function processYAML(markdownContent) {
 			if (yaml.bots) {
 				for (const [botName,botProperties] of Object.entries(yaml.bots)) {
 					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : '';  
-					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : ''
-					const botAvatarCSS =  '.botName-'+botName+'>:first-child:before {'+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +'}'
+					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : '';
+					const botAvatarCSS =  '.botName-'+botName+'>:first-child:before {'+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +'}';
 					const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : '';
-					const botCSS = '<style>'+botAvatarCSS+' .botName-'+botName+'{'+botCSSmessage+'}</style>'
+					const botCSS = '<style>'+botAvatarCSS+' .botName-'+botName+'{'+botCSSmessage+'}</style>';
 					Promise.all([
 						loadCSS(botCSS)
-					])
+					]);
 				}
 			}
 			if (yaml.useLLM.url || yaml.utiliserLLM.url) {
-				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM
+				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
 				yaml.useLLM.RAGinformations = yaml.useLLM.informations ? yaml.useLLM.informations : yaml.useLLM.RAGinformations; 
 				yaml.useLLM.RAGmaxTopElements = yaml.useLLM.maxTopElements ? yaml.useLLM.maxTopElements: yaml.useLLM.RAGmaxTopElements;
 				yaml.useLLM.RAGseparator = yaml.useLLM.separator ? yaml.useLLM.separator : yaml.useLLM.RAGseparator;
@@ -172,6 +172,8 @@ export function processYAML(markdownContent) {
 					yaml.useLLM.apiKey = yaml.useLLM.askAPIkey ? yaml.useLLM.askAPIkey : ""; // Attention à ne pas diffuser publiuement votre clé API
 				}
 			}
-		} catch (e) {console.log("erreur processYAML : "+e)}
+		} catch (e) {
+			console.log("erreur processYAML : "+e);
+		}
 	}
 }

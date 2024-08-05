@@ -1,4 +1,4 @@
-export let config = {}
+export let config = {};
 
 config.secureMode = false;
 // Si on utilise le mode sécurisé, il faut indiquer les chatbots qui sont autorisés, soit en utilisant 'authorizedChatbots', soit en utilisant les raccourcis ci-dessous
@@ -60,7 +60,7 @@ config.allowedAddOns = {
 
 config.addOnsDependencies = {
 	kroki: ["pako"]
-}
+};
 
 // Paramètres dans l'en-tête YAML
 config.yaml = {
@@ -82,11 +82,11 @@ config.yaml = {
 	'typeWriter': true,
 	'userInput': true,
 	'variables': '',
-}
+};
 
 // Paramètres pour l'utilisation d'un LLM
 const defaultMaxTokens = 100;
-const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires."
+const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
 
 config.yaml.useLLM = {
@@ -114,6 +114,6 @@ const RAG = {
 	'RAGseparator': '\n',
 	'RAGmaxTopElements': 3,
 	'RAGprompt': defaultRAGprompt,
-}
+};
 
-config.yaml.useLLM = {...config.yaml.useLLM, ...RAG}
+config.yaml.useLLM = {...config.yaml.useLLM, ...RAG};

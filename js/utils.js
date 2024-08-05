@@ -98,7 +98,7 @@ export function handleURL(url) {
 		if (shortcut) {
 			url = shortcut[1];
 			// Si on a un raccourci, on n'a pas besoin de traiter correctement l'url
-			return url
+			return url;
 		}
 		if (config.secureMode) {
 			const authorizedChatbot = config.authorizedChatbots.find((element) => element == url);

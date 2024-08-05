@@ -12,16 +12,16 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 			if(isCohere) {
 				const chunkObject = JSON.parse(chunkElement.trim());
 				if (chunkObject.event_type == 'text-generation'  && LLMactive) {
-					const chunkMessage = chunkObject.text
-					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
+					const chunkMessage = chunkObject.text;
+					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
 				}
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
-				const chunkObjectString = chunkElement.replace('data: ','')
+				const chunkObjectString = chunkElement.replace('data: ','');
 				if(!chunkObjectString.includes('[DONE]') && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
 					const chunkMessage = chunkObject.choices[0].delta.content;
-					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage
+					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
 				} else {
 					LLMactive = false;
 				}
@@ -34,12 +34,12 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 // On utilise une variable LLMactive pour indiquer l'état d'activité du LLM
 document.body.addEventListener("click", () => {
 	LLMactive = false;
-})
+});
 document.body.addEventListener("keypress", (event) => {
 	if (event.key === "Enter") {
 		LLMactive = false;
 	}
-})
+});
 
 // Configuration de l'accès au LLM
 let bodyObject = {
@@ -50,7 +50,7 @@ let bodyObject = {
 	presence_penalty: 0,
 	temperature: 0.7,
 	top_p: 0.95,
-}
+};
 
 // Pour envoyer un message d'erreur si la connexion au LLM n'a pas été correctement configurée ou bien si cette connexion ne fonctionne pas
 function messageIfErrorWithGetAnswerFromLLM(error) {
@@ -68,7 +68,7 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(userPrompt, informations) {
 	if (informations.length>0) {
-		informations = yaml.useLLM.RAGprompt+informations
+		informations = yaml.useLLM.RAGprompt+informations;
 	}
 	const isCohere = yaml.useLLM.url.includes('cohere');
 
@@ -84,7 +84,7 @@ export function getAnswerFromLLM(userPrompt, informations) {
 				content: yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations,
 				role: "user",
 			},
-		]
+		];
 	}
 	try {
 		fetch(yaml.useLLM.url, {
@@ -102,14 +102,14 @@ export function getAnswerFromLLM(userPrompt, informations) {
 					chatMessage.classList.add("message");
 					chatMessage.classList.add("bot-message");
 					chatContainer.appendChild(chatMessage);
-					readStream(response.body, chatMessage, isCohere)
+					readStream(response.body, chatMessage, isCohere);
 				} else {
-					messageIfErrorWithGetAnswerFromLLM()
+					messageIfErrorWithGetAnswerFromLLM();
 				}
 		}).catch((error) => {
-			messageIfErrorWithGetAnswerFromLLM(error)
-		})
+			messageIfErrorWithGetAnswerFromLLM(error);
+		});
 	} catch(error) {
-		messageIfErrorWithGetAnswerFromLLM(error)
+		messageIfErrorWithGetAnswerFromLLM(error);
 	};
 }
