@@ -115,7 +115,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.favicon) {
 				const faviconElement = document.getElementById("favicon");
-				faviconElement.href=yaml.favicon;
+				faviconElement.href = yaml.favicon;
 			}
 			if (yaml.avatar) {
 				const avatarCSS = `
@@ -128,7 +128,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.defaultMessage || yaml.messageParDéfaut) {
 				config.defaultMessage = yaml.messageParDéfaut ? Object.values(yaml.messageParDéfaut) : yaml.defaultMessage;
-				while (config.defaultMessage.length<5) {
+				while (config.defaultMessage.length < 5) {
 					config.defaultMessage.push(...config.defaultMessage);
 				}
 			}
@@ -138,7 +138,7 @@ export function processYAML(markdownContent) {
 				footerElement.innerHTML = yaml.footer;
 			}
 			if (yaml.theme) {
-				const cssFile = yaml.theme.endsWith(".css") ? "css/themes/"+yaml.theme : "css/themes/"+yaml.theme+".css";
+				const cssFile = yaml.theme.endsWith(".css") ? "css/themes/" + yaml.theme : "css/themes/" + yaml.theme + ".css";
 				loadCSS(cssFile);
 			}
 			if (yaml.dynamicContent || yaml.contenuDynamique) {
@@ -154,9 +154,9 @@ export function processYAML(markdownContent) {
 				for (const [botName, botProperties] of Object.entries(yaml.bots)) {
 					const botAvatarCustomImageCSS = botProperties.avatar ? 'background-image:url("' + botProperties.avatar + '"); ' : "";
 					const botAvatarCSSfromYAML = botProperties.cssAvatar ? botProperties.cssAvatar : "";
-					const botAvatarCSS = ".botName-"+botName+">:first-child:before {"+ botAvatarCustomImageCSS + botAvatarCSSfromYAML +"}";
+					const botAvatarCSS = ".botName-" + botName + ">:first-child:before {" + botAvatarCustomImageCSS + botAvatarCSSfromYAML + "}";
 					const botCSSmessage = botProperties.cssMessage ? botProperties.cssMessage : "";
-					const botCSS = "<style>"+botAvatarCSS+" .botName-"+botName+"{"+botCSSmessage+"}</style>";
+					const botCSS = "<style>" + botAvatarCSS + " .botName-" + botName + "{" + botCSSmessage + "}</style>";
 					Promise.all([
 						loadCSS(botCSS)
 					]);
@@ -165,7 +165,7 @@ export function processYAML(markdownContent) {
 			if (yaml.useLLM.url || yaml.utiliserLLM.url) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
 				yaml.useLLM.RAGinformations = yaml.useLLM.informations ? yaml.useLLM.informations : yaml.useLLM.RAGinformations;
-				yaml.useLLM.RAGmaxTopElements = yaml.useLLM.maxTopElements ? yaml.useLLM.maxTopElements: yaml.useLLM.RAGmaxTopElements;
+				yaml.useLLM.RAGmaxTopElements = yaml.useLLM.maxTopElements ? yaml.useLLM.maxTopElements : yaml.useLLM.RAGmaxTopElements;
 				yaml.useLLM.RAGseparator = yaml.useLLM.separator ? yaml.useLLM.separator : yaml.useLLM.RAGseparator;
 				if(yaml.useLLM.askAPIkey === true) {
 					yaml.useLLM.apiKey = prompt("Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.");
@@ -174,7 +174,7 @@ export function processYAML(markdownContent) {
 				}
 			}
 		} catch (e) {
-			console.log("erreur processYAML : "+e);
+			console.log("erreur processYAML : " + e);
 		}
 	}
 }

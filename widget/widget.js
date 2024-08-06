@@ -75,7 +75,7 @@ widgetContainer.id = "chatmdWidget";
 
 // Créer le premier sous-div
 const widget = document.createElement("div");
-widget.innerHTML = '<img src="'+imageWidget+'"/>';
+widget.innerHTML = '<img src="' + imageWidget + '"/>';
 
 // Créer le deuxième sous-div, qui est caché par défaut
 const chatbotBox = document.createElement("div");

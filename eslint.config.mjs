@@ -15,6 +15,7 @@ export default [
 			"comma-spacing": ["error"],
 			"array-bracket-spacing": ["error"],
 			"object-curly-spacing": ["error", "always"],
+			"space-infix-ops": ["error"],
 		}
 	}
 ];

@@ -64,7 +64,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
 					dynamicVariables[variableName] = variableValue;
-					return match.includes("KEYBOARD") ? "<!--"+match+"-->" : "";
+					return match.includes("KEYBOARD") ? "<!--" + match + "-->" : "";
 				} else {
 					return match;
 				}

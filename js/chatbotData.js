@@ -78,7 +78,7 @@ function parseMarkdown(markdownContent) {
 	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace("# ", "").trim()] : [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
-	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle+chatbotTitle.length) : firstPart.substring(indexStartTitle);
+	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle + chatbotTitle.length) : firstPart.substring(indexStartTitle);
 	const initialMessageContentLines = initialMessageContent.split("\n");
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "").trim();

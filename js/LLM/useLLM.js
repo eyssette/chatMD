@@ -67,13 +67,13 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(userPrompt, informations) {
-	if (informations.length>0) {
-		informations = yaml.useLLM.RAGprompt+informations;
+	if (informations.length > 0) {
+		informations = yaml.useLLM.RAGprompt + informations;
 	}
 	const isCohere = yaml.useLLM.url.includes("cohere");
 
 	if (isCohere) {
-		bodyObject.message = yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations;
+		bodyObject.message = yaml.useLLM.preprompt + userPrompt + yaml.useLLM.postprompt + informations;
 	} else {
 		bodyObject.messages = [
 			{
@@ -81,7 +81,7 @@ export function getAnswerFromLLM(userPrompt, informations) {
 				role: "system",
 			},
 			{
-				content: yaml.useLLM.preprompt+userPrompt+yaml.useLLM.postprompt+informations,
+				content: yaml.useLLM.preprompt + userPrompt + yaml.useLLM.postprompt + informations,
 				role: "user",
 			},
 		];
@@ -90,7 +90,7 @@ export function getAnswerFromLLM(userPrompt, informations) {
 		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {
-				"Authorization": "Bearer "+yaml.useLLM.apiKey,
+				"Authorization": "Bearer " + yaml.useLLM.apiKey,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(bodyObject),
