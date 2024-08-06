@@ -1,15 +1,13 @@
 import { config } from "./config";
 import { yaml, filterBadWords } from "./yaml";
 import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow } from "./utils";
-import { nextMessage } from "./directivesAndSpecialContents";
-import { processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents";
+import { nextMessage, processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents";
 import { processFixedVariables } from "./processFixedVariables";
 import { processDynamicVariables, evaluateExpression } from "./processDynamicVariables";
 import { convertLatexExpressions } from "./convertLatex";
 import { markdownToHTML } from "./markdown";
-import { displayMessage, autoFocus } from "./typewriter";
+import { displayMessage, autoFocus, chatContainer, userInput } from "./typewriter";
 import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp";
-import { chatContainer, userInput } from "./typewriter";
 import { getAnswerFromLLM } from "./LLM/useLLM";
 import { getRAGcontent, vectorRAGinformations, RAGcontent } from "./LLM/processRAG";
 
