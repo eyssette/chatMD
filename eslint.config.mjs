@@ -19,6 +19,8 @@ export default [
 			"camelcase": ["error"],
 			"key-spacing": ["error"],
 			"no-duplicate-imports": ["error"],
+			"padded-blocks": ["error", "never"],
+			"space-before-blocks": ["error"],
 		}
 	}
 ];
