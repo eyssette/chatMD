@@ -1,5 +1,5 @@
 variables:
-  COMPRESS_FILES: "htm\\|html\\|txt\\|text\\|js\\|css\\|md\\|ico\\|svg"
+  COMPRESS_FILES: 'htm|html|txt|text|js|css|md|ico|svg'
 
 pages:
   image: alpine:latest
@@ -9,8 +9,8 @@ pages:
     - mkdir .public
     - cp -r * .public
     - mv .public public
-    - find public -type f -regex ".*\.\($COMPRESS_FILES\)$" -exec gzip -f -k {} \;
-    - find public -type f -regex ".*\.\($COMPRESS_FILES\)$" -exec brotli -f -k {} \;
+    - find public -type f -regex ".*\.($COMPRESS_FILES)$" -exec gzip -f -k {} \;
+    - find public -type f -regex ".*\.($COMPRESS_FILES)$" -exec brotli -f -k {} \;
   artifacts:
     paths:
       - public
