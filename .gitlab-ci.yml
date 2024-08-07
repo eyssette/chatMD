@@ -1,5 +1,5 @@
 variables:
-  COMPRESS_FILES: "htm|html|txt|text|js|css|md|ico|svg"
+  COMPRESS_FILES: "htm\\|html\\|txt\\|text\\|js\\|css\\|md\\|ico\\|svg"
 
 pages:
   image: alpine:latest
