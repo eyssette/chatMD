@@ -22,7 +22,7 @@ function levenshteinDistance(a, b) {
 			matrix[i][j] = Math.min(
 				matrix[i - 1][j] + 1,
 				matrix[i][j - 1] + 1,
-				matrix[i - 1][j - 1] + cost
+				matrix[i - 1][j - 1] + cost,
 			);
 		}
 	}
@@ -84,7 +84,7 @@ export function removeAccents(str) {
 
 	return str.replace(
 		/[àâéèêëîïôöûüÿçÀÂÉÈÊËÎÏÔÖÛÜŸÇ]/g,
-		(match) => accentMap[match] || match
+		(match) => accentMap[match] || match,
 	);
 }
 

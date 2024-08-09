@@ -21,6 +21,7 @@ export default [
 			"no-duplicate-imports": ["error"],
 			"padded-blocks": ["error", "never"],
 			"space-before-blocks": ["error"],
+			"space-after-keywords": ["error"],
 		}
 	}
 ];

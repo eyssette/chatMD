@@ -8,7 +8,7 @@ export const userInput = document.getElementById("user-input");
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
 const isMobile =
 	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-		navigator.userAgent
+		navigator.userAgent,
 	);
 export const autoFocus = isMobile ? false : true;
 
@@ -24,7 +24,11 @@ const observerConfig = {
 	subtree: true,
 };
 
-const messageTypeEnterToStopTypeWriter = isMobile ? "Clic sur “Envoyer” pour stopper l'effet “machine à écrire”" : window.innerWidth > 880 ? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement" : "“Enter” pour stopper l'effet “machine à écrire”";
+const messageTypeEnterToStopTypeWriter = isMobile
+	? "Clic sur “Envoyer” pour stopper l'effet “machine à écrire”"
+	: window.innerWidth > 880
+		? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
+		: "“Enter” pour stopper l'effet “machine à écrire”";
 
 let typed;
 const pauseTypeWriter = "^300 ";
@@ -37,27 +41,28 @@ function typeWriter(content, element) {
 		typed.stop();
 		typed.reset();
 		slowContent = slowContent.replaceAll("`", "");
-		slowContent = slowContent.replace(
-			regexMessageOptions,
-			"`$1`"
-		);
+		slowContent = slowContent.replace(regexMessageOptions, "`$1`");
 		// On doit conserver les retours à la ligne dans les blocs "pre"
 		const contentKeepReturnInCode = slowContent.replaceAll(
 			regexPre,
 			function (match) {
 				return match.replaceAll("\n", "RETURNCHARACTER");
-			}
+			},
 		);
 		const contentArray = contentKeepReturnInCode.split("\n");
 		// On découpe chaque paragraphe pour pouvoir ensuite l'afficher d'un coup
 		const contentArrayFiltered = contentArray.map((element) =>
 			element.startsWith(pauseTypeWriter)
 				? element
-					.replace(pauseTypeWriter, "")
-					.replaceAll("RETURNCHARACTER", "\n") + "`"
+						.replace(pauseTypeWriter, "")
+						.replaceAll("RETURNCHARACTER", "\n") + "`"
 				: element.endsWith("`")
 					? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-					: "`" + element.replaceAll("RETURNCHARACTER", "\n").replace(pauseTypeWriterMultipleBots, "") + "`"
+					: "`" +
+						element
+							.replaceAll("RETURNCHARACTER", "\n")
+							.replace(pauseTypeWriterMultipleBots, "") +
+						"`",
 		);
 		typed.strings = [contentArrayFiltered.join(" ")];
 		typed.start();
@@ -93,10 +98,7 @@ function typeWriter(content, element) {
 	}
 
 	// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
-	content = content.replace(
-		regexMessageOptions,
-		pauseTypeWriter + "`$1`"
-	);
+	content = content.replace(regexMessageOptions, pauseTypeWriter + "`$1`");
 
 	// On fait apparaître d'un coup les iframes
 	content = content.replaceAll(regexIframe, "`$1`");
@@ -126,7 +128,10 @@ function typeWriter(content, element) {
 			setTimeout(() => {
 				// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
 				document.addEventListener("mousemove", function (e) {
-					if (Math.abs(e.movementX) > thresholdMouseMovement || Math.abs(e.movementY) > thresholdMouseMovement) {
+					if (
+						Math.abs(e.movementX) > thresholdMouseMovement ||
+						Math.abs(e.movementY) > thresholdMouseMovement
+					) {
 						observerConnected = false;
 						mutationObserver.disconnect();
 					}
@@ -182,7 +187,6 @@ function typeWriter(content, element) {
 		},
 	});
 }
-
 
 export function displayMessage(html, isUser, chatMessage) {
 	// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct

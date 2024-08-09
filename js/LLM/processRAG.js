@@ -3,8 +3,8 @@ import { handleURL } from "../utils";
 import { createVector } from "../nlp";
 
 function prepareRAGdata(informations, separator) {
-	if(separator) {
-		if(separator == "auto") {
+	if (separator) {
+		if (separator == "auto") {
 			// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
 			function splitIntoChunks(text, charLimit = 600) {
 				let chunks = [];
@@ -24,10 +24,14 @@ function prepareRAGdata(informations, separator) {
 			}
 			return splitIntoChunks(informations);
 		} else {
-			return yaml.useLLM.RAGseparator == "break" ? informations.split("---").map(element => element.replaceAll("\n", " ").trim()) : informations.split(yaml.useLLM.RAGseparator);
+			return yaml.useLLM.RAGseparator == "break"
+				? informations
+						.split("---")
+						.map((element) => element.replaceAll("\n", " ").trim())
+				: informations.split(yaml.useLLM.RAGseparator);
 		}
 	} else {
-		return informations.split("\n").filter(line => line.trim() !== "");
+		return informations.split("\n").filter((line) => line.trim() !== "");
 	}
 }
 
@@ -46,10 +50,9 @@ function createVectorRAGinformations(informations) {
 	}
 }
 
-
 export function getRAGcontent(informations) {
-	if(informations) {
-		if(informations.includes("http")) {
+	if (informations) {
+		if (informations.includes("http")) {
 			const urlRAGfile = handleURL(informations);
 			fetch(urlRAGfile)
 				.then((response) => response.text())
@@ -60,12 +63,18 @@ export function getRAGcontent(informations) {
 				});
 		} else {
 			let RAGinformations;
-			if(informations.toString().includes("useFile")) {
+			if (informations.toString().includes("useFile")) {
 				RAGinformations = RAGinformations.trim();
-				yaml.useLLM.RAGinformations = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
+				yaml.useLLM.RAGinformations = prepareRAGdata(
+					RAGinformations,
+					yaml.useLLM.RAGseparator,
+				);
 			} else {
 				RAGinformations = informations.trim();
-				yaml.useLLM.RAGinformations = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
+				yaml.useLLM.RAGinformations = prepareRAGdata(
+					RAGinformations,
+					yaml.useLLM.RAGseparator,
+				);
 			}
 			return yaml.useLLM.RAGinformations;
 		}

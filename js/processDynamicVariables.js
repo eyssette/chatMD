@@ -7,26 +7,47 @@ let getLastMessage = false;
 
 // Opérations autorisées pour le calcul des expressions complexes
 const sanitizeCodeAllowedOperations = [
-	"+", "-", "*", "/",
-	"<=", ">=",
-	"<", ">",
-	"==", "!=",
-	"&&", "||", "!",
-	"(", ")",
+	"+",
+	"-",
+	"*",
+	"/",
+	"<=",
+	">=",
+	"<",
+	">",
+	"==",
+	"!=",
+	"&&",
+	"||",
+	"!",
+	"(",
+	")",
 ];
 
 // Sanitize le code avant d'utiliser new Function
 function sanitizeCode(code) {
 	// On supprime d'abord dans l'expression les variables dynamiques
-	let codeWithoutAllowedOperations = code.replace(/tryConvertStringToNumber\(.*?\]\)/g, "");
+	let codeWithoutAllowedOperations = code.replace(
+		/tryConvertStringToNumber\(.*?\]\)/g,
+		"",
+	);
 	// On supprime ensuite les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
-		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(allowedOperation, "///");
+		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(
+			allowedOperation,
+			"///",
+		);
 	});
 	// On supprime aussi tous les nombres (ils sont autorisés)
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/[0-9]*/g, "");
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/[0-9]*/g,
+		"",
+	);
 	// On supprime les chaînes de caractères entre guillemets
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(/".*?"/g, "///");
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/".*?"/g,
+		"///",
+	);
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
 	const forbiddenExpressions = codeWithoutAllowedOperations.split("///");
 	forbiddenExpressions.forEach((forbiddenExpression) => {
@@ -38,18 +59,21 @@ function sanitizeCode(code) {
 export function evaluateExpression(expression, dynamicVariables) {
 	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
 	expression = config.secureMode ? expression : sanitizeCode(expression);
-	const result = new Function("dynamicVariables", "tryConvertStringToNumber", "return " + expression)(dynamicVariables, tryConvertStringToNumber);
+	const result = new Function(
+		"dynamicVariables",
+		"tryConvertStringToNumber",
+		"return " + expression,
+	)(dynamicVariables, tryConvertStringToNumber);
 	return result;
 }
 
 function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
-	let calc = complexExpression.replace(
-		/@(\w+)/g,
-		function (match, varName) {
-			return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-		}
-	);
+	let calc = complexExpression.replace(/@(\w+)/g, function (match, varName) {
+		return (
+			'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])'
+		);
+	});
 	// Évalue l'expression de manière sécurisée
 	const calcResult = evaluateExpression(calc, dynamicVariables);
 	return calcResult;
@@ -68,9 +92,11 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 				} else {
 					return match;
 				}
-			}
+			},
 		);
-		message = message.replaceAll("<!--<!--", "<!--").replaceAll("-->-->", "-->");
+		message = message
+			.replaceAll("<!--<!--", "<!--")
+			.replaceAll("-->-->", "-->");
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
 		if (yaml.userInput === false) {
 			if (dynamicVariables["KEYBOARD"] == "true") {
@@ -98,7 +124,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 						? dynamicVariables[variableName]
 						: match;
 				}
-			}
+			},
 		);
 		// Calcul des variables qui dépendent d'autres variables
 		const hasComplexVariable = message.includes("calc(") ? true : false;
@@ -107,14 +133,17 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			function (match, variableName, complexExpression) {
 				try {
 					// Calcule l'expression complexe
-					const calcResult = processComplexDynamicVariables(complexExpression, dynamicVariables);
+					const calcResult = processComplexDynamicVariables(
+						complexExpression,
+						dynamicVariables,
+					);
 					dynamicVariables[variableName] = calcResult;
 					return "";
 				} catch (e) {
 					console.error("Error evaluating :", match, e);
 					return "<!--" + match + "-->";
 				}
-			}
+			},
 		);
 
 		// Si on a des variables complexes ou s'il reste des variables sans assignation de valeur : 2e passage pour remplacer dans le texte les variables `@nomVariable` par leur valeur (qui vient d'être définie)
@@ -129,7 +158,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 							? dynamicVariables[variableName]
 							: "";
 					}
-				}
+				},
 			);
 		}
 
@@ -139,18 +168,17 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			function (match, variableName, nextAnswer) {
 				getLastMessage = match ? [variableName, nextAnswer] : false;
 				return "";
-			}
+			},
 		);
-
 
 		// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 		message = message.replaceAll(
 			/ (@[^\s]*?=.*?)</g,
-			'<span class="hidden">$1</span><'
+			'<span class="hidden">$1</span><',
 		);
 		message = message.replaceAll(
 			/>(@[^\s]*?=)/g,
-			'><span class="hidden">$1</span>'
+			'><span class="hidden">$1</span>',
 		);
 		// Traitement du cas où on a l'affichage d'un contenu est conditionné par la valeur d'une variable
 		message = message.replaceAll(
@@ -162,8 +190,12 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 						condition = condition.replace(
 							/@([^\s()&|!=<>]+)/g,
 							function (match, varName) {
-								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-							}
+								return (
+									'tryConvertStringToNumber(dynamicVariables["' +
+									varName.trim() +
+									'"])'
+								);
+							},
 						);
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 						condition = condition
@@ -173,10 +205,10 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 									match,
 									comparisonSignLeft,
 									value,
-									comparisonSignRight
+									comparisonSignRight,
 								) {
 									return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
-								}
+								},
 							)
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
@@ -190,7 +222,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 				} else {
 					return "";
 				}
-			}
+			},
 		);
 		// On nettoie le message en supprimant les lignes vides en trop
 		message = message.replaceAll(/\n\n\n*/g, "\n\n");
@@ -201,11 +233,17 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 		message = message.replaceAll(
 			/@([^\s]*?)=(.*)/g,
 			function (match, variableName, variableValue, offset) {
-				if(match.includes("calc(")) {
+				if (match.includes("calc(")) {
 					try {
 						// Calcule l'expression complexe
-						const complexExpression = variableValue.replace("calc(", "").trim().slice(0, -1);
-						const calcResult = processComplexDynamicVariables(complexExpression, dynamicVariables);
+						const complexExpression = variableValue
+							.replace("calc(", "")
+							.trim()
+							.slice(0, -1);
+						const calcResult = processComplexDynamicVariables(
+							complexExpression,
+							dynamicVariables,
+						);
 						dynamicVariables[variableName] = calcResult;
 					} catch (e) {
 						console.error("Error evaluating :", match, e);
@@ -216,7 +254,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 				}
 				// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
 				return offset == 0 ? variableValue : "";
-			}
+			},
 		);
 
 		if (getLastMessage) {

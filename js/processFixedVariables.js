@@ -21,6 +21,6 @@ export function processFixedVariables(content, preprocess = false) {
 			} else {
 				return "@{" + variableName + "}";
 			}
-		}
+		},
 	);
 }

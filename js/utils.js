@@ -101,8 +101,10 @@ export function handleURL(url) {
 			return url;
 		}
 		if (config.secureMode) {
-			const authorizedChatbot = config.authorizedChatbots.find((element) => element == url);
-			if(authorizedChatbot) {
+			const authorizedChatbot = config.authorizedChatbots.find(
+				(element) => element == url,
+			);
+			if (authorizedChatbot) {
 				url = authorizedChatbot;
 			} else {
 				return "";
@@ -117,7 +119,7 @@ export function handleURL(url) {
 			addCorsProxy = false;
 			url = url.replace(
 				"https://github.com",
-				"https://raw.githubusercontent.com"
+				"https://raw.githubusercontent.com",
 			);
 			url = url.replace("/blob/", "/");
 		}
@@ -137,7 +139,10 @@ export function handleURL(url) {
 			url = url.indexOf("download") === -1 ? url + "/download" : url;
 		}
 		// gestion des fichiers hébergés sur framapad ou digidoc
-		if ((url.includes("framapad") || url.includes("digidoc")) && !url.endsWith("/export/txt")) {
+		if (
+			(url.includes("framapad") || url.includes("digidoc")) &&
+			!url.endsWith("/export/txt")
+		) {
 			addCorsProxy = false;
 			url = url.replace(/\?.*/, "") + "/export/txt";
 		}
@@ -197,7 +202,6 @@ export function hideFooter() {
 	document.head.appendChild(styleSheet);
 }
 
-
 export function tryConvertStringToNumber(input) {
 	const number = parseFloat(input);
 	if (!isNaN(number) && number.toString() === input.toString().trim()) {
@@ -208,7 +212,7 @@ export function tryConvertStringToNumber(input) {
 }
 
 export function deepMerge(target, source) {
-	const isObject = obj => obj && typeof obj === "object";
+	const isObject = (obj) => obj && typeof obj === "object";
 
 	for (const key in source) {
 		if (isObject(source[key])) {

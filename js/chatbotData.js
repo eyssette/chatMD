@@ -16,12 +16,16 @@ export function getMarkdownContentandCreateChatbot() {
 	if (sourceChatBot !== "") {
 		if (Array.isArray(sourceChatBot)) {
 			// Cas où la source est répartie dans plusieurs fichiers
-			const promises = sourceChatBot.map(url => fetch(url).then(data => data.text()));
-			Promise.all(promises).then(data => {
-				md = data.join("\n");
-				chatData = parseMarkdown(md);
-				createChatBot(chatData);
-			}).catch((error) => console.error(error));
+			const promises = sourceChatBot.map((url) =>
+				fetch(url).then((data) => data.text()),
+			);
+			Promise.all(promises)
+				.then((data) => {
+					md = data.join("\n");
+					chatData = parseMarkdown(md);
+					createChatBot(chatData);
+				})
+				.catch((error) => console.error(error));
 		} else {
 			// Récupération du contenu du fichier
 			fetch(sourceChatBot)
@@ -30,7 +34,8 @@ export function getMarkdownContentandCreateChatbot() {
 					md = data;
 					chatData = parseMarkdown(md);
 					createChatBot(chatData);
-				}).catch((error) => console.error(error));
+				})
+				.catch((error) => console.error(error));
 		}
 	} else {
 		createChatBot(parseMarkdown(md));
@@ -56,17 +61,19 @@ function parseMarkdown(markdownContent) {
 	// On récupère le contenu principal sans l'en-tête YAML s'il existe
 	let indexFirstH1title = markdownContent.indexOf("# ");
 	const indexFirstH2title = markdownContent.indexOf("## ");
-	if(indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
+	if (indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
 		indexFirstH1title = 0;
 	}
 	let mainContent = markdownContent.substring(indexFirstH1title);
-	if(yaml.variables) {
+	if (yaml.variables) {
 		mainContent = processFixedVariables(mainContent, true);
 	}
 	const mainContentWithoutH1 = mainContent.substring(1);
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
 	const possibleTitles = ["# ", "## ", "### ", "#### ", "##### "];
-	const indexOfFirstTitles = possibleTitles.map(title => mainContentWithoutH1.indexOf(title)).filter(index => index > 0);
+	const indexOfFirstTitles = possibleTitles
+		.map((title) => mainContentWithoutH1.indexOf(title))
+		.filter((index) => index > 0);
 	const indexAfterFirstMessage = Math.min(...indexOfFirstTitles);
 
 	// Gestion de la première partie des données : titre + message initial
@@ -74,10 +81,14 @@ function parseMarkdown(markdownContent) {
 	// Gestion du titre
 	const chatbotTitleMatch = firstPart.match(/# .*/);
 	const chatbotTitle = chatbotTitleMatch ? chatbotTitleMatch[0] : "Chatbot";
-	const chatbotTitleArray = chatbotTitle ? [chatbotTitle.replace("# ", "").trim()] : [""];
+	const chatbotTitleArray = chatbotTitle
+		? [chatbotTitle.replace("# ", "").trim()]
+		: [""];
 	const indexStartTitle = firstPart.indexOf(chatbotTitle);
 	// Gestion du message initial
-	const initialMessageContent = chatbotTitleMatch ? firstPart.substring(indexStartTitle + chatbotTitle.length) : firstPart.substring(indexStartTitle);
+	const initialMessageContent = chatbotTitleMatch
+		? firstPart.substring(indexStartTitle + chatbotTitle.length)
+		: firstPart.substring(indexStartTitle);
 	const initialMessageContentLines = initialMessageContent.split("\n");
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "").trim();
@@ -109,7 +120,9 @@ function parseMarkdown(markdownContent) {
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line.replace(startsWithAnyOf(line, yaml.responsesTitles), "").trim(); // Titre h2
+			currentH2Title = line
+				.replace(startsWithAnyOf(line, yaml.responsesTitles), "")
+				.trim(); // Titre h2
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
@@ -118,7 +131,9 @@ function parseMarkdown(markdownContent) {
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
 		} else if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
-			ifCondition = line.match(regexDynamicContentIfBlock)[1] ? line.match(regexDynamicContentIfBlock)[1] : "";
+			ifCondition = line.match(regexDynamicContentIfBlock)[1]
+				? line.match(regexDynamicContentIfBlock)[1]
+				: "";
 			content.push(line + "\n");
 			listParsed = true;
 		} else if (yaml.dynamicContent && line.includes("`endif`")) {
@@ -147,12 +162,7 @@ function parseMarkdown(markdownContent) {
 		}
 	}
 
-	chatbotData.push([
-		currentH2Title,
-		currentLiItems,
-		content,
-		lastOrderedList,
-	]);
+	chatbotData.push([currentH2Title, currentLiItems, content, lastOrderedList]);
 
 	const initialMessage = [initialMessageContentArray, initialMessageOptions];
 	chatbotData.push(initialMessage);

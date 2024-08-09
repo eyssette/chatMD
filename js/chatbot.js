@@ -1,25 +1,58 @@
 import { config } from "./config";
 import { yaml, filterBadWords } from "./yaml";
-import { topElements, getRandomElement, shouldBeRandomized, randomizeArrayWithFixedElements, scrollWindow } from "./utils";
-import { nextMessage, processAudio, processDirectiveBot, processDirectiveNext, processDirectiveSelect, processDirectiveSelectNext, processKroki, processMultipleBots, processRandomMessage } from "./directivesAndSpecialContents";
+import {
+	topElements,
+	getRandomElement,
+	shouldBeRandomized,
+	randomizeArrayWithFixedElements,
+	scrollWindow,
+} from "./utils";
+import {
+	nextMessage,
+	processAudio,
+	processDirectiveBot,
+	processDirectiveNext,
+	processDirectiveSelect,
+	processDirectiveSelectNext,
+	processKroki,
+	processMultipleBots,
+	processRandomMessage,
+} from "./directivesAndSpecialContents";
 import { processFixedVariables } from "./processFixedVariables";
-import { processDynamicVariables, evaluateExpression } from "./processDynamicVariables";
+import {
+	processDynamicVariables,
+	evaluateExpression,
+} from "./processDynamicVariables";
 import { convertLatexExpressions } from "./convertLatex";
 import { markdownToHTML } from "./markdown";
-import { displayMessage, autoFocus, chatContainer, userInput } from "./typewriter";
-import { removeAccents, hasLevenshteinDistanceLessThan, cosineSimilarity, createVector } from "./nlp";
+import {
+	displayMessage,
+	autoFocus,
+	chatContainer,
+	userInput,
+} from "./typewriter";
+import {
+	removeAccents,
+	hasLevenshteinDistanceLessThan,
+	cosineSimilarity,
+	createVector,
+} from "./nlp";
 import { getAnswerFromLLM } from "./LLM/useLLM";
-import { getRAGcontent, vectorRAGinformations, RAGcontent } from "./LLM/processRAG";
+import {
+	getRAGcontent,
+	vectorRAGinformations,
+	RAGcontent,
+} from "./LLM/processRAG";
 
 const sendButton = document.getElementById("send-button");
 
 export async function createChatBot(chatData) {
 	let dynamicVariables = {};
 	const params1 = Object.fromEntries(
-		new URLSearchParams(document.location.search)
+		new URLSearchParams(document.location.search),
 	);
 	const params2 = Object.fromEntries(
-		new URLSearchParams(document.location.hash.replace(/#.*\?/, ""))
+		new URLSearchParams(document.location.hash.replace(/#.*\?/, "")),
 	);
 	const params = { ...params1, ...params2 };
 	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
@@ -27,7 +60,6 @@ export async function createChatBot(chatData) {
 	for (const [key, value] of Object.entries(params)) {
 		dynamicVariables["GET" + key] = value;
 	}
-
 
 	const chatbotName = chatData.pop();
 	let initialMessage = chatData.pop();
@@ -37,7 +69,7 @@ export async function createChatBot(chatData) {
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
-		Math.random() * config.defaultMessage.length
+		Math.random() * config.defaultMessage.length,
 	);
 	let randomDefaultMessageIndexLastChoice = [];
 
@@ -48,7 +80,7 @@ export async function createChatBot(chatData) {
 		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
 		nextMessage.selected = undefined;
 		// Gestion des variables fixes prédéfinies
-		if(yaml.variables) {
+		if (yaml.variables) {
 			message = processFixedVariables(message);
 		}
 		if (!isUser) {
@@ -63,7 +95,7 @@ export async function createChatBot(chatData) {
 		// Cas où c'est un message du bot
 		if (!isUser) {
 			// Gestion de la directive !Bot: botName
-			if(yaml.bots) {
+			if (yaml.bots) {
 				message = processDirectiveBot(message, chatMessage);
 			}
 
@@ -83,7 +115,7 @@ export async function createChatBot(chatData) {
 		}
 
 		let html = markdownToHTML(message);
-		if(yaml.bots) {
+		if (yaml.bots) {
 			html = processMultipleBots(html);
 		}
 		if (yaml.maths === true) {
@@ -140,10 +172,8 @@ export async function createChatBot(chatData) {
 		}
 	}
 
-	if(yaml.useLLM.url && yaml.useLLM.RAGinformations) {
-		getRAGcontent(
-			yaml.useLLM.RAGinformations
-		);
+	if (yaml.useLLM.url && yaml.useLLM.RAGinformations) {
+		getRAGcontent(yaml.useLLM.RAGinformations);
 	}
 
 	function chatbotResponse(inputText) {
@@ -156,20 +186,20 @@ export async function createChatBot(chatData) {
 		if (yaml.useLLM.url) {
 			inputText = inputText.replace(
 				'<span class="hidden">!useLLM</span>',
-				"!useLLM"
+				"!useLLM",
 			);
 			questionToLLM = inputText.trim().replace("!useLLM", "");
 			if (yaml.useLLM.RAGinformations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 				const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
-					cosineSimilarity(questionToLLM, vectorRAGinformation)
+					cosineSimilarity(questionToLLM, vectorRAGinformation),
 				);
 				const RAGbestMatchesIndexes = topElements(
 					cosSimArray,
-					yaml.useLLM.RAGmaxTopElements
+					yaml.useLLM.RAGmaxTopElements,
 				);
 				RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
-					(element) => RAGcontent[element[1]]
+					(element) => RAGcontent[element[1]],
 				).join("\n");
 			}
 		}
@@ -195,10 +225,10 @@ export async function createChatBot(chatData) {
 			optionsLastResponseKeysToLowerCase = optionsLastResponse.map(
 				(element) => {
 					return element[0].toLowerCase();
-				}
+				},
 			);
 			indexLastResponseKeyMatch = optionsLastResponseKeysToLowerCase.indexOf(
-				userInputTextToLowerCase
+				userInputTextToLowerCase,
 			);
 		}
 
@@ -230,7 +260,7 @@ export async function createChatBot(chatData) {
 				if (yaml.searchInContent) {
 					const cosSim = cosineSimilarity(
 						userInputTextToLowerCase,
-						vectorChatBotResponses[i]
+						vectorChatBotResponses[i],
 					);
 					matchScore = matchScore + cosSim + 0.5;
 				}
@@ -242,11 +272,11 @@ export async function createChatBot(chatData) {
 						if (nextMessage.onlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
 							userInputTextToLowerCase = removeAccents(
-								userInputTextToLowerCase
+								userInputTextToLowerCase,
 							);
 							keywordToLowerCase = removeAccents(keywordToLowerCase);
 							const regexStrictIdentityMatch = new RegExp(
-								`\\b${keywordToLowerCase}\\b`
+								`\\b${keywordToLowerCase}\\b`,
 							);
 							if (regexStrictIdentityMatch.test(userInputTextToLowerCase)) {
 								strictIdentityMatch = true;
@@ -266,7 +296,7 @@ export async function createChatBot(chatData) {
 							hasLevenshteinDistanceLessThan(
 								userInputTextToLowerCase,
 								keyword,
-								LEVENSHTEIN_THRESHOLD
+								LEVENSHTEIN_THRESHOLD,
 							)
 						) {
 							distanceScore++;
@@ -320,26 +350,25 @@ export async function createChatBot(chatData) {
 				let selectedResponseWithOptions;
 				if (nextMessage.onlyIfKeywords && titleBestMatch !== nextMessage.goto) {
 					selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
-						nextMessage.messageIfKeywordsNotFound
+						nextMessage.messageIfKeywordsNotFound,
 					)
 						? nextMessage.lastMessageFromBot
-						: nextMessage.messageIfKeywordsNotFound + nextMessage.lastMessageFromBot;
+						: nextMessage.messageIfKeywordsNotFound +
+							nextMessage.lastMessageFromBot;
 				} else {
 					selectedResponseWithOptions = gestionOptions(
 						selectedResponseWithoutOptions,
-						optionsSelectedResponse
+						optionsSelectedResponse,
 					);
 				}
 				// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
 				if (
-					(	yaml.useLLM.url &&
-						yaml.useLLM.model &&
-						yaml.useLLM.always) ||
+					(yaml.useLLM.url && yaml.useLLM.model && yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
 					getAnswerFromLLM(
 						questionToLLM.trim(),
-						selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation
+						selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation,
 					);
 					return;
 				} else {
@@ -347,9 +376,7 @@ export async function createChatBot(chatData) {
 				}
 			} else {
 				if (
-					(	yaml.useLLM.url &&
-						yaml.useLLM.model &&
-						yaml.useLLM.always) ||
+					(yaml.useLLM.url && yaml.useLLM.model && yaml.useLLM.always) ||
 					inputText.includes("!useLLM")
 				) {
 					getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
@@ -359,29 +386,29 @@ export async function createChatBot(chatData) {
 					// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
 					while (
 						randomDefaultMessageIndexLastChoice.includes(
-							randomDefaultMessageIndex
+							randomDefaultMessageIndex,
 						)
 					) {
 						randomDefaultMessageIndex = Math.floor(
-							Math.random() * config.defaultMessage.length
+							Math.random() * config.defaultMessage.length,
 						);
 					}
 					if (randomDefaultMessageIndexLastChoice.length > 4) {
 						randomDefaultMessageIndexLastChoice.shift();
 					}
 					randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-					let messageNoAnswer = config.defaultMessage[randomDefaultMessageIndex];
-					if (
-						yaml.useLLM.url &&
-						yaml.useLLM.model &&
-						!yaml.useLLM.always
-					) {
+					let messageNoAnswer =
+						config.defaultMessage[randomDefaultMessageIndex];
+					if (yaml.useLLM.url && yaml.useLLM.model && !yaml.useLLM.always) {
 						const optionMessageNoAnswer = [
-							["Voir une réponse générée par une IA", "!useLLM " + inputText.replaceAll('"', "“")],
+							[
+								"Voir une réponse générée par une IA",
+								"!useLLM " + inputText.replaceAll('"', "“"),
+							],
 						];
 						messageNoAnswer = gestionOptions(
 							messageNoAnswer,
-							optionMessageNoAnswer
+							optionMessageNoAnswer,
 						);
 					}
 					createChatMessage(messageNoAnswer, false);
@@ -403,8 +430,12 @@ export async function createChatBot(chatData) {
 						condition = condition.replace(
 							/@([^\s()&|!=<>]+)/g,
 							function (match, varName) {
-								return 'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])';
-							}
+								return (
+									'tryConvertStringToNumber(dynamicVariables["' +
+									varName.trim() +
+									'"])'
+								);
+							},
 						);
 						// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
 						condition = condition
@@ -414,10 +445,10 @@ export async function createChatBot(chatData) {
 									match,
 									comparisonSignLeft,
 									value,
-									comparisonSignRight
+									comparisonSignRight,
 								) {
 									return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
-								}
+								},
 							)
 							.replaceAll('""', '"')
 							.replace('"undefined"', "undefined");
@@ -473,8 +504,8 @@ export async function createChatBot(chatData) {
 			const enterEvent = new KeyboardEvent("keypress", {
 				key: "Enter",
 				keyCode: 13,
-				which: 13
-			  });
+				which: 13,
+			});
 			userInput.dispatchEvent(enterEvent);
 		}
 	});
@@ -559,17 +590,21 @@ export async function createChatBot(chatData) {
 	// Envoi du message d'accueil du chatbot
 	initialMessage = gestionOptions(
 		initialMessage[0].join("\n"),
-		initialMessage[1]
+		initialMessage[1],
 	);
 
 	if (yaml.dynamicContent) {
 		// S'il y a des variables dynamiques dans le message initial, on les traite
-		initialMessage = processDynamicVariables(initialMessage, dynamicVariables, false);
+		initialMessage = processDynamicVariables(
+			initialMessage,
+			dynamicVariables,
+			false,
+		);
 	}
 
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
 		/<span class="unique">.*?<\/span>/,
-		""
+		"",
 	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }

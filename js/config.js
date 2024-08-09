@@ -3,7 +3,9 @@ export let config = {};
 config.secureMode = false;
 // Si on utilise le mode sécurisé, il faut indiquer les chatbots qui sont autorisés, soit en utilisant 'authorizedChatbots', soit en utilisant les raccourcis ci-dessous
 // Les raccourcis définis plus bas sont également ajoutés aux chatbots autorisés si on utilise le mode sécurisé
-config.authorizedChatbots = ["https://codimd.apps.education.fr/d3yEseF3RtWzeW3vcgn4MQ"];
+config.authorizedChatbots = [
+	"https://codimd.apps.education.fr/d3yEseF3RtWzeW3vcgn4MQ",
+];
 
 config.defaultMessage = [
 	"Désolé, je ne comprends pas votre question.",
@@ -42,8 +44,17 @@ config.badWordsMessage = [
 
 // Raccourcis vers des chatbots particuliers
 config.shortcuts = [
-	["dissertation-philo", "https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md"],
-	["multiple-urls", ["https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download", "https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download"]]
+	[
+		"dissertation-philo",
+		"https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md",
+	],
+	[
+		"multiple-urls",
+		[
+			"https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download",
+			"https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download",
+		],
+	],
 ];
 
 config.corsProxy = "https://corsproxy.io/?";
@@ -55,52 +66,55 @@ config.responsesTitles = ["## "];
 config.allowedAddOns = {
 	pako: { js: "js/externals/pako.min.js" },
 	kroki: { js: "js/externals/kroki.js" },
-	textFit: { js: "js/externals/textFit.min.js", css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>" }
+	textFit: {
+		js: "js/externals/textFit.min.js",
+		css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>",
+	},
 };
 
 config.addOnsDependencies = {
-	kroki: ["pako"]
+	kroki: ["pako"],
 };
 
 // Paramètres dans l'en-tête YAML
 config.yaml = {
-	"addOns": "",
-	"avatar": "",
-	"bots": {},
-	"detectBadWords": false,
-	"defaultMessage": config.defaultMessage,
-	"dynamicContent": false,
-	"favicon": "",
-	"footer": true,
-	"maths": false,
-	"obfuscate": false,
-	"responsesTitles": config.responsesTitles,
-	"searchInContent": false,
-	"style": "",
-	"theme": "",
+	addOns: "",
+	avatar: "",
+	bots: {},
+	detectBadWords: false,
+	defaultMessage: config.defaultMessage,
+	dynamicContent: false,
+	favicon: "",
+	footer: true,
+	maths: false,
+	obfuscate: false,
+	responsesTitles: config.responsesTitles,
+	searchInContent: false,
+	style: "",
+	theme: "",
 	//useLLM : défini plus bas
-	"typeWriter": true,
-	"userInput": true,
-	"variables": "",
+	typeWriter: true,
+	userInput: true,
+	variables: "",
 };
 
 // Paramètres pour l'utilisation d'un LLM
 const defaultMaxTokens = 100;
-const defaultSystemPrompt = "Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
+const defaultSystemPrompt =
+	"Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
 
 config.yaml.useLLM = {
-	"url": "",
-	"askAPIkey": false,
-	"apiKey": "", // Attention à ne pas mettre votre apiKey en public !
-	"model": "",
-	"always": false,
-	"systemPrompt": defaultSystemPrompt,
-	"maxTokens": defaultMaxTokens,
-	"preprompt": "",
-	"postprompt": defaultPostprompt,
+	url: "",
+	askAPIkey: false,
+	apiKey: "", // Attention à ne pas mettre votre apiKey en public !
+	model: "",
+	always: false,
+	systemPrompt: defaultSystemPrompt,
+	maxTokens: defaultMaxTokens,
+	preprompt: "",
+	postprompt: defaultPostprompt,
 };
-
 
 // Paramètres pour le RAG
 const defaultRAGprompt = `
@@ -110,10 +124,10 @@ CONTEXTE : `;
 // Voici ci-dessous le contexte à partir duquel tu dois construire ta réponse, tu dois sélectionner dans ce contexte l'information pertinente et ne pas parler du reste. Si la réponse à la question n'est pas dans le contexte, tu ne dois pas répondre et dire : je ne sais pas.
 // CONTEXTE : `;
 const RAG = {
-	"RAGinformations": "",
-	"RAGseparator": "\n",
-	"RAGmaxTopElements": 3,
-	"RAGprompt": defaultRAGprompt,
+	RAGinformations: "",
+	RAGseparator: "\n",
+	RAGmaxTopElements: 3,
+	RAGprompt: defaultRAGprompt,
 };
 
 config.yaml.useLLM = { ...config.yaml.useLLM, ...RAG };

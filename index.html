@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<title>ChatMD</title>
-		<meta
-			name="description"
-			content="ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot à partir d'un fichier en Markdown. ChatMD est disponible sur la Forge des Communs Numériques Éducatifs." />
-		<meta name="author" content="Cédric Eyssette" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="css/styles.min.css" />
-		<link id="favicon" rel="icon" href="favicon.ico" type="image/x-icon" />
-	</head>
 
-	<body>
-		<h1 id="chatbot-name">&nbsp;</h1>
-		<main>
-			<div id="chat" class="chat-container" role="region" aria-label="Zone de conversation">
-				<!-- La conversation sera affichée ici -->
-			</div>
-			<div id="controls">
-				<div id="input-container">
-					<div id="user-input" contenteditable="true"
-						placeholder="Écrivez votre message"
-						tabindex="0" role="textbox"
-						aria-label="Votre message pour le chatbot">
-					</div>
+<head>
+	<meta charset="utf-8" />
+	<title>ChatMD</title>
+	<meta name="description"
+		content="ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot à partir d'un fichier en Markdown. ChatMD est disponible sur la Forge des Communs Numériques Éducatifs." />
+	<meta name="author" content="Cédric Eyssette" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="css/styles.min.css" />
+	<link id="favicon" rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+	<h1 id="chatbot-name">&nbsp;</h1>
+	<main>
+		<div id="chat" class="chat-container" role="region" aria-label="Zone de conversation">
+			<!-- La conversation sera affichée ici -->
+		</div>
+		<div id="controls">
+			<div id="input-container">
+				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0" role="textbox"
+					aria-label="Votre message pour le chatbot">
 				</div>
-				<button id="send-button">Envoyer</button>
 			</div>
-		</main>
-		<footer id="footer">
-			ChatMD – Outil libre et gratuit créé par <a href="http://eyssette.forge.apps.education.fr/">Cédric Eyssette</a>
-		</footer>
-		<script src="script.min.js"></script>
-	</body>
+			<button id="send-button">Envoyer</button>
+		</div>
+	</main>
+	<footer id="footer">
+		ChatMD – Outil libre et gratuit créé par <a href="http://eyssette.forge.apps.education.fr/">Cédric Eyssette</a>
+	</footer>
+	<script src="script.min.js"></script>
+</body>
+
 </html>

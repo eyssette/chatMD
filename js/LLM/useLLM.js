@@ -7,9 +7,12 @@ let LLMactive = false;
 async function readStream(streamableObject, chatMessage, isCohere) {
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk);
-		const chunkArray = chunkString.trim().split("\n").filter(element => element.trim().length > 0);
-		chunkArray.forEach(chunkElement => {
-			if(isCohere) {
+		const chunkArray = chunkString
+			.trim()
+			.split("\n")
+			.filter((element) => element.trim().length > 0);
+		chunkArray.forEach((chunkElement) => {
+			if (isCohere) {
 				const chunkObject = JSON.parse(chunkElement.trim());
 				if (chunkObject.event_type == "text-generation" && LLMactive) {
 					const chunkMessage = chunkObject.text;
@@ -18,7 +21,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
 				const chunkObjectString = chunkElement.replace("data: ", "");
-				if(!chunkObjectString.includes("[DONE]") && LLMactive) {
+				if (!chunkObjectString.includes("[DONE]") && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
 					const chunkMessage = chunkObject.choices[0].delta.content;
 					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
@@ -62,8 +65,9 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 	errorMessageElement.classList.add("message");
 	errorMessageElement.classList.add("bot-message");
 	chatContainer.appendChild(errorMessageElement);
-	errorMessageElement.textContent = "Pour répondre à cette question, je dois faire appel à une IA générative : la connexion à cette IA n'a pas été correctement configurée ou bien ne fonctionne pas";
-	if(error) {
+	errorMessageElement.textContent =
+		"Pour répondre à cette question, je dois faire appel à une IA générative : la connexion à cette IA n'a pas été correctement configurée ou bien ne fonctionne pas";
+	if (error) {
 		console.error("Erreur:", error.message);
 		console.log("Une erreur s'est produite : " + error);
 	}
@@ -77,7 +81,11 @@ export function getAnswerFromLLM(userPrompt, informations) {
 	const isCohere = yaml.useLLM.url.includes("cohere");
 
 	if (isCohere) {
-		bodyObject.message = yaml.useLLM.preprompt + userPrompt + yaml.useLLM.postprompt + informations;
+		bodyObject.message =
+			yaml.useLLM.preprompt +
+			userPrompt +
+			yaml.useLLM.postprompt +
+			informations;
 	} else {
 		bodyObject.messages = [
 			{
@@ -85,7 +93,11 @@ export function getAnswerFromLLM(userPrompt, informations) {
 				role: "system",
 			},
 			{
-				content: yaml.useLLM.preprompt + userPrompt + yaml.useLLM.postprompt + informations,
+				content:
+					yaml.useLLM.preprompt +
+					userPrompt +
+					yaml.useLLM.postprompt +
+					informations,
 				role: "user",
 			},
 		];
@@ -94,7 +106,7 @@ export function getAnswerFromLLM(userPrompt, informations) {
 		fetch(yaml.useLLM.url, {
 			method: "POST",
 			headers: {
-				"Authorization": "Bearer " + yaml.useLLM.apiKey,
+				Authorization: "Bearer " + yaml.useLLM.apiKey,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(bodyObject),
@@ -110,10 +122,11 @@ export function getAnswerFromLLM(userPrompt, informations) {
 				} else {
 					messageIfErrorWithGetAnswerFromLLM();
 				}
-			}).catch((error) => {
+			})
+			.catch((error) => {
 				messageIfErrorWithGetAnswerFromLLM(error);
 			});
-	} catch(error) {
+	} catch (error) {
 		messageIfErrorWithGetAnswerFromLLM(error);
-	};
+	}
 }

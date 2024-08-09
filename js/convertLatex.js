@@ -5,7 +5,7 @@ export function convertLatexExpressions(string) {
 		.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
 		.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
 	let expressionsLatex = string.match(
-		new RegExp(/&#92;\[.*?&#92;\]|&#92;\(.*?&#92;\)/g)
+		new RegExp(/&#92;\[.*?&#92;\]|&#92;\(.*?&#92;\)/g),
 	);
 	if (expressionsLatex) {
 		// On n'utilise Katex que s'il y a des expressions en Latex dans le Markdown
@@ -27,19 +27,22 @@ export function convertLatexExpressions(string) {
 				.replaceAll("</em>", "_")
 				.replaceAll("&amp;", "&")
 				// eslint-disable-next-line no-useless-escape
-				.replaceAll("\ ", "\\ ");
+				.replaceAll(" ", "\\ ");
 			// On convertit la formule mathématique en HTML avec Katex
-			const stringWithLatex = window.katex.renderToString(mathInExpressionLatex, {
-				displayMode: inlineMaths,
-			});
+			const stringWithLatex = window.katex.renderToString(
+				mathInExpressionLatex,
+				{
+					displayMode: inlineMaths,
+				},
+			);
 			string = string.replace(expressionLatex, stringWithLatex);
 		}
 	}
 	// Optimisation pour le Latex avec l'effet typeWriter
-	if(yaml.typeWriter === true) {
+	if (yaml.typeWriter === true) {
 		string = string.replaceAll(
 			/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
-			"`$1`"
+			"`$1`",
 		);
 		string = string.replaceAll(/(<span class=".?strut">.*?<\/span>)/g, "`$1`");
 	}
