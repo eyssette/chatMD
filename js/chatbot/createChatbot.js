@@ -24,7 +24,7 @@ import {
 	evaluateExpression,
 } from "../processMarkdown/processDynamicVariables";
 import { convertLatexExpressions } from "../processMarkdown/convertLatex";
-import { markdownToHTML } from "../processMarkdown/markdown";
+import { markdownToHTML } from "../processMarkdown/markdownToHTML";
 import {
 	displayMessage,
 	autoFocus,
