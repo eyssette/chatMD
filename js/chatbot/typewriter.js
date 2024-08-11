@@ -93,7 +93,9 @@ function typeWriter(content, element) {
 			mutationObserver.disconnect();
 		}
 		// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
-		scrollWindow();
+		if(observerConnected) {
+			scrollWindow();
+		}
 		counter++;
 	}
 
@@ -121,6 +123,7 @@ function typeWriter(content, element) {
 			// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 			mutationObserver = new MutationObserver(handleMutation);
 			function enableAutoScroll() {
+				observerConnected = true;
 				mutationObserver.observe(chatContainer, observerConfig);
 			}
 			enableAutoScroll();
