@@ -1,12 +1,12 @@
-import { config } from "./config";
-import { yaml, filterBadWords } from "./yaml";
+import { config } from "../config";
+import { yaml, filterBadWords } from "../processMarkdown/yaml";
 import {
 	topElements,
 	getRandomElement,
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
 	scrollWindow,
-} from "./utils";
+} from "../utils";
 import {
 	nextMessage,
 	processAudio,
@@ -17,14 +17,14 @@ import {
 	processKroki,
 	processMultipleBots,
 	processRandomMessage,
-} from "./directivesAndSpecialContents";
-import { processFixedVariables } from "./processFixedVariables";
+} from "../processMarkdown/directivesAndSpecialContents";
+import { processFixedVariables } from "../processMarkdown/processFixedVariables";
 import {
 	processDynamicVariables,
 	evaluateExpression,
-} from "./processDynamicVariables";
-import { convertLatexExpressions } from "./convertLatex";
-import { markdownToHTML } from "./markdown";
+} from "../processMarkdown/processDynamicVariables";
+import { convertLatexExpressions } from "../processMarkdown/convertLatex";
+import { markdownToHTML } from "../processMarkdown/markdown";
 import {
 	displayMessage,
 	autoFocus,
@@ -37,12 +37,12 @@ import {
 	cosineSimilarity,
 	createVector,
 } from "./nlp";
-import { getAnswerFromLLM } from "./LLM/useLLM";
+import { getAnswerFromLLM } from "../LLM/useLLM";
 import {
 	getRAGcontent,
 	vectorRAGinformations,
 	RAGcontent,
-} from "./LLM/processRAG";
+} from "../LLM/processRAG";
 
 const sendButton = document.getElementById("send-button");
 

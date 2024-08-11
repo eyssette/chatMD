@@ -1,5 +1,5 @@
-import { getRandomElement, shuffleArray } from "./utils";
-import { pauseTypeWriterMultipleBots } from "./typewriter";
+import { getRandomElement, shuffleArray } from "../utils";
+import { pauseTypeWriterMultipleBots } from "../chatbot/typewriter";
 import { yaml } from "./yaml";
 
 export let nextMessage = {

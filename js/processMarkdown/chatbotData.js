@@ -1,8 +1,8 @@
-import { handleURL, startsWithAnyOf } from "./utils";
-import { createChatBot } from "./chatbot";
+import { handleURL, startsWithAnyOf } from "../utils";
+import { createChatBot } from "../chatbot/createChatbot";
 import { processYAML, yaml } from "./yaml";
 import { processFixedVariables } from "./processFixedVariables";
-import defaultMD from "../data.md";
+import defaultMD from "../../data.md";
 
 let md = defaultMD;
 let chatData;

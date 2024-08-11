@@ -1,6 +1,6 @@
-import { yaml } from "../yaml";
+import { yaml } from "../processMarkdown/yaml";
 import { handleURL } from "../utils";
-import { createVector } from "../nlp";
+import { createVector } from "../chatbot/nlp";
 
 function prepareRAGdata(informations, separator) {
 	if (separator) {

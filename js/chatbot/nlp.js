@@ -1,4 +1,4 @@
-import { nextMessage } from "./directivesAndSpecialContents";
+import { nextMessage } from "../processMarkdown/directivesAndSpecialContents";
 
 function levenshteinDistance(a, b) {
 	/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */

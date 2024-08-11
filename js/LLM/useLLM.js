@@ -1,5 +1,5 @@
-import { chatContainer } from "../typewriter";
-import { yaml } from "../yaml";
+import { chatContainer } from "../chatbot/typewriter";
+import { yaml } from "../processMarkdown/yaml";
 
 let LLMactive = false;
 
