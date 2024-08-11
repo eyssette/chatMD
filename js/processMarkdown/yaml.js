@@ -202,7 +202,7 @@ export function processYAML(markdownContent) {
 					Promise.all([loadCSS(botCSS)]);
 				}
 			}
-			if (yaml.useLLM.url || yaml.utiliserLLM.url) {
+			if (yaml.useLLM.url || yaml.utiliserLLM && yaml.utiliserLLM.url) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
 				yaml.useLLM.RAGinformations = yaml.useLLM.informations
 					? yaml.useLLM.informations
