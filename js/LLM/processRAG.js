@@ -1,6 +1,7 @@
 import { yaml } from "../processMarkdown/yaml";
 import { handleURL } from "../utils";
 import { createVector } from "../chatbot/nlp";
+import { localRAGinformations } from "./RAG";
 
 function prepareRAGdata(informations, separator) {
 	if (separator) {
@@ -64,19 +65,13 @@ export function getRAGcontent(informations) {
 		} else {
 			let RAGinformations;
 			if (informations.toString().includes("useFile")) {
-				RAGinformations = RAGinformations.trim();
-				yaml.useLLM.RAGinformations = prepareRAGdata(
-					RAGinformations,
-					yaml.useLLM.RAGseparator,
-				);
+				RAGinformations = localRAGinformations.trim();
 			} else {
 				RAGinformations = informations.trim();
-				yaml.useLLM.RAGinformations = prepareRAGdata(
-					RAGinformations,
-					yaml.useLLM.RAGseparator,
-				);
 			}
-			return yaml.useLLM.RAGinformations;
+			RAGcontent = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
+			const RAGvectors = createVectorRAGinformations(RAGcontent);
+			return RAGvectors;
 		}
 	}
 }
