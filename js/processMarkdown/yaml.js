@@ -218,9 +218,7 @@ export function processYAML(markdownContent) {
 						"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
 					);
 				} else {
-					yaml.useLLM.apiKey = yaml.useLLM.askAPIkey
-						? yaml.useLLM.askAPIkey
-						: ""; // Attention à ne pas diffuser publiquement votre clé API
+					yaml.useLLM.apiKey = (process && process.env && process.env.LLM_API_KEY) ? process.env.LLM_API_KEY : "" // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
 				}
 			}
 		} catch (e) {
