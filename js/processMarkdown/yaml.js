@@ -1,5 +1,5 @@
 import { config } from "../config.js";
-import jsYaml from "../externals/js-yaml.js";
+import { load as loadYAML } from "../externals/js-yaml.js";
 import {
 	loadScript,
 	loadCSS,
@@ -37,7 +37,7 @@ export function processYAML(markdownContent) {
 	) {
 		try {
 			// Traitement des propriétés dans le YAML
-			const yamlData = jsYaml.load(markdownContent.split("---")[1]);
+			const yamlData = loadYAML(markdownContent.split("---")[1]);
 			yaml = yamlData ? deepMerge(yaml, yamlData) : yaml;
 			if (yaml.maths === true) {
 				yaml.addOns = yaml.addOns ? yaml.addOns + ",textFit" : "textFit";
@@ -202,7 +202,7 @@ export function processYAML(markdownContent) {
 					Promise.all([loadCSS(botCSS)]);
 				}
 			}
-			if (yaml.useLLM.url || yaml.utiliserLLM && yaml.utiliserLLM.url) {
+			if (yaml.useLLM.url || (yaml.utiliserLLM && yaml.utiliserLLM.url)) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
 				yaml.useLLM.RAGinformations = yaml.useLLM.informations
 					? yaml.useLLM.informations
@@ -218,7 +218,10 @@ export function processYAML(markdownContent) {
 						"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
 					);
 				} else {
-					yaml.useLLM.apiKey = (process && process.env && process.env.LLM_API_KEY) ? process.env.LLM_API_KEY : "" // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
+					yaml.useLLM.apiKey =
+						process && process.env && process.env.LLM_API_KEY
+							? process.env.LLM_API_KEY
+							: ""; // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
 				}
 			}
 		} catch (e) {
