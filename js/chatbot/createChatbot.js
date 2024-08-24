@@ -5,8 +5,8 @@ import {
 	getRandomElement,
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
-	scrollWindow,
-} from "../utils";
+} from "../utils/arrays";
+import { scrollWindow } from "../utils/ui";
 import {
 	nextMessage,
 	processAudio,

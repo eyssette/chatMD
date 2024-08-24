@@ -1,5 +1,5 @@
 import { yaml } from "../processMarkdown/yaml";
-import { handleURL } from "../utils";
+import { handleURL } from "../utils/urls";
 import { createVector } from "../chatbot/nlp";
 import { localRAGinformations } from "./RAG";
 

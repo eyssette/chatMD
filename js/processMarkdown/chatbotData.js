@@ -1,4 +1,5 @@
-import { handleURL, startsWithAnyOf } from "../utils";
+import { handleURL } from "../utils/urls";
+import { startsWithAnyOf } from "../utils/strings";
 import { createChatBot } from "../chatbot/createChatbot";
 import { processYAML, yaml } from "./yaml";
 import { processFixedVariables } from "./processFixedVariables";

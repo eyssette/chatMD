@@ -1,7 +1,7 @@
 import { config } from "../config";
 import { yaml } from "./yaml";
 import { nextMessage } from "./directivesAndSpecialContents";
-import { tryConvertStringToNumber } from "../utils";
+import { tryConvertStringToNumber } from "../utils/strings";
 
 let getLastMessage = false;
 

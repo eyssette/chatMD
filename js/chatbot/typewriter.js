@@ -1,4 +1,4 @@
-import { scrollWindow } from "../utils.js";
+import { scrollWindow } from "../utils/ui.js";
 import { yaml } from "../processMarkdown/yaml.js";
 import Typed from "../externals/typed.js";
 
@@ -93,7 +93,7 @@ function typeWriter(content, element) {
 			mutationObserver.disconnect();
 		}
 		// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
-		if(observerConnected) {
+		if (observerConnected) {
 			scrollWindow();
 		}
 		counter++;

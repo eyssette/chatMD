@@ -1,4 +1,4 @@
-import { getRandomElement, shuffleArray } from "../utils";
+import { getRandomElement, shuffleArray } from "../utils/arrays";
 import { pauseTypeWriterMultipleBots } from "../chatbot/typewriter";
 import { yaml } from "./yaml";
 

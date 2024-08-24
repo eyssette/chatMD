@@ -1,12 +1,8 @@
 import { config } from "../config.js";
 import { load as loadYAML } from "../externals/js-yaml.js";
-import {
-	loadScript,
-	loadCSS,
-	deepMerge,
-	footerElement,
-	hideFooter,
-} from "../utils.js";
+import { loadScript, loadCSS } from "../utils/urls.js";
+import { deepMerge } from "../utils/objects.js";
+import { footerElement, hideFooter } from "../utils/ui.js";
 
 export let yaml = {
 	addOns: config.yaml.addOns,
