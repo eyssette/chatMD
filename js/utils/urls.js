@@ -1,3 +1,5 @@
+import { config } from "../config";
+
 // Pour gérer l'URL de la source du chatbot
 export function handleURL(url) {
 	if (url !== "") {
