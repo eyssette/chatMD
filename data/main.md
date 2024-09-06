@@ -197,6 +197,16 @@ Si on veut activer ou désactiver le clavier pour certaines réponses, on met `&
 
 Si on veut désactiver l'effet typewriter pour un passage seulement de son texte, on utilise la syntaxe suivante dans son code markdown : `\\&#96texte sans effet typewriter\\&#96`
 
+On peut définir dans la balise style des classes personnalisées et les utiliser ensuite dans son texte en ajoutant cette classe en fin de ligne ainsi : ` {.maClasse}`.
+
+Si vous voulez attribuer une classe CSS à plusieurs lignes, il faut utiliser cette syntaxe :
+
+```
+<div markdown class="maClasse">
+Bloc de texte Markdown multiligne
+</div>
+```
+
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
 
