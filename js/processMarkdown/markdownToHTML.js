@@ -49,6 +49,42 @@ function showdownExtensionAdmonitions() {
 	];
 }
 
+// Gestion des attributs génériques du type {.classe1 .classe2}
+function showdownExtensionGenericAttributes() {
+	return [
+		{
+			type: "output",
+			filter: (text) => {
+				const regex = /<(\w+)>(.*?){\.(.*?)}/g;
+				const matches = text.match(regex);
+				if (matches) {
+					let modifiedText = text;
+					for (const match of matches) {
+						const indexMatch = text.indexOf(match);
+						const endIndeMatch = indexMatch + match.length;
+						const isInCode =
+							text.substring(endIndeMatch, endIndeMatch + 7) == "</code>"
+								? true
+								: false;
+						if (!isInCode) {
+							const matchInformations = regex.exec(match);
+							const classes = matchInformations[3].replaceAll(".", "");
+							const matchReplaced = match.replace(
+								regex,
+								`<$1 class="${classes}">$2`,
+							);
+							modifiedText = modifiedText.replaceAll(match, matchReplaced);
+						}
+					}
+					return modifiedText;
+				} else {
+					return text;
+				}
+			},
+		},
+	];
+}
+
 // Gestion du markdown dans les réponses du chatbot
 const converter = new Showdown.Converter({
 	emoji: true,
@@ -57,7 +93,10 @@ const converter = new Showdown.Converter({
 	simplifiedAutoLink: true,
 	tables: true,
 	openLinksInNewWindow: true,
-	extensions: [showdownExtensionAdmonitions],
+	extensions: [
+		showdownExtensionAdmonitions,
+		showdownExtensionGenericAttributes,
+	],
 });
 
 // Conversion du Markdown en HTML
