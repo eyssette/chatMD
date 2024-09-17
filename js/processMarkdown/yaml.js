@@ -3,6 +3,7 @@ import { load as loadYAML } from "../externals/js-yaml.js";
 import { loadScript, loadCSS } from "../utils/urls.js";
 import { deepMerge } from "../utils/objects.js";
 import { footerElement, hideFooter } from "../utils/ui.js";
+import { decodeApiKey } from "../LLM/decodeApiKey.js";
 
 export let yaml = {
 	addOns: config.yaml.addOns,
@@ -214,10 +215,24 @@ export function processYAML(markdownContent) {
 						"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez votre clé API, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
 					);
 				} else {
-					yaml.useLLM.apiKey =
-						process && process.env && process.env.LLM_API_KEY
-							? process.env.LLM_API_KEY
-							: ""; // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
+					if (yaml.useLLM.encryptedAPIkey) {
+						yaml.useLLM.encryptionMethod = yaml.useLLM.encryptionMethod
+							? yaml.useLLM.encryptionMethod
+							: "XOR";
+						const apiKeyPassword = prompt(
+							"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez le mot de passe qui vous a été communiqué, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
+						);
+						yaml.useLLM.apiKey = decodeApiKey(
+							yaml.useLLM.encryptedAPIkey,
+							apiKeyPassword,
+							yaml.useLLM.encryptionMethod,
+						);
+					} else {
+						yaml.useLLM.apiKey =
+							process && process.env && process.env.LLM_API_KEY
+								? process.env.LLM_API_KEY
+								: ""; // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
+					}
 				}
 			}
 		} catch (e) {
