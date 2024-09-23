@@ -80,6 +80,7 @@ config.addOnsDependencies = {
 config.yaml = {
 	addOns: "",
 	avatar: "",
+	avatarCircle: false,
 	bots: {},
 	detectBadWords: false,
 	defaultMessage: config.defaultMessage,

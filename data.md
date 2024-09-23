@@ -186,6 +186,7 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
 - `avatar: URL` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
+- `avatarCercle: true` permet d'avoir un avatar en forme de cercle
 - `favicon: URL` permet de changer l'icône du chatbot dans les onglets (il faut mettre l'url de son image à la place de URL)
 - `footer: false` permet de supprimer le pied de page
 - `footer: 'Mon footer'` permet de customiser ce qui apparaît dans le pied de page
@@ -656,6 +657,7 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 
 - `style: a{color:red}` permet d'ajouter des styles CSS personnalisés.
 - `avatar: URL` permet de changer l'avatar du chatbot (il faut mettre l'url de son image à la place de URL)
+- `avatarCercle: true` permet d'avoir un avatar en forme de cercle
 - `favicon: URL` permet de changer l'icône du chatbot dans les onglets (il faut mettre l'url de son image à la place de URL)
 - `footer: false` permet de supprimer le pied de page
 - `footer: 'Mon footer'` permet de customiser ce qui apparaît dans le pied de page
