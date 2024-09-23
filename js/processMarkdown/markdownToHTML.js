@@ -99,9 +99,15 @@ const converter = new Showdown.Converter({
 	],
 });
 
+function fixImageDimensionsCodiMD(md) {
+	md = md.replaceAll(/=x([0-9]*)\)/g, "=*x$1)");
+	md = md.replaceAll(/=([0-9]*)x\)/g, "=$1x*)");
+	return md;
+}
+
 // Conversion du Markdown en HTML
 export function markdownToHTML(text) {
-	text = text.replaceAll("\n\n|", "|");
+	text = fixImageDimensionsCodiMD(text.replaceAll("\n\n|", "|"));
 	// eslint-disable-next-line no-useless-escape
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
 	return html;
