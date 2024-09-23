@@ -129,10 +129,18 @@ function tokenize(text, titleResponse) {
 	const bonusStart = 0.2;
 	// Si le token est présent dans le titre, le poids est très important
 	const bonusInTitle = nextMessage.goto ? 100 : 10;
+	// Si le nombre de caractères du token est proche du nombre de caractères du mot de base, alors le poids est plus important
+	const bonusLengthSimilarity = 5;
 
 	function weightedToken(index, tokenDimension, word) {
 		let weight = weights[tokenDimension - 1]; // Poids en fonction de la taille du token
 		weight = index === 0 ? weight + bonusStart : weight; // Bonus si le token est en début du mot
+		// Bonus si le token est proche en nombre de mots, du mot de base
+		const lengthDifference = word.length - tokenDimension;
+		weight =
+			lengthDifference > 0
+				? weight + bonusLengthSimilarity / lengthDifference
+				: weight;
 		const token = word.substring(index, index + tokenDimension);
 		if (titleResponse) {
 			titleResponse = titleResponse.toLowerCase();
@@ -194,7 +202,7 @@ export function cosineSimilarity(str, vector) {
 	const mag2 = magnitude(vector);
 
 	if (mag1 === 0 || mag2 === 0) {
-		return 0; // Évitez la division par zéro
+		return 0; // Évite la division par zéro
 	} else {
 		return dot / (mag1 * mag2);
 	}
