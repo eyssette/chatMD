@@ -134,7 +134,7 @@ export async function createChatBot(chatData) {
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
-	const BESTMATCH_THRESHOLD = 0.55; // Seuil pour que le bestMatch soit pertinent
+	const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
 
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
