@@ -73,16 +73,16 @@ main {
 }
 
 .hideControls #controls {
-	height: 50px;
+	height: 55px;
 }
 
 .hideControls #controls #input-container {
-	opacity: 0;
-	filter: alpha(opacity=0);
+	display:none;
 }
 .hideControls #controls #send-button {
-	opacity: 0;
-	filter: alpha(opacity=0);
+	position: absolute;
+	right: 30px;
+	z-index: 100;
 }
 
 #input-container {
@@ -210,6 +210,10 @@ footer {
 	bottom: 15px;
 	left: 0;
 	width: 100%;
+}
+.hideControls footer {
+	width:50%;
+	left:25%;
 }
 
 footer a,
@@ -349,6 +353,12 @@ pre {
 	.hideControls #chat {
 		margin-bottom: 2em !important;
 	}
+	.hideControls #controls {
+		height: 55px;
+	}
+	.hideControls #controls #send-button {
+		top:10px;
+	}
 	.hideFooter #controls {
 		height: 0px !important;
 	}
@@ -368,7 +378,8 @@ pre {
 	}
 	.hideControls footer {
 		left: 0;
-		width: 90%;
+		width: 50%;
+		right:50px;
 	}
 
 	#chat,
