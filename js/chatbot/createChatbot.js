@@ -61,11 +61,12 @@ export async function createChatBot(chatData) {
 		dynamicVariables["GET" + key] = value;
 	}
 
-	const chatbotName = chatData.pop();
+	const chatbotName = chatData.pop()[0];
 	let initialMessage = chatData.pop();
 	const chatDataLength = chatData.length;
-	document.getElementById("chatbot-name").textContent = chatbotName;
-	document.title = chatbotName;
+	const chatbotNameHTML = markdownToHTML(chatbotName).replace(/<\/?p>/g, "");
+	document.getElementById("chatbot-name").innerHTML = chatbotNameHTML;
+	document.title = chatbotNameHTML;
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
