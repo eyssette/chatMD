@@ -92,7 +92,7 @@ function parseMarkdown(markdownContent) {
 		: firstPart.substring(indexStartTitle);
 	const initialMessageContentLines = initialMessageContent.split("\n");
 	for (let line of initialMessageContentLines) {
-		line = line.replace(/^>\s?/, "").trim();
+		line = line.replace(/^>\s?/, "");
 		if (regexOrderedList.test(line)) {
 			// Récupération des options dans le message initial, s'il y en a
 			randomOrder = regexOrderedListRandom.test(line);
