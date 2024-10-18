@@ -48,6 +48,7 @@ config.shortcuts = [
 		"dissertation-philo",
 		"https://raw.githubusercontent.com/eyssette/chatbot/main/dissertation-philosophie.md",
 	],
+	["orientation", "https://codimd.apps.education.fr/UB1xium-TSqpdHEqdxipTw"],
 	[
 		"multiple-urls",
 		[
