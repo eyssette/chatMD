@@ -1,10 +1,12 @@
 import { chatContainer } from "../chatbot/typewriter";
+import { markdownToHTML } from "../processMarkdown/markdownToHTML";
 import { yaml } from "../processMarkdown/yaml";
 
 let LLMactive = false;
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
+	let accumulatedChunks = "";
 	for await (const chunk of streamableObject) {
 		const chunkString = new TextDecoder().decode(chunk);
 		const chunkArray = chunkString
@@ -16,7 +18,8 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 				const chunkObject = JSON.parse(chunkElement.trim());
 				if (chunkObject.event_type == "text-generation" && LLMactive) {
 					const chunkMessage = chunkObject.text;
-					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
+					accumulatedChunks = accumulatedChunks + chunkMessage;
+					chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 				}
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
@@ -24,7 +27,8 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 				if (!chunkObjectString.includes("[DONE]") && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
 					const chunkMessage = chunkObject.choices[0].delta.content;
-					chatMessage.innerHTML = chatMessage.innerHTML + chunkMessage;
+					accumulatedChunks = accumulatedChunks + chunkMessage;
+					chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 				} else {
 					LLMactive = false;
 				}
