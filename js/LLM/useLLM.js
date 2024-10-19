@@ -48,21 +48,6 @@ document.body.addEventListener("keypress", (event) => {
 	}
 });
 
-// Configuration de l'accès au LLM
-let bodyObject = {
-	model: yaml.useLLM.model,
-	stream: true,
-	// eslint-disable-next-line camelcase
-	max_tokens: yaml.useLLM.maxTokens,
-	// eslint-disable-next-line camelcase
-	frequency_penalty: 0,
-	// eslint-disable-next-line camelcase
-	presence_penalty: 0,
-	temperature: 0.7,
-	// eslint-disable-next-line camelcase
-	top_p: 0.95,
-};
-
 // Pour envoyer un message d'erreur si la connexion au LLM n'a pas été correctement configurée ou bien si cette connexion ne fonctionne pas
 function messageIfErrorWithGetAnswerFromLLM(error) {
 	const errorMessageElement = document.createElement("div");
@@ -79,6 +64,20 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(userPrompt, informations) {
+	// Configuration de l'accès au LLM
+	let bodyObject = {
+		model: yaml.useLLM.model,
+		stream: true,
+		// eslint-disable-next-line camelcase
+		max_tokens: yaml.useLLM.maxTokens,
+		// eslint-disable-next-line camelcase
+		frequency_penalty: 0,
+		// eslint-disable-next-line camelcase
+		presence_penalty: 0,
+		temperature: 0.7,
+		// eslint-disable-next-line camelcase
+		top_p: 0.95,
+	};
 	if (informations.length > 0) {
 		informations = yaml.useLLM.RAGprompt + informations;
 	}
