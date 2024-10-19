@@ -15,3 +15,13 @@ export function tryConvertStringToNumber(input) {
 		return input;
 	}
 }
+
+export function hasSentenceEndMark(string) {
+	string = string.trim();
+	if (string.length === 0) {
+		return false;
+	}
+	const lastChar = string[string.length - 1];
+	// Vérifie si c'est une marque de fin de phrase
+	return lastChar === "." || lastChar === "!" || lastChar === "?";
+}

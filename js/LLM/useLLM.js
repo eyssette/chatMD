@@ -1,6 +1,7 @@
 import { chatContainer } from "../chatbot/typewriter";
 import { markdownToHTML } from "../processMarkdown/markdownToHTML";
 import { yaml } from "../processMarkdown/yaml";
+import { hasSentenceEndMark } from "../utils/strings";
 
 let LLMactive = false;
 
@@ -35,6 +36,10 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 			}
 			window.scrollTo(0, document.body.scrollHeight);
 		});
+	}
+	const chatMessageLastChild = chatMessage.lastChild;
+	if (!hasSentenceEndMark(chatMessageLastChild.innerHTML)) {
+		chatMessageLastChild.innerHTML = chatMessageLastChild.innerHTML + " …";
 	}
 }
 
