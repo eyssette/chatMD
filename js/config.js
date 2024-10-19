@@ -104,7 +104,7 @@ config.yaml = {
 };
 
 // Paramètres pour l'utilisation d'un LLM
-const defaultMaxTokens = 100;
+const defaultMaxTokens = 300;
 const defaultSystemPrompt =
 	"Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
