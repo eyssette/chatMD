@@ -134,10 +134,10 @@ export async function createChatBot(chatData) {
 		}
 	}
 
-	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
-	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
+	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité (tolérance des fautes d'orthographe et des fautes de frappe)
+	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
 	const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
-	const WORD_LENGTH_FACTOR = 10;
+	const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
@@ -290,7 +290,7 @@ export async function createChatBot(chatData) {
 							// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 							matchScore = matchScore + MATCH_SCORE_IDENTITY;
 							// On privilégie les correspondances sur les keywords plus longs
-							matchScore = matchScore + keyword.length / WORD_LENGTH_FACTOR;
+							matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
 						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
@@ -327,7 +327,7 @@ export async function createChatBot(chatData) {
 						longestCommonSubstring(
 							userInputTextToLowerCase,
 							keywords.join(" "),
-						) / WORD_LENGTH_FACTOR;
+						) * WORD_LENGTH_FACTOR;
 				}
 				if (matchScore > bestMatchScore) {
 					bestMatch = responses;

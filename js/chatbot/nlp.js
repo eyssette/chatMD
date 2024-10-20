@@ -68,7 +68,7 @@ export function hasLevenshteinDistanceLessThan(
 
 		// Si la distance est inférieure à la distance donnée, on augmente le score de similarité en fonction de la taille du n-gramme
 		if (distanceLevenshtein < distance) {
-			similarity = similarity + nGram.length / WORD_LENGTH_FACTOR;
+			similarity = similarity + nGram.length * WORD_LENGTH_FACTOR;
 		}
 	}
 	return similarity;
