@@ -1,5 +1,21 @@
 import { nextMessage } from "../processMarkdown/directivesAndSpecialContents";
 
+export function longestCommonSubstring(str1, str2) {
+	let maxLength = 0;
+	const table = Array(str1.length + 1)
+		.fill(null)
+		.map(() => Array(str2.length + 1).fill(0));
+	for (let i = 1; i <= str1.length; i++) {
+		for (let j = 1; j <= str2.length; j++) {
+			if (str1[i - 1] === str2[j - 1]) {
+				table[i][j] = table[i - 1][j - 1] + 1;
+				maxLength = Math.max(maxLength, table[i][j]);
+			}
+		}
+	}
+	return maxLength;
+}
+
 function levenshteinDistance(a, b) {
 	/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */
 	const aLength = a.length;
@@ -30,24 +46,32 @@ function levenshteinDistance(a, b) {
 	return matrix[bLength][aLength];
 }
 
-export function hasLevenshteinDistanceLessThan(string, keyWord, distance) {
-	// Teste la présence d'un mot dans une chaîne de caractère qui a une distance de Levenshstein inférieure à une distance donnée
-
+export function hasLevenshteinDistanceLessThan(
+	string,
+	keyWord,
+	distance,
+	WORD_LENGTH_FACTOR,
+) {
+	let similarity = 0;
+	// Divise keyWord en mots pour déterminer la longueur des n-grammes
+	const keyWordWords = keyWord.split(" ");
+	const n = keyWordWords.length;
+	// Divise la chaîne en un tableau de mots
 	const words = string.split(" ");
-	// On parcourt les mots
 
-	for (const word of words) {
-		// On calcule la distance de Levenshtein entre le mot et le mot cible
-		const distanceLevenshtein = levenshteinDistance(word, keyWord);
+	// Parcours les n-grammes de taille n dans la chaîne
+	for (let i = 0; i <= words.length - n; i++) {
+		// Crée un n-gramme à partir de la sous-séquence des mots
+		const nGram = words.slice(i, i + n).join(" ");
+		// Calcule la distance de Levenshtein entre le n-gramme et keyWord
+		const distanceLevenshtein = levenshteinDistance(nGram, keyWord);
 
-		// Si la distance est inférieure à la distance donnée, on renvoie vrai
+		// Si la distance est inférieure à la distance donnée, on augmente le score de similarité en fonction de la taille du n-gramme
 		if (distanceLevenshtein < distance) {
-			return true;
+			similarity = similarity + nGram.length / WORD_LENGTH_FACTOR;
 		}
 	}
-
-	// Si on n'a pas trouvé de mot avec une distance inférieure à la distance donnée, on renvoie faux
-	return false;
+	return similarity;
 }
 
 export function removeAccents(str) {

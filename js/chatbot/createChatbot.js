@@ -36,6 +36,7 @@ import {
 	hasLevenshteinDistanceLessThan,
 	cosineSimilarity,
 	createVector,
+	longestCommonSubstring,
 } from "./nlp";
 import { getAnswerFromLLM } from "../LLM/useLLM";
 import {
@@ -136,6 +137,7 @@ export async function createChatBot(chatData) {
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité
 	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un mot à la simple similarité
 	const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
+	const WORD_LENGTH_FACTOR = 10;
 
 	function responseToSelectedOption(optionLink) {
 		// Gestion de la réponse à envoyer si on sélectionne une des options proposées
@@ -254,7 +256,9 @@ export async function createChatBot(chatData) {
 				) {
 					userInputTextToLowerCase = nextMessage.goto.toLowerCase();
 				}
-				const keywords = keywordsResponse.concat(titleResponse);
+				const keywords = keywordsResponse
+					.concat(titleResponse)
+					.map((keyword) => keyword.toLowerCase());
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
@@ -266,8 +270,7 @@ export async function createChatBot(chatData) {
 					matchScore = matchScore + cosSim + 0.5;
 				}
 				for (let keyword of keywords) {
-					let keywordToLowerCase = keyword.toLowerCase();
-					if (userInputTextToLowerCase.includes(keywordToLowerCase)) {
+					if (userInputTextToLowerCase.includes(keyword)) {
 						// Test de l'identité stricte
 						let strictIdentityMatch = false;
 						if (nextMessage.onlyIfKeywords) {
@@ -275,10 +278,8 @@ export async function createChatBot(chatData) {
 							userInputTextToLowerCase = removeAccents(
 								userInputTextToLowerCase,
 							);
-							keywordToLowerCase = removeAccents(keywordToLowerCase);
-							const regexStrictIdentityMatch = new RegExp(
-								`\\b${keywordToLowerCase}\\b`,
-							);
+							keyword = removeAccents(keyword);
+							const regexStrictIdentityMatch = new RegExp(`\\b${keyword}\\b`);
 							if (regexStrictIdentityMatch.test(userInputTextToLowerCase)) {
 								strictIdentityMatch = true;
 							}
@@ -289,25 +290,27 @@ export async function createChatBot(chatData) {
 							// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 							matchScore = matchScore + MATCH_SCORE_IDENTITY;
 							// On privilégie les correspondances sur les keywords plus longs
-							matchScore = matchScore + keywordToLowerCase.length / 10;
+							matchScore = matchScore + keyword.length / WORD_LENGTH_FACTOR;
 						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
-						if (
+						distanceScore =
+							distanceScore +
 							hasLevenshteinDistanceLessThan(
 								userInputTextToLowerCase,
 								keyword,
 								LEVENSHTEIN_THRESHOLD,
-							)
-						) {
-							distanceScore++;
-						}
+								WORD_LENGTH_FACTOR,
+							);
 					}
 				}
-				if (matchScore == 0 && !nextMessage.onlyIfKeywords) {
-					// En cas de simple similarité : on monte quand même le score, mais d'une unité seulement. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
+				if (
+					(matchScore == 0 || yaml.searchInContent) &&
+					!nextMessage.onlyIfKeywords
+				) {
+					// En cas de simple similarité : on monte quand même le score. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 					if (distanceScore > bestDistanceScore) {
-						matchScore++;
+						matchScore = matchScore + distanceScore;
 						bestDistanceScore = distanceScore;
 					}
 				}
@@ -318,6 +321,13 @@ export async function createChatBot(chatData) {
 					titleResponse == nextMessage.goto
 				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
+				}
+				if (matchScore == 0) {
+					matchScore =
+						longestCommonSubstring(
+							userInputTextToLowerCase,
+							keywords.join(" "),
+						) / WORD_LENGTH_FACTOR;
 				}
 				if (matchScore > bestMatchScore) {
 					bestMatch = responses;
