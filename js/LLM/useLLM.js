@@ -41,6 +41,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 	if (!hasSentenceEndMark(chatMessageLastChild.innerHTML)) {
 		chatMessageLastChild.innerHTML = chatMessageLastChild.innerHTML + " …";
 	}
+	return true;
 }
 
 // On utilise une variable LLMactive pour indiquer l'état d'activité du LLM
@@ -68,73 +69,90 @@ function messageIfErrorWithGetAnswerFromLLM(error) {
 }
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
-export function getAnswerFromLLM(userPrompt, informations) {
-	// Configuration de l'accès au LLM
-	let bodyObject = {
-		model: yaml.useLLM.model,
-		stream: true,
-		// eslint-disable-next-line camelcase
-		max_tokens: yaml.useLLM.maxTokens,
-		// eslint-disable-next-line camelcase
-		frequency_penalty: 0,
-		// eslint-disable-next-line camelcase
-		presence_penalty: 0,
-		temperature: 0.7,
-		// eslint-disable-next-line camelcase
-		top_p: 0.95,
-	};
-	if (informations.length > 0) {
-		informations = yaml.useLLM.RAGprompt + informations;
-	}
-	const isCohere = yaml.useLLM.url.includes("cohere");
+export function getAnswerFromLLM(
+	userPrompt,
+	informations,
+	chatMessageElement,
+	container,
+) {
+	return new Promise((resolve) => {
+		// Configuration de l'accès au LLM
+		let bodyObject = {
+			model: yaml.useLLM.model,
+			stream: true,
+			// eslint-disable-next-line camelcase
+			max_tokens: yaml.useLLM.maxTokens,
+			// eslint-disable-next-line camelcase
+			frequency_penalty: 0,
+			// eslint-disable-next-line camelcase
+			presence_penalty: 0,
+			temperature: 0.7,
+			// eslint-disable-next-line camelcase
+			top_p: 0.95,
+		};
+		if (informations.length > 0) {
+			informations = yaml.useLLM.RAGprompt + informations;
+		}
+		const isCohere = yaml.useLLM.url.includes("cohere");
 
-	if (isCohere) {
-		bodyObject.message =
-			yaml.useLLM.preprompt +
-			userPrompt +
-			yaml.useLLM.postprompt +
-			informations;
-	} else {
-		bodyObject.messages = [
-			{
-				content: yaml.useLLM.systemPrompt,
-				role: "system",
-			},
-			{
-				content:
-					yaml.useLLM.preprompt +
-					userPrompt +
-					yaml.useLLM.postprompt +
-					informations,
-				role: "user",
-			},
-		];
-	}
-	try {
-		fetch(yaml.useLLM.url, {
-			method: "POST",
-			headers: {
-				Authorization: "Bearer " + yaml.useLLM.apiKey,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(bodyObject),
-		})
-			.then((response) => {
-				if (response.ok) {
-					LLMactive = true;
-					const chatMessage = document.createElement("div");
-					chatMessage.classList.add("message");
-					chatMessage.classList.add("bot-message");
-					chatContainer.appendChild(chatMessage);
-					readStream(response.body, chatMessage, isCohere);
-				} else {
-					messageIfErrorWithGetAnswerFromLLM();
-				}
+		if (isCohere) {
+			bodyObject.message =
+				yaml.useLLM.preprompt +
+				userPrompt +
+				yaml.useLLM.postprompt +
+				informations;
+		} else {
+			bodyObject.messages = [
+				{
+					content: yaml.useLLM.systemPrompt,
+					role: "system",
+				},
+				{
+					content:
+						yaml.useLLM.preprompt +
+						userPrompt +
+						yaml.useLLM.postprompt +
+						informations,
+					role: "user",
+				},
+			];
+		}
+		try {
+			fetch(yaml.useLLM.url, {
+				method: "POST",
+				headers: {
+					Authorization: "Bearer " + yaml.useLLM.apiKey,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(bodyObject),
 			})
-			.catch((error) => {
-				messageIfErrorWithGetAnswerFromLLM(error);
-			});
-	} catch (error) {
-		messageIfErrorWithGetAnswerFromLLM(error);
-	}
+				.then((response) => {
+					if (response.ok) {
+						LLMactive = true;
+						if (!chatMessageElement) {
+							chatMessageElement = document.createElement("div");
+							chatMessageElement.classList.add("message");
+							chatMessageElement.classList.add("bot-message");
+						}
+						if (!container) {
+							container = chatContainer;
+						}
+						container.appendChild(chatMessageElement);
+						readStream(response.body, chatMessageElement, isCohere).then(() =>
+							resolve(),
+						);
+					} else {
+						messageIfErrorWithGetAnswerFromLLM();
+						resolve();
+					}
+				})
+				.catch((error) => {
+					messageIfErrorWithGetAnswerFromLLM(error);
+					resolve();
+				});
+		} catch (error) {
+			messageIfErrorWithGetAnswerFromLLM(error);
+			resolve();
+		}
+	});
 }
