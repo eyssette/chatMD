@@ -37,6 +37,7 @@ export function handleURL(url) {
 		// gestion des fichiers hébergés sur codiMD / hedgedoc / digipage
 		if (
 			url.startsWith("https://codimd") ||
+			url.startsWith("https://pad.numerique.gouv.fr/") ||
 			url.includes("hedgedoc") ||
 			url.includes("digipage")
 		) {
