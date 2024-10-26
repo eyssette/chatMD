@@ -320,6 +320,7 @@ export async function createChatBot(chatData) {
 			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
 			for (let i = 0; i < chatDataLength; i++) {
 				const titleResponse = chatData[i][0];
+				console.log(titleResponse);
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
 				if (nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) {
@@ -397,15 +398,15 @@ export async function createChatBot(chatData) {
 						bestDistanceScore = distanceScore;
 					}
 				}
-				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0 et que la réponse correspond au titre de la réponse voulue dans la directive
+				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0.5 et que la réponse correspond au titre de la réponse voulue dans la directive
 				if (
-					matchScore > 0 &&
+					matchScore > 0.5 &&
 					nextMessage.onlyIfKeywords &&
 					titleResponse == nextMessage.goto
 				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				}
-				if (matchScore == 0) {
+				if (matchScore == 0 && !nextMessage.onlyIfKeywords) {
 					matchScore =
 						longestCommonSubstring(
 							userInputTextToLowerCase,
@@ -442,7 +443,11 @@ export async function createChatBot(chatData) {
 					: [];
 				// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 				let selectedResponseWithOptions;
-				if (nextMessage.onlyIfKeywords && titleBestMatch !== nextMessage.goto) {
+				if (
+					nextMessage.onlyIfKeywords &&
+					(titleBestMatch !== nextMessage.goto ||
+						bestMatchScore < BESTMATCH_THRESHOLD)
+				) {
 					selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
 						nextMessage.messageIfKeywordsNotFound,
 					)
