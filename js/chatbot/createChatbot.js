@@ -371,15 +371,21 @@ export async function createChatBot(chatData) {
 						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
-						distanceScore =
-							distanceScore +
-							hasLevenshteinDistanceLessThan(
-								userInputTextToLowerCase,
-								keyword,
-								LEVENSHTEIN_THRESHOLD,
-								WORD_LENGTH_FACTOR,
-							);
+						const isNegativeKeyword = keyword.startsWith("! ");
+						keyword = keyword.replace(/^\! /, "");
+						const levenshteinDistance = hasLevenshteinDistanceLessThan(
+							userInputTextToLowerCase,
+							keyword,
+							LEVENSHTEIN_THRESHOLD,
+							WORD_LENGTH_FACTOR,
+						);
+						distanceScore = isNegativeKeyword
+							? distanceScore - levenshteinDistance
+							: distanceScore + levenshteinDistance;
 					}
+				}
+				if (distanceScore < 0) {
+					matchScore = 0;
 				}
 				if (
 					(matchScore == 0 || yaml.searchInContent) &&

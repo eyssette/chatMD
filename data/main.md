@@ -160,12 +160,21 @@ gestionGrosMots: true
 - gros mot
 - insulte
 - message par défaut
+- déclencheur négatif
+- mot clef négatif
+- mot clé négatif
 
 Pour améliorer l'algorithme de choix d'une réponse, vous pouvez utiliser ces paramètres dans l'en-tête YAML : 
 
 - si on ajoute `rechercheContenu: true`, alors l'algorithme ne se contente pas de comparer le message de l'utilisateur avec le titre de la réponse et les déclencheurs, mais il compare aussi ce message avec le contenu entier de la réponse. Attention, dans ce cas, le chatbot peut mettre un peu plus de temps à se charger.
 - `gestionGrosMots: true` permet de détecter les gros mots et les insultes envoyés par l'utilisateur et de formuler une réponse adéquate si l'utilisateur en utilise.
 - `messageParDéfaut: ["message 1", "message 2", "message 3"]` permet de modifier le message par défaut qui s'affiche aléatoirement quand le chatbot n'a pas trouvé de réponse pertinente.
+
+On peut aussi utiliser des déclencheurs négatifs afin d'indiquer des mots-clés ou des expressions qui ne doivent pas se trouver dans la question de l'utilisateur.
+
+On indique un déclencheur négatif, en ajoutant un point d'exclamation suivi d'une espace devant le déclencheur :
+
+`- ! déclencheur négatif`
 
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 2. [Je veux voir les autres options de configurations](Options de configuration)
