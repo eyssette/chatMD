@@ -98,18 +98,23 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			.replaceAll("<!--<!--", "<!--")
 			.replaceAll("-->-->", "-->");
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
+		const sendButton = document.getElementById("send-button");
 		if (yaml.userInput === false) {
 			if (dynamicVariables["KEYBOARD"] == "true") {
+				sendButton.innerHTML = "Envoyer";
 				document.body.classList.remove("hideControls");
 				dynamicVariables["KEYBOARD"] = "false";
 			} else {
+				sendButton.innerHTML = "Afficher tout";
 				document.body.classList.add("hideControls");
 			}
 		} else {
 			if (dynamicVariables["KEYBOARD"] == "false") {
+				sendButton.innerHTML = "Afficher tout";
 				document.body.classList.add("hideControls");
 				dynamicVariables["KEYBOARD"] = "true";
 			} else {
+				sendButton.innerHTML = "Envoyer";
 				document.body.classList.remove("hideControls");
 			}
 		}

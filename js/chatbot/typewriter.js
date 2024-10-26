@@ -4,6 +4,7 @@ import Typed from "../externals/typed.js";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
+const sendButton = document.getElementById("send-button");
 
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
 const isMobile =
@@ -113,6 +114,10 @@ function typeWriter(content, element) {
 			startDelay: 100,
 			showCursor: false,
 			onBegin: () => {
+				// Si on a désactivé le clavier, on remet l'opacité du bouton à 1 pour pouvoir voir le bouton "Afficher tout"
+				if (yaml.userInput == false) {
+					sendButton.style.opacity = "1";
+				}
 				// Quand l'effet démarre, on refocalise sur userInput (sauf sur les smartphones)
 				if (autoFocus) {
 					userInput.focus();
@@ -174,6 +179,13 @@ function typeWriter(content, element) {
 				}, 1000);
 			},
 			onComplete: () => {
+				// Si on a désactivé le clavier, on remet l'opacité du bouton à 0.5 pour pouvoir voir en grisé le bouton "Afficher tout"
+				if (
+					yaml.userInput == false &&
+					document.body.classList.contains("hideControls")
+				) {
+					sendButton.style.opacity = "0.5";
+				}
 				// Gestion de textFit pour les éléments en Latex
 				if (yaml.addOns && yaml.addOns.includes("textFit")) {
 					window.textFit(element.querySelectorAll(".katex-display"));

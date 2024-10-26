@@ -99,6 +99,8 @@ export function processYAML(markdownContent) {
 			) {
 				yaml.userInput = false;
 				document.body.classList.add("hideControls");
+				const sendButton = document.getElementById("send-button");
+				sendButton.innerHTML = "Afficher tout";
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
 				yaml.searchInContent = yaml.rechercheContenu
