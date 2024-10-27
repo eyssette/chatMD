@@ -320,7 +320,6 @@ export async function createChatBot(chatData) {
 			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
 			for (let i = 0; i < chatDataLength; i++) {
 				const titleResponse = chatData[i][0];
-				console.log(titleResponse);
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
 				if (nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) {
@@ -424,7 +423,11 @@ export async function createChatBot(chatData) {
 				(bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) ||
 				nextMessage.onlyIfKeywords
 			) {
-				if (bestMatch && nextMessage.onlyIfKeywords) {
+				if (
+					bestMatch &&
+					nextMessage.onlyIfKeywords &&
+					bestMatchScore > BESTMATCH_THRESHOLD
+				) {
 					// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
 					nextMessage.lastMessageFromBot = "";
 					nextMessage.goto = "";
@@ -445,8 +448,7 @@ export async function createChatBot(chatData) {
 				let selectedResponseWithOptions;
 				if (
 					nextMessage.onlyIfKeywords &&
-					(titleBestMatch !== nextMessage.goto ||
-						bestMatchScore < BESTMATCH_THRESHOLD)
+					bestMatchScore < BESTMATCH_THRESHOLD
 				) {
 					selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
 						nextMessage.messageIfKeywordsNotFound,
