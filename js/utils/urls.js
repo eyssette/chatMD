@@ -34,7 +34,7 @@ export function handleURL(url) {
 			);
 			url = url.replace("/blob/", "/");
 		}
-		// gestion des fichiers hébergés sur codiMD / hedgedoc / digipage
+		// gestion des fichiers hébergés sur codiMD / le pad gouv / hedgedoc / digipage
 		if (
 			url.startsWith("https://codimd") ||
 			url.startsWith("https://pad.numerique.gouv.fr/") ||

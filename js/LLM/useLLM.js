@@ -16,6 +16,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 			.filter((element) => element.trim().length > 0);
 		chunkArray.forEach((chunkElement) => {
 			if (isCohere) {
+				// Cas de l'API Cohere
 				const chunkObject = JSON.parse(chunkElement.trim());
 				if (chunkObject.event_type == "text-generation" && LLMactive) {
 					const chunkMessage = chunkObject.text;
@@ -24,6 +25,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 				}
 				LLMactive = chunkObject.is_finished ? false : true;
 			} else {
+				// Cas des autres API (modèles openAI)
 				const chunkObjectString = chunkElement.replace("data: ", "");
 				if (!chunkObjectString.includes("[DONE]") && LLMactive) {
 					const chunkObject = JSON.parse(chunkObjectString);
@@ -129,6 +131,7 @@ export function getAnswerFromLLM(
 				.then((response) => {
 					if (response.ok) {
 						LLMactive = true;
+						// Si on n'a pas indiqué d'élément et de container, on met la réponse du LLM dans un nouveau message du chatbot, sinon on utilise l'élément et le container indiqué
 						if (!chatMessageElement) {
 							chatMessageElement = document.createElement("div");
 							chatMessageElement.classList.add("message");

@@ -208,7 +208,7 @@ function typeWriter(content, element) {
 
 export function displayMessage(html, isUser, chatMessage, container) {
 	return new Promise((resolve) => {
-		// Si on a dû séparer le contenu en Markdown et les prompts : il faut mettre chaque contenu dans un container propre.
+		// On affiche le message dans un container. Par défaut on affiche le message comme un nouveau message dans le chat, mais on peut définir un container (pour afficher le message comme un élément enfant d'un nouveau message en cas de génération de message à la fois via le markdown et un LLM : dans ce cas, il faut que le contenu des messages se suivent, dans un même message, au lieu d'ajouter un nouveau message à chaque fois)
 		if (container) {
 			chatContainer.appendChild(container);
 		} else {

@@ -371,14 +371,18 @@ export async function createChatBot(chatData) {
 						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
+
+						// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
 						const isNegativeKeyword = keyword.startsWith("! ");
 						keyword = keyword.replace(/^\! /, "");
+						// On calcule la distance de Levenshtein entre le keyword et la question de l'utilisateur (en parcourant les n-grammes du message de l'utilisateur et en prenant en compte la longueur du n-gramme ; avec n = nombre de mots du keyword)
 						const levenshteinDistance = hasLevenshteinDistanceLessThan(
 							userInputTextToLowerCase,
 							keyword,
 							LEVENSHTEIN_THRESHOLD,
 							WORD_LENGTH_FACTOR,
 						);
+						// Si le keyword est négatif on diminue le score, sinon on l'augmente
 						distanceScore = isNegativeKeyword
 							? distanceScore - levenshteinDistance
 							: distanceScore + levenshteinDistance;
@@ -406,6 +410,7 @@ export async function createChatBot(chatData) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				}
 				if (matchScore == 0 && !nextMessage.onlyIfKeywords) {
+					// Si on a toujours un matchScore = 0 alors qu'on vient de faire un calcul de similarité avec le keyword, on regarde quand même la plus longue chaîne de caractère commune entre le keyword et la question de l'utilisateur
 					matchScore =
 						longestCommonSubstring(
 							userInputTextToLowerCase,
@@ -450,6 +455,7 @@ export async function createChatBot(chatData) {
 					nextMessage.onlyIfKeywords &&
 					bestMatchScore < BESTMATCH_THRESHOLD
 				) {
+					// En cas de mauvaise réponse
 					selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
 						nextMessage.messageIfKeywordsNotFound,
 					)
@@ -457,6 +463,7 @@ export async function createChatBot(chatData) {
 						: nextMessage.messageIfKeywordsNotFound +
 							nextMessage.lastMessageFromBot;
 				} else {
+					// En cas de bonne réponse
 					selectedResponseWithOptions = gestionOptions(
 						selectedResponseWithoutOptions,
 						optionsSelectedResponse,
