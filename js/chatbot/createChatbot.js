@@ -333,14 +333,15 @@ export async function createChatBot(chatData) {
 				) {
 					userInputTextToLowerCase = nextMessage.goto.toLowerCase();
 				}
-				// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords
+				// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords (sauf s'il n'y a pas de keyword)
 				// Sinon on inclut le titre
 				// On met tout en minuscule
-				const keywords = nextMessage.onlyIfKeywords
-					? keywordsResponse.map((keyword) => keyword.toLowerCase())
-					: keywordsResponse
-							.concat(titleResponse)
-							.map((keyword) => keyword.toLowerCase());
+				const keywords =
+					nextMessage.onlyIfKeywords && keywordsResponse.length > 0
+						? keywordsResponse.map((keyword) => keyword.toLowerCase())
+						: keywordsResponse
+								.concat(titleResponse)
+								.map((keyword) => keyword.toLowerCase());
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
