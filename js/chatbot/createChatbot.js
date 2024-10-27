@@ -347,7 +347,13 @@ export async function createChatBot(chatData) {
 					matchScore = matchScore + cosSim + 0.5;
 				}
 				for (let keyword of keywords) {
-					if (userInputTextToLowerCase.includes(keyword)) {
+					// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
+					const isNegativeKeyword = keyword.startsWith("! ");
+					keyword = keyword.replace(/^\! /, "");
+					if (
+						userInputTextToLowerCase.includes(keyword) &&
+						!isNegativeKeyword
+					) {
 						// Test de l'identité stricte
 						let strictIdentityMatch = false;
 						if (nextMessage.onlyIfKeywords) {
@@ -371,10 +377,6 @@ export async function createChatBot(chatData) {
 						}
 					} else if (userInputTextToLowerCase.length > 4) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
-
-						// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
-						const isNegativeKeyword = keyword.startsWith("! ");
-						keyword = keyword.replace(/^\! /, "");
 						// On calcule la distance de Levenshtein entre le keyword et la question de l'utilisateur (en parcourant les n-grammes du message de l'utilisateur et en prenant en compte la longueur du n-gramme ; avec n = nombre de mots du keyword)
 						const levenshteinDistance = hasLevenshteinDistanceLessThan(
 							userInputTextToLowerCase,
@@ -388,6 +390,7 @@ export async function createChatBot(chatData) {
 							: distanceScore + levenshteinDistance;
 					}
 				}
+				// si on a un score de distance négatif, c'est qu'il y avait des keywords négatifs : donc le matchscore doit être égal à 0
 				if (distanceScore < 0) {
 					matchScore = 0;
 				}
