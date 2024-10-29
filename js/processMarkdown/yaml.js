@@ -170,7 +170,11 @@ export function processYAML(markdownContent) {
 					? yaml.contenuDynamique
 					: yaml.dynamicContent;
 			}
-			if (yaml.typeWriter === false || yaml.effetDactylo === false) {
+			if (
+				yaml.typewriter === false ||
+				yaml.typeWriter === false ||
+				yaml.effetDactylo === false
+			) {
 				yaml.typeWriter = false;
 			}
 			if (yaml.obfuscate) {
