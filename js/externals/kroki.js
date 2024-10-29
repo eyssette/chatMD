@@ -7,7 +7,8 @@ function krokiCreateImageFromSource(type, source) {
 	const dataKrokiCompressedFormatted = btoa(dataKrokiCompressed)
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_");
-	const urlImage = 'https://kroki.io/'+type+'/svg/'+dataKrokiCompressedFormatted;
-	const image = '![]('+urlImage+')';
+	const urlImage =
+		"https://kroki.io/" + type + "/svg/" + dataKrokiCompressedFormatted;
+	const image = "![](" + urlImage + ")";
 	return image;
 }
