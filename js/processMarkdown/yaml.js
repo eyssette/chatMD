@@ -155,7 +155,7 @@ export function processYAML(markdownContent) {
 				}
 			}
 			if (yaml.footer === false) {
-				hideFooter();
+				hideFooter(yaml.userInput);
 			} else if (typeof yaml.footer == "string") {
 				footerElement.innerHTML = yaml.footer;
 			}
