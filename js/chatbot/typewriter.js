@@ -69,6 +69,7 @@ function typeWriter(content, element) {
 			typed.strings = [contentArrayFiltered.join(" ")];
 			typed.start();
 			typed.destroy();
+			scrollWindow();
 		}
 
 		function keypressHandler(event) {
