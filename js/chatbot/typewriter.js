@@ -58,6 +58,17 @@ function formatSlowContent(content) {
 	return contentArrayFiltered.join(" ");
 }
 
+// Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
+function stopTypeWriter(slowContent, typedElement) {
+	typedElement.stop();
+	typedElement.reset();
+	slowContent = formatSlowContent(slowContent);
+	typedElement.strings = [slowContent];
+	typedElement.start();
+	typedElement.destroy();
+	scrollWindow();
+}
+
 let typed;
 const pauseTypeWriter = "^300 ";
 export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
@@ -65,22 +76,11 @@ const stopTypeWriterExecutionTimeThreshold = 800;
 // Effet machine à écrire
 function typeWriter(content, element) {
 	return new Promise((resolve) => {
-		// Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
-		function stopTypeWriter(slowContent) {
-			typed.stop();
-			typed.reset();
-			slowContent = formatSlowContent(slowContent);
-			typed.strings = [slowContent];
-			typed.start();
-			typed.destroy();
-			scrollWindow();
-		}
-
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
 				mutationObserver.disconnect();
 				observerConnected = false;
-				stopTypeWriter(content);
+				stopTypeWriter(content, typed);
 			}
 		}
 
@@ -95,7 +95,7 @@ function typeWriter(content, element) {
 				executionTime > stopTypeWriterExecutionTimeThreshold &&
 				observerConnected
 			) {
-				stopTypeWriter(content);
+				stopTypeWriter(content, typed);
 				observerConnected = false;
 				mutationObserver.disconnect();
 			}
