@@ -31,6 +31,33 @@ const messageTypeEnterToStopTypeWriter = isMobile
 		? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
 		: "“Enter” pour stopper l'effet “machine à écrire”";
 
+function formatSlowContent(content) {
+	content = content.replaceAll("`", "").replace(regexMessageOptions, "`$1`");
+	// On doit conserver les retours à la ligne dans les blocs "pre"
+	const contentKeepReturnInCode = content.replaceAll(
+		regexPre,
+		function (match) {
+			return match.replaceAll("\n", "RETURNCHARACTER");
+		},
+	);
+	const contentArray = contentKeepReturnInCode.split("\n");
+	// On découpe chaque paragraphe pour pouvoir ensuite l'afficher d'un coup
+	const contentArrayFiltered = contentArray.map((element) =>
+		element.startsWith(pauseTypeWriter)
+			? element
+					.replace(pauseTypeWriter, "")
+					.replaceAll("RETURNCHARACTER", "\n") + "`"
+			: element.endsWith("`")
+				? "`" + element.replaceAll("RETURNCHARACTER", "\n")
+				: "`" +
+					element
+						.replaceAll("RETURNCHARACTER", "\n")
+						.replace(pauseTypeWriterMultipleBots, "") +
+					"`",
+	);
+	return contentArrayFiltered.join(" ");
+}
+
 let typed;
 const pauseTypeWriter = "^300 ";
 export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
@@ -42,31 +69,8 @@ function typeWriter(content, element) {
 		function stopTypeWriter(slowContent) {
 			typed.stop();
 			typed.reset();
-			slowContent = slowContent.replaceAll("`", "");
-			slowContent = slowContent.replace(regexMessageOptions, "`$1`");
-			// On doit conserver les retours à la ligne dans les blocs "pre"
-			const contentKeepReturnInCode = slowContent.replaceAll(
-				regexPre,
-				function (match) {
-					return match.replaceAll("\n", "RETURNCHARACTER");
-				},
-			);
-			const contentArray = contentKeepReturnInCode.split("\n");
-			// On découpe chaque paragraphe pour pouvoir ensuite l'afficher d'un coup
-			const contentArrayFiltered = contentArray.map((element) =>
-				element.startsWith(pauseTypeWriter)
-					? element
-							.replace(pauseTypeWriter, "")
-							.replaceAll("RETURNCHARACTER", "\n") + "`"
-					: element.endsWith("`")
-						? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-						: "`" +
-							element
-								.replaceAll("RETURNCHARACTER", "\n")
-								.replace(pauseTypeWriterMultipleBots, "") +
-							"`",
-			);
-			typed.strings = [contentArrayFiltered.join(" ")];
+			slowContent = formatSlowContent(slowContent);
+			typed.strings = [slowContent];
 			typed.start();
 			typed.destroy();
 			scrollWindow();
