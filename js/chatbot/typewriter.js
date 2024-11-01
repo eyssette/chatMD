@@ -31,7 +31,8 @@ const messageTypeEnterToStopTypeWriter = isMobile
 		? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
 		: "“Enter” pour stopper l'effet “machine à écrire”";
 
-function formatSlowContent(content) {
+// Formate le contenu quand on veut utiliser la fonction stopwriter
+function formatContentStopTypeWriter(content) {
 	content = content.replaceAll("`", "").replace(regexMessageOptions, "`$1`");
 	// On doit conserver les retours à la ligne dans les blocs "pre"
 	const contentKeepReturnInCode = content.replaceAll(
@@ -59,11 +60,11 @@ function formatSlowContent(content) {
 }
 
 // Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
-function stopTypeWriter(slowContent, typedElement) {
+function stopTypeWriter(content, typedElement) {
 	typedElement.stop();
 	typedElement.reset();
-	slowContent = formatSlowContent(slowContent);
-	typedElement.strings = [slowContent];
+	content = formatContentStopTypeWriter(content);
+	typedElement.strings = [content];
 	typedElement.start();
 	typedElement.destroy();
 	scrollWindow();
