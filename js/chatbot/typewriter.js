@@ -24,6 +24,7 @@ const observerConfig = {
 	childList: true,
 	subtree: true,
 };
+let observerConnected;
 
 const messageTypeEnterToStopTypeWriter = isMobile
 	? "Clic sur “Envoyer” pour stopper l'effet “machine à écrire”"
@@ -59,6 +60,75 @@ function formatContentStopTypeWriter(content) {
 	return contentArrayFiltered.join(" ");
 }
 
+// Active ou désactive la détection des mouvements pour l’auto-scroll
+function manageScrollDetection(enable) {
+	function scrollHandler(event) {
+		if (
+			// On désactive l'autoscroll dans 3 cas
+			// 1er cas : si on a déplacé la souris (on évite les petits mouvements avec un treshold)
+			(event.type === "mousemove" &&
+				(Math.abs(event.movementX) > thresholdMouseMovement ||
+					Math.abs(event.movementY) > thresholdMouseMovement)) ||
+			// 2e cas : si on fait un mouvement vers le haut ou bien vers le bas, mais sans aller jusqu'au bas de la fenêtre
+			(event.type === "wheel" &&
+				(event.deltaY <= 0 ||
+					(event.deltaY > 0 &&
+						window.scrollY + window.innerHeight <
+							document.body.offsetHeight))) ||
+			// 3e cas, sur un portable ou une tablette, si on touche l'écran
+			event.type === "touchstart"
+		) {
+			observerConnected = false;
+			mutationObserver.disconnect();
+			removeScrollListeners();
+			// Sur un portable ou une tablette, on réactive le scroll si finalement on est revenu en bas de la page
+			if (event.type === "touchstart") {
+				setTimeout(() => {
+					if (
+						window.scrollY + window.innerHeight + 200 >=
+						document.documentElement.scrollHeight
+					) {
+						observerConnected = true;
+						mutationObserver.observe(chatContainer, observerConfig);
+					}
+				}, 5000);
+			}
+		} else if (
+			// On réactive l'autoscroll si on se déplace vers le bas jusqu'au bas de la fenêtre
+			event.type === "wheel" &&
+			event.deltaY > 0 &&
+			window.scrollY + window.innerHeight >= document.body.offsetHeight
+		) {
+			observerConnected = true;
+			mutationObserver.observe(chatContainer, observerConfig);
+		}
+	}
+
+	function addScrollListeners() {
+		document.addEventListener("mousemove", (event) => {
+			scrollHandler(event);
+		});
+		document.addEventListener("wheel", (event) => {
+			scrollHandler(event);
+		});
+		document.addEventListener("touchstart", (event) => {
+			scrollHandler(event);
+		});
+	}
+
+	function removeScrollListeners() {
+		document.removeEventListener("mousemove", scrollHandler);
+		document.removeEventListener("wheel", scrollHandler);
+		document.removeEventListener("touchstart", scrollHandler);
+	}
+
+	if (enable) {
+		addScrollListeners();
+	} else {
+		removeScrollListeners();
+	}
+}
+
 // Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
 function stopTypeWriter(content, typedElement) {
 	typedElement.stop();
@@ -68,6 +138,7 @@ function stopTypeWriter(content, typedElement) {
 	typedElement.start();
 	typedElement.destroy();
 	scrollWindow();
+	manageScrollDetection(false);
 }
 
 let typed;
@@ -87,7 +158,7 @@ function typeWriter(content, element) {
 
 		let counter = 0;
 		const start = Date.now();
-		let observerConnected = true;
+		observerConnected = true;
 		function handleMutation() {
 			// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 			const executionTime = Date.now() - start;
@@ -116,7 +187,7 @@ function typeWriter(content, element) {
 		// Effet machine à écrire
 		typed = new Typed(element, {
 			strings: [content],
-			typeSpeed: -5000,
+			typeSpeed: 0,
 			startDelay: 100,
 			showCursor: false,
 			onBegin: () => {
@@ -134,55 +205,9 @@ function typeWriter(content, element) {
 
 				// On détecte le remplissage petit à petit du DOM pour scroller automatiquement la fenêtre vers le bas
 				mutationObserver = new MutationObserver(handleMutation);
-				function enableAutoScroll() {
-					observerConnected = true;
-					mutationObserver.observe(chatContainer, observerConfig);
-				}
-				enableAutoScroll();
-
-				setTimeout(() => {
-					// Arrêter le scroll automatique en cas de mouvement de la souris ou de contact avec l'écran
-					document.addEventListener("mousemove", function (e) {
-						if (
-							Math.abs(e.movementX) > thresholdMouseMovement ||
-							Math.abs(e.movementY) > thresholdMouseMovement
-						) {
-							observerConnected = false;
-							mutationObserver.disconnect();
-						}
-					});
-					document.addEventListener("wheel", function (e) {
-						if (e.deltaY > 0) {
-							// On détecte si on a fait un mouvement vers le bas
-							if (
-								window.scrollY + window.innerHeight >=
-								document.body.offsetHeight
-							) {
-								// On remet le scroll automatique si on a scrollé jusqu'au bas de la page
-								enableAutoScroll();
-							} else {
-								observerConnected = false;
-								mutationObserver.disconnect();
-							}
-						} else {
-							observerConnected = false;
-							mutationObserver.disconnect();
-						}
-					});
-					document.addEventListener("touchstart", function () {
-						observerConnected = false;
-						mutationObserver.disconnect();
-						setTimeout(() => {
-							if (
-								window.scrollY + window.innerHeight + 200 >=
-								document.documentElement.scrollHeight
-							) {
-								// On remet le scroll automatique si on a scrollé jusqu'au bas de la page
-								enableAutoScroll();
-							}
-						}, 5000);
-					});
-				}, 1000);
+				observerConnected = true;
+				mutationObserver.observe(chatContainer, observerConfig);
+				setTimeout(() => manageScrollDetection(true), 1000);
 			},
 			onComplete: () => {
 				// Si on a désactivé le clavier, on remet l'opacité du bouton à 0.5 pour pouvoir voir en grisé le bouton "Afficher tout"
@@ -206,6 +231,7 @@ function typeWriter(content, element) {
 				}
 				observerConnected = false;
 				mutationObserver.disconnect();
+				manageScrollDetection(false);
 				resolve();
 			},
 		});
