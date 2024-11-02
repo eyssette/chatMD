@@ -8,42 +8,48 @@ function showdownExtensionAdmonitions() {
 		{
 			type: "output",
 			filter: (text) => {
-				text = text.replaceAll(/<p>:::(.*?)<\/p>/g, ":::$1");
-				const regex = /:::(.*?)\n(.*?):::/gs;
-				const matches = text.match(regex);
-				if (matches) {
-					let modifiedText = text;
-					for (const match of matches) {
-						const regex2 = /:::(.*?)\s(.*?)\n(.*?):::/s;
-						const matchInformations = regex2.exec(match);
-						const indexMatch = text.indexOf(match);
-						// Pas de transformation de l'admonition en html si l'admonition est dans un bloc code
-						const isInCode =
-							text.substring(indexMatch - 6, indexMatch) == "<code>"
-								? true
-								: false;
-						if (!isInCode) {
-							let type = matchInformations[1];
-							let title = matchInformations[2];
-							if (type.includes("<br")) {
-								type = type.replace("<br", "");
-								title = "";
-							}
-							const content = matchInformations[3];
-							let matchReplaced;
-							if (title.includes("collapsible")) {
-								title = title.replace("collapsible", "");
-								matchReplaced = `<div><div class="admonition ${type}"><details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content}</div></details></div></div>`;
-							} else {
-								matchReplaced = `<div><div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content}</div></div></div>`;
-							}
-							modifiedText = modifiedText.replaceAll(match, matchReplaced);
+				// Supprimer les balises <p> autour des admonitions
+				text = text.replace(/<p>:::(.*?)<\/p>/g, ":::$1");
+
+				// Expression régulière pour capturer le contenu des admonitions
+				const regex = /:::(\w+)(?:\s+(collapsible)?)?\s*(.*?)\n([\s\S]*?):::/g;
+
+				// Traiter chaque match de l'admonition
+				text = text.replace(
+					regex,
+					(match, type, collapsible, title, content, offset) => {
+						// Vérifier si l'admonition est dans un bloc code en regardant autour
+						const before = text.substring(0, offset);
+						const isInCode = /<code>|<pre>/.test(
+							before.slice(before.lastIndexOf("<")),
+						);
+
+						if (isInCode) {
+							// Si l'admonition est dans un bloc de code, on ne fait rien
+							return match;
 						}
-					}
-					return modifiedText;
-				} else {
-					return text;
-				}
+
+						// Retirer "collapsible" du titre si présent
+						if (collapsible) title = title.replace("collapsible", "").trim();
+
+						// Construire le HTML de l'admonition
+						if (collapsible) {
+							return `<div class="admonition ${type}">
+							<details>
+								<summary class="admonitionTitle">${title || type}</summary>
+								<div class="admonitionContent">${content.trim()}</div>
+							</details>
+						</div>`;
+						} else {
+							return `<div class="admonition ${type}">
+							<div class="admonitionTitle">${title || type}</div>
+							<div class="admonitionContent">${content.trim()}</div>
+						</div>`;
+						}
+					},
+				);
+
+				return text;
 			},
 		},
 	];
