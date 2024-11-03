@@ -1,17 +1,22 @@
 // Gestion du scroll automatique vers le bas
+function scrollToBottomOfPage(behavior) {
+	const heightPage = Math.max(
+		document.body.scrollHeight,
+		document.documentElement.scrollHeight,
+	);
+	window.scrollTo({
+		top: heightPage,
+		behavior: behavior,
+	});
+}
+
 export function scrollWindow(isSmooth) {
 	if (isSmooth) {
 		window.requestAnimationFrame(() => {
-			window.scrollTo({
-				top: document.body.scrollHeight,
-				behavior: "smooth",
-			});
+			scrollToBottomOfPage("smooth");
 		});
 	} else {
-		window.scrollTo({
-			top: document.body.scrollHeight,
-			behavior: "auto",
-		});
+		scrollToBottomOfPage("auto");
 	}
 }
 
