@@ -7,9 +7,10 @@ export const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
+const userAgent = window.navigator.userAgent;
 const isMobile =
 	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-		navigator.userAgent,
+		userAgent,
 	);
 export const autoFocus = isMobile ? false : true;
 
@@ -141,12 +142,52 @@ function stopTypeWriter(content, typedElement) {
 	manageScrollDetection(false);
 }
 
+function accelerateTypeWriter(content, typedElement, accelerationFactor) {
+	typedElement.stop();
+}
+
+// Pour ajouter des backticks tous les n caractères
+function wrapWithBackticksEveryNcharacters(text, n) {
+	let wrappedText = "";
+	let i = 0;
+	while (i < text.length) {
+		const substring = text.slice(i, i + n);
+		wrappedText += "`" + substring + "`";
+		i += n;
+	}
+	return wrappedText;
+}
+
+// Pour découper un texte en chunks de N caractères (afin de l'afficher plus rapidement), sans découper les balises HTML et sans découper le texte qui est déjà entre des backticks
+function chunkByNChars(html, n) {
+	// Divise le texte sur les backticks
+	const parts = html.split(/(`[^`]*`)/);
+	// Traite chaque partie
+	const processedParts = parts.map((part) => {
+		// Si la partie est entre backticks, on la garde telle quelle
+		if (part.startsWith("`") && part.endsWith("`")) {
+			return part;
+		} else {
+			// Traite le texte à l'intérieur des balises HTML
+			return part.replace(/>([^<]*)</g, (match, textBetweenTags) => {
+				// Traiter le texte entre balises HTML : on ajoute des backticks tous les N caractères
+				const processedText = wrapWithBackticksEveryNcharacters(
+					textBetweenTags,
+					n,
+				);
+				return ">" + processedText + "<";
+			});
+		}
+	});
+	return processedParts.join("");
+}
+
 let typed;
 const pauseTypeWriter = "^300 ";
 export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 const stopTypeWriterExecutionTimeThreshold = 800;
 // Effet machine à écrire
-function typeWriter(content, element) {
+function typeWriter(content, element, accelerateFactor) {
 	return new Promise((resolve) => {
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
@@ -183,6 +224,11 @@ function typeWriter(content, element) {
 
 		// On fait apparaître d'un coup les iframes
 		content = content.replaceAll(regexIframe, "`$1`");
+
+		// On peut accéler l'effet machine à écrire en regroupant les caractères : au lieu de les afficher un par, on les affiche N par N (N = le facteur d'accélération)
+		if (accelerateFactor) {
+			content = chunkByNChars(content, accelerateFactor);
+		}
 
 		// Effet machine à écrire
 		typed = new Typed(element, {
