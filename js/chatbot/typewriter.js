@@ -138,7 +138,7 @@ function stopTypeWriter(content, typedElement) {
 	typedElement.strings = [content];
 	typedElement.start();
 	typedElement.destroy();
-	scrollWindow();
+	scrollWindow(false);
 	manageScrollDetection(false);
 }
 
@@ -214,7 +214,7 @@ function typeWriter(content, element, accelerateFactor) {
 			}
 			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
 			if (observerConnected) {
-				scrollWindow();
+				scrollWindow(true);
 			}
 			counter++;
 		}

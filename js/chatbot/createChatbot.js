@@ -614,7 +614,7 @@ export async function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
-				scrollWindow();
+				scrollWindow(false);
 			}, 100);
 			userInput.innerText = "";
 		} else {
@@ -632,7 +632,7 @@ export async function createChatBot(chatData) {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			sendButton.click();
-			scrollWindow();
+			scrollWindow(false);
 		} else if (
 			userInput.parentElement.parentElement.classList.contains("hideControls")
 		) {
@@ -697,7 +697,7 @@ export async function createChatBot(chatData) {
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
 				nextMessage.errorsCounter = 0;
-				scrollWindow();
+				scrollWindow(false);
 			}
 		}
 	}

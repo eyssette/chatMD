@@ -1,8 +1,18 @@
 // Gestion du scroll automatique vers le bas
-export function scrollWindow() {
-	setTimeout(() => {
-		window.scrollTo(0, document.body.scrollHeight);
-	}, 100);
+export function scrollWindow(isSmooth) {
+	if (isSmooth) {
+		window.requestAnimationFrame(() => {
+			window.scrollTo({
+				top: document.body.scrollHeight,
+				behavior: "smooth",
+			});
+		});
+	} else {
+		window.scrollTo({
+			top: document.body.scrollHeight,
+			behavior: "auto",
+		});
+	}
 }
 
 export const footerElement = document.getElementById("footer");
