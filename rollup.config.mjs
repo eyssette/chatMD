@@ -8,7 +8,7 @@ import cssnano from "cssnano";
 const mainMdPath = "data/main.md";
 const mainMdContent = fs.readFileSync(mainMdPath, "utf8");
 const otherMdFiles = getAllMdFiles("data").filter(
-	(file) => file !== mainMdPath
+	(file) => !file.endsWith(mainMdPath),
 );
 
 function getAllMdFiles(dir) {
@@ -27,7 +27,7 @@ function getAllMdFiles(dir) {
 
 function createCombinedMdFile() {
 	const filesContent = otherMdFiles.map((file) =>
-		fs.readFileSync(file, "utf8")
+		fs.readFileSync(file, "utf8"),
 	);
 	const combinedContent = [mainMdContent, ...filesContent].join("\n");
 	fs.writeFileSync("data.md", combinedContent);
@@ -45,13 +45,13 @@ export default {
 	},
 	plugins: [
 		string({
-			include: "*.md"
+			include: "*.md",
 		}),
 		{
 			name: "concat-md-files",
 			concatMDfiles() {
 				const filesContent = otherMdFiles.map((file) =>
-					fs.readFileSync(file, "utf8")
+					fs.readFileSync(file, "utf8"),
 				);
 				const combinedContent = [mainMdContent, ...filesContent].join("\n");
 				this.emitFile({
