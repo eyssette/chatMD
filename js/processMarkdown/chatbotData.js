@@ -39,7 +39,8 @@ export function getMarkdownContentandCreateChatbot() {
 				.catch((error) => console.error(error));
 		}
 	} else {
-		createChatBot(parseMarkdown(md));
+		chatData = parseMarkdown(md);
+		createChatBot(chatData);
 	}
 }
 

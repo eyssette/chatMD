@@ -27,7 +27,7 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 4. [Donne-moi des exemples !](Exemples)
 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
 6. [Comment intégrer mon chatbot dans un site ?](Comment intégrer mon chatbot sur un site ?)
-7. [Qui a créé ChatMD ?](Qui a créé ChatMD)
+7. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
 
 ## Markdown
 - markdown
@@ -456,10 +456,16 @@ Il faut bien sûr remplacer `URL_SOURCE_CHATBOT` par l'URL de la source de votre
 
 On peut customiser l'image du widget en ajoutant `data-image="URL_IMAGE"` comme paramètre.
 
-## Qui a créé ChatMD
+## Qui a créé ChatMD ?
 - Qui a créé ChatMD
 - créé ChatMD
+- quel est l'auteur
 - qui
+- eyssette
+- logiciel libre
+- licence
+- sources
+- forge
 
 ChatMD a été créé par Cédric Eyssette, professeur de philosophie et chargé de projet à la DRANE à Lyon.
 

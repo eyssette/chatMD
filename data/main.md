@@ -145,14 +145,14 @@ Que voulez-vous faire ?
 ## Explication en-tête yaml
 
 Un en-tête YAML est une section spéciale dans laquelle on déclare certaines variables, qu'un programme comme ChatMD peut ensuite utiliser.
-Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et terminer l'en-tête par trois tirets `-​-​-`.
+Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et terminer l'en-tête par trois tirets `-​​-​​-`.
 
 Voici un exemple d'en-tête YAML :
 
 ```
--​-​-
+-​​​-​​-
 gestionGrosMots: true
--​-​-
+-​​-​​-
 ```
 
 ## option : Améliorer l'algorithme
@@ -457,7 +457,15 @@ Il faut bien sûr remplacer `URL_SOURCE_CHATBOT` par l'URL de la source de votre
 On peut customiser l'image du widget en ajoutant `data-image="URL_IMAGE"` comme paramètre.
 
 ## Qui a créé ChatMD ?
+- Qui a créé ChatMD
+- créé ChatMD
+- quel est l'auteur
 - qui
+- eyssette
+- logiciel libre
+- licence
+- sources
+- forge
 
 ChatMD a été créé par Cédric Eyssette, professeur de philosophie et chargé de projet à la DRANE à Lyon.
 
