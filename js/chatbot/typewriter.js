@@ -228,6 +228,13 @@ function typeWriter(content, element, accelerateFactor) {
 		// On peut accéler l'effet machine à écrire en regroupant les caractères : au lieu de les afficher un par, on les affiche N par N (N = le facteur d'accélération)
 		if (accelerateFactor) {
 			content = chunkByNChars(content, accelerateFactor);
+		} else {
+			// Accélération par défaut pour Firefox sur Windows
+			const isFirefoxOnWindows =
+				userAgent.includes("Firefox") && userAgent.includes("Windows");
+			if (isFirefoxOnWindows) {
+				content = chunkByNChars(content, 3);
+			}
 		}
 
 		// Effet machine à écrire
