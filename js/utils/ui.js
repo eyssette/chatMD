@@ -1,9 +1,10 @@
 // Gestion du scroll automatique vers le bas
 function scrollToBottomOfPage(behavior) {
-	const heightPage = Math.max(
-		document.body.scrollHeight,
-		document.documentElement.scrollHeight,
-	);
+	const heightPage =
+		Math.max(
+			document.body.scrollHeight,
+			document.documentElement.scrollHeight,
+		) + 150;
 	window.scrollTo({
 		top: heightPage,
 		behavior: behavior,
