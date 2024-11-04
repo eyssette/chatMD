@@ -193,21 +193,27 @@ export async function createChatBot(chatData) {
 			processMessagesSequentially(message);
 		} else {
 			let html = markdownToHTML(message);
-			if (yaml.bots) {
-				html = processMultipleBots(html);
+			if (html.trim() !== "") {
+				if (yaml.bots) {
+					html = processMultipleBots(html);
+				}
+				if (yaml.maths === true) {
+					// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
+					setTimeout(() => {
+						displayMessage(html, isUser, chatMessage).then(() => {
+							if (nextMessage.selected) {
+								chatbotResponse(nextMessage.selected);
+							}
+						});
+					}, 100);
+				} else {
+					displayMessage(html, isUser, chatMessage).then(() => {
+						if (nextMessage.selected) {
+							chatbotResponse(nextMessage.selected);
+						}
+					});
+				}
 			}
-			if (yaml.maths === true) {
-				// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
-				html = convertLatexExpressions(html);
-				setTimeout(() => {
-					displayMessage(html, isUser, chatMessage);
-				}, 100);
-			} else {
-				displayMessage(html, isUser, chatMessage);
-			}
-		}
-		if (nextMessage.selected) {
-			chatbotResponse(nextMessage.selected);
 		}
 	}
 
