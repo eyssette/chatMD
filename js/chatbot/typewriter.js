@@ -142,10 +142,6 @@ function stopTypeWriter(content, typedElement) {
 	manageScrollDetection(false);
 }
 
-function accelerateTypeWriter(content, typedElement, accelerationFactor) {
-	typedElement.stop();
-}
-
 // Pour ajouter des backticks tous les n caractères
 function wrapWithBackticksEveryNcharacters(text, n) {
 	let wrappedText = "";
@@ -197,28 +193,6 @@ function typeWriter(content, element, accelerateFactor) {
 			}
 		}
 
-		let counter = 0;
-		const start = Date.now();
-		observerConnected = true;
-		function handleMutation() {
-			// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
-			const executionTime = Date.now() - start;
-			if (
-				counter == 50 &&
-				executionTime > stopTypeWriterExecutionTimeThreshold &&
-				observerConnected
-			) {
-				stopTypeWriter(content, typed);
-				observerConnected = false;
-				mutationObserver.disconnect();
-			}
-			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
-			if (observerConnected) {
-				scrollWindow(true);
-			}
-			counter++;
-		}
-
 		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
 		content = content.replace(regexMessageOptions, pauseTypeWriter + "`$1`");
 
@@ -234,6 +208,32 @@ function typeWriter(content, element, accelerateFactor) {
 				userAgent.includes("Firefox") && userAgent.includes("Windows");
 			if (isFirefoxOnWindows) {
 				content = chunkByNChars(content, 3);
+			}
+		}
+
+		const start = Date.now();
+		observerConnected = true;
+		let watchExecutionTime = true;
+		function handleMutation() {
+			// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
+			if (watchExecutionTime) {
+				const executionTime = Date.now() - start;
+				if (
+					executionTime > stopTypeWriterExecutionTimeThreshold &&
+					observerConnected
+				) {
+					if (element.innerHTML.length < 90) {
+						stopTypeWriter(content, typed);
+						observerConnected = false;
+						mutationObserver.disconnect();
+					}
+					watchExecutionTime = false;
+				}
+			}
+
+			// On scrolle automatiquement la fenêtre pour suivre l'affichage du texte
+			if (observerConnected) {
+				scrollWindow(true);
 			}
 		}
 
