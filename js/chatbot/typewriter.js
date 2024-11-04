@@ -181,7 +181,7 @@ function chunkByNChars(html, n) {
 let typed;
 const pauseTypeWriter = "^300 ";
 export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
-const stopTypeWriterExecutionTimeThreshold = 800;
+
 // Effet machine à écrire
 function typeWriter(content, element, accelerateFactor) {
 	return new Promise((resolve) => {
@@ -218,11 +218,10 @@ function typeWriter(content, element, accelerateFactor) {
 			// On arrête l'effet “machine à écrire” si le temps d'exécution est trop important
 			if (watchExecutionTime) {
 				const executionTime = Date.now() - start;
-				if (
-					executionTime > stopTypeWriterExecutionTimeThreshold &&
-					observerConnected
-				) {
-					if (element.innerHTML.length < 90) {
+				const checkpointTime = 1000;
+				const minCharLength = 80;
+				if (executionTime > checkpointTime && observerConnected) {
+					if (element.innerHTML.length < minCharLength) {
 						stopTypeWriter(content, typed);
 						observerConnected = false;
 						mutationObserver.disconnect();
