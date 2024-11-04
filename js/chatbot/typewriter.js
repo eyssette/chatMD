@@ -207,7 +207,7 @@ function typeWriter(content, element, accelerateFactor) {
 			const isFirefoxOnWindows =
 				userAgent.includes("Firefox") && userAgent.includes("Windows");
 			if (isFirefoxOnWindows) {
-				content = chunkByNChars(content, 3);
+				content = chunkByNChars(content, 5);
 			}
 		}
 
