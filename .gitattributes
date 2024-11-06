@@ -1,0 +1,2 @@
+# Forcer les fins de ligne en LF pour tous les fichiers texte
+* text=auto eol=lf
