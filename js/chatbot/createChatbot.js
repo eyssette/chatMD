@@ -384,7 +384,10 @@ export async function createChatBot(chatData) {
 							// On privilégie les correspondances sur les keywords plus longs
 							matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
 						}
-					} else if (userInputTextToLowerCase.length > 4) {
+					} else if (
+						(userInputTextToLowerCase.length > 4) &
+						(keyword.length > 5 || isNegativeKeyword)
+					) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 						// On calcule la distance de Levenshtein entre le keyword et la question de l'utilisateur (en parcourant les n-grammes du message de l'utilisateur et en prenant en compte la longueur du n-gramme ; avec n = nombre de mots du keyword)
 						const levenshteinDistance = hasLevenshteinDistanceLessThan(
