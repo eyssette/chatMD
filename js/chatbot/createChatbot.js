@@ -301,7 +301,7 @@ export async function createChatBot(chatData) {
 		let bestMatch = null;
 		let bestMatchScore = 0;
 		let bestDistanceScore = 0;
-		let userInputTextToLowerCase = inputText.toLowerCase();
+		let userInputTextToLowerCase = removeAccents(inputText.toLowerCase());
 		let indexBestMatch;
 
 		let optionsLastResponseKeysToLowerCase;
@@ -362,6 +362,7 @@ export async function createChatBot(chatData) {
 					// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
 					const isNegativeKeyword = keyword.startsWith("! ");
 					keyword = keyword.replace(/^\! /, "");
+					keyword = removeAccents(keyword);
 					if (
 						userInputTextToLowerCase.includes(keyword) &&
 						!isNegativeKeyword
@@ -370,10 +371,6 @@ export async function createChatBot(chatData) {
 						let strictIdentityMatch = false;
 						if (nextMessage.onlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
-							userInputTextToLowerCase = removeAccents(
-								userInputTextToLowerCase,
-							);
-							keyword = removeAccents(keyword);
 							const regexStrictIdentityMatch = new RegExp(`\\b${keyword}\\b`);
 							if (regexStrictIdentityMatch.test(userInputTextToLowerCase)) {
 								strictIdentityMatch = true;
