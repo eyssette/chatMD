@@ -36,7 +36,7 @@ import {
 	hasLevenshteinDistanceLessThan,
 	cosineSimilarity,
 	createVector,
-	longestCommonSubstring,
+	longestCommonSubstringWeightedLength,
 } from "./nlp";
 import { getAnswerFromLLM } from "../LLM/useLLM";
 import {
@@ -385,8 +385,8 @@ export async function createChatBot(chatData) {
 							matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
 						}
 					} else if (
-						(userInputTextToLowerCase.length > 4) &
-						(keyword.length > 5 || isNegativeKeyword)
+						(userInputTextToLowerCase.length > 5) &
+						(keyword.length > 4 || isNegativeKeyword)
 					) {
 						// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 						// On calcule la distance de Levenshtein entre le keyword et la question de l'utilisateur (en parcourant les n-grammes du message de l'utilisateur et en prenant en compte la longueur du n-gramme ; avec n = nombre de mots du keyword)
@@ -399,7 +399,19 @@ export async function createChatBot(chatData) {
 						// Si le keyword est négatif on diminue le score, sinon on l'augmente
 						distanceScore = isNegativeKeyword
 							? distanceScore - levenshteinDistance
-							: distanceScore + levenshteinDistance;
+							: levenshteinDistance > 1
+								? distanceScore + levenshteinDistance
+								: distanceScore;
+						if (!isNegativeKeyword && !nextMessage.onlyIfKeywords) {
+							// Si on n'a pas de keyword négatif on prend en compte la plus longue chaîne commune de caractères (sauf si on doit passer au message seulement s'il y a présence du keyword [cas d'un quiz] : dans ce cas, on doit être plus strict et tester seulement la proximité avec la distance de Levenshtein pour simplement autoriser quelques fautes d'orthographe)
+							distanceScore =
+								distanceScore +
+								longestCommonSubstringWeightedLength(
+									userInputTextToLowerCase,
+									keyword,
+									WORD_LENGTH_FACTOR,
+								);
+						}
 					}
 				}
 				// si on a un score de distance négatif, c'est qu'il y avait des keywords négatifs : donc le matchscore doit être égal à 0
@@ -423,14 +435,6 @@ export async function createChatBot(chatData) {
 					titleResponse == nextMessage.goto
 				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
-				}
-				if (matchScore == 0 && !nextMessage.onlyIfKeywords) {
-					// Si on a toujours un matchScore = 0 alors qu'on vient de faire un calcul de similarité avec le keyword, on regarde quand même la plus longue chaîne de caractère commune entre le keyword et la question de l'utilisateur
-					matchScore =
-						longestCommonSubstring(
-							userInputTextToLowerCase,
-							keywords.join(" "),
-						) * WORD_LENGTH_FACTOR;
 				}
 				if (matchScore > bestMatchScore) {
 					bestMatch = responses;

@@ -1,19 +1,57 @@
 import { nextMessage } from "../processMarkdown/directivesAndSpecialContents";
 
-export function longestCommonSubstring(str1, str2) {
-	let maxLength = 0;
-	const table = Array(str1.length + 1)
-		.fill(null)
-		.map(() => Array(str2.length + 1).fill(0));
-	for (let i = 1; i <= str1.length; i++) {
-		for (let j = 1; j <= str2.length; j++) {
-			if (str1[i - 1] === str2[j - 1]) {
-				table[i][j] = table[i - 1][j - 1] + 1;
-				maxLength = Math.max(maxLength, table[i][j]);
+export function longestCommonSubstringWeightedLength(
+	userInput,
+	keyword,
+	wordLengthFactor,
+) {
+	let longestCommonSubstring = "";
+	let longestCommonSubstringWeightedLength = 0;
+	const positionDecayFactor = 10; // Coefficient d'importance pour la position
+
+	for (let i = 0; i < userInput.length; i++) {
+		for (let j = 0; j < keyword.length; j++) {
+			let substringWeightedLength = 0;
+			let substring = "";
+			let substringLength = 0;
+			let x = i;
+			let y = j;
+			while (
+				x < userInput.length &&
+				y < keyword.length &&
+				userInput[x] === keyword[y]
+			) {
+				substring += userInput[x];
+				x++;
+				y++;
+
+				// On calcule un poids en fonction de deux paramètres :
+				// 1) Prise en compte de la position de la substring dans le keyword : plus la substring est au début du keyword, plus le poids est important
+				// Idée = début d'un mot souvent plus important pour la signification que la fin
+				const positionDecay = j / keyword.length;
+				substringLength = substring.length;
+				const positionFactor = 1 / (1 + positionDecay * positionDecayFactor);
+				// 2) Prise en compte de la longueur de la substring : plus la substring est longue par rapport à la longueur initial du keyword, plus le poids est important
+				const lengthFactor = 1 / (1 + 1 * (keyword.length - substringLength));
+				// Calcul du poids final
+				const positionWeight = positionFactor * lengthFactor;
+
+				// Prise en compte d'une constante qui donne plus ou moins de poids à la longueur des keywords
+				substringWeightedLength =
+					(substringLength + substringLength * wordLengthFactor) *
+					positionWeight;
+			}
+
+			if (
+				substringLength > 4 &&
+				substringLength > longestCommonSubstring.length
+			) {
+				longestCommonSubstring = substring;
+				longestCommonSubstringWeightedLength = substringWeightedLength;
 			}
 		}
 	}
-	return maxLength;
+	return longestCommonSubstringWeightedLength;
 }
 
 function levenshteinDistance(a, b) {
