@@ -199,6 +199,7 @@ export async function createChatBot(chatData) {
 				}
 				if (yaml.maths === true) {
 					// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
+					html = convertLatexExpressions(html);
 					setTimeout(() => {
 						displayMessage(html, isUser, chatMessage).then(() => {
 							if (nextMessage.selected) {
