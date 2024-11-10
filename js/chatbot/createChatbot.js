@@ -201,6 +201,15 @@ export async function createChatBot(chatData) {
 					// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 					html = convertLatexExpressions(html);
 					setTimeout(() => {
+						if (isUser) {
+							// Fix si on veut pouvoir cliquer sur des boutons de réponse qui contiennent du Latex
+							html = html
+								.replace('<span class="katex">`', '<span class="katex">')
+								.replace(
+									'`<span class="katex-html"',
+									'<span class="katex-html',
+								);
+						}
 						displayMessage(html, isUser, chatMessage).then(() => {
 							if (nextMessage.selected) {
 								chatbotResponse(nextMessage.selected);
@@ -663,8 +672,11 @@ export async function createChatBot(chatData) {
 	});
 
 	function handleClick(event) {
-		const target = event.target;
-		if (target.tagName === "A") {
+		let target = event.target;
+		while (target && target.tagName !== "A") {
+			target = target.parentElement;
+		}
+		if (target) {
 			// Gestion du cas où on clique sur un lien
 			const currentUrl = window.location.href;
 			const link = target.getAttribute("href");
@@ -679,7 +691,7 @@ export async function createChatBot(chatData) {
 				nextMessage.lastMessageFromBot = "";
 				nextMessage.goto = "";
 				nextMessage.onlyIfKeywords = false;
-				let messageFromLink = target.innerText;
+				let messageFromLink = yaml.maths ? target.innerHTML : target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yaml.obfuscate
 					? atob(link.replace("#", ""))
