@@ -2,6 +2,7 @@ import { chatContainer } from "../chatbot/typewriter";
 import { markdownToHTML } from "../processMarkdown/markdownToHTML";
 import { yaml } from "../processMarkdown/yaml";
 import { hasSentenceEndMark } from "../utils/strings";
+import { convertLatexExpressions } from "../processMarkdown/convertLatex";
 
 let LLMactive = false;
 
@@ -38,6 +39,12 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 			}
 			window.scrollTo(0, document.body.scrollHeight);
 		});
+		if (yaml.maths == true) {
+			chatMessage.innerHTML = convertLatexExpressions(
+				chatMessage.innerHTML,
+				true,
+			);
+		}
 	}
 	const chatMessageLastChild = chatMessage.lastChild;
 	if (!hasSentenceEndMark(chatMessageLastChild.innerHTML)) {
