@@ -199,17 +199,11 @@ export async function createChatBot(chatData) {
 				}
 				if (yaml.maths === true) {
 					// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
-					html = convertLatexExpressions(html);
+					// Si le message est celui de l'utilisateur, on n'utilise pas les backticks (car ils ne sont utiles que pour l'effet typewriter qui n'est pas utilisé pour les messages de l'utilisateur)
+					html = isUser
+						? convertLatexExpressions(html, true)
+						: convertLatexExpressions(html);
 					setTimeout(() => {
-						if (isUser) {
-							// Fix si on veut pouvoir cliquer sur des boutons de réponse qui contiennent du Latex
-							html = html
-								.replace('<span class="katex">`', '<span class="katex">')
-								.replace(
-									'`<span class="katex-html"',
-									'<span class="katex-html',
-								);
-						}
 						displayMessage(html, isUser, chatMessage).then(() => {
 							if (nextMessage.selected) {
 								chatbotResponse(nextMessage.selected);
