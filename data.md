@@ -442,7 +442,7 @@ Vous pouvez intégrer chatMD dans votre site de deux manières : soit avec une b
 Pour utiliser ChatMD avec une balise iframe, vous pouvez utiliser le code suivant (en modifiant le style CSS si nécessaire) :
 
 ```html
-<iframe src=https://chatmd.forge.apps.education.fr/#URLDEVOTRECHATBOT" style="border:0; width:100%; height:700px"></iframe>
+<iframe src="https://chatmd.forge.apps.education.fr/#URLDEVOTRECHATBOT" style="border:0; width:100%; height:700px"></iframe>
 ```
 
 ### Widget
