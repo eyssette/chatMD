@@ -1,6 +1,6 @@
 import { yaml } from "./yaml";
 
-export function convertLatexExpressions(string) {
+export function convertLatexExpressions(string, noBackticks) {
 	string = string
 		.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
 		.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
@@ -39,7 +39,8 @@ export function convertLatexExpressions(string) {
 		}
 	}
 	// Optimisation pour le Latex avec l'effet typeWriter
-	if (yaml.typeWriter === true) {
+	// On peut empêcher l'utilisation des backticks en mettant noBackticks à "true"
+	if (yaml.typeWriter === true && !noBackticks) {
 		string = string.replaceAll(
 			/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
 			"`$1`",
