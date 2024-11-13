@@ -216,8 +216,10 @@ footer {
 	width: 100%;
 }
 .hideControls footer {
-	width:50%;
-	left:25%;
+	left: 0;
+	right: 0;
+	width: fit-content;
+	max-width: 40%;
 }
 
 footer a,
