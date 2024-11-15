@@ -113,7 +113,10 @@ function fixImageDimensionsCodiMD(md) {
 
 // Conversion du Markdown en HTML
 export function markdownToHTML(text) {
-	text = fixImageDimensionsCodiMD(text.replaceAll("\n\n|", "|"));
+	// Fix pour les tableaux
+	text = text.replaceAll("\n|", "|");
+	// gestion des dimensions des images avec la syntaxe CodiMD
+	text = fixImageDimensionsCodiMD(text);
 	// eslint-disable-next-line no-useless-escape
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
 	return html;
