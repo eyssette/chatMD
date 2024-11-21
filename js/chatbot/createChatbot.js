@@ -7,6 +7,7 @@ import {
 	randomizeArrayWithFixedElements,
 } from "../utils/arrays";
 import { scrollWindow } from "../utils/ui";
+import { getParamsFromURL } from "../utils/urls";
 import {
 	nextMessage,
 	processAudio,
@@ -50,15 +51,9 @@ const sendButton = document.getElementById("send-button");
 
 export async function createChatBot(chatData) {
 	let dynamicVariables = {};
-	const params1 = Object.fromEntries(
-		new URLSearchParams(document.location.search),
-	);
-	const params2 = Object.fromEntries(
-		new URLSearchParams(document.location.hash.replace(/#.*\?/, "")),
-	);
-	const params = { ...params1, ...params2 };
 	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
+	const params = getParamsFromURL();
 	for (const [key, value] of Object.entries(params)) {
 		dynamicVariables["GET" + key] = value;
 	}
