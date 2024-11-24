@@ -141,6 +141,12 @@ export function processAudio(message) {
 			if (match.includes("autoplay")) {
 				const audio = new Audio(v1);
 				audio.play();
+				if (match.includes("loop")) {
+					audio.addEventListener("ended", () => {
+						audio.currentTime = 0;
+						audio.play();
+					});
+				}
 				return `<!--${match}-->`;
 			} else {
 				return match;
