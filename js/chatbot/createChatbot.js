@@ -72,10 +72,16 @@ export async function createChatBot(chatData) {
 	let randomDefaultMessageIndexLastChoice = [];
 
 	// Création du message par le bot ou l'utilisateur
-	function createChatMessage(message, isUser) {
-		const chatMessage = document.createElement("div");
-		chatMessage.classList.add("message");
-		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
+	function createChatMessage(message, isUser, chatMessageElement) {
+		const originalMessage = message;
+		let chatMessage;
+		if (!chatMessageElement) {
+			chatMessage = document.createElement("div");
+			chatMessage.classList.add("message");
+			chatMessage.classList.add(isUser ? "user-message" : "bot-message");
+		} else {
+			chatMessage = chatMessageElement;
+		}
 		nextMessage.selected = undefined;
 		// Gestion des variables fixes prédéfinies
 		if (yaml.variables) {
