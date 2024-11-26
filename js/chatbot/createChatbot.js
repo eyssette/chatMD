@@ -728,15 +728,6 @@ export async function createChatBot(chatData) {
 		initialMessage[1],
 	);
 
-	if (yaml.dynamicContent) {
-		// S'il y a des variables dynamiques dans le message initial, on les traite
-		initialMessage = processDynamicVariables(
-			initialMessage,
-			dynamicVariables,
-			false,
-		);
-	}
-
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
 		/<span class="unique">.*?<\/span>/,
