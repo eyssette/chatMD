@@ -210,6 +210,12 @@ export async function createChatBot(chatData) {
 								chatbotResponse(nextMessage.selected);
 							}
 						});
+						// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
+						message = processSelectElements(
+							message,
+							originalMessage,
+							chatMessage,
+						);
 					}, 100);
 				} else {
 					displayMessage(html, isUser, chatMessage).then(() => {
@@ -217,9 +223,43 @@ export async function createChatBot(chatData) {
 							chatbotResponse(nextMessage.selected);
 						}
 					});
+					// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
+					message = processSelectElements(
+						message,
+						originalMessage,
+						chatMessage,
+					);
 				}
 			}
 		}
+	}
+
+	function processSelectElements(message, originalMessage, chatMessage) {
+		// Sélectionne tous les éléments <select> de la page
+		const allSelectElements = document.querySelectorAll("select");
+		// Parcours chaque <select> et ajoute un écouteur d'événement 'change'
+		allSelectElements.forEach((selectElement) => {
+			const selectedValue = selectElement.getAttribute("data-selected");
+			if (selectedValue) {
+				const optionToSelect = selectElement.querySelector(
+					`option[value="${selectedValue}"]`,
+				);
+				if (optionToSelect) {
+					optionToSelect.selected = true;
+				}
+			}
+			selectElement.addEventListener("change", (event) => {
+				const selectedName = event.target.name;
+				const selectedValue = event.target.value;
+				const regex = new RegExp(`^\`@${selectedName} =.*`, "g");
+				message = originalMessage
+					.replaceAll(regex, "")
+					.replaceAll(/`.*= calc\(@GET.*/g, "");
+				message = `\`@${selectedName} = ${selectedValue}\`` + message;
+				createChatMessage(message, false, chatMessage);
+			});
+		});
+		return message;
 	}
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité (tolérance des fautes d'orthographe et des fautes de frappe)
