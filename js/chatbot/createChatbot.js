@@ -263,7 +263,7 @@ export async function createChatBot(chatData) {
 	}
 
 	const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité (tolérance des fautes d'orthographe et des fautes de frappe)
-	const MATCH_SCORE_IDENTITY = 5; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
+	const MATCH_SCORE_IDENTITY = 10; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
 	const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
 	const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
