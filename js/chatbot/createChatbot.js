@@ -372,8 +372,11 @@ export async function createChatBot(chatData) {
 			for (let i = 0; i < chatDataLength; i++) {
 				const titleResponse = chatData[i][0];
 				const keywordsResponse = chatData[i][1];
-				// Si on a la directive !Next, on teste seulement la similarité avec la réponse indiquée dans !Next et on saute toutes les autres réponses
-				if (nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) {
+				// Si on a la directive !Next ou !SelectNext, on teste seulement la similarité avec la réponse vers laquelle on doit aller et on saute toutes les autres réponses
+				if (
+					(nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) ||
+					(nextMessage.selected && titleResponse != nextMessage.selected)
+				) {
 					continue;
 				}
 				// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
