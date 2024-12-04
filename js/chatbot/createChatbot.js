@@ -369,10 +369,8 @@ export async function createChatBot(chatData) {
 			responseToSelectedOption(optionLink);
 		} else {
 			/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
-			console.log(userInputTextToLowerCase);
 			for (let i = 0; i < chatDataLength; i++) {
 				const titleResponse = chatData[i][0];
-				console.log(titleResponse);
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next ou !SelectNext, on teste seulement la similarité avec la réponse vers laquelle on doit aller et on saute toutes les autres réponses
 				if (
@@ -408,9 +406,6 @@ export async function createChatBot(chatData) {
 					);
 					matchScore = matchScore + cosSim + 0.5;
 				}
-				if (titleResponse.includes("rogramme")) {
-					console.log(keywords);
-				}
 				for (let keyword of keywords) {
 					// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
 					const isNegativeKeyword = keyword.startsWith("! ");
@@ -432,13 +427,10 @@ export async function createChatBot(chatData) {
 							strictIdentityMatch = true;
 						}
 						if (strictIdentityMatch) {
-							console.log(keyword);
-							console.log("strictIdentityMatch");
 							// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
 							matchScore = matchScore + MATCH_SCORE_IDENTITY;
 							// On privilégie les correspondances sur les keywords plus longs
 							matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
-							console.log("ms: " + matchScore);
 						}
 					} else if (
 						(userInputTextToLowerCase.length > 5) &
@@ -497,8 +489,6 @@ export async function createChatBot(chatData) {
 					bestMatchScore = matchScore;
 					indexBestMatch = i;
 				}
-				console.log(matchScore);
-				console.log(distanceScore);
 			}
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 			if (
