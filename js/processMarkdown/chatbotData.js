@@ -17,12 +17,14 @@ export function getMarkdownContentandCreateChatbot() {
 	if (sourceChatBot !== "") {
 		if (Array.isArray(sourceChatBot)) {
 			// Cas où la source est répartie dans plusieurs fichiers
-			const promises = sourceChatBot.map((url) =>
-				fetch(url).then((data) => data.text()),
-			);
+			const promises = sourceChatBot.map((url) => {
+				const processedUrl = handleURL(url);
+				return fetch(processedUrl).then((response) => response.text());
+			});
 			Promise.all(promises)
 				.then((data) => {
 					md = data.join("\n");
+					processYAML(md);
 					chatData = parseMarkdown(md);
 					createChatBot(chatData);
 				})
@@ -33,20 +35,44 @@ export function getMarkdownContentandCreateChatbot() {
 				.then((response) => response.text())
 				.then((data) => {
 					md = data;
-					chatData = parseMarkdown(md);
-					createChatBot(chatData);
+					processYAML(md);
+					if (yaml && yaml.include) {
+						let filesToAdd = yaml.include;
+						filesToAdd =
+							typeof filesToAdd == "object" ? filesToAdd : { filesToAdd };
+						const promises = Object.values(filesToAdd).map((url) => {
+							const processedUrl = handleURL(url);
+							return fetch(processedUrl).then((response) => {
+								if (!response.ok) {
+									throw new Error(
+										`Erreur lors de la récupération du fichier : ${url}`,
+									);
+								}
+								return response.text();
+							});
+						});
+						Promise.all(promises)
+							.then((data) => {
+								md = md + "\n\n" + data.join("\n\n");
+								chatData = parseMarkdown(md);
+								createChatBot(chatData);
+							})
+							.catch((error) => console.error(error));
+					} else {
+						chatData = parseMarkdown(md);
+						createChatBot(chatData);
+					}
 				})
 				.catch((error) => console.error(error));
 		}
 	} else {
+		processYAML(md);
 		chatData = parseMarkdown(md);
 		createChatBot(chatData);
 	}
 }
 
 function parseMarkdown(markdownContent) {
-	processYAML(markdownContent);
-
 	let chatbotData = [];
 	let currentH2Title = null;
 	let currentLiItems = [];

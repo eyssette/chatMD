@@ -282,9 +282,15 @@ Les variables fixes qui commencent par `_` sont interprétées au moment de la g
 
 ### Source répartie entre plusieurs fichiers
 
-Si votre chatbot est très long, vous pouvez répartir la source de votre fichier dans plusieurs fichiers. Pour cela, il faut d'abord dupliquer le projet sur la forge.
+Si votre chatbot est très long, vous pouvez répartir la source de votre fichier dans plusieurs fichiers, soit dans le YAML, soit en récupérant le projet initial.
 
-Vous pourrez ensuite modifier le contenu du fichier `data/main.md` et ajouter des dossiers et des fichiers `.md` dans le dossier `data`. Tous les fichiers `.md` dans ce dossier seront combinés pour définir la source du chatbot au moment de la compilation, en exécutant `npm build`. Il faut au préalable installer les dépendances nécessaires avec `npm install`. Si vous utilisez VSCode, la tâche par défaut est déjà définie pour exécuter l'opération de _build_.
+Dans le YAML, il suffit d'inclure les fichiers additionnels ainsi (on peut mettre autant de fichiers que l'on veut) :
+
+```
+include: ['URL fichier 1', 'URL fichier 2']
+```
+
+Si vous récupérez le projet initial sur la forge, vous pourrez ensuite modifier le contenu du fichier `data/main.md` et ajouter des dossiers et des fichiers `.md` dans le dossier `data`. Tous les fichiers `.md` dans ce dossier seront combinés pour définir la source du chatbot au moment de la compilation, en exécutant `npm build`. Il faut au préalable installer les dépendances nécessaires avec `npm install`. Si vous utilisez VSCode, la tâche par défaut est déjà définie pour exécuter l'opération de _build_.
 
 Vous pouvez également utiliser la fonction “raccourci” afin d'indiquer comme source plusieurs fichiers (en utilisant une _array_ d'URL). 
 
