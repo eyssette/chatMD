@@ -91,6 +91,19 @@ function showdownExtensionGenericAttributes() {
 	];
 }
 
+// Extension Showdown pour autoriser les liens internes avec espaces
+function allowInternalLinksWithSpaces() {
+	return [
+		{
+			type: "output",
+			regex: /\[([^\]]+)\]\(\#([^\)]+)\)/g, // Reconnaît les liens internes avec #
+			replace: function (_, text, anchor) {
+				return `<a href="#${anchor}">${text}</a>`;
+			},
+		},
+	];
+}
+
 // Gestion du markdown dans les réponses du chatbot
 const converter = new Showdown.Converter({
 	emoji: true,
@@ -102,6 +115,7 @@ const converter = new Showdown.Converter({
 	extensions: [
 		showdownExtensionAdmonitions,
 		showdownExtensionGenericAttributes,
+		allowInternalLinksWithSpaces,
 	],
 });
 
