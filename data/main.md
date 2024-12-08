@@ -311,7 +311,9 @@ Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres répo
 
 Un chatbot sert souvent à répondre à des questions, mais on peut aussi utiliser ChatMD pour poser des questions !
 
-Si on veut que l'utilisateur réponde avec le clavier, la directive `!​Next: Titreréponse`, dans le contenu du Markdown, va forcer la redirection vers une réponse particulière : le message de l'utilisateur sera alors comparé aux déclencheurs choisis pour cette réponse ou même au contenu entier de la réponse si on a ajouté `rechercheContenu: true` dans le YAML. Si le message correspond, alors la réponse de l'utilisateur est considérée comme juste (voir cet [exemple](https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A)).
+Si on veut que l'utilisateur réponde avec le clavier, la directive `!​Next: Titreréponse`, dans le contenu du Markdown, va forcer la redirection vers une réponse particulière : le message de l'utilisateur sera alors comparé aux déclencheurs choisis pour cette réponse ou même au contenu entier de la réponse si on a ajouté `rechercheContenu: true` dans le YAML. Si le message correspond, alors la réponse de l'utilisateur est considérée comme juste. Au bout de 3 mauvaises réponses, un bouton vers la bonne réponse s'affiche (sauf si on ajoute le paramètre `!loop`).
+
+&rArr; Voir cet [exemple](https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/sp8dwq5rQGq3pIj2DPBD0A).
 
 Si on veut que l'utilisateur réponde en cliquant sur des propositions, on peut utiliser la propriété `obfuscate: true` dans l'en-tête YAML pour cacher le titre des liens, afin d'éviter de donner un indice en survolant un lien (voir cet [exemple](https://codimd.apps.education.fr/hWgravuHTTmfRydTUfjgWQ?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/hWgravuHTTmfRydTUfjgWQ)).
 

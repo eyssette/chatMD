@@ -25,9 +25,10 @@ export function processDirectiveNext(message) {
 			} else {
 				nextDirectiveContent = nextDirectiveContentSplit[0];
 			}
+			const isLoopMode = nextDirectiveContent.includes("!loop");
 
 			nextMessage.lastMessageFromBot = message;
-			nextMessage.goto = nextDirectiveContent.trim();
+			nextMessage.goto = nextDirectiveContent.replace("!loop", "").trim();
 			nextMessage.onlyIfKeywords = true;
 			nextMessage.messageIfKeywordsNotFound = messageIfError
 				? messageIfError.trim()
@@ -35,7 +36,10 @@ export function processDirectiveNext(message) {
 			nextMessage.messageIfKeywordsNotFound =
 				nextMessage.messageIfKeywordsNotFound + "\n\n";
 			nextMessage.errorsCounter++;
-			if (match && nextMessage.errorsCounter < nextMessage.maxErrors) {
+			if (
+				match &&
+				(nextMessage.errorsCounter < nextMessage.maxErrors || isLoopMode)
+			) {
 				return "";
 			} else {
 				const skipMessage = `<ul class="messageOptions"><li><a href="#${
