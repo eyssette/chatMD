@@ -716,7 +716,9 @@ export async function createChatBot(chatData) {
 			const copyCodeButton = target;
 			const codeBlock = target.parentElement.querySelector("code");
 			navigator.clipboard
-				.writeText(codeBlock.innerText.replaceAll("​", ""))
+				.writeText(
+					codeBlock.innerText.replaceAll("​", "").replaceAll("\n\n", "\n"),
+				)
 				.then(() => {
 					copyCodeButton.innerText = "Copié !";
 					setTimeout(() => (copyCodeButton.innerText = "Copier"), 2000);
