@@ -1,6 +1,7 @@
 import { scrollWindow } from "../utils/ui.js";
 import { yaml } from "../processMarkdown/yaml.js";
 import Typed from "../externals/typed.js";
+import { processCopyCode } from "../processMarkdown/directivesAndSpecialContents.js";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
@@ -299,6 +300,7 @@ export function displayMessage(html, isUser, chatMessage, container) {
 			container = chatContainer;
 		}
 		container.appendChild(chatMessage);
+		html = isUser ? html : processCopyCode(html);
 		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
 		// Pas d'effet machine à écrire s'il y a la préférence : "prefers-reduced-motion"
 		if (

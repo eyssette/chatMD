@@ -246,12 +246,28 @@ footer a:hover {
 pre {
 	line-height: 1em;
 	margin: 2.5em;
-	border: 1px solid grey;
 	padding: 20px;
 	border-radius: 5px;
 	width: fit-content;
 	word-break: break-all;
 	white-space: pre-wrap;
+	background: white;
+	box-shadow: 1px 1px 1px 1px #aaa;
+	position: relative;
+	padding-right: 6em;
+}
+
+button.copyCode {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	padding: 5px 10px;
+	font-size: 12px;
+	cursor: pointer;
+	border: none;
+	border-radius: 3px;
+	background-color: rgb(0, 123, 255);
+	color: white;
 }
 
 .admonition {
@@ -403,7 +419,7 @@ pre {
 	}
 	pre {
 		margin: 0em;
-		width: 95%;
+		width: 75%;
 	}
 	.message > div > .admonition {
 		margin-left: 0.5em;

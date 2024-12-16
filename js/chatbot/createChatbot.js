@@ -711,6 +711,20 @@ export async function createChatBot(chatData) {
 
 	function handleClick(event) {
 		let target = event.target;
+		// Si c'est un bouton "copyCode", on copie le contenu du bloc code dans le presse-papier
+		if (target.classList.contains("copyCode")) {
+			const copyCodeButton = target;
+			const codeBlock = target.parentElement.querySelector("code");
+			navigator.clipboard
+				.writeText(codeBlock.innerText)
+				.then(() => {
+					copyCodeButton.innerText = "Copié !";
+					setTimeout(() => (copyCodeButton.innerText = "Copier"), 2000);
+				})
+				.catch((err) => {
+					console.error("Erreur lors de la copie", err);
+				});
+		}
 		while (target && target.tagName !== "A") {
 			target = target.parentElement;
 		}
