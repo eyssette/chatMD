@@ -68,10 +68,10 @@ config.responsesTitles = ["## "];
 
 // Gestion des addOns
 config.allowedAddOns = {
-	pako: { js: "js/externals/pako.min.js" },
-	kroki: { js: "js/externals/kroki.js" },
+	pako: { js: "js/addOns/pako.min.js" },
+	kroki: { js: "js/addOns/kroki.js" },
 	textFit: {
-		js: "js/externals/textFit.min.js",
+		js: "js/addOns/textFit.min.js",
 		css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>",
 	},
 };

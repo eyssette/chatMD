@@ -113,8 +113,8 @@ export function processYAML(markdownContent) {
 					: yaml.detectBadWords;
 				if (yaml.detectBadWords === true) {
 					Promise.all([
-						loadScript("js/externals/leo-profanity.js"),
-						loadScript("js/externals/badWords-fr.js"),
+						loadScript("js/addOns/leo-profanity.js"),
+						loadScript("js/addOns/badWords-fr.js"),
 					])
 						.then(() => {
 							// Les deux scripts sont chargés et prêts à être utilisés

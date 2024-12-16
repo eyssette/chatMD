@@ -3,5 +3,6 @@
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
-	}
+	},
+	"liveServer.settings.port": 5501
 }
