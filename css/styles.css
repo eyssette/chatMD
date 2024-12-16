@@ -77,7 +77,7 @@ main {
 }
 
 .hideControls #controls #input-container {
-	display:none;
+	display: none;
 }
 .hideControls #controls #send-button {
 	position: absolute;
@@ -174,8 +174,8 @@ button {
 	vertical-align: bottom;
 }
 
-.bot-message>div:first-child * {
-	display:inline;
+.bot-message > div:first-child * {
+	display: inline;
 }
 
 .message > div > .admonition {
@@ -379,7 +379,7 @@ button.copyCode {
 		height: 55px;
 	}
 	.hideControls #controls #send-button {
-		top:10px;
+		top: 10px;
 	}
 	.hideFooter #controls {
 		height: 0px !important;
@@ -401,7 +401,7 @@ button.copyCode {
 	.hideControls footer {
 		left: 0;
 		width: 50%;
-		right:50px;
+		right: 50px;
 	}
 
 	#chat,
