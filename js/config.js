@@ -61,7 +61,7 @@ config.shortcuts = [
 	],
 ];
 
-config.corsProxy = "https://corsproxy.io/?";
+config.corsProxy = "https://corsproxy.io/?url=";
 
 // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 config.responsesTitles = ["## "];
