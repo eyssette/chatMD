@@ -20,7 +20,8 @@
 		</div>
 		<div id="controls">
 			<div id="input-container">
-				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0" role="textbox" aria-label="Votre message pour le chatbot"></div>
+				<label id="user-input-label" class="sr-only" for="user-input">Écrivez votre message</label>
+				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0" role="textbox" aria-labelledby="user-input-label"></div>
 			</div>
 			<button id="send-button">Envoyer</button>
 		</div>
