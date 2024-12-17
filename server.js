@@ -1,60 +1,85 @@
-var http = require("http"),
-    url = require("url"),
-    path = require("path"),
-    fs = require("fs"),
-    { exec } = require('child_process'),
-    port = process.argv[2] || 8888;
+const http = require("http");
+const url = require("url");
+const path = require("path");
+const fs = require("fs");
+const { exec } = require("child_process");
 
-http.createServer(function(request, response) {
-  
+const PORT = process.argv[2] || 8888;
 
-  var uri = url.parse(request.url).pathname
-    , filename = path.join(process.cwd(), uri);
+const ALLOWED_FILES = [
+	"/index.html",
+	"/script.min.js",
+	"/favicon.svg",
+	"/css/styles.min.css",
+	"/css/themes/bubbles.css",
+	"/js/addOns/badWords-fr.js",
+	"/js/addOns/kroki.js",
+	"/js/addOns/leo-profanity.js",
+	"/js/addOns/pako.min.js",
+	"/js/addOns/textFit.min.js",
+];
 
-    fs.stat(filename, function(err,stats) {
-      if (err) {
-        response.writeHead(404, {'Content-Type': 'text/plain'})
-        response.write('404 Not Found\n')
-        response.end()
-        return
-      }
-  
-      if (stats.isDirectory()) filename += '/index.html'
-  
-      fs.readFile(filename, 'binary', function(err, file) {
-        if(err) {
-          response.writeHead(500, {'Content-Type': 'text/plain'})
-          response.write(err + '\n')
-          response.end()
-          return
-        }
-        if(filename.includes("//index.html")) {
-          const apiKey = process.env.LLM_API_KEY ? process.env.LLM_API_KEY.slice(1,-2) : "";
-          file =  '<script>const process={env: {LLM_API_KEY: "'+apiKey+'"}}</script>' + file;
-          response.writeHead(200)
-          response.write(file, 'binary')
-          response.end()
-        } else {
-          response.writeHead(200)
-          response.write(file, 'binary')
-          response.end()
-        }
-      })
-    })
-}).listen(parseInt(port, 10));
+const server = http.createServer((request, response) => {
+	// Validation et nettoyage du chemin de fichier
+	const uri = url.parse(request.url).pathname;
 
-console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+	// Vérification si le fichier est dans la liste des fichiers autorisés
+	if (!ALLOWED_FILES.includes(uri)) {
+		response.writeHead(403, { "Content-Type": "text/plain" });
+		response.end("403 Forbidden");
+		return;
+	}
 
-// Ouvrir automatiquement l'URL dans le navigateur
-const localUrl = `http://localhost:${port}/`;
-  
-// Déterminer la commande en fonction du système d'exploitation
-const startCommand = process.platform === 'win32' ? 'start' :
-                     process.platform === 'darwin' ? 'open' :
-                     'xdg-open'; // Linux
+	const filename = path.normalize(path.join(process.cwd(), uri));
 
-exec(`${startCommand} ${localUrl}`, (err) => {
-  if (err) {
-    console.error(`Failed to open browser: ${err}`);
-  }
+	// Vérification que le fichier est dans le répertoire courant
+	if (!filename.startsWith(process.cwd())) {
+		response.writeHead(403, { "Content-Type": "text/plain" });
+		response.end("403 Forbidden");
+		return;
+	}
+
+	// Détermine le type de contenu en fonction de l'extension
+	const contentType =
+		{
+			".html": "text/html; charset=utf-8",
+			".css": "text/css; charset=utf-8",
+			".svg": "image/svg+xml",
+		}[path.extname(filename)] || "application/octet-stream";
+
+	// Lecture du fichier
+	fs.readFile(filename, (readErr, file) => {
+		if (readErr) {
+			response.writeHead(404, { "Content-Type": "text/plain" });
+			response.end("404 Not Found");
+			return;
+		}
+
+		response.writeHead(200, { "Content-Type": contentType });
+		response.end(file);
+	});
+});
+
+// Démarrage du serveur
+server.listen(PORT, () => {
+	console.log(
+		`Static file server running at\n  => http://localhost:${PORT}/index.html\nCTRL + C to shutdown`,
+	);
+
+	// Ouverture automatique de l'URL dans le navigateur
+	const localUrl = `http://localhost:${PORT}/index.html`;
+
+	// Déterminer la commande en fonction du système d'exploitation
+	const startCommand =
+		process.platform === "win32"
+			? "start"
+			: process.platform === "darwin"
+				? "open"
+				: "xdg-open"; // Linux
+
+	exec(`${startCommand} ${localUrl}`, (err) => {
+		if (err) {
+			console.error(`Failed to open browser: ${err}`);
+		}
+	});
 });
