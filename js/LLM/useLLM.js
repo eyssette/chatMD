@@ -8,42 +8,54 @@ let LLMactive = false;
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, isCohere) {
+	if (!streamableObject.getReader) {
+		throw new TypeError(
+			"streamableObject n'est pas une ReadableStream compatible.",
+		);
+	}
+	// Récupération du lecteur de stream
+	const reader = streamableObject.getReader();
 	let accumulatedChunks = "";
-	for await (const chunk of streamableObject) {
-		const chunkString = new TextDecoder().decode(chunk);
-		const chunkArray = chunkString
-			.trim()
-			.split("\n")
-			.filter((element) => element.trim().length > 0);
-		chunkArray.forEach((chunkElement) => {
-			if (isCohere) {
-				// Cas de l'API Cohere
-				const chunkObject = JSON.parse(chunkElement.trim());
-				if (chunkObject.event_type == "text-generation" && LLMactive) {
-					const chunkMessage = chunkObject.text;
-					accumulatedChunks = accumulatedChunks + chunkMessage;
-					chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
-				}
-				LLMactive = chunkObject.is_finished ? false : true;
-			} else {
-				// Cas des autres API (modèles openAI)
-				const chunkObjectString = chunkElement.replace("data: ", "");
-				if (!chunkObjectString.includes("[DONE]") && LLMactive) {
-					const chunkObject = JSON.parse(chunkObjectString);
-					const chunkMessage = chunkObject.choices[0].delta.content;
-					accumulatedChunks = accumulatedChunks + chunkMessage;
-					chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+	let done = false;
+	while (!done) {
+		const { value, done: streamDone } = await reader.read();
+		done = streamDone;
+		if (value) {
+			const chunkString = new TextDecoder().decode(value);
+			const chunkArray = chunkString
+				.trim()
+				.split("\n")
+				.filter((element) => element.trim().length > 0);
+			chunkArray.forEach((chunkElement) => {
+				if (isCohere) {
+					// Cas de l'API Cohere
+					const chunkObject = JSON.parse(chunkElement.trim());
+					if (chunkObject.event_type == "text-generation" && LLMactive) {
+						const chunkMessage = chunkObject.text;
+						accumulatedChunks = accumulatedChunks + chunkMessage;
+						chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+					}
+					LLMactive = chunkObject.is_finished ? false : true;
 				} else {
-					LLMactive = false;
+					// Cas des autres API (modèles openAI)
+					const chunkObjectString = chunkElement.replace("data: ", "");
+					if (!chunkObjectString.includes("[DONE]") && LLMactive) {
+						const chunkObject = JSON.parse(chunkObjectString);
+						const chunkMessage = chunkObject.choices[0].delta.content;
+						accumulatedChunks = accumulatedChunks + chunkMessage;
+						chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+					} else {
+						LLMactive = false;
+					}
 				}
+				window.scrollTo(0, document.body.scrollHeight);
+			});
+			if (yaml.maths == true) {
+				chatMessage.innerHTML = convertLatexExpressions(
+					chatMessage.innerHTML,
+					true,
+				);
 			}
-			window.scrollTo(0, document.body.scrollHeight);
-		});
-		if (yaml.maths == true) {
-			chatMessage.innerHTML = convertLatexExpressions(
-				chatMessage.innerHTML,
-				true,
-			);
 		}
 	}
 	const chatMessageLastChild = chatMessage.lastChild;
