@@ -68,6 +68,10 @@ config.responsesTitles = ["## "];
 
 // Gestion des addOns
 config.allowedAddOns = {
+	maths: {
+		js: "js/addOns/katex/katex.min.js",
+		css: "js/addOns/katex/katex.min.css",
+	},
 	pako: { js: "js/addOns/pako.min.js" },
 	kroki: { js: "js/addOns/kroki.js" },
 	textFit: {

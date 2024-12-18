@@ -18,6 +18,8 @@ const ALLOWED_FILES = [
 	"/js/addOns/leo-profanity.js",
 	"/js/addOns/pako.min.js",
 	"/js/addOns/textFit.min.js",
+	"/js/addOns/katex/katex.min.js",
+	"/js/addOns/katex/katex.min.css",
 ];
 
 // Type MIME sécurisé
@@ -46,8 +48,14 @@ const server = http.createServer((request, response) => {
 	const parsedUrl = url.parse(request.url);
 	const requestedPath = decodeURIComponent(parsedUrl.pathname); // Nettoyage des caractères encodés
 
+	const isAllowedFontFile =
+		requestedPath.includes("js/addOns/katex/fonts/") &&
+		(requestedPath.endsWith(".woff2") ||
+			requestedPath.endsWith(".woff") ||
+			requestedPath.endsWith(".ttf"));
+
 	// Vérification si le fichier demandé est autorisé
-	if (!ALLOWED_FILES.includes(requestedPath)) {
+	if (!ALLOWED_FILES.includes(requestedPath) && !isAllowedFontFile) {
 		response.writeHead(403, { "Content-Type": "text/plain" });
 		response.end("403 Forbidden: Access Denied");
 		return;
@@ -79,8 +87,7 @@ const server = http.createServer((request, response) => {
 		response.writeHead(200, {
 			"Content-Type": contentType,
 			"X-Content-Type-Options": "nosniff",
-			"Content-Security-Policy":
-				"script-src 'self' https://cdn.jsdelivr.net/npm/katex@0.16.9/",
+			"Content-Security-Policy": "script-src 'self'",
 			"Strict-Transport-Security":
 				"max-age=63072000; includeSubDomains; preload",
 			"Cache-Control": "no-cache, no-store, must-revalidate",

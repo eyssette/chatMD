@@ -38,15 +38,9 @@ export function processYAML(markdownContent) {
 			const yamlData = loadYAML(markdownContent.split("---")[1]);
 			yaml = yamlData ? deepMerge(yaml, yamlData) : yaml;
 			if (yaml.maths === true) {
-				yaml.addOns = yaml.addOns ? yaml.addOns + ",textFit" : "textFit";
-				Promise.all([
-					loadScript(
-						"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js",
-					),
-					loadCSS(
-						"https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css",
-					),
-				]);
+				yaml.addOns = yaml.addOns
+					? yaml.addOns + ",maths,textFit"
+					: "maths,textFit";
 			}
 			if (yaml.addOns) {
 				// Gestion des addOns (scripts et css en plus)
