@@ -65,16 +65,6 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 	return true;
 }
 
-// On utilise une variable LLMactive pour indiquer l'état d'activité du LLM
-document.body.addEventListener("click", () => {
-	LLMactive = false;
-});
-document.body.addEventListener("keypress", (event) => {
-	if (event.key === "Enter") {
-		LLMactive = false;
-	}
-});
-
 // Pour envoyer un message d'erreur si la connexion au LLM n'a pas été correctement configurée ou bien si cette connexion ne fonctionne pas
 function messageIfErrorWithGetAnswerFromLLM(error) {
 	const errorMessageElement = document.createElement("div");
