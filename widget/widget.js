@@ -83,7 +83,7 @@ widget.innerHTML = '<img src="' + imageWidget + '"/>';
 const chatbotBox = document.createElement("div");
 
 chatbotBox.innerHTML =
-	'<iframe sandbox="allow-scripts allow-modals" src="https://chatmd.forge.apps.education.fr/' +
+	'<iframe sandbox="allow-scripts allow-modals allow-popups" src="https://chatmd.forge.apps.education.fr/' +
 	chatbotSRC +
 	'" width="400" height="600" style="border:none"></iframe>';
 
