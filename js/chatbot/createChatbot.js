@@ -7,7 +7,7 @@ import {
 	randomizeArrayWithFixedElements,
 } from "../utils/arrays";
 import { scrollWindow } from "../utils/ui";
-import { getParamsFromURL } from "../utils/urls";
+import { getParamsFromURL, goToNewChatbot } from "../utils/urls";
 import {
 	nextMessage,
 	processAudio,
@@ -686,11 +686,16 @@ export async function createChatBot(chatData) {
 	});
 
 	document.addEventListener("keypress", (event) => {
-		userInput.focus();
 		if (event.key === "Enter") {
 			event.preventDefault();
-			sendButton.click();
-			scrollWindow(false);
+			if (event.target.id == "urlSourceChatbot") {
+				const urlNewChatbot = event.target.value.trim();
+				goToNewChatbot(urlNewChatbot);
+			} else {
+				userInput.focus();
+				sendButton.click();
+				scrollWindow(false);
+			}
 		} else if (
 			userInput.parentElement.parentElement.classList.contains("hideControls")
 		) {
@@ -708,9 +713,16 @@ export async function createChatBot(chatData) {
 	userInput.addEventListener("blur", function () {
 		this.classList.add("placeholder");
 	});
-
 	function handleClick(event) {
 		let target = event.target;
+		// Cas où on a cliqué sur un bouton pour ouvrir un nouveau chatbot
+		if (target.id == "openNewChatbot") {
+			const urlNewChatbot = target.parentElement
+				.querySelector("#urlSourceChatbot")
+				.value.trim();
+			goToNewChatbot(urlNewChatbot);
+			return;
+		}
 		// Si c'est un bouton "copyCode", on copie le contenu du bloc code dans le presse-papier
 		if (target.classList.contains("copyCode")) {
 			const copyCodeButton = target;

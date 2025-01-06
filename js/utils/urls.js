@@ -112,3 +112,13 @@ export function getParamsFromURL() {
 	const params = { ...params1, ...params2 };
 	return params;
 }
+
+// Pour ouvrir un nouveau chatbot
+export function goToNewChatbot(urlNewChatbot) {
+	if (urlNewChatbot && urlNewChatbot.indexOf(".") > -1) {
+		const fullUrl = window.location.origin + `/#${urlNewChatbot}`;
+		window.open(fullUrl, "_blank");
+	} else {
+		alert("Veuillez entrer une URL valide.");
+	}
+}

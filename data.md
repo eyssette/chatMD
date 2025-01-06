@@ -9,7 +9,10 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 :::info C'est très simple !
 1. Créez un fichier en Markdown accessible en ligne.
 2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
-3. Votre chatbot est alors accessible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) <br>(Mettez l'url de votre fichier à la place de URL) !
+3. Votre chatbot est alors accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL`
+
+<label for="urlSourceChatbot">Collez ici l'URL de votre fichier :</label> <input type="url" id="urlSourceChatbot" placeholder="Votre URL"> <button id="openNewChatbot">OK</button>
+Cliquez ensuite sur "OK" pour accéder à votre chatbot
 :::
 
 On peut imaginer **de nombreux usages** :
