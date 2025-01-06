@@ -18,48 +18,89 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 	let accumulatedChunks = "";
 	let done = false;
 	while (!done) {
-		const { value, done: streamDone } = await reader.read();
-		done = streamDone;
+		let value;
+		try {
+			const result = await reader.read();
+			value = result.value;
+			done = result.done;
+		} catch (error) {
+			console.error("Erreur lors de la lecture du flux :", error);
+			break; // Arrête la boucle en cas d'erreur de lecture
+		}
+
 		if (value) {
 			const chunkString = new TextDecoder().decode(value);
 			const chunkArray = chunkString
 				.trim()
 				.split("\n")
 				.filter((element) => element.trim().length > 0);
-			chunkArray.forEach((chunkElement) => {
-				if (isCohere) {
-					// Cas de l'API Cohere
-					const chunkObject = JSON.parse(chunkElement.trim());
-					if (chunkObject.event_type == "text-generation" && LLMactive) {
-						const chunkMessage = chunkObject.text;
-						accumulatedChunks = accumulatedChunks + chunkMessage;
-						chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
-					}
-					LLMactive = chunkObject.is_finished ? false : true;
-				} else {
-					// Cas des autres API (modèles openAI)
-					const chunkObjectString = chunkElement.replace("data: ", "");
-					if (!chunkObjectString.includes("[DONE]") && LLMactive) {
-						const chunkObject = JSON.parse(chunkObjectString);
-						const chunkMessage = chunkObject.choices[0].delta.content;
-						accumulatedChunks = accumulatedChunks + chunkMessage;
-						chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+
+			for (const chunkElement of chunkArray) {
+				try {
+					if (isCohere) {
+						// Cas de l'API Cohere
+						const chunkObject = JSON.parse(chunkElement.trim());
+						if (chunkObject.event_type === "text-generation" && LLMactive) {
+							const chunkMessage = chunkObject.text || "";
+							accumulatedChunks += chunkMessage;
+							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+						}
+						LLMactive = chunkObject.is_finished ? false : true;
 					} else {
-						LLMactive = false;
+						// Cas des autres API (modèles OpenAI)
+						const chunkObjectString = chunkElement.replace("data: ", "").trim();
+
+						// Vérifie si le flux a fini
+						if (chunkObjectString.includes("[DONE]")) {
+							LLMactive = false;
+							continue;
+						}
+
+						let chunkObject;
+						try {
+							chunkObject = JSON.parse(chunkObjectString);
+						} catch (jsonError) {
+							console.warn(
+								"Erreur JSON.parse sur chunkObjectString :",
+								chunkObjectString,
+								jsonError,
+							);
+							continue;
+						}
+
+						if (chunkObject.choices && chunkObject.choices[0]?.delta?.content) {
+							const chunkMessage = chunkObject.choices[0].delta.content || "";
+							accumulatedChunks += chunkMessage;
+							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+						}
 					}
+
+					// Scroll automatique en bas
+					window.scrollTo(0, document.body.scrollHeight);
+				} catch (error) {
+					console.error("Erreur lors du traitement d'un chunk :", error);
+					continue;
 				}
-				window.scrollTo(0, document.body.scrollHeight);
-			});
-			if (yaml.maths == true) {
-				chatMessage.innerHTML = convertLatexExpressions(
-					chatMessage.innerHTML,
-					true,
-				);
+			}
+
+			// Si LaTeX est activé, convertit les expressions mathématiques
+			if (yaml?.maths === true) {
+				try {
+					chatMessage.innerHTML = convertLatexExpressions(
+						chatMessage.innerHTML,
+						true,
+					);
+				} catch (latexError) {
+					console.warn("Erreur lors de la conversion LaTeX :", latexError);
+				}
 			}
 		}
 	}
 	const chatMessageLastChild = chatMessage.lastChild;
-	if (!hasSentenceEndMark(chatMessageLastChild.innerHTML)) {
+	if (
+		chatMessageLastChild &&
+		!hasSentenceEndMark(chatMessageLastChild.innerHTML)
+	) {
 		chatMessageLastChild.innerHTML = chatMessageLastChild.innerHTML + " …";
 	}
 	return true;
