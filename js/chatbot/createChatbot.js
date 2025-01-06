@@ -162,34 +162,44 @@ export async function createChatBot(chatData) {
 			}
 			function processMessagesSequentially(parts) {
 				// On a découpé en parties le message et selon qu'on est dans une partie Markdown ou une partie LLM : on gère le contenu en fonction en enchaînant des Promesses, afin d'attendre que le contenu soit généré jusqu'à la fin pour pouvoir passer à la suite
-				let index = 0;
-				return parts.reduce((promiseChain, currentPart) => {
-					const chatMessageElement = document.createElement("div");
-					let content;
-					let useLLM = false;
-					if (index % 2 == 0) {
-						// Gestion du contenu en Markdown
-						content = markdownToHTML(currentPart);
-						if (yaml.bots) {
-							content = processMultipleBots(content);
+				return parts
+					.reduce((promiseChain, currentPart, index) => {
+						const chatMessageElement = document.createElement("div");
+						let content;
+						let useLLM = false;
+						try {
+							if (index % 2 == 0) {
+								// Gestion du contenu en Markdown
+								content = markdownToHTML(currentPart);
+								if (yaml.bots) {
+									content = processMultipleBots(content);
+								}
+							} else {
+								// Gestion du contenu qui fait appel à un LLM
+								useLLM = true;
+								content = currentPart;
+							}
+						} catch (error) {
+							console.error("Erreur lors du traitement de la partie :", error);
+							return promiseChain; // Passer à la prochaine partie
 						}
-					} else {
-						// Gestion du contenu qui fait appel à un LLM
-						useLLM = true;
-						content = currentPart;
-					}
-					index++;
-					// Pour chaque élément, on ajoute une promesse à la chaîne
-					return promiseChain.then(() =>
-						displayMessageOrGetAnswerFromLLM(
-							useLLM,
-							content,
-							isUser,
-							chatMessageElement,
-							chatMessage,
-						),
-					);
-				}, Promise.resolve());
+						// Pour chaque élément, on ajoute une promesse à la chaîne
+						return promiseChain.then(() =>
+							displayMessageOrGetAnswerFromLLM(
+								useLLM,
+								content,
+								isUser,
+								chatMessageElement,
+								chatMessage,
+							),
+						);
+					}, Promise.resolve())
+					.catch((error) => {
+						console.error(
+							"Une erreur s'est produite lors du traitement des messages :",
+							error,
+						);
+					});
 			}
 			processMessagesSequentially(message);
 		} else {
