@@ -12,7 +12,7 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 3. Votre chatbot est alors accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL`
 
 <label for="urlSourceChatbot">Collez ici l'URL de votre fichier et cliquez sur “OK” pour accéder à votre chatbot :</label>
-\`<input type="url" id="urlSourceChatbot" placeholder="Votre URL" role="textbox" title="Votre URL" size="60"> <button id="openNewChatbot" type="button">OK</button>\`
+\`<input type="url" id="urlSourceChatbot" placeholder="Votre URL" role="textbox" title="Votre URL" style="width:75%"> <button id="openNewChatbot" type="button">OK</button>\`
 :::
 
 On peut imaginer **de nombreux usages** :

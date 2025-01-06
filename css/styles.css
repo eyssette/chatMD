@@ -256,6 +256,9 @@ pre {
 	position: relative;
 	padding-right: 6em;
 }
+code {
+	word-break: break-word;
+}
 
 button.copyCode {
 	position: absolute;
