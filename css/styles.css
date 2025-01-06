@@ -311,6 +311,10 @@ button.copyCode {
 	font-size: 1.15em;
 }
 
+.admonitionTitle:empty {
+	display: none;
+}
+
 .info .admonitionTitle,
 .note .admonitionTitle,
 .spoiler .admonitionTitle {

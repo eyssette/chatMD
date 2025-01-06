@@ -18,6 +18,7 @@ function showdownExtensionAdmonitions() {
 				text = text.replace(
 					regex,
 					(match, type, collapsible, title, content, offset) => {
+						title = title.replace("<br />", "");
 						// Vérifier si l'admonition est dans un bloc code en regardant autour
 						const before = text.substring(0, offset);
 						const isInCode = /<code>|<pre>/.test(
@@ -36,13 +37,13 @@ function showdownExtensionAdmonitions() {
 						if (collapsible) {
 							return `<div class="admonition ${type}">
 							<details>
-								<summary class="admonitionTitle">${title || type}</summary>
+								<summary class="admonitionTitle">${title}</summary>
 								<div class="admonitionContent">${content.trim()}</div>
 							</details>
 						</div>`;
 						} else {
 							return `<div class="admonition ${type}">
-							<div class="admonitionTitle">${title || type}</div>
+							<div class="admonitionTitle">${title}</div>
 							<div class="admonitionContent">${content.trim()}</div>
 						</div>`;
 						}
