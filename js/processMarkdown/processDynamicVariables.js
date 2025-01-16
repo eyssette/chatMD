@@ -84,7 +84,7 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
 		message = message.replaceAll(
-			/`@([^\s]*?) ?= ?(?<!@)(.*?)`/g,
+			/`@([^\s]*?) ?= ?([^@]*?)`/g,
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
 					dynamicVariables[variableName] = variableValue;
