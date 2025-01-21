@@ -36,6 +36,8 @@ const MIME_TYPES = {
 	".jpeg": "image/jpeg",
 };
 
+const crypto = require("crypto"); // Pour générer un nonce
+
 // Serveur HTTP sécurisé
 const server = http.createServer((request, response) => {
 	// Limite la taille maximale des requêtes pour éviter le DoS
@@ -83,26 +85,55 @@ const server = http.createServer((request, response) => {
 			return;
 		}
 
-		// Réponse avec des en-têtes sécurisés
-		response.writeHead(200, {
-			"Content-Type": contentType,
-			"X-Content-Type-Options": "nosniff",
-			"Content-Security-Policy": "script-src 'self'",
-			"Strict-Transport-Security":
-				"max-age=63072000; includeSubDomains; preload",
-			"Cache-Control": "no-cache, no-store, must-revalidate",
-			Pragma: "no-cache",
-			Expires: "0",
-		});
+		if (requestedPath === "/index.html") {
+			fs.readFile(filePath, "utf8", (err, data) => {
+				if (err) {
+					response.writeHead(500, { "Content-Type": "text/plain" });
+					response.end("500 Internal Server Error");
+					return;
+				}
 
-		// Diffusion du fichier en streaming
-		const stream = createReadStream(filePath);
-		stream.on("error", (error) => {
-			console.error("File read error:", error);
-			response.writeHead(500, { "Content-Type": "text/plain" });
-			response.end("500 Internal Server Error");
-		});
-		stream.pipe(response);
+				const apiKey = process.env.LLM_API_KEY
+					? process.env.LLM_API_KEY.slice(1, -2)
+					: "";
+				const nonce = crypto.randomBytes(16).toString("base64"); // Générer un nonce
+
+				const injectedScript = `<script nonce="${nonce}">const process={env: {LLM_API_KEY: "${apiKey}"}}</script>`;
+				const modifiedData = injectedScript + data;
+
+				response.writeHead(200, {
+					"Content-Type": contentType,
+					"X-Content-Type-Options": "nosniff",
+					"Content-Security-Policy": `script-src 'self' 'nonce-${nonce}'`,
+					"Strict-Transport-Security":
+						"max-age=63072000; includeSubDomains; preload",
+					"Cache-Control": "no-cache, no-store, must-revalidate",
+					Pragma: "no-cache",
+					Expires: "0",
+				});
+				response.end(modifiedData);
+			});
+		} else {
+			// Diffusion du fichier en streaming pour les autres fichiers
+			response.writeHead(200, {
+				"Content-Type": contentType,
+				"X-Content-Type-Options": "nosniff",
+				"Content-Security-Policy": "script-src 'self'",
+				"Strict-Transport-Security":
+					"max-age=63072000; includeSubDomains; preload",
+				"Cache-Control": "no-cache, no-store, must-revalidate",
+				Pragma: "no-cache",
+				Expires: "0",
+			});
+
+			const stream = createReadStream(filePath);
+			stream.on("error", (error) => {
+				console.error("File read error:", error);
+				response.writeHead(500, { "Content-Type": "text/plain" });
+				response.end("500 Internal Server Error");
+			});
+			stream.pipe(response);
+		}
 	});
 });
 
