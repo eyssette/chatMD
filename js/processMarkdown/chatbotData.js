@@ -73,6 +73,7 @@ export function getMarkdownContentandCreateChatbot() {
 }
 
 function parseMarkdown(markdownContent) {
+	markdownContent = markdownContent.replaceAll(`\r`, `\n`);
 	let chatbotData = [];
 	let currentH2Title = null;
 	let currentLiItems = [];
