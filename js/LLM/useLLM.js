@@ -14,7 +14,12 @@ function detectApiType(chunkElement) {
 
 		if (chunkObject.response) {
 			return "ollama";
-		} else if (chunkObject.choices && chunkObject.choices[0]?.delta?.content) {
+		} else if (
+			chunkObject.choices &&
+			chunkObject.choices[0] &&
+			chunkObject.choices[0].delta &&
+			chunkObject.choices[0].delta.content
+		) {
 			return "openai";
 		}
 	} catch (error) {
@@ -130,7 +135,12 @@ async function readStream(streamableObject, chatMessage, APItype) {
 							continue;
 						}
 
-						if (chunkObject.choices && chunkObject.choices[0]?.delta?.content) {
+						if (
+							chunkObject.choices &&
+							chunkObject.choices[0] &&
+							chunkObject.choices[0].delta &&
+							chunkObject.choices[0].delta.content
+						) {
 							const chunkMessage = chunkObject.choices[0].delta.content || "";
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
