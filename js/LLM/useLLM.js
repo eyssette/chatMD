@@ -4,10 +4,29 @@ import { yaml } from "../processMarkdown/yaml";
 import { hasSentenceEndMark } from "../utils/strings";
 import { convertLatexExpressions } from "../processMarkdown/convertLatex";
 
+// Fonction pour détecter le type d'API en fonction du contenu
+function detectApiType(chunkElement) {
+	const normalizedChunk = chunkElement.trim();
+	try {
+		const chunkObject = JSON.parse(
+			normalizedChunk.replace("data: ", "").trim(),
+		);
+
+		if (chunkObject.response) {
+			return "ollama";
+		} else if (chunkObject.choices && chunkObject.choices[0]?.delta?.content) {
+			return "openai";
+		}
+	} catch (error) {
+		console.warn("Erreur lors de la détection du type d'API :", error);
+	}
+	return null; // Retourne null si le type ne peut être déterminé
+}
+
 let LLMactive = false;
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
-async function readStream(streamableObject, chatMessage, isCohere) {
+async function readStream(streamableObject, chatMessage, APItype) {
 	if (!streamableObject.getReader) {
 		throw new TypeError(
 			"streamableObject n'est pas une ReadableStream compatible.",
@@ -37,17 +56,60 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 
 			for (const chunkElement of chunkArray) {
 				try {
-					if (isCohere) {
+					// Si le type d'API n'est pas encore détecté, on tente de l'inférer
+					if (!APItype) {
+						APItype = detectApiType(chunkElement);
+					}
+					if (APItype === "cohere") {
 						// Cas de l'API Cohere
+						// détection de la version utilisée
+						const cohereAPIversion = yaml.useLLM.url.match(/v\d+/)?.[0];
+						function textInChunk(chunkObject) {
+							switch (cohereAPIversion) {
+								case "v1":
+									return chunkObject.text;
+								case "v2":
+									return chunkObject.message.content[0].text;
+								default:
+									throw new Error(
+										"Version d'API Cohere non supportée : " + cohereAPIversion,
+									);
+							}
+						}
+
 						const chunkObject = JSON.parse(chunkElement.trim());
 						if (chunkObject.event_type === "text-generation" && LLMactive) {
-							const chunkMessage = chunkObject.text || "";
+							const chunkMessage = textInChunk(chunkObject) || "";
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 						}
 						LLMactive = chunkObject.is_finished ? false : true;
-					} else {
-						// Cas des autres API (modèles OpenAI)
+					} else if (APItype === "ollama") {
+						// Cas de l'API Ollama
+						const chunkObjectString = chunkElement.replace("data: ", "").trim();
+						// Vérifie si le flux a fini
+						if (chunkObjectString.includes("[DONE]")) {
+							LLMactive = false;
+							continue;
+						}
+						let chunkObject;
+						try {
+							chunkObject = JSON.parse(chunkObjectString);
+						} catch (jsonError) {
+							console.warn(
+								"Erreur JSON.parse sur chunkObjectString :",
+								chunkObjectString,
+								jsonError,
+							);
+							continue;
+						}
+						if (chunkObject.response) {
+							const chunkMessage = chunkObject.response || "";
+							accumulatedChunks += chunkMessage;
+							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+						}
+					} else if (APItype === "openai") {
+						// Cas du modèle openAI
 						const chunkObjectString = chunkElement.replace("data: ", "").trim();
 
 						// Vérifie si le flux a fini
@@ -84,7 +146,7 @@ async function readStream(streamableObject, chatMessage, isCohere) {
 			}
 
 			// Si LaTeX est activé, convertit les expressions mathématiques
-			if (yaml?.maths === true) {
+			if (yaml && yaml.maths === true) {
 				try {
 					chatMessage.innerHTML = convertLatexExpressions(
 						chatMessage.innerHTML,
@@ -145,7 +207,8 @@ export function getAnswerFromLLM(
 		if (informations.length > 0) {
 			informations = yaml.useLLM.RAGprompt + informations;
 		}
-		const isCohere = yaml.useLLM.url.includes("cohere");
+		const isCohere = yaml && yaml.useLLM.url.includes("cohere");
+		const APItype = isCohere ? "cohere" : undefined;
 
 		if (isCohere) {
 			bodyObject.message =
@@ -191,7 +254,7 @@ export function getAnswerFromLLM(
 							container = chatContainer;
 						}
 						container.appendChild(chatMessageElement);
-						readStream(response.body, chatMessageElement, isCohere).then(() =>
+						readStream(response.body, chatMessageElement, APItype).then(() =>
 							resolve(),
 						);
 					} else {
