@@ -12,7 +12,7 @@ function detectApiType(chunkElement) {
 			normalizedChunk.replace("data: ", "").trim(),
 		);
 
-		if (chunkObject.response) {
+		if (chunkObject.message) {
 			return "ollama";
 		} else if (
 			chunkObject.choices &&
@@ -108,8 +108,8 @@ async function readStream(streamableObject, chatMessage, APItype) {
 							);
 							continue;
 						}
-						if (chunkObject.response) {
-							const chunkMessage = chunkObject.response || "";
+						if (chunkObject.message && chunkObject.message.content) {
+							const chunkMessage = chunkObject.message.content || "";
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 						}
