@@ -4,6 +4,8 @@ import { yaml } from "../processMarkdown/yaml";
 import { hasSentenceEndMark } from "../utils/strings";
 import { convertLatexExpressions } from "../processMarkdown/convertLatex";
 
+const LLM_MAX_PROCESSING_TIME = 15000; // Limite de temps de 15 secondes pour la production d'une réponse par un LLM
+
 // Fonction pour détecter le type d'API en fonction du contenu
 function detectApiType(chunkElement) {
 	const normalizedChunk = chunkElement.trim();
@@ -41,7 +43,14 @@ async function readStream(streamableObject, chatMessage, APItype) {
 	const reader = streamableObject.getReader();
 	let accumulatedChunks = "";
 	let done = false;
+	const startTime = Date.now();
 	while (!done) {
+		const elapsedTime = Date.now() - startTime;
+		if (elapsedTime >= LLM_MAX_PROCESSING_TIME) {
+			console.log("La réponse du LLM a pris plus de temps qu'autorisé");
+			LLMactive = false;
+			break;
+		}
 		let value;
 		try {
 			const result = await reader.read();
