@@ -91,9 +91,9 @@ async function readStream(streamableObject, chatMessage, APItype) {
 						LLMactive = chunkObject.is_finished ? false : true;
 					} else if (APItype === "ollama") {
 						// Cas de l'API Ollama
-						const chunkObjectString = chunkElement.replace("data: ", "").trim();
+						const chunkObjectString = chunkElement.trim();
 						// Vérifie si le flux a fini
-						if (chunkObjectString.includes("[DONE]")) {
+						if (chunkObjectString.includes('"done":true')) {
 							LLMactive = false;
 							continue;
 						}
