@@ -4,8 +4,6 @@ import { yaml } from "../processMarkdown/yaml";
 import { hasSentenceEndMark } from "../utils/strings";
 import { convertLatexExpressions } from "../processMarkdown/convertLatex";
 
-const LLM_MAX_PROCESSING_TIME = 15000; // Limite de temps de 15 secondes pour la production d'une réponse par un LLM
-
 // Fonction pour détecter le type d'API en fonction du contenu
 function detectApiType(chunkElement) {
 	const normalizedChunk = chunkElement.trim();
@@ -34,6 +32,7 @@ let LLMactive = false;
 
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, APItype) {
+	const LLM_MAX_PROCESSING_TIME = yaml.useLLM.maxProcessingTime;
 	if (!streamableObject.getReader) {
 		throw new TypeError(
 			"streamableObject n'est pas une ReadableStream compatible.",

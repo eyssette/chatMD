@@ -112,6 +112,7 @@ const defaultMaxTokens = 300;
 const defaultSystemPrompt =
 	"Tu es un assistant efficace qui réponds en français et pas dans une autre langue. Les phrases de réponse doivent être courtes et claires.";
 const defaultPostprompt = "\nN'oublie pas de répondre en français.";
+const maxProcessingTime = 20000; // Limite de temps de 20 secondes pour la production d'une réponse par un LLM
 
 config.yaml.useLLM = {
 	url: "",
@@ -123,6 +124,7 @@ config.yaml.useLLM = {
 	maxTokens: defaultMaxTokens,
 	preprompt: "",
 	postprompt: defaultPostprompt,
+	maxProcessingTime: maxProcessingTime,
 };
 
 // Paramètres pour le RAG
