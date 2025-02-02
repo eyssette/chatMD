@@ -206,9 +206,9 @@ Pour personnaliser l'apparence du chatbot, vous pouvez utiliser ces paramètres 
 - `typewriter: false` désactive l'effet “machine à écrire”
 - `clavier: false` désactive le champ d'entrée clavier si on souhaite simplement guider l'utilisateur avec les options proposées en fin de chaque réponse.
 
-Si on veut activer ou désactiver le clavier pour certaines réponses, on met `&#96@​KEYBOARD = true&#96` ou `&#96@​KEYBOARD = false&#96` à l'intérieur de son code markdown pour les réponses en question..
+Si on veut activer ou désactiver le clavier pour certaines réponses, il faut activer le contenu dynamique dans le YAML (avec `contenuDynamique: true`) et mettre ensuite `&#96@​KEYBOARD = true&#96` ou `&#96@​KEYBOARD = false&#96` à l'intérieur de son code markdown pour les réponses en question..
 
-Si on veut désactiver l'effet typewriter pour un passage seulement de son texte, on utilise la syntaxe suivante dans son code markdown : `\\&#96texte sans effet typewriter\\&#96`
+Si on veut désactiver l'effet typewriter pour un passage seulement de son texte, on utilise la syntaxe suivante dans son code markdown : `\&#96texte sans effet typewriter\&#96`
 
 On peut définir dans la balise style des classes personnalisées et les utiliser ensuite dans son texte en ajoutant cette classe en fin de ligne ainsi : ` {.maClasse}`.
 
