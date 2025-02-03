@@ -308,7 +308,8 @@ export function displayMessage(html, isUser, chatMessage, container) {
 			window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
 			yaml.typeWriter === false
 		) {
-			chatMessage.innerHTML = html;
+			// La désactivation de l'effet typewriter avec les backticks n'est plus nécessaire : on les supprime
+			chatMessage.innerHTML = html.replaceAll("`", "");
 			resolve();
 		} else {
 			typeWriter(html, chatMessage).then(() => resolve());
