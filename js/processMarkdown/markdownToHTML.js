@@ -126,6 +126,5 @@ export function markdownToHTML(text) {
 	text = fixImageDimensionsCodiMD(text);
 	// eslint-disable-next-line no-useless-escape
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
-	console.log(html);
 	return html;
 }
