@@ -63,7 +63,7 @@ export async function createChatBot(chatData) {
 	const chatDataLength = chatData.length;
 	const chatbotNameHTML = markdownToHTML(chatbotName).replace(/<\/?p>/g, "");
 	document.getElementById("chatbot-name").innerHTML = chatbotNameHTML;
-	document.title = chatbotNameHTML;
+	document.title = chatbotNameHTML.replace(/<[^>]*>?/gm, "");
 
 	let optionsLastResponse = null;
 	let randomDefaultMessageIndex = Math.floor(
