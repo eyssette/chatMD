@@ -1,6 +1,9 @@
 main {
 	background: white;
 }
+h1 {
+	margin-bottom: 0.25em;
+}
 .user-message:after,
 .user-message:before {
 	content: "";
