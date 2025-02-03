@@ -3,23 +3,26 @@ const widgetStyle = `
 #chatmdWidget {
 	width: 80px;
 	height: 80px;
-	background-color: #f4f4f4;
-	padding: 10px;
 	cursor: pointer;
 	position: fixed;
 	border-radius:50%;
 	bottom:40px;
 	right:40px;
 	font-family:sans-serif;
-	z-index:999;
+	z-index:10000;
 }
 
 #chatmdWidget div:nth-of-type(1) {
+	position:absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+	background-color: #f4f4f4;
+	padding: 10px;
+	border-radius:50%;
+	z-index:1;
 }
 
 #chatmdWidget img {
@@ -49,11 +52,11 @@ const widgetStyle = `
 		width: 100%;
 		top: 0px;
 		bottom: auto;
-		height: 500px;
+		height: 100vh;
 	}
 	#chatmdWidget div:nth-of-type(2) iframe {
 		width: 100%;
-		height: 540px;
+		height: 100%;
 	}
 }
 `;

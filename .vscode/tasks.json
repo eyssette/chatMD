@@ -16,6 +16,7 @@
 			"label": "Minify Widget",
 			"type": "shell",
 			"command": "rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
+			// "command": "npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
 		}
 	]
 }
