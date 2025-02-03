@@ -10,7 +10,6 @@ function showdownExtensionAdmonitions() {
 			filter: (text) => {
 				// Supprimer les balises <p> autour des admonitions
 				text = text.replace(/<p>:::(.*?)<\/p>/g, ":::$1");
-
 				// Expression régulière pour capturer le contenu des admonitions
 				const regex = /:::(\w+)(?:\s+(collapsible)?)?\s*(.*?)\n([\s\S]*?):::/g;
 
@@ -35,17 +34,10 @@ function showdownExtensionAdmonitions() {
 
 						// Construire le HTML de l'admonition
 						if (collapsible) {
-							return `<div class="admonition ${type}">
-							<details>
-								<summary class="admonitionTitle">${title}</summary>
-								<div class="admonitionContent">${content.trim()}</div>
-							</details>
-						</div>`;
+							// On affiche d'un coup, sans effet typewriter, le contenu interne de l'admonition si elle est collapsible
+							return `<div class="admonition ${type}">\`<details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content.trim()}</div></details>\`</div>`;
 						} else {
-							return `<div class="admonition ${type}">
-							<div class="admonitionTitle">${title}</div>
-							<div class="admonitionContent">${content.trim()}</div>
-						</div>`;
+							return `<div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content.trim()}</div></div>`;
 						}
 					},
 				);
@@ -134,5 +126,6 @@ export function markdownToHTML(text) {
 	text = fixImageDimensionsCodiMD(text);
 	// eslint-disable-next-line no-useless-escape
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
+	console.log(html);
 	return html;
 }
