@@ -24,7 +24,7 @@ function showdownExtensionAdmonitions() {
 						admonitionRegex,
 						(match, type, collapsible, title = "", content, offset) => {
 							const admonitionFirstLine = match.slice(0, match.indexOf("\n"));
-							const hasTitle = admonitionFirstLine.trim().indexOf(" ") > 0;
+							const hasTitle = admonitionFirstLine.trim().indexOf(" ") !== -1;
 
 							// Si l'admonition n'a pas de titre, la variable title fait en fait partie du contenu interne de l'admonition
 							if (!hasTitle) {
@@ -44,17 +44,20 @@ function showdownExtensionAdmonitions() {
 							if (isInCode) {
 								return match;
 							}
-
+							const isCollapsible =
+								collapsible || admonitionFirstLine.indexOf("spoiler") !== -1;
 							// Nettoyer "collapsible" du titre si présent
-							if (collapsible) {
-								title = title.replace("collapsible", "").trim();
+							if (isCollapsible) {
+								title = title
+									? title.replace("collapsible", "").trim()
+									: "Détails";
 							}
 
 							// Traiter récursivement le contenu pour les admonitions imbriquées
 							content = processAdmonitions(content, level + 1);
 
 							// Générer le HTML selon que l'admonition soit repliable ou non
-							if (collapsible) {
+							if (isCollapsible) {
 								// Si l'admonition est repliable, on désactive l'effet typewriter en encadrant le contenu de details avec : \`
 								return `<div class="admonition ${type}">
 									\`<details>
