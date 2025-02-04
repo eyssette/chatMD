@@ -177,6 +177,13 @@ button {
 .bot-message > div:first-child:not(.admonition) * {
 	display: inline;
 }
+.bot-message > :first-child.admonition:before {
+	position: absolute;
+	margin-top: -2em;
+}
+.bot-message > :first-child.admonition {
+	margin-top: 3em;
+}
 
 .message > div > .admonition {
 	margin-left: 3em;
