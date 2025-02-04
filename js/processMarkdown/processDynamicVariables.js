@@ -2,6 +2,7 @@ import { config } from "../config";
 import { yaml } from "./yaml";
 import { nextMessage } from "./directivesAndSpecialContents";
 import { tryConvertStringToNumber } from "../utils/strings";
+import { getRandomElement } from "../utils/arrays";
 
 let getLastMessage = false;
 
@@ -87,7 +88,9 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			/`@([^\s]*?) ?= ?([^@]*?)`/g,
 			function (match, variableName, variableValue) {
 				if (!match.includes("calc(") && !match.includes("@INPUT")) {
-					dynamicVariables[variableName] = variableValue;
+					const variableValueSplit = variableValue.split("///");
+					const variableValueChoice = getRandomElement(variableValueSplit);
+					dynamicVariables[variableName] = variableValueChoice;
 					return match.includes("KEYBOARD") ? "<!--" + match + "-->" : "";
 				} else {
 					return match;
