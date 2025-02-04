@@ -2,52 +2,82 @@ import Showdown from "../externals/showdown.js";
 
 // Extensions pour Showdown
 
-// Gestion des admonitions
+// Extension Showdown pour gérer les admonitions (boîtes d'avertissement/info/note)
 function showdownExtensionAdmonitions() {
 	return [
 		{
 			type: "output",
 			filter: (text) => {
-				// Supprimer les balises <p> autour des admonitions
-				text = text.replace(/<p>:::(.*?)<\/p>/g, ":::$1");
-				// Expression régulière pour capturer le contenu des admonitions
-				const regex = /:::(\w+)(?:\s+(collapsible)?)?\s*(.*?)\n([\s\S]*?):::/g;
+				// Nettoyer les balises <p> autour des admonitions
+				text = text.replace(/<p>(:{3,4}.*?)<\/p>/g, "$1");
 
-				// Traiter chaque match de l'admonition
-				text = text.replace(
-					regex,
-					(match, type, collapsible, title, content, offset) => {
-						title = title.replace("<br />", "");
-						// Vérifier si l'admonition est dans un bloc code en regardant autour
-						const before = text.substring(0, offset);
-						const isInCode = /<code>|<pre>/.test(
-							before.slice(before.lastIndexOf("<")),
-						);
+				// Fonction récursive pour traiter les admonitions imbriquées
+				function processAdmonitions(text, level = 3) {
+					const colons = ":".repeat(level);
+					// Regex pour capturer les admonitions
+					const admonitionRegex = new RegExp(
+						`${colons}(\\w+)(?:\\s+(collapsible))?(?:\\s+([^\\n]+)\\n)?([\\s\\S]*?)(\n)${colons}(\n|$)`,
+						"g",
+					);
 
-						if (isInCode) {
-							// Si l'admonition est dans un bloc de code, on ne fait rien
-							return match;
-						}
+					return text.replace(
+						admonitionRegex,
+						(match, type, collapsible, title = "", content, offset) => {
+							const admonitionFirstLine = match.slice(0, match.indexOf("\n"));
+							const hasTitle = admonitionFirstLine.trim().indexOf(" ") > 0;
 
-						// Retirer "collapsible" du titre si présent
-						if (collapsible) title = title.replace("collapsible", "").trim();
+							// Si l'admonition n'a pas de titre, la variable title fait en fait partie du contenu interne de l'admonition
+							if (!hasTitle) {
+								content = title + content;
+								title = "";
+							}
 
-						// Construire le HTML de l'admonition
-						if (collapsible) {
-							// On affiche d'un coup, sans effet typewriter, le contenu interne de l'admonition si elle est collapsible
-							return `<div class="admonition ${type}">\`<details><summary class="admonitionTitle">${title}</summary><div class="admonitionContent">${content.trim()}</div></details>\`</div>`;
-						} else {
-							return `<div class="admonition ${type}"><div class="admonitionTitle">${title}</div><div class="admonitionContent">${content.trim()}</div></div>`;
-						}
-					},
-				);
+							// Nettoyer le titre des sauts de ligne HTML
+							title = title.replace("<br />", "");
 
-				return text;
+							// Vérifier si l'admonition est à l'intérieur d'un bloc de code
+							const before = text.substring(0, offset);
+							const isInCode = /<code>|<pre>/.test(
+								before.slice(before.lastIndexOf("<")),
+							);
+
+							if (isInCode) {
+								return match;
+							}
+
+							// Nettoyer "collapsible" du titre si présent
+							if (collapsible) {
+								title = title.replace("collapsible", "").trim();
+							}
+
+							// Traiter récursivement le contenu pour les admonitions imbriquées
+							content = processAdmonitions(content, level + 1);
+
+							// Générer le HTML selon que l'admonition soit repliable ou non
+							if (collapsible) {
+								// Si l'admonition est repliable, on désactive l'effet typewriter en encadrant le contenu de details avec : \`
+								return `<div class="admonition ${type}">
+									\`<details>
+										 <summary class="admonitionTitle">${title}</summary>
+										 <div class="admonitionContent">${content.trim()}</div>
+									</details>\`
+							  </div>`;
+							} else {
+								return `<div class="admonition ${type}">
+									<div class="admonitionTitle">${title}</div>
+									<div class="admonitionContent">${content.trim()}</div>
+							  </div>`;
+							}
+						},
+					);
+				}
+
+				// Démarrer le traitement avec le niveau de base (3 ":")
+				return processAdmonitions(text);
 			},
 		},
 	];
 }
-
 // Gestion des attributs génériques du type {.classe1 .classe2}
 function showdownExtensionGenericAttributes() {
 	return [
