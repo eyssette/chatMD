@@ -805,11 +805,11 @@ export async function createChatBot(chatData) {
 
 	chatContainer.addEventListener("click", (event) => handleClick(event));
 
+	const initialMessageContent = initialMessage[0].join("\n");
+	const initialMessageOptions = initialMessage[1];
+
 	// Envoi du message d'accueil du chatbot
-	initialMessage = gestionOptions(
-		initialMessage[0].join("\n"),
-		initialMessage[1],
-	);
+	initialMessage = gestionOptions(initialMessageContent, initialMessageOptions);
 
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage.replace(
