@@ -1,15 +1,5 @@
----
-name: Bug
-about: Créer un ticket pour faire un rapport de bug
-title: ''
-labels: ''
-assignees: ''
----
-
-<!-- Merci d'aider à améliorer ChatMD.
-Pour faire votre rapport de bug, merci d'utiliser le format ci-dessous.-->
-
-/label "Type: Bug"
+<!-- Merci d'aider à améliorer ChatMD !
+Pour signaler un bug, merci d'utiliser le format ci-dessous.-->
 
 **Votre configuration:**
 Système d'exploitation : 
