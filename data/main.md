@@ -339,8 +339,12 @@ Dans le contenu du Markdown, la directive : `!​Select: x` peut être ajoutée 
 
 Enfin, la directive `!​SelectNext: titre question 1 / titre question 2 / titre question 3` permet de renvoyer de manière aléatoire vers une question parmi un ensemble de questions qu'on a choisies (voir cet [exemple](https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/Yvq5u2btTOmrTFCFoXGTwg)).
 
+On peut utiliser de l'aléatoire également dans les variables fixes ou dans les variables dynamiques.
+
 1. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
-2. [Je veux voir les autres options de configurations](Options de configuration)
+2. [Comment peut-on utiliser les variables fixes ?](option : Organiser son fichier source)
+3. [Comment peut-on utiliser les variables dynamiques ?](option : Variables dynamiques)
+4. [Je veux voir les autres options de configurations](Options de configuration)
 
 
 ## option : Variables dynamiques
@@ -354,7 +358,9 @@ Pour utiliser les variables dynamiques, il faut ajouter `contenuDynamique: true`
 
 On peut avoir des variables dynamiques définies selon le parcours de l'utilisateur, et conditionner du contenu en fonction de ces variables.
 
-On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : `@​mavariable=contenu de ma variable` que l'on place soit dans un bloc code dans le contenu de sa réponse : `&#96@​mavariable=contenu de ma variable&#96`, soit directement dans l'intitulé du lien du bouton de réponse : `1. [intitulé @​mavariable=contenu de ma variable](titre réponse)`.
+On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : `@​mavariable = contenu de ma variable` que l'on place soit dans un bloc code dans le contenu de sa réponse : `&#96@​mavariable = contenu de ma variable&#96`, soit directement dans l'intitulé du lien du bouton de réponse : `1. [intitulé @​mavariable=contenu de ma variable](titre réponse)`.
+
+On peut utiliser de l'aléatoire dans sa variable en mettant les différents choix possibles que ChatMD sélectionnera au hasard. On utilise cette syntaxe : `@mavariable = option 1 /// option 2 /// option 3`
 
 Pour le conditionnement, on commence un bloc code avec `i​f` puis l'ensemble des conditions (par exemple `&#96i​f @​mavariable1 == valeur1 && @​mavariable == valeur2&#96`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code :  `&#96end​if&#96`.
 
