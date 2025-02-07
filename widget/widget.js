@@ -91,7 +91,7 @@ const chatbotBox = document.createElement("div");
 chatbotBox.innerHTML =
 	'<iframe sandbox="allow-scripts allow-modals allow-popups allow-same-origin" src="https://chatmd.forge.apps.education.fr/' +
 	chatbotSRC +
-	'" width="400" height="600" style="border:none"></iframe>';
+	'" width="400" height="600" style="border:none" allow="fullscreen"></iframe>';
 
 // Ajouter les sous-divs à l'élément principal
 widgetContainer.appendChild(widget);
