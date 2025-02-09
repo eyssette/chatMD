@@ -82,14 +82,14 @@ function processAdmonition(text, level) {
 	return text;
 }
 
-// Gestion des admonitions
+// Gestion des admonitions (encadrés)
 function showdownExtensionAdmonitions() {
 	return [
 		{
 			type: "output",
 			filter: (text) => {
-				// Supprimer les balises <p> autour des admonitions
-				text = text.replace(/(<p>)?(:::.*?)<\/p>/g, "$2");
+				// Supprimer les balises <p> ou les balises <br /> autour ou à la fin des admonitions
+				text = text.replace(/(<p>)?(:::.*?)(<\/p>|<br \/>)/g, "$2");
 				let level = 3;
 				text = processAdmonition(text, level);
 				while (text.includes(":".repeat(level + 1))) {
