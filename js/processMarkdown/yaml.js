@@ -44,7 +44,7 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.addOns) {
 				// Gestion des addOns (scripts et css en plus)
-				yaml.addOns = yaml.addOns.replace(" ", "").split(",");
+				yaml.addOns = yaml.addOns.replaceAll(" ", "").split(",");
 				let addOnsDependenciesArray = [];
 				// On ajoute aussi les dépendances pour chaque addOn
 				for (const [addOn, addOnDependencies] of Object.entries(
