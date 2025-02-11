@@ -52,7 +52,9 @@ function sanitizeCode(code) {
 	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
 	const forbiddenExpressions = codeWithoutAllowedOperations.split("///");
 	forbiddenExpressions.forEach((forbiddenExpression) => {
-		code = code.replaceAll(forbiddenExpression, "");
+		if (!forbiddenExpression.includes("undefined")) {
+			code = code.replaceAll(forbiddenExpression, "");
+		}
 	});
 	return code;
 }
