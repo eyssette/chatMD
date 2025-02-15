@@ -73,6 +73,8 @@ export function getMarkdownContentandCreateChatbot() {
 }
 
 function parseMarkdown(markdownContent) {
+	// Fix pour l'utilisation de \\ dans le Latex
+	markdownContent = markdownContent.replaceAll("\\\\", "&#92;&#92;");
 	markdownContent = markdownContent.replaceAll(`\r`, `\n`);
 	let chatbotData = [];
 	let currentH2Title = null;

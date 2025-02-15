@@ -15,19 +15,22 @@ export function convertLatexExpressions(string, noBackticks) {
 			// On récupère la formule mathématique
 			let mathInExpressionLatex = expressionLatex
 				.replace("&#92;[", "")
-				.replace("&#92;]", "");
-			mathInExpressionLatex = mathInExpressionLatex
+				.replace("&#92;]", "")
 				.replace("&#92;(", "")
-				.replace("&#92;)", "");
-			mathInExpressionLatex = mathInExpressionLatex
+				.replace("&#92;)", "")
 				.replaceAll("&lt;", "\\lt")
-				.replaceAll("&gt;", "\\gt");
-			mathInExpressionLatex = mathInExpressionLatex
+				.replaceAll("&gt;", "\\gt")
+				.replaceAll("align<em>", "align*")
+				.replaceAll("align</em>", "align*")
 				.replaceAll("<em>", "_")
 				.replaceAll("</em>", "_")
 				.replaceAll("&amp;", "&")
+				.replaceAll("\\left{", "\\left\\{")
+				.replaceAll("\\right}", "\\right\\}")
 				// eslint-disable-next-line no-useless-escape
-				.replaceAll(" ", "\\ ");
+				.replaceAll(" ", "\\ ")
+				// Fix pour l'utilisation de \\ dans le Latex
+				.replaceAll("&#92;&#92;", "\\\\");
 			// On convertit la formule mathématique en HTML avec Katex
 			const stringWithLatex = window.katex.renderToString(
 				mathInExpressionLatex,
