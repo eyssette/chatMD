@@ -32,13 +32,15 @@ export function convertLatexExpressions(string, noBackticks) {
 				// Fix pour l'utilisation de \\ dans le Latex
 				.replaceAll("&#92;&#92;", "\\\\");
 			// On convertit la formule mathématique en HTML avec Katex
-			const stringWithLatex = window.katex.renderToString(
-				mathInExpressionLatex,
-				{
-					displayMode: inlineMaths,
-				},
-			);
-			string = string.replace(expressionLatex, stringWithLatex);
+			if (window.katex) {
+				const stringWithLatex = window.katex.renderToString(
+					mathInExpressionLatex,
+					{
+						displayMode: inlineMaths,
+					},
+				);
+				string = string.replace(expressionLatex, stringWithLatex);
+			}
 		}
 	}
 	// Optimisation pour le Latex avec l'effet typeWriter
