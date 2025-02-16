@@ -146,6 +146,7 @@ Que voulez-vous faire ?
 10. [Qu'est-ce qu'un en-tête YAML ?](Explication en-tête yaml)
 
 ## Explication en-tête yaml
+- yaml
 
 Un en-tête YAML est une section spéciale dans laquelle on déclare certaines variables, qu'un programme comme ChatMD peut ensuite utiliser.
 Cet en-tête doit se trouver au tout début du fichier. Il faut commencer et terminer l'en-tête par trois tirets `-​​-​​-`.
@@ -225,6 +226,7 @@ Bloc de texte Markdown multiligne
 
 ## option : Gérer des contenus particuliers
 - admonition
+- encadré
 - iframe
 - audio
 - son
@@ -311,6 +313,9 @@ Vous pouvez aussi ajouter dans le contenu Markdown des liens vers d'autres répo
 
 ## option : Utiliser ChatMD pour faire des quiz
 - quiz
+- poser des questions
+- qcm
+- questions
 
 Un chatbot sert souvent à répondre à des questions, mais on peut aussi utiliser ChatMD pour poser des questions !
 
@@ -347,6 +352,7 @@ On peut utiliser de l'aléatoire également dans les variables fixes ou dans les
 
 
 ## option : Variables dynamiques
+- dynamique
 - variables dynamiques
 - conditionnement
 - conditionner
