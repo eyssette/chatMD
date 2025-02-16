@@ -359,7 +359,7 @@ On peut avoir des variables dynamiques définies selon le parcours de l'utilisat
 
 On définit une variable soit dans le contenu en Markdown de la réponse, soit dans un bouton de réponse en fin de message. On utilise la syntaxe suivante : `@​mavariable = contenu de ma variable` que l'on place soit dans un bloc code dans le contenu de sa réponse : `&#96@​mavariable = contenu de ma variable&#96`, soit directement dans l'intitulé du lien du bouton de réponse : `1. [intitulé @​mavariable=contenu de ma variable](titre réponse)`.
 
-On peut utiliser de l'aléatoire dans sa variable en mettant les différents choix possibles que ChatMD sélectionnera au hasard. On utilise cette syntaxe : `@mavariable = option 1 /// option 2 /// option 3`
+On peut utiliser de l'aléatoire dans sa variable en mettant les différents choix possibles que ChatMD sélectionnera au hasard. On utilise cette syntaxe : `&#96@mavariable = option 1 /// option 2 /// option 3&#96`
 
 Pour le conditionnement, on commence un bloc code avec `i​f` puis l'ensemble des conditions (par exemple `&#96i​f @​mavariable1 == valeur1 && @​mavariable == valeur2&#96`), puis on met ensuite ce qui doit s'afficher si cette condition est vérifiée, et on termine par un bloc code :  `&#96end​if&#96`.
 
@@ -367,11 +367,11 @@ Pour le conditionnement, on commence un bloc code avec `i​f` puis l'ensemble d
 
 On peut également récupérer des paramètres dans l'URL pour les utiliser ensuite. Chaque paramètre est récupéré dans une variable : `@​GE​Tnomduparamètre` que l'on peut utiliser comme les autres variables dynamiques.
 
-On peut récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : `@​mavariable  = @​INPUT : Titre réponse`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
+On peut récupérer le contenu d'un message entré par un utilisateur pour l'assigner à une variable dynamique en utilisant la syntaxe : `&#96@​mavariable  = @​INPUT : Titre réponse&#96`. Le message de l'utilisateur sera assigné à la variable et l'utilisateur sera redirigé automatiquement vers la réponse dont on a indiqué le titre.
 
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/_2I1TWwBT22IML7BsR7sWw)
 
-On peut enfin utiliser des opérations élémentaires pour calculer la valeur d'une variable (afin de calculer un score par exemple). Par exemple, on pourrait écrire : `@​mavariable  = c​alc(@​score+1)` soit dans un bloc code, soit dans un bouton en fin de message. À la place de `c​alc(@​score+1)`, on peut mettre une expression plus complexes avec plusieurs variables dynamiques. Les opérations autorisées sont l'addition, la soustraction, la multiplication, la division, la concaténation (avec le même signe que pour l'addition).
+On peut enfin utiliser des opérations élémentaires pour calculer la valeur d'une variable (afin de calculer un score par exemple). Par exemple, on pourrait écrire : `&#96@​mavariable  = c​alc(@​score+1)&#96` soit dans un bloc code, soit dans un bouton en fin de message. À la place de `c​alc(@​score+1)`, on peut mettre une expression plus complexes avec plusieurs variables dynamiques. Les opérations autorisées sont l'addition, la soustraction, la multiplication, la division, la concaténation (avec le même signe que pour l'addition).
 
 &rArr; Voir cet [exemple](https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow?both) et le [chatbot correspondant](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/6ZFeM407RbyCPxpAxKU8ow)
 
