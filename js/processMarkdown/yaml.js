@@ -79,6 +79,9 @@ export function processYAML(markdownContent) {
 				if (typeof yaml.responsesTitles === "string") {
 					// Cas où le yaml pour les titres des réponses ne contient pas un tableau, mais un seul élément
 					yaml.responsesTitles = [yaml.responsesTitles];
+				} else if (typeof yaml.responsesTitles == "object") {
+					// Cas où le yaml renvoie un objet : conversion en array
+					yaml.responsesTitles = Object.values(yaml.responsesTitles);
 				}
 			}
 			if (yaml.style) {

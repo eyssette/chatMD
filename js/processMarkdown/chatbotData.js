@@ -90,8 +90,8 @@ function parseMarkdown(markdownContent) {
 	let randomOrder = false;
 
 	// On récupère le contenu principal sans l'en-tête YAML s'il existe
-	let indexFirstH1title = markdownContent.indexOf("# ");
-	const indexFirstH2title = markdownContent.indexOf("## ");
+	let indexFirstH1title = markdownContent.indexOf("\n# ");
+	const indexFirstH2title = markdownContent.indexOf("\n## ");
 	if (indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
 		indexFirstH1title = 0;
 	}
@@ -139,7 +139,6 @@ function parseMarkdown(markdownContent) {
 	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
 	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
 	let ifCondition = "";
-
 	for (let line of contentAfterFirstPartLines) {
 		if (startsWithAnyOf(line, yaml.responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
