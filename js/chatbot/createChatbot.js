@@ -503,10 +503,7 @@ export async function createChatBot(chatData) {
 				}
 			}
 			// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
-			if (
-				(bestMatch && bestMatchScore > BESTMATCH_THRESHOLD) ||
-				nextMessage.onlyIfKeywords
-			) {
+			if (bestMatch || nextMessage.onlyIfKeywords) {
 				if (
 					bestMatch &&
 					nextMessage.onlyIfKeywords &&
