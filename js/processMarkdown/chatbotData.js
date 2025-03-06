@@ -59,6 +59,11 @@ export function getMarkdownContentandCreateChatbot() {
 							})
 							.catch((error) => console.error(error));
 					} else {
+						const isNotMarkdown = !md.includes("# ");
+						if (isNotMarkdown) {
+							md =
+								"# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown";
+						}
 						chatData = parseMarkdown(md);
 						createChatBot(chatData);
 					}
