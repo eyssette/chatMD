@@ -809,8 +809,8 @@ export async function createChatBot(chatData) {
 	initialMessage = gestionOptions(initialMessageContent, initialMessageOptions);
 
 	createChatMessage(initialMessage, false);
-	initialMessage = initialMessage.replace(
-		/<span class="unique">.*?<\/span>/,
-		"",
-	); // S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
+	initialMessage = initialMessage
+		.replace(/<span class="unique">.*?<\/span>/g, "")
+		.replace(/<section class="unique">[\s\S]*?<\/section>/gm, "");
+	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }
