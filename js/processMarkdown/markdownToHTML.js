@@ -152,6 +152,7 @@ function allowInternalLinksWithSpaces() {
 
 // Gestion du markdown dans les réponses du chatbot
 const converter = new Showdown.Converter({
+	tasklists: true,
 	emoji: true,
 	parseImgDimensions: true,
 	simpleLineBreaks: true,
