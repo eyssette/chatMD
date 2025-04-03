@@ -59,7 +59,10 @@ function formatContentStopTypeWriter(content) {
 						.replace(pauseTypeWriterMultipleBots, "") +
 					"`",
 	);
-	return contentArrayFiltered.join(" ");
+	const contentWithNoPause = contentArrayFiltered
+		.join(" ")
+		.replace(/\^\d+/g, "");
+	return contentWithNoPause;
 }
 
 // Active ou désactive la détection des mouvements pour l’auto-scroll
