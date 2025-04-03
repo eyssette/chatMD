@@ -31,11 +31,11 @@ h1 {
 }
 .bot-message {
 	background: #e5e5ea;
-	text-shadow: 1px 1px 0 \#f3f3f4;
+	text-shadow: 1px 1px 0 #f3f3f4;
 }
 .user-message {
 	color: #fff;
-	text-shadow: 1px 1px 0 \#1b96fc;
+	text-shadow: 1px 1px 0 #1b96fc;
 	background-color: #39a1f9;
 }
 .bot-message:before {
