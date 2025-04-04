@@ -174,7 +174,8 @@ button {
 	vertical-align: bottom;
 }
 
-.bot-message > div:first-child:not(.admonition) * {
+.bot-message > div:first-child:not(.admonition) *,
+section.unique > *:first-child:not(.admonition) {
 	display: inline;
 }
 .bot-message > div:first-child .admonition {
