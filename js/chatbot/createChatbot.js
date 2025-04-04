@@ -802,7 +802,9 @@ export async function createChatBot(chatData) {
 
 	chatContainer.addEventListener("click", (event) => handleClick(event));
 
-	const initialMessageContent = initialMessage[0].join("\n");
+	const initialMessageContent = initialMessage[0]
+		.join("\n")
+		.replace('<section class="unique">', '<section class="unique" markdown>');
 	const initialMessageOptions = initialMessage[1];
 
 	// Envoi du message d'accueil du chatbot
@@ -811,6 +813,6 @@ export async function createChatBot(chatData) {
 	createChatMessage(initialMessage, false);
 	initialMessage = initialMessage
 		.replace(/<span class="unique">.*?<\/span>/g, "")
-		.replace(/<section class="unique">[\s\S]*?<\/section>/gm, "");
+		.replace(/<section class="unique".*?>[\s\S]*?<\/section>/gm, "");
 	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 }
