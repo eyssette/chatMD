@@ -30,8 +30,43 @@ function detectApiType(chunkElement) {
 
 let LLMactive = false;
 
+function isJSONComplete(str) {
+	try {
+		JSON.parse(str);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+function parseChunkSafely(chunk, incompleteBuffer) {
+	incompleteBuffer += chunk;
+	if (!isJSONComplete(incompleteBuffer)) {
+		return { parsed: null, incompleteChunkBuffer: incompleteBuffer };
+	}
+	const parsed = JSON.parse(incompleteBuffer);
+	incompleteBuffer = "";
+	return { parsed: parsed, incompleteChunkBuffer: incompleteBuffer };
+}
+
+function extractCohereText(chunkObject, version) {
+	switch (version) {
+		case "v1":
+			return chunkObject.text ? chunkObject.text : "";
+		case "v2":
+			return chunkObject.message &&
+				chunkObject.message.content &&
+				chunkObject.message.content[0]
+				? chunkObject.message.content[0].text
+				: "";
+		default:
+			throw new Error("Version d'API Cohere non supportée : " + version);
+	}
+}
+
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 async function readStream(streamableObject, chatMessage, APItype) {
+	let incompleteChunkBuffer = "";
 	const LLM_MAX_PROCESSING_TIME = yaml.useLLM.maxProcessingTime;
 	if (!streamableObject.getReader) {
 		throw new TypeError(
@@ -73,83 +108,57 @@ async function readStream(streamableObject, chatMessage, APItype) {
 					if (!APItype) {
 						APItype = detectApiType(chunkElement);
 					}
-					if (APItype === "cohere") {
-						// Cas de l'API Cohere
-						// détection de la version utilisée
-						const cohereAPIversion = yaml.useLLM.url.match(/v\d+/)?.[0];
-						function textInChunk(chunkObject) {
-							switch (cohereAPIversion) {
-								case "v1":
-									return chunkObject.text;
-								case "v2":
-									return chunkObject.message.content[0].text;
-								default:
-									throw new Error(
-										"Version d'API Cohere non supportée : " + cohereAPIversion,
-									);
-							}
-						}
 
-						const chunkObject = JSON.parse(chunkElement.trim());
-						if (chunkObject.event_type === "text-generation" && LLMactive) {
-							const chunkMessage = textInChunk(chunkObject) || "";
-							accumulatedChunks += chunkMessage;
-							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
-						}
-						LLMactive = chunkObject.is_finished ? false : true;
-					} else if (APItype === "ollama") {
-						// Cas de l'API Ollama
-						const chunkObjectString = chunkElement.trim();
-						// Vérifie si le flux a fini
-						if (chunkObjectString.includes('"done":true')) {
+					let cleanedChunk = chunkElement.trim();
+
+					if (APItype === "openai") {
+						cleanedChunk = cleanedChunk.replace("data: ", "");
+						if (cleanedChunk.indexOf("[DONE]") !== -1) {
 							LLMactive = false;
 							continue;
 						}
-						let chunkObject;
-						try {
-							chunkObject = JSON.parse(chunkObjectString);
-						} catch (jsonError) {
-							console.warn(
-								"Erreur JSON.parse sur chunkObjectString :",
-								chunkObjectString,
-								jsonError,
-							);
+					}
+
+					const parsingChunk = parseChunkSafely(
+						cleanedChunk,
+						incompleteChunkBuffer,
+					);
+					const chunkObject = parsingChunk.parsed;
+					incompleteChunkBuffer = parsingChunk.incompleteChunkBuffer;
+
+					if (!chunkObject) continue;
+
+					if (APItype === "cohere") {
+						const cohereAPIversion =
+							yaml &&
+							yaml.useLLM &&
+							yaml.useLLM.url &&
+							yaml.useLLM.url.match(/v\d+/)
+								? yaml.useLLM.url.match(/v\d+/)[0]
+								: "v2";
+						if (chunkObject.event_type === "text-generation" && LLMactive) {
+							const chunkMessage =
+								extractCohereText(chunkObject, cohereAPIversion) || "";
+							accumulatedChunks += chunkMessage;
+							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+						}
+						LLMactive = !chunkObject.is_finished;
+					} else if (APItype === "ollama") {
+						// Cas de l'API Ollama
+						if (cleanedChunk.indexOf('"done":true') !== -1) {
+							LLMactive = false;
 							continue;
 						}
 						if (chunkObject.message && chunkObject.message.content) {
-							const chunkMessage = chunkObject.message.content || "";
+							const chunkMessage = chunkObject.message.content;
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 						}
 					} else if (APItype === "openai") {
 						// Cas du modèle openAI
-						const chunkObjectString = chunkElement.replace("data: ", "").trim();
-
-						// Vérifie si le flux a fini
-						if (chunkObjectString.includes("[DONE]")) {
-							LLMactive = false;
-							continue;
-						}
-
-						let chunkObject;
-						try {
-							chunkObject = JSON.parse(chunkObjectString);
-						} catch (jsonError) {
-							console.warn(
-								"Erreur JSON.parse sur chunkObjectString :",
-								chunkObjectString,
-								jsonError,
-							);
-							continue;
-						}
-
-						if (
-							chunkObject.choices &&
-							chunkObject.choices[0] &&
-							chunkObject.choices[0].delta &&
-							chunkObject.choices[0].delta.content
-						) {
-							const chunkMessage = chunkObject.choices[0].delta.content || "";
+						const choice = chunkObject.choices && chunkObject.choices[0];
+						if (choice && choice.delta && choice.delta.content) {
+							const chunkMessage = choice.delta.content;
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 						}
