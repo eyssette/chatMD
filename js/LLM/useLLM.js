@@ -6,12 +6,8 @@ import { convertLatexExpressions } from "../processMarkdown/convertLatex";
 
 // Fonction pour détecter le type d'API en fonction du contenu
 function detectApiType(chunkElement) {
-	const normalizedChunk = chunkElement.trim();
 	try {
-		const chunkObject = JSON.parse(
-			normalizedChunk.replace("data: ", "").trim(),
-		);
-
+		const chunkObject = JSON.parse(chunkElement);
 		if (chunkObject.message) {
 			return "ollama";
 		} else if (
@@ -25,7 +21,7 @@ function detectApiType(chunkElement) {
 	} catch (error) {
 		console.warn("Erreur lors de la détection du type d'API :", error);
 	}
-	return null; // Retourne null si le type ne peut être déterminé
+	return null;
 }
 
 let LLMactive = false;
@@ -39,8 +35,8 @@ function isJSONComplete(str) {
 	}
 }
 
-function parseChunkSafely(chunk, incompleteBuffer) {
-	incompleteBuffer += chunk;
+function parseChunkSafely(chunkToParse, incompleteBuffer) {
+	incompleteBuffer += chunkToParse;
 	if (!isJSONComplete(incompleteBuffer)) {
 		return { parsed: null, incompleteChunkBuffer: incompleteBuffer };
 	}
@@ -92,7 +88,7 @@ async function readStream(streamableObject, chatMessage, APItype) {
 			done = result.done;
 		} catch (error) {
 			console.error("Erreur lors de la lecture du flux :", error);
-			break; // Arrête la boucle en cas d'erreur de lecture
+			break;
 		}
 
 		if (value) {
@@ -104,15 +100,14 @@ async function readStream(streamableObject, chatMessage, APItype) {
 
 			for (const chunkElement of chunkArray) {
 				try {
+					const cleanedChunk = chunkElement.trim().replace(/^data: /, "");
+
 					// Si le type d'API n'est pas encore détecté, on tente de l'inférer
 					if (!APItype) {
-						APItype = detectApiType(chunkElement);
+						APItype = detectApiType(cleanedChunk);
 					}
 
-					let cleanedChunk = chunkElement.trim();
-
 					if (APItype === "openai") {
-						cleanedChunk = cleanedChunk.replace("data: ", "");
 						if (cleanedChunk.indexOf("[DONE]") !== -1) {
 							LLMactive = false;
 							continue;
