@@ -170,11 +170,10 @@ function chunkByNChars(html, n) {
 		} else {
 			// Traite le texte à l'intérieur des balises HTML
 			return part.replace(/>([^<]*)</g, (match, textBetweenTags) => {
-				// Traiter le texte entre balises HTML : on ajoute des backticks tous les N caractères
-				const processedText = wrapWithBackticksEveryNcharacters(
-					textBetweenTags,
-					n,
-				);
+				// Traiter le texte entre balises HTML : on ajoute des backticks tous les N caractères, sauf si le texte correspond à une pause du type "^nombre"
+				const processedText = /\^\d+/.test(textBetweenTags)
+					? textBetweenTags
+					: wrapWithBackticksEveryNcharacters(textBetweenTags, n);
 				return ">" + processedText + "<";
 			});
 		}
