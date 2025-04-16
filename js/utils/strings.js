@@ -25,3 +25,9 @@ export function hasSentenceEndMark(string) {
 	// Vérifie si c'est une marque de fin de phrase
 	return lastChar === "." || lastChar === "!" || lastChar === "?";
 }
+
+export function sanitizeHtml(html, allowedTags) {
+	return html.replace(/<[^>]+>/g, (tag) => {
+		return allowedTags.includes(tag) ? tag : "";
+	});
+}
