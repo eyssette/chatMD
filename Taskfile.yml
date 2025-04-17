@@ -1,0 +1,43 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  build:
+    aliases:
+      - default
+    cmds:
+      - task: npm:build
+      - task: minify-widget
+
+  npm:build:
+    deps: [npm:install]
+    sources:
+      - data/
+      - css/
+      - js/
+      - rollup.config.mjs
+    generates:
+      - data.md
+      - css/styles.min.css
+      - script.min.js
+      - script.min.js.map
+    cmds:
+      - npm run build
+
+  npm:install:
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - node_modules/.package-lock.json
+    cmds:
+      - npm install
+
+  minify-widget:
+    sources:
+      - widget/widget.js
+    generates:
+      - widget.min.js
+    cmds:
+      - npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser

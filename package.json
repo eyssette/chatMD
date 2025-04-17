@@ -5,6 +5,7 @@
   "main": "script.min.js",
   "devDependencies": {
     "@eslint/js": "^9.8.0",
+    "@go-task/cli": "^3.42.1",
     "@rollup/plugin-terser": "^0.4.4",
     "cssnano": "^7.0.4",
     "eslint": "^9.8.0",

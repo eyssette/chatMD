@@ -6,17 +6,11 @@
 		{
 			"label": "Build",
 			"type": "shell",
-			"command": "npm run build",
+			"command": "task",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
-		},
-		{
-			"label": "Minify Widget",
-			"type": "shell",
-			"command": "rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
-			// "command": "npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser ",
 		}
 	]
 }
