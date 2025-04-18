@@ -41,3 +41,10 @@ tasks:
       - widget.min.js
     cmds:
       - npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser
+
+  push:
+    cmds:
+      - git push apps
+      - git push drane
+      - git push chatmd
+      - git push github
