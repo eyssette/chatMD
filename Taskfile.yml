@@ -13,9 +13,9 @@ tasks:
   npm:build:
     deps: [npm:install]
     sources:
-      - data/
-      - css/
-      - js/
+      - data/**/*.md
+      - css/**/*.css
+      - js/**/*.js
       - rollup.config.mjs
     generates:
       - data.md
