@@ -5,7 +5,10 @@ version_scheme = "semver"
 version = "6.8.1"
 update_changelog_on_bump = true
 changelog_incremental = true
-
+version_files= [
+	"VERSION",
+	"package.json:version"
+]
 [tool.commitizen.customize]
 message_template = "{{change_type}}:{% if show_message %} {{message}}{% endif %}"
 commit_parser = '^((?P<change_type>feat|fix|refactor|perf|style|test|ci|build|doc|chore|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?|\w+!):\s(?P<message>.*)?'
