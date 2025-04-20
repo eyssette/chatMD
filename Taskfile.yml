@@ -45,9 +45,13 @@ tasks:
   push:
     cmds:
       - git push apps
+      - git push apps --tags
       - git push drane
+      - git push drane --tags
       - git push chatmd
+      - git push chatmd --tags
       - git push github
+      - git push github --tags
 
   tag:
     desc: "Crée un tag avec pour date du tag la date du commit (usage: task tag -- <commit> <tag>)"
