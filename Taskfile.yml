@@ -48,3 +48,23 @@ tasks:
       - git push drane
       - git push chatmd
       - git push github
+
+  tag:
+    desc: "Crée un tag avec pour date du tag la date du commit (usage: task tag -- <commit> <tag>)"
+    cmds:
+      - |
+        bash -c '
+        set -- {{.CLI_ARGS}}
+        COMMIT=$1
+        TAG=$2
+
+        if [ -z "$COMMIT" ] || [ -z "$TAG" ]; then
+          echo "❌ Usage: task tag -- <commit> <tag>"
+          exit 1
+        fi
+
+        TAG_DATE=$(git show -s --format=%aD "$COMMIT")
+        echo "📌 Création du tag \"$TAG\" sur le commit $COMMIT (date: $TAG_DATE)"
+        GIT_COMMITTER_DATE="$TAG_DATE" git tag -a "$TAG" "$COMMIT" -m ""
+        '
+    silent: false
