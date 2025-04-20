@@ -5,7 +5,7 @@ import path from "path";
 import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
-const mainMdPath = "data/main.md";
+const mainMdPath = "data/index.md";
 const mainMdContent = fs.readFileSync(mainMdPath, "utf8");
 const otherMdFiles = getAllMdFiles("data").filter(
 	(file) => !file.endsWith(mainMdPath),
@@ -30,7 +30,7 @@ function createCombinedMdFile() {
 		fs.readFileSync(file, "utf8"),
 	);
 	const combinedContent = [mainMdContent, ...filesContent].join("\n");
-	fs.writeFileSync("data.md", combinedContent);
+	fs.writeFileSync("index.md", combinedContent);
 }
 
 createCombinedMdFile();
@@ -56,7 +56,7 @@ export default {
 				const combinedContent = [mainMdContent, ...filesContent].join("\n");
 				this.emitFile({
 					type: "asset",
-					fileName: "data.md",
+					fileName: "index.md",
 					source: combinedContent,
 				});
 			},

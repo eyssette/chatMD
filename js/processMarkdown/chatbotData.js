@@ -3,7 +3,7 @@ import { startsWithAnyOf } from "../utils/strings";
 import { createChatBot } from "../chatbot/createChatbot";
 import { processYAML, yaml } from "./yaml";
 import { processFixedVariables } from "./processFixedVariables";
-import defaultMD from "../../data.md";
+import defaultMD from "../../index.md";
 
 let md = defaultMD;
 let chatData;

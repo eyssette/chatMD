@@ -11,16 +11,21 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
 3. Votre chatbot est alors accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL`
 
+\`
 <label for="urlSourceChatbot">Collez ici l'URL de votre fichier et cliquez sur “OK” pour accéder à votre chatbot :</label>
-\`<input type="url" id="urlSourceChatbot" placeholder="Votre URL" role="textbox" title="Votre URL" style="width:75%"> <button id="openNewChatbot" type="button">OK</button>\`
+<input type="url" id="urlSourceChatbot" placeholder="Votre URL" role="textbox" title="Votre URL" style="width:75%"> <button id="openNewChatbot" type="button">OK</button>\`
 :::
 
+
 On peut imaginer **de nombreux usages** :
+
+\`
 - Tutoriel pour un outil informatique
 - Guide méthodologique
 - Soutien pour la révision d'un cours, quiz interactif,
 - Discussion avec un personnage historique,
 - Histoire dont vous êtes le héros …
+\`
 
 La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usages plus complexes** : personnalisation de l'interface, utilisation de variables, de choix aléatoires, intégration avec un LLM, possibilité de faire du RAG …
 
@@ -296,7 +301,7 @@ Dans le YAML, il suffit d'inclure les fichiers additionnels ainsi (on peut mettr
 include: ['URL fichier 1', 'URL fichier 2']
 ```
 
-Si vous récupérez le projet initial sur la forge, vous pourrez ensuite modifier le contenu du fichier `data/main.md` et ajouter des dossiers et des fichiers `.md` dans le dossier `data`. Tous les fichiers `.md` dans ce dossier seront combinés pour définir la source du chatbot au moment de la compilation, en exécutant `npm build`. Il faut au préalable installer les dépendances nécessaires avec `npm install`. Si vous utilisez VSCode, la tâche par défaut est déjà définie pour exécuter l'opération de _build_.
+Si vous récupérez le projet initial sur la forge, vous pourrez ensuite modifier le contenu du fichier `data/index.md` et ajouter des dossiers et des fichiers `.md` dans le dossier `data`. Tous les fichiers `.md` dans ce dossier seront combinés pour définir la source du chatbot au moment de la compilation, en exécutant `npm build`. Il faut au préalable installer les dépendances nécessaires avec `npm install`. Si vous utilisez VSCode, la tâche par défaut est déjà définie pour exécuter l'opération de _build_.
 
 Vous pouvez également utiliser la fonction “raccourci” afin d'indiquer comme source plusieurs fichiers (en utilisant une _array_ d'URL). 
 

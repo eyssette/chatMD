@@ -18,7 +18,7 @@ tasks:
       - js/**/*.js
       - rollup.config.mjs
     generates:
-      - data.md
+      - index.md
       - css/styles.min.css
       - script.min.js
       - script.min.js.map
