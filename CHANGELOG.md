@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.0.0 (2025-04-21)
+
+### Fix
+
+- pas de corsProxy par défaut pour fetch URL
+- source par défaut = fichier index.md
+
+### Chore
+
+- numéro de version avec commitizen dans package.json et fichier VERSION
+- configuration commitizen
+- ajout des tags dans la task de push
+
 ## 6.8.1 (2025-04-20)
 
 ### Fix
