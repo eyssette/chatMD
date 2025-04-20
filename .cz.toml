@@ -1,0 +1,13 @@
+[tool.commitizen]
+name = "cz_customize"
+tag_format = "$version"
+version_scheme = "semver"
+version = "6.8.1"
+update_changelog_on_bump = true
+changelog_incremental = true
+
+[tool.commitizen.customize]
+message_template = "{{change_type}}:{% if show_message %} {{message}}{% endif %}"
+commit_parser = '^((?P<change_type>feat|fix|refactor|perf|style|test|ci|build|doc|chore|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?|\w+!):\s(?P<message>.*)?'
+change_type_order = ["BREAKING CHANGE", "Feat", "Fix", "refactor", "perf", "test", "style", "doc", "CI", "Build", "Chore"]
+change_type_map = {"feat"= "Feat","fix"= "Fix","refactor"= "Refactor","perf"= "Perf","chore"= "Chore", "ci" = "CI"}
