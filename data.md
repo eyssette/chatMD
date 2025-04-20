@@ -30,7 +30,8 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 4. [Donne-moi des exemples !](Exemples)
 5. [Quelles sont les options de configuration plus avancées ?](Options de configuration)
 6. [Comment intégrer mon chatbot dans un site ?](Comment intégrer mon chatbot sur un site ?)
-7. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
+7. [J'ai repéré un bug ou j'ai une suggestion d'amélioration](Bug ou suggestion d'amélioration)
+8. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
 
 ## Markdown
 - markdown
@@ -478,6 +479,30 @@ Pour utiliser ChatMD en tant que widget, il faut avoir accès au HTML et insére
 Il faut bien sûr remplacer `URL_SOURCE_CHATBOT` par l'URL de la source de votre chatbot.
 
 On peut customiser l'image du widget en ajoutant `data-image="URL_IMAGE"` comme paramètre.
+
+## Bug ou suggestion d'amélioration
+- un bug
+- un problème
+- ne marche pas
+- suggestion
+- ticket
+- comment faire un ticket
+- comment faire des tickets
+- comment faire une suggestion
+- rapporter un bug
+- rapport de bug
+- signaler un bug
+- signaler un problème
+
+Vous pouvez [faire une suggestion](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=suggestion) de nouvelles fonctionnalités, [signaler un bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) ou, de manière générale, discuter de l'évolution de ChatMD via les [tickets](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/) ou bien par [mail](forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr).
+
+Si vous souhaitez participer au code de ChatMD, n'hésitez pas à consulter les tickets et à [contacter le responsable du projet](https://eyssette.forge.apps.education.fr/).
+
+Si vous avez accès à Tchap, la messagerie instantanée du secteur public, n'hésitez pas à rejoindre la communauté dans le [salon dédié à ChatMD](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr). Vous pourrez demander de l'aide pour la mise en place de votre chatbot et vous pourrez aussi faire part de vos découvertes et créations.
+
+Si vous avez besoin d'aide pour le développement de votre chatbot, vous pouvez aussi utiliser le système des [tickets](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/) et préciser votre besoin.
+
+
 
 ## Qui a créé ChatMD ?
 - Qui a créé ChatMD
