@@ -1,9 +1,9 @@
 import { config } from "../config";
 
 // Pour gérer l'URL de la source du chatbot
-export function handleURL(url) {
+export function handleURL(url, options) {
 	if (url !== "") {
-		let addCorsProxy = true;
+		let addCorsProxy = options && options.useCorsProxy ? true : false;
 		// Vérification de la présence d'un raccourci
 		const shortcut = config.shortcuts.find((element) => element[0] == url);
 		if (shortcut) {

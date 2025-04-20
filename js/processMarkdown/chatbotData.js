@@ -1,3 +1,4 @@
+import { config } from "../config";
 import { handleURL } from "../utils/urls";
 import { startsWithAnyOf } from "../utils/strings";
 import { createChatBot } from "../chatbot/createChatbot";
@@ -68,7 +69,21 @@ export function getMarkdownContentandCreateChatbot() {
 						createChatBot(chatData);
 					}
 				})
-				.catch((error) => console.error(error));
+				.catch((error) =>
+					fetch(config.corsProxy + sourceChatBot)
+						.then((response) => response.text())
+						.then((data) => {
+							md = data;
+							const isNotMarkdown = !md.includes("# ");
+							if (isNotMarkdown) {
+								md =
+									"# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown";
+							}
+							processYAML(md);
+							chatData = parseMarkdown(md);
+							createChatBot(chatData);
+						}),
+				);
 		}
 	} else {
 		processYAML(md);

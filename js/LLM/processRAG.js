@@ -54,7 +54,7 @@ function createVectorRAGinformations(informations) {
 export function getRAGcontent(informations) {
 	if (informations) {
 		if (informations.includes("http")) {
-			const urlRAGfile = handleURL(informations);
+			const urlRAGfile = handleURL(informations, { useCorsProxy: true });
 			fetch(urlRAGfile)
 				.then((response) => response.text())
 				.then((data) => {
