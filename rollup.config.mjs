@@ -5,11 +5,20 @@ import path from "path";
 import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
-const mainMdPath = "data/index.md";
-let mainMdContent = fs.readFileSync(mainMdPath, "utf8");
-const otherMdFiles = getAllMdFiles("data").filter(
-	(file) => !file.endsWith(mainMdPath),
-);
+const mainMdPath = "data/";
+
+let mainMdContent;
+let otherMdFiles;
+
+if (fs.existsSync(mainMdPath)) {
+	const mainMdFile = mainMdPath + "index.md";
+	mainMdContent = fs.readFileSync(mainMdFile, "utf8");
+	otherMdFiles = getAllMdFiles("data").filter(
+		(file) => !file.endsWith(mainMdFile),
+	);
+} else {
+	mainMdContent = fs.readFileSync("index.md", "utf8");
+}
 
 function getAllMdFiles(dir) {
 	const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -55,7 +64,9 @@ function createCombinedMdFile() {
 	fs.writeFileSync("index.md", combinedContent);
 }
 
-createCombinedMdFile();
+if (otherMdFiles) {
+	createCombinedMdFile();
+}
 
 export default {
 	input: "js/main.js",
