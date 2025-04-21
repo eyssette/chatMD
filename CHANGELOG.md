@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.1 (2025-04-21)
+
+### Fix
+
+- copie tous les fichiers lors du déploiement
+
 ## 7.2.0 (2025-04-21)
 
 ### Feat
