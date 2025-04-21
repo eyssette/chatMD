@@ -13,9 +13,7 @@
 ### Chore
 
 - pre_bump_hook / task build avant la montée de version
-- package-lock.json pas ignoré
 - ajout des types docs, build et style à la configuration de commitizen
-- gitignore package-lock.json
 
 ## 7.0.0 (2025-04-21)
 
