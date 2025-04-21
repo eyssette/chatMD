@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.1.0 (2025-04-21)
+
+### Feat
+
+- génération index.md ssi dossier data existe
+
+### Chore
+
+- précision pour les montées de version majeure
+- suppression commits inutiles dans Changelog
+
 ## 7.0.1 (2025-04-21)
 
 ### Fix
