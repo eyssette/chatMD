@@ -47,20 +47,6 @@ export default {
 		string({
 			include: "*.md",
 		}),
-		{
-			name: "concat-md-files",
-			concatMDfiles() {
-				const filesContent = otherMdFiles.map((file) =>
-					fs.readFileSync(file, "utf8"),
-				);
-				const combinedContent = [mainMdContent, ...filesContent].join("\n");
-				this.emitFile({
-					type: "asset",
-					fileName: "index.md",
-					source: combinedContent,
-				});
-			},
-		},
 		postcss({
 			extensions: [".css"],
 			extract: "css/styles.min.css",
