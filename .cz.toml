@@ -5,10 +5,11 @@ version_scheme = "semver"
 version = "7.0.0"
 update_changelog_on_bump = true
 changelog_incremental = true
-version_files= [
+version_files = [
 	"VERSION",
 	"package.json:version"
 ]
+pre_bump_hooks = "npx task build"
 [tool.commitizen.customize]
 message_template = "{{change_type}}:{% if show_message %} {{message}}{% endif %}"
 commit_parser = '^((?P<change_type>feat|fix|refactor|perf|style|test|ci|build|doc|docs|chore|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?|\w+!):\s(?P<message>.*)?'
