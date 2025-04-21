@@ -5,19 +5,26 @@ import path from "path";
 import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
-const mainMdPath = "data/";
+const folderWithMarkdownFilesToCombine = "data/";
+const mainMdFileName = "index.md";
 
 let mainMdContent;
 let otherMdFiles;
 
-if (fs.existsSync(mainMdPath)) {
-	const mainMdFile = mainMdPath + "index.md";
+if (fs.existsSync(folderWithMarkdownFilesToCombine)) {
+	const mainMdFile = folderWithMarkdownFilesToCombine + mainMdFileName;
 	mainMdContent = fs.readFileSync(mainMdFile, "utf8");
 	otherMdFiles = getAllMdFiles("data").filter(
 		(file) => !file.endsWith(mainMdFile),
 	);
 } else {
-	mainMdContent = fs.readFileSync("index.md", "utf8");
+	if (fs.existsSync(mainMdFileName)) {
+		mainMdContent = fs.readFileSync(mainMdFileName, "utf8");
+	} else {
+		mainMdContent =
+			"# Chatbot\nAucun chatbot par défaut n'a été configuré.\nIl faut créer un fichier index.md dans votre dépôt pour définir le chatbot par défaut.";
+		fs.writeFileSync("index.md", mainMdContent);
+	}
 }
 
 function getAllMdFiles(dir) {
