@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.2 (2025-04-21)
+
+### Fix
+
+- commande pour copier tous les fichiers du dépôt dans public
+
 ## 7.2.1 (2025-04-21)
 
 ### Fix
