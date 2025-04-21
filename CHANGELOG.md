@@ -20,7 +20,7 @@
 ### Fix
 
 - pas de corsProxy par défaut pour fetch URL
-- source par défaut = fichier index.md
+- BREAKING CHANGE: source par défaut = fichier index.md
 
 ### Chore
 
@@ -340,6 +340,8 @@
 
 ## 6.0.0 (2024-08-04)
 
+Montée de version majeure : refactoring important du code avec la modularisation et l'utilisation de rollup pour la compilation
+
 ### Feat
 
 - Utilisation des modules + rollup : Merge branch 'test-modules'
@@ -496,7 +498,7 @@
 
 ### Fix
 
-- changement nom fichier chatdata=&gt;chatbotData
+- BREAKING CHANGE: changement nom fichier chatdata=&gt;chatbotData
 - typo
 
 ## 4.5.1 (2024-07-10)
@@ -618,7 +620,7 @@
 
 ### Feat
 
-- paramètres personnalisables : dans custom.js plutôt que dans chatdata.js
+- BREAKING CHANGE: paramètres personnalisables dans custom.js plutôt que dans chatdata.js
 
 ## 3.10.1 (2024-06-29)
 
@@ -804,6 +806,8 @@
 - Directive "!Select : x" pour sélectionner aléatoirement x propositions de réponse
 
 ## 3.0.0 (2024-05-19)
+
+Montée de version majeure : ChatMD peut maintenant se connecter à un LLM
 
 ### Feat
 
@@ -1103,7 +1107,7 @@
 
 ### Fix
 
-- Changement nom variable yaml gestion gros Mots
+- BREAKING CHANGE: Changement nom variable yaml gestion gros Mots
 - explication gestion gros mots
 
 ## 1.5.0 (2023-10-19)
