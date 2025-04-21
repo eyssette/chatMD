@@ -319,8 +319,8 @@ export function displayMessage(html, isUser, chatMessage, container) {
 				window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
 				yaml.typeWriter === false
 			) {
-				// La désactivation de l'effet typewriter avec les backticks n'est plus nécessaire : on les supprime
-				html = html.replaceAll("`", "");
+				// La désactivation de l'effet typewriter avec les backticks n'est plus nécessaire : on les supprime, et on supprime également les pauses (par exemple : ^100)
+				html = html.replaceAll("`", "").replace(/\^\d+/g, "");
 				if (isUser) {
 					chatMessage.innerHTML = sanitizeHtml(html, allowedTagsInUserInput);
 				} else {
