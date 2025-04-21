@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.2.0 (2025-04-21)
+
+### Feat
+
+- ajout d'un template gitlab-ci pour déployer ChatMD dans un autre dépôt
+
+### Fix
+
+- gestion du build si pas de index.md dans le dépôt
+
+### Chore
+
+- configuration task bump
+
 ## 7.1.0 (2025-04-21)
 
 ### Feat
