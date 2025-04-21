@@ -15,6 +15,10 @@ pages:
   script:
     # Installer les outils de compression
     - apk add --no-cache gzip brotli
+
+    # Récupérer tous les fichiers du dépôt, de manière récursive dans un dossier temporaire .public
+    - mkdir .public
+    - cp -r * .public
     
     # Créer le dossier public et récupérer l'application
     - mkdir -p public
@@ -24,8 +28,9 @@ pages:
     # Suppression du dossier data dans public
     - rm -r public/data
 
-    # Copier de tous les fichiers Markdown dans public
-    - cp *.md public/
+    # Copie de tous les fichiers du dépôt dans public
+    # Attention : ces fichiers écrasent les fichiers présents dans le dépôt de ChatMD
+    - mv .public public
    
     # Construire l'application
     - cd public
