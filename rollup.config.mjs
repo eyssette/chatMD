@@ -6,7 +6,7 @@ import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
 const mainMdPath = "data/index.md";
-const mainMdContent = fs.readFileSync(mainMdPath, "utf8");
+let mainMdContent = fs.readFileSync(mainMdPath, "utf8");
 const otherMdFiles = getAllMdFiles("data").filter(
 	(file) => !file.endsWith(mainMdPath),
 );
@@ -23,6 +23,28 @@ function getAllMdFiles(dir) {
 		}
 	}
 	return mdFiles;
+}
+
+const warningAutomaticallyGeneratedFile =
+	"\n<!--Fichier généré automatiquement à partir des fichiers présents dans le dossier data/.\nAttention : les modifications faites manuellement dans ce fichier seront écrasées à la prochaine compilation de ChatMD -->\n";
+
+mainMdContent = mainMdContent.trim();
+const yamlInMainMdContent =
+	mainMdContent.startsWith("---") && mainMdContent.split("---").length > 2
+		? "---" + mainMdContent.split("---")[1] + "---\n"
+		: "";
+
+if (yamlInMainMdContent) {
+	const mainMdContentWithoutYaml = mainMdContent.replace(
+		yamlInMainMdContent,
+		"",
+	);
+	mainMdContent =
+		yamlInMainMdContent +
+		warningAutomaticallyGeneratedFile +
+		mainMdContentWithoutYaml;
+} else {
+	mainMdContent = warningAutomaticallyGeneratedFile + mainMdContent;
 }
 
 function createCombinedMdFile() {

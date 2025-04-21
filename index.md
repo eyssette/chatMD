@@ -2,6 +2,9 @@
 gestionGrosMots: true
 ---
 
+<!--Fichier généré automatiquement à partir des fichiers présents dans le dossier data/.
+Attention : les modifications faites manuellement dans ce fichier seront écrasées à la prochaine compilation de ChatMD -->
+
 # ChatMD
 
 Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
@@ -537,4 +540,3 @@ ChatMD est un logiciel libre qui repose également sur d'autres logiciels libres
 - [textFit](https://github.com/STRML/textFit) pour la gestion du redimensionnement automatique (ici : des formules mathématiques en Latex).
 
 Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
-
