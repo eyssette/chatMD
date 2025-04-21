@@ -73,3 +73,11 @@ tasks:
         GIT_COMMITTER_DATE="$TAG_DATE" git tag -a "$TAG" "$COMMIT" -m ""
         '
     silent: false
+
+  bump:
+    generates:
+      - VERSION
+      - package.json
+      - package-lock.json
+    cmds:
+      - cz bump
