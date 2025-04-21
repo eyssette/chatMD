@@ -1,5 +1,22 @@
 # Changelog
 
+## 7.0.1 (2025-04-21)
+
+### Fix
+
+- ajout automatique d'un warning dans le fichier index.md généré à partir du dossier data
+
+### Build
+
+- simplification configuration rollup
+
+### Chore
+
+- pre_bump_hook / task build avant la montée de version
+- package-lock.json pas ignoré
+- ajout des types docs, build et style à la configuration de commitizen
+- gitignore package-lock.json
+
 ## 7.0.0 (2025-04-21)
 
 ### Fix
