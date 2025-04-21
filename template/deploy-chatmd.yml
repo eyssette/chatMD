@@ -30,7 +30,8 @@ pages:
 
     # Copie de tous les fichiers du dépôt dans public
     # Attention : ces fichiers écrasent les fichiers présents dans le dépôt de ChatMD
-    - mv .public public
+    - cp -r .public/* public/
+    - rm -r .public
    
     # Construire l'application
     - cd public
