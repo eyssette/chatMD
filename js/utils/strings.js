@@ -16,14 +16,10 @@ export function tryConvertStringToNumber(input) {
 	}
 }
 
-export function hasSentenceEndMark(string) {
-	string = string.trim();
-	if (string.length === 0) {
-		return false;
-	}
-	const lastChar = string[string.length - 1];
-	// Vérifie si c'est une marque de fin de phrase
-	return lastChar === "." || lastChar === "!" || lastChar === "?";
+export function hasSentenceEndMark(str) {
+	const trimmed = str.trim();
+	const lastChar = trimmed.slice(-1);
+	return [".", "!", "?", "…"].includes(lastChar);
 }
 
 export function sanitizeHtml(html, allowedTags) {
