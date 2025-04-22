@@ -11,10 +11,18 @@ function scrollToBottomOfPage(behavior) {
 	});
 }
 
-export function scrollWindow(isSmooth) {
+let animationFrameId = null;
+export function scrollWindow(option) {
+	const isSmooth = option && option.scrollMode == "smooth";
+	if (animationFrameId !== null) {
+		window.cancelAnimationFrame(animationFrameId);
+		animationFrameId = null;
+	}
+
 	if (isSmooth) {
-		window.requestAnimationFrame(() => {
+		animationFrameId = window.requestAnimationFrame(() => {
 			scrollToBottomOfPage("smooth");
+			animationFrameId = null;
 		});
 	} else {
 		scrollToBottomOfPage("auto");

@@ -707,7 +707,7 @@ export async function createChatBot(chatData) {
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);
-				scrollWindow(false);
+				scrollWindow({ scrollMode: "instant" });
 			}, 100);
 			userInput.innerText = "";
 		} else {
@@ -729,7 +729,7 @@ export async function createChatBot(chatData) {
 			} else {
 				userInput.focus();
 				sendButton.click();
-				scrollWindow(false);
+				scrollWindow({ scrollMode: "instant" });
 			}
 		} else if (
 			userInput.parentElement.parentElement.classList.contains("hideControls")
@@ -821,7 +821,7 @@ export async function createChatBot(chatData) {
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
 				nextMessage.errorsCounter = 0;
-				scrollWindow(false);
+				scrollWindow({ scrollMode: "instant" });
 			}
 		}
 	}
