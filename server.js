@@ -8,18 +8,18 @@ const PORT = process.argv[2] || 8888;
 
 // Liste des fichiers autorisés
 const ALLOWED_FILES = [
-	"/index.html",
-	"/script.min.js",
-	"/favicon.svg",
-	"/css/styles.min.css",
-	"/css/themes/bubbles.css",
-	"/js/addOns/badWords-fr.js",
-	"/js/addOns/kroki.js",
-	"/js/addOns/leo-profanity.js",
-	"/js/addOns/pako.min.js",
-	"/js/addOns/textFit.min.js",
-	"/js/addOns/katex/katex.min.js",
-	"/js/addOns/katex/katex.min.css",
+	"/app/index.html",
+	"/app/script.min.js",
+	"/app/favicon.svg",
+	"/app/css/styles.min.css",
+	"/app/css/themes/bubbles.css",
+	"/app/js/addOns/badWords-fr.js",
+	"/app/js/addOns/kroki.js",
+	"/app/js/addOns/leo-profanity.js",
+	"/app/js/addOns/pako.min.js",
+	"/app/js/addOns/textFit.min.js",
+	"/app/js/addOns/katex/katex.min.js",
+	"/app/js/addOns/katex/katex.min.css",
 ];
 
 // Type MIME sécurisé
@@ -51,7 +51,7 @@ const server = http.createServer((request, response) => {
 	const requestedPath = decodeURIComponent(parsedUrl.pathname); // Nettoyage des caractères encodés
 
 	const isAllowedFontFile =
-		requestedPath.includes("js/addOns/katex/fonts/") &&
+		requestedPath.includes("app/js/addOns/katex/fonts/") &&
 		(requestedPath.endsWith(".woff2") ||
 			requestedPath.endsWith(".woff") ||
 			requestedPath.endsWith(".ttf"));
@@ -85,7 +85,7 @@ const server = http.createServer((request, response) => {
 			return;
 		}
 
-		if (requestedPath === "/index.html") {
+		if (requestedPath === "/app/index.html") {
 			fs.readFile(filePath, "utf8", (err, data) => {
 				if (err) {
 					response.writeHead(500, { "Content-Type": "text/plain" });
@@ -140,6 +140,6 @@ const server = http.createServer((request, response) => {
 // Démarrage du serveur
 server.listen(PORT, () => {
 	console.log(
-		`Static file server running at:\n  => http://localhost:${PORT}/index.html\nCTRL + C to shutdown`,
+		`Static file server running at:\n  => http://localhost:${PORT}/app/index.html\nCTRL + C to shutdown`,
 	);
 });
