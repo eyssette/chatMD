@@ -5,7 +5,8 @@ import path from "path";
 import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
-const folderWithMarkdownFilesToCombine = "data/";
+const appFolder = "app/";
+const folderWithMarkdownFilesToCombine = appFolder + "data/";
 const mainMdFileName = "index.md";
 
 let mainMdContent;
@@ -14,7 +15,7 @@ let otherMdFiles;
 if (fs.existsSync(folderWithMarkdownFilesToCombine)) {
 	const mainMdFile = folderWithMarkdownFilesToCombine + mainMdFileName;
 	mainMdContent = fs.readFileSync(mainMdFile, "utf8");
-	otherMdFiles = getAllMdFiles("data").filter(
+	otherMdFiles = getAllMdFiles(appFolder + "data").filter(
 		(file) => !file.endsWith(mainMdFile),
 	);
 } else {
@@ -23,7 +24,7 @@ if (fs.existsSync(folderWithMarkdownFilesToCombine)) {
 	} else {
 		mainMdContent =
 			"# Chatbot\nAucun chatbot par défaut n'a été configuré.\nIl faut créer un fichier index.md dans votre dépôt pour définir le chatbot par défaut.";
-		fs.writeFileSync("index.md", mainMdContent);
+		fs.writeFileSync(appFolder + "index.md", mainMdContent);
 	}
 }
 
@@ -68,7 +69,7 @@ function createCombinedMdFile() {
 		fs.readFileSync(file, "utf8"),
 	);
 	const combinedContent = [mainMdContent, ...filesContent].join("\n");
-	fs.writeFileSync("index.md", combinedContent);
+	fs.writeFileSync(appFolder + "index.md", combinedContent);
 }
 
 if (otherMdFiles) {
@@ -76,16 +77,16 @@ if (otherMdFiles) {
 }
 
 export default {
-	input: "js/main.js",
+	input: appFolder + "js/main.js",
 	output: {
-		file: "script.min.js",
+		file: appFolder + "script.min.js",
 		format: "iife",
 		plugins: [terser()],
 		sourcemap: true,
 	},
 	plugins: [
 		string({
-			include: "*.md",
+			include: appFolder + "*.md",
 		}),
 		postcss({
 			extensions: [".css"],

@@ -1,5 +1,6 @@
 variables:
   FILES_TO_COMPRESS: "htm html txt text js css md ico svg"
+  APP_FOLDER: "app"
 
 pages:
   image: alpine:latest
@@ -7,11 +8,11 @@ pages:
     - apk update && apk add gzip brotli
   script:
     - mkdir -p .public .public/widget/ .public/css/themes .public/js/addOns
-    - cp *.svg index.html script.min.js script.min.js.map widget.min.js .public/
-    - cp css/styles.min.css .public/css/
-    - cp css/themes/* .public/css/themes/
-    - cp widget/message.svg .public/widget/
-    - cp -r js/addOns/* .public/js/addOns/
+    - cp $APP_FOLDER/*.svg $APP_FOLDER/index.html $APP_FOLDER/script.min.js $APP_FOLDER/script.min.js.map $APP_FOLDER/widget/widget.min.js .public/
+    - cp $APP_FOLDER/css/styles.min.css .public/css/
+    - cp $APP_FOLDER/css/themes/* .public/css/themes/
+    - cp $APP_FOLDER/widget/message.svg .public/widget/
+    - cp -r $APP_FOLDER/js/addOns/* .public/js/addOns/
     - mv .public public
     - for ext in $FILES_TO_COMPRESS; do find public -type f -name "*.$ext" -exec gzip -f -k {} \;; done
     - for ext in $FILES_TO_COMPRESS; do find public -type f -name "*.$ext" -exec brotli -f -k {} \;; done

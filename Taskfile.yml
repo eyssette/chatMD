@@ -2,6 +2,9 @@
 
 version: '3'
 
+vars:
+  APP_FOLDER: "app/"
+
 tasks:
   build:
     aliases:
@@ -13,16 +16,16 @@ tasks:
   npm:build:
     deps: [npm:install]
     sources:
-      - data/**/*.md
-      - index.md
-      - css/**/*.css
-      - js/**/*.js
+      - "{{.APP_FOLDER}}data/**/*.md"
+      - "{{.APP_FOLDER}}index.md"
+      - "{{.APP_FOLDER}}css/**/*.css"
+      - "{{.APP_FOLDER}}js/**/*.js"
       - rollup.config.mjs
     generates:
-      - index.md
-      - css/styles.min.css
-      - script.min.js
-      - script.min.js.map
+      - "{{.APP_FOLDER}}index.md"
+      - "{{.APP_FOLDER}}css/styles.min.css"
+      - "{{.APP_FOLDER}}script.min.js"
+      - "{{.APP_FOLDER}}script.min.js.map"
     cmds:
       - npm run build
 
@@ -39,7 +42,7 @@ tasks:
     sources:
       - widget/widget.js
     generates:
-      - widget.min.js
+      - widget/widget.min.js
     cmds:
       - npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser
 
@@ -59,7 +62,7 @@ tasks:
     cmds:
       - |
         bash -c '
-        set -- {{.CLI_ARGS}}
+        set -- "{{.CLI_ARGS}}"
         COMMIT=$1
         TAG=$2
 
