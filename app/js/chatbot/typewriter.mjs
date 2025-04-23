@@ -1,8 +1,8 @@
-import { scrollWindow } from "../utils/ui";
-import { sanitizeHtml } from "../utils/strings";
-import { yaml } from "../processMarkdown/yaml";
+import { scrollWindow } from "../utils/ui.mjs";
+import { sanitizeHtml } from "../utils/strings.mjs";
+import { yaml } from "../processMarkdown/yaml.mjs";
 import Typed from "../externals/typed.js";
-import { processCopyCode } from "../processMarkdown/directivesAndSpecialContents";
+import { processCopyCode } from "../processMarkdown/directivesAndSpecialContents.mjs";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");

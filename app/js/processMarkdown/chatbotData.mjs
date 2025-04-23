@@ -1,9 +1,9 @@
-import { config } from "../config";
-import { handleURL } from "../utils/urls";
-import { startsWithAnyOf } from "../utils/strings";
-import { createChatBot } from "../chatbot/createChatbot";
-import { processYAML, yaml } from "./yaml";
-import { processFixedVariables } from "./processFixedVariables";
+import { config } from "../config.mjs";
+import { handleURL } from "../utils/urls.mjs";
+import { startsWithAnyOf } from "../utils/strings.mjs";
+import { createChatBot } from "../chatbot/createChatbot.mjs";
+import { processYAML, yaml } from "./yaml.mjs";
+import { processFixedVariables } from "./processFixedVariables.mjs";
 import defaultMD from "../../index.md";
 
 let md = defaultMD;

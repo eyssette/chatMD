@@ -1,4 +1,4 @@
-import { config } from "../config";
+import { config } from "../config.mjs";
 
 // Pour gérer l'URL de la source du chatbot
 export function handleURL(url, options) {

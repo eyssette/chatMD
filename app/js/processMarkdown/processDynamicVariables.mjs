@@ -1,8 +1,8 @@
-import { config } from "../config";
-import { yaml } from "./yaml";
-import { nextMessage } from "./directivesAndSpecialContents";
-import { tryConvertStringToNumber } from "../utils/strings";
-import { getRandomElement } from "../utils/arrays";
+import { config } from "../config.mjs";
+import { yaml } from "./yaml.mjs";
+import { nextMessage } from "./directivesAndSpecialContents.mjs";
+import { tryConvertStringToNumber } from "../utils/strings.mjs";
+import { getRandomElement } from "../utils/arrays.mjs";
 
 let getLastMessage = false;
 

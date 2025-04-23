@@ -1,8 +1,8 @@
-import { chatContainer } from "../chatbot/typewriter";
-import { markdownToHTML } from "../processMarkdown/markdownToHTML";
-import { yaml } from "../processMarkdown/yaml";
-import { hasSentenceEndMark } from "../utils/strings";
-import { convertLatexExpressions } from "../processMarkdown/convertLatex";
+import { chatContainer } from "../chatbot/typewriter.mjs";
+import { markdownToHTML } from "../processMarkdown/markdownToHTML.mjs";
+import { yaml } from "../processMarkdown/yaml.mjs";
+import { hasSentenceEndMark } from "../utils/strings.mjs";
+import { convertLatexExpressions } from "../processMarkdown/convertLatex.mjs";
 
 // Fonction pour détecter le type d'API en fonction du contenu
 function detectApiType(chunkElement) {

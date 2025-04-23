@@ -1,4 +1,4 @@
-import { nextMessage } from "../processMarkdown/directivesAndSpecialContents";
+import { nextMessage } from "../processMarkdown/directivesAndSpecialContents.mjs";
 
 export function longestCommonSubstringWeightedLength(
 	userInput,

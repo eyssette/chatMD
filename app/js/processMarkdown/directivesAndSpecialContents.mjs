@@ -1,6 +1,6 @@
-import { getRandomElement, shuffleArray } from "../utils/arrays";
-import { pauseTypeWriterMultipleBots } from "../chatbot/typewriter";
-import { yaml } from "./yaml";
+import { getRandomElement, shuffleArray } from "../utils/arrays.mjs";
+import { pauseTypeWriterMultipleBots } from "../chatbot/typewriter.mjs";
+import { yaml } from "./yaml.mjs";
 
 export let nextMessage = {
 	goto: "",

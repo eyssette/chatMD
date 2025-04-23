@@ -1,4 +1,4 @@
-import { yaml } from "./yaml";
+import { yaml } from "./yaml.mjs";
 
 export function convertLatexExpressions(string, noBackticks) {
 	string = string

@@ -1,9 +1,9 @@
-import { config } from "../config";
+import { config } from "../config.mjs";
 import { load as loadYAML } from "../externals/js-yaml.js";
-import { loadScript, loadCSS } from "../utils/urls";
-import { deepMerge } from "../utils/objects";
-import { hideFooter, setContentOfFooter } from "../utils/ui";
-import { decodeApiKey } from "../LLM/decodeApiKey";
+import { loadScript, loadCSS } from "../utils/urls.mjs";
+import { deepMerge } from "../utils/objects.mjs";
+import { hideFooter, setContentOfFooter } from "../utils/ui.mjs";
+import { decodeApiKey } from "../LLM/decodeApiKey.mjs";
 
 export let yaml = {
 	addOns: config.yaml.addOns,

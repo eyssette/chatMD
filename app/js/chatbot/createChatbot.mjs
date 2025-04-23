@@ -1,13 +1,13 @@
-import { config } from "../config";
-import { yaml, filterBadWords } from "../processMarkdown/yaml";
+import { config } from "../config.mjs";
+import { yaml, filterBadWords } from "../processMarkdown/yaml.mjs";
 import {
 	topElements,
 	getRandomElement,
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
-} from "../utils/arrays";
-import { scrollWindow } from "../utils/ui";
-import { getParamsFromURL, goToNewChatbot } from "../utils/urls";
+} from "../utils/arrays.mjs";
+import { scrollWindow } from "../utils/ui.mjs";
+import { getParamsFromURL, goToNewChatbot } from "../utils/urls.mjs";
 import {
 	nextMessage,
 	processAudio,
@@ -18,20 +18,20 @@ import {
 	processKroki,
 	processMultipleBots,
 	processRandomMessage,
-} from "../processMarkdown/directivesAndSpecialContents";
-import { processFixedVariables } from "../processMarkdown/processFixedVariables";
+} from "../processMarkdown/directivesAndSpecialContents.mjs";
+import { processFixedVariables } from "../processMarkdown/processFixedVariables.mjs";
 import {
 	processDynamicVariables,
 	evaluateExpression,
-} from "../processMarkdown/processDynamicVariables";
-import { convertLatexExpressions } from "../processMarkdown/convertLatex";
-import { markdownToHTML } from "../processMarkdown/markdownToHTML";
+} from "../processMarkdown/processDynamicVariables.mjs";
+import { convertLatexExpressions } from "../processMarkdown/convertLatex.mjs";
+import { markdownToHTML } from "../processMarkdown/markdownToHTML.mjs";
 import {
 	displayMessage,
 	autoFocus,
 	chatContainer,
 	userInput,
-} from "./typewriter";
+} from "./typewriter.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
@@ -39,13 +39,13 @@ import {
 	createVector,
 	longestCommonSubstringWeightedLength,
 } from "./nlp";
-import { getAnswerFromLLM } from "../LLM/useLLM";
+import { getAnswerFromLLM } from "../LLM/useLLM.mjs";
 import {
 	getRAGcontent,
 	vectorRAGinformations,
 	RAGcontent,
-} from "../LLM/processRAG";
-import { splitMarkdownAndLLMPrompts } from "../LLM/splitMarkdownAndLLMPrompts";
+} from "../LLM/processRAG.mjs";
+import { splitMarkdownAndLLMPrompts } from "../LLM/splitMarkdownAndLLMPrompts.mjs";
 
 const sendButton = document.getElementById("send-button");
 
