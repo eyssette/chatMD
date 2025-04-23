@@ -4,11 +4,10 @@
 
 ### Fix
 
-- template ci / erreur sur le dossier public
-- copie des fichiers de .build dans public
-- template ci car déplacement sources dans app
-- chemin dans la CI pour les fichiers du widget
-- déplacement du template ci gitlab
+- template CI : copie des fichiers de .build dans public
+- template CI : modification suite au déplacement des sources dans app
+- template CI : chemin pour les fichiers du widget
+- template CI : déplacement du template dans .gitlab
 - amélioration gestion footer (hide, setContent, resize)
 - amélioration de scrollWindow
 - amélioration de hasSentenceEndMark()
@@ -18,7 +17,7 @@
 
 ### Refactor
 
-- déplacement des fichiers sources
+- déplacement des fichiers sources dans le dossier "app" et du fichier widget.min.js dans le dossier widget
 
 ## 7.2.2 (2025-04-21)
 
