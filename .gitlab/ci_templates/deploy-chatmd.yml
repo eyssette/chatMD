@@ -6,10 +6,11 @@ cache:
   paths:
     - .npm/
 
-# Fichiers à compresser, et nom de l'application à utiliser
+# Fichiers à compresser, nom de l'application et dossier où se trouve l'application
 variables:
   FILES_TO_COMPRESS: "htm html txt text js css md ico svg"
   APP_NAME: "chatmd"
+  APP_FOLDER: "app"
 
 pages:
   script:
@@ -25,12 +26,12 @@ pages:
     - wget https://forge.apps.education.fr/$APP_NAME/$APP_NAME.forge.apps.education.fr/-/archive/main/$APP_NAME.forge.apps.education.fr-main.tar.bz2
     - tar -xjf $APP_NAME.forge.apps.education.fr-main.tar.bz2 --strip-components=1 -C public
 
-    # Suppression du dossier data dans public
-    - rm -r public/data
+    # Suppression du dossier data dans $APP_FOLDER/public
+    - rm -r public/$APP_FOLDER/data
 
-    # Copie de tous les fichiers du dépôt dans public
+    # Copie de tous les fichiers du dépôt dans public/$APP_FOLDER
     # Attention : ces fichiers écrasent les fichiers présents dans le dépôt de ChatMD
-    - cp -r .public/* public/
+    - cp -r .public/* public/$APP_FOLDER
     - rm -r .public
    
     # Construire l'application
@@ -40,6 +41,16 @@ pages:
 
     # Supprimer les éléments inutiles dans public
     - rm -r node_modules 
+
+    # L'application est construite dans le répertoire app : on déplace tous les fichiers nécessaires à la racine
+    - mkdir -p .build .build/widget/ .build/css/themes .build/js/addOns
+    - cp $APP_FOLDER/*.svg $APP_FOLDER/index.html $APP_FOLDER/script.min.js $APP_FOLDER/script.min.js.map widget/widget.min.js .build/
+    - cp $APP_FOLDER/css/styles.min.css .build/css/
+    - cp $APP_FOLDER/css/themes/* .build/css/themes/
+    - cp widget/message.svg .build/widget/
+    - cp -r $APP_FOLDER/js/addOns/* .build/js/addOns/
+    - cp $APP_FOLDER/*.md .build/
+    - mv .build public
 
     # Compresser les fichiers spécifiés
     - |
