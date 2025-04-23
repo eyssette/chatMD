@@ -2,7 +2,7 @@ import { config } from "../config.js";
 import { load as loadYAML } from "../externals/js-yaml.js";
 import { loadScript, loadCSS } from "../utils/urls.js";
 import { deepMerge } from "../utils/objects.js";
-import { footerElement, hideFooter } from "../utils/ui.js";
+import { hideFooter, setContentOfFooter } from "../utils/ui.js";
 import { decodeApiKey } from "../LLM/decodeApiKey.js";
 
 export let yaml = {
@@ -152,9 +152,10 @@ export function processYAML(markdownContent) {
 				}
 			}
 			if (yaml.footer === false) {
-				hideFooter(yaml.userInput);
+				const isUserInputVisible = yaml.userInput;
+				hideFooter(isUserInputVisible);
 			} else if (typeof yaml.footer == "string") {
-				footerElement.innerHTML = yaml.footer;
+				setContentOfFooter(yaml.footer);
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith(".css")
