@@ -78,6 +78,23 @@ tasks:
         '
     silent: false
 
+  tests:
+    deps:
+      - tests:codeceptjs
+      - test:jasmine
+
+  tests:codeceptjs:
+    aliases:
+      - tests:e2e
+    cmds:
+      - npx codeceptjs run --steps
+
+  tests:jasmine:
+    aliases:
+      - tests:unit
+    cmds:
+      - npx jasmine --config='tests/unit/.config/jasmine.mjs'
+
   bump:
     generates:
       - VERSION
