@@ -76,8 +76,20 @@ if (otherMdFiles) {
 	createCombinedMdFile();
 }
 
+const onwarn = (warning) => {
+	// Disable some Rollup warnings
+	if (
+		warning.code === "CIRCULAR_DEPENDENCY" ||
+		warning.code === "THIS_IS_UNDEFINED"
+	) {
+		return;
+	}
+	console.warn(`(!) ${warning.message}`);
+};
+
 export default {
 	input: appFolder + "js/main.mjs",
+	onwarn,
 	output: {
 		file: appFolder + "script.min.js",
 		format: "iife",
