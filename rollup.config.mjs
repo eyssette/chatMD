@@ -77,7 +77,7 @@ if (otherMdFiles) {
 }
 
 export default {
-	input: appFolder + "js/main.js",
+	input: appFolder + "js/main.mjs",
 	output: {
 		file: appFolder + "script.min.js",
 		format: "iife",

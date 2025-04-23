@@ -19,6 +19,7 @@ tasks:
       - "{{.APP_FOLDER}}data/**/*.md"
       - "{{.APP_FOLDER}}index.md"
       - "{{.APP_FOLDER}}css/**/*.css"
+      - "{{.APP_FOLDER}}js/**/*.mjs"
       - "{{.APP_FOLDER}}js/**/*.js"
       - rollup.config.mjs
     generates:
