@@ -50,7 +50,8 @@ pages:
     - cp widget/message.svg .build/widget/
     - cp -r $APP_FOLDER/js/addOns/* .build/js/addOns/
     - cp $APP_FOLDER/*.md .build/
-    - mv .build public
+    - cp -r .build/* public/
+    - rm -r .build
 
     # Compresser les fichiers spécifiés
     - |
