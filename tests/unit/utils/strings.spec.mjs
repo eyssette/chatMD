@@ -1,0 +1,206 @@
+import {
+	sanitizeHtml,
+	tryConvertStringToNumber,
+	startsWithAnyOf,
+	hasSentenceEndMark,
+} from "../../../app/js/utils/strings.mjs";
+
+describe("sanitizeHtml", () => {
+	it("keeps only the allowed HTML tags and removes all others", () => {
+		const allowedTags = ["<p>", "</p>"];
+		const input = "<p><a>test</a></p>";
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe("<p>test</p>");
+	});
+
+	it("keeps only the allowed HTML tags and attributes and removes all others", () => {
+		const allowedTags = ['<p class="myClass">', "</p>"];
+		const input = '<p class="myClass"><a>test</a></p>';
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe('<p class="myClass">test</p>');
+	});
+
+	it("removes all HTML tags if none are allowed", () => {
+		const allowedTags = [];
+		const input = "<div><strong>Text</strong></div>";
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe("Text");
+	});
+
+	it("preserves allowed tags even if they are nested", () => {
+		const allowedTags = ["<b>", "</b>", "<i>", "</i>"];
+		const input = "<b><i>text</i></b><u>test</u>";
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe("<b><i>text</i></b>test");
+	});
+
+	it("preserves allowed tags even if they are used more than once", () => {
+		const allowedTags = ["<b>", "</b>", "<i>", "</i>"];
+		const input = "<b>bold1</b><i>italics1</i> <b>bold2</b><i>italics2</i>";
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe(
+			"<b>bold1</b><i>italics1</i> <b>bold2</b><i>italics2</i>",
+		);
+	});
+
+	it("returns plain text if the string contains no allowed tags", () => {
+		const allowedTags = ["<p>", "</p>"];
+		const input = "<div><span>hello</span></div>";
+		const output = sanitizeHtml(input, allowedTags);
+		expect(output).toBe("hello");
+	});
+});
+
+describe("startsWithAnyOf", () => {
+	it("returns the first element from an array that is present at the beginning of a string", () => {
+		const result = startsWithAnyOf("coucou ça va ?", [
+			"hello",
+			"bonjour",
+			"courage !",
+			"coucou",
+		]);
+		expect(result).toBe("coucou");
+	});
+
+	it("does not return an element of an array if that element is not at the beginning of the string", () => {
+		const result = startsWithAnyOf("coucou ça va ?", [
+			"hello",
+			"bonjour",
+			"courage !",
+			"coucou",
+		]);
+		expect(result).not.toBe("bonjour !");
+	});
+
+	it("does not return an element of an array if that element includes the string but is longer than the string", () => {
+		const result = startsWithAnyOf("coucou ça va ?", [
+			"hello",
+			"bonjour",
+			"courage !",
+			"coucou",
+			"coucou ça va bien ?",
+		]);
+		expect(result).not.toBe("coucou ça va bien ?");
+	});
+
+	it("returns undefined if no match is found", () => {
+		const result = startsWithAnyOf("salut !", [
+			"hello",
+			"bonjour",
+			"courage !",
+			"coucou",
+		]);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns the first element from an array that is present at the beginning of a string, in order even if there are other matching elements", () => {
+		const result = startsWithAnyOf("bonjour tout le monde", [
+			"bonjour",
+			"bonjour tout le monde",
+			"bon",
+		]);
+		expect(result).toBe("bonjour");
+	});
+});
+
+describe("tryConvertStringToNumber", () => {
+	it("converts a numeric string to a number", () => {
+		const result = tryConvertStringToNumber("10");
+		expect(result).toBeInstanceOf(Number);
+		expect(result).toBe(10);
+	});
+
+	it("handles decimal numbers", () => {
+		const result = tryConvertStringToNumber("3.14");
+		expect(result).toBe(3.14);
+	});
+
+	it("handles negative numbers", () => {
+		const result = tryConvertStringToNumber("-3.14");
+		expect(result).toBe(-3.14);
+	});
+
+	it("handles a string which mixes numbers with letters", () => {
+		const result = tryConvertStringToNumber("123abc");
+		expect(result).toBe("123abc");
+	});
+
+	it("does not convert to number if the string starts with 0", () => {
+		const result = tryConvertStringToNumber("007");
+		expect(result).not.toBe(7);
+	});
+
+	it("does not convert negative numbers writen in French", () => {
+		const result = tryConvertStringToNumber("-3,14");
+		expect(result).not.toBe(-3.14);
+	});
+
+	it("returns the original string when it represents a hexadecimal number", () => {
+		const result = tryConvertStringToNumber("BBC");
+		expect(result).toBe("BBC");
+	});
+
+	it("returns the initial string for non-numeric strings", () => {
+		const result = tryConvertStringToNumber("hello");
+		expect(result).toBe("hello");
+	});
+
+	it("returns an empty string if the initial string is empty", () => {
+		const result = tryConvertStringToNumber("");
+		expect(result).toBe("");
+	});
+
+	it("returns the argument if the argument is not a string", () => {
+		const object = { test: "test" };
+		const result = tryConvertStringToNumber(object);
+		expect(result).toBe(object);
+	});
+
+	it("returns undefined if the argument is undefined", () => {
+		const result = tryConvertStringToNumber(undefined);
+		expect(result).toBe(undefined);
+	});
+});
+
+describe("hasSentenceEndMark", () => {
+	it("returns true when the string ends with a period", () => {
+		expect(hasSentenceEndMark("Hello.")).toBe(true);
+	});
+
+	it("returns true when the string ends with an exclamation mark", () => {
+		expect(hasSentenceEndMark("Wow !")).toBe(true);
+	});
+
+	it("returns true when the string ends with a question mark", () => {
+		expect(hasSentenceEndMark("Really ?")).toBe(true);
+	});
+
+	it("returns true when the string ends with an ellipsis character (…) ", () => {
+		expect(hasSentenceEndMark("To be continued…")).toBe(true);
+	});
+
+	it("returns false when the string ends with a semicolon", () => {
+		expect(hasSentenceEndMark("Wait here;")).toBe(false);
+	});
+
+	it("returns false when the string ends with a comma", () => {
+		expect(hasSentenceEndMark("Hello,")).toBe(false);
+	});
+
+	it("returns false when the string has no sentence-ending punctuation", () => {
+		expect(hasSentenceEndMark("Hello there")).toBe(false);
+	});
+
+	it("returns false when the string has no sentence-ending punctuation at the end of the string", () => {
+		expect(hasSentenceEndMark("Hello. How are you ? Fine ! Well")).toBe(false);
+	});
+
+	it("returns false for an empty string", () => {
+		expect(hasSentenceEndMark("")).toBe(false);
+	});
+
+	it("ignores trailing whitespace", () => {
+		expect(hasSentenceEndMark("Hi !   ")).toBe(true);
+		expect(hasSentenceEndMark("Hello   ")).toBe(false);
+	});
+});
