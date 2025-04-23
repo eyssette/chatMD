@@ -1,5 +1,25 @@
 # Changelog
 
+## 7.2.3 (2025-04-23)
+
+### Fix
+
+- template ci / erreur sur le dossier public
+- copie des fichiers de .build dans public
+- template ci car déplacement sources dans app
+- chemin dans la CI pour les fichiers du widget
+- déplacement du template ci gitlab
+- amélioration gestion footer (hide, setContent, resize)
+- amélioration de scrollWindow
+- amélioration de hasSentenceEndMark()
+- logo.svg transparence du fond
+- logo.svg simplifié et minifié
+- suppression des pauses dans le contenu si pas d'effet typewriter
+
+### Refactor
+
+- déplacement des fichiers sources
+
 ## 7.2.2 (2025-04-21)
 
 ### Fix
