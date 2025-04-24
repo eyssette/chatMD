@@ -98,6 +98,14 @@ tasks:
     cmds:
       - npx jasmine --config='tests/unit/.config/jasmine.mjs'
 
+  tests:createSteps:
+    sources:
+      - tests/e2e/.config/generateStepsDefinitionsFromFeatures.js
+      - features/**/*.feature
+      - tests/e2e/step_definitions/**/*.js
+    cmds:
+      - node tests/e2e/.config/generateStepsDefinitionsFromFeatures.js
+
   bump:
     generates:
       - VERSION
