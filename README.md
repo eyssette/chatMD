@@ -1,12 +1,12 @@
 # ChatMD
 
-ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
+[ChatMD](https://chatmd.forge.apps.education.fr/) est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
 ## ⚙️ Comment ça marche ?
 
 1. Créez un fichier en Markdown accessible en ligne.
 2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
-3. Votre chatbot est alors accessible à l'adresse suivante : [https://chatmd.forge.apps.education.fr/#URL](https://chatmd.forge.apps.education.fr/#URL) (Mettez l'url de votre fichier à la place de URL) !
+3. Votre chatbot est alors accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL` (Mettez l'url de votre fichier à la place de URL) !
 
 La syntaxe de base est simple, mais ChatMD peut être configuré pour des usages plus complexes : personnalisation de l'interface, utilisation de variables, de choix aléatoires, intégration avec un LLM, possibilité de faire du RAG …
 
@@ -15,6 +15,7 @@ Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://c
 ## 🎯 Quels sont les usages possibles ?
 
 On peut imaginer de nombreux usages :
+- Outil interactif pour pouvoir répondre à des questions fréquentes (FAQ)
 - Tutoriel pour un outil informatique
 - Guide méthodologique
 - Soutien pour la révision d'un cours, quiz interactif,
@@ -27,11 +28,11 @@ Si vous souhaitez contribuer ou tout simplement discuter de ce projet pour parti
 
 ## 👩‍⚖️ Licence
 
-ChatMD est un outil libre et gratuit distribué sous licence MIT. Les sources sont disponibles sur [la Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr).
+[ChatMD](https://chatmd.forge.apps.education.fr/) est un outil libre et gratuit distribué sous licence MIT. Les sources sont disponibles sur [la Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr).
 
 ## 🙏 Crédits
 
-ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
+[ChatMD](https://chatmd.forge.apps.education.fr/) n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
 
 Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
 
