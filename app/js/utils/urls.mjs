@@ -115,11 +115,16 @@ export function getParamsFromURL(
 }
 
 // Pour ouvrir un nouveau chatbot
-export function goToNewChatbot(urlNewChatbot) {
+export function goToNewChatbot(
+	urlNewChatbot,
+	URLbaseChatbot = window.location.origin,
+) {
 	if (urlNewChatbot && urlNewChatbot.indexOf(".") > -1) {
-		const fullUrl = window.location.origin + `/#${urlNewChatbot}`;
+		URLbaseChatbot =
+			!URLbaseChatbot || URLbaseChatbot == "null" ? "" : URLbaseChatbot;
+		const fullUrl = URLbaseChatbot + `/#${urlNewChatbot}`;
 		window.open(fullUrl, "_blank");
 	} else {
-		alert("Veuillez entrer une URL valide.");
+		window.alert("Veuillez entrer une URL valide.");
 	}
 }
