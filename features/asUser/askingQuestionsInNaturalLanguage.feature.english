@@ -1,4 +1,4 @@
-@core @naturalLanguageQuestions
+@core @asUser @naturalLanguageQuestions
 Feature: Getting relevant answers from the chatbot using natural language
   In order to get information from the chatbot
   As a user

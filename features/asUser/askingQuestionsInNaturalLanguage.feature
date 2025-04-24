@@ -1,4 +1,4 @@
-@core @roleIsUser @naturalLanguageQuestions 
+@core @asUser @naturalLanguageQuestions 
 Feature: Poser des questions au chatbot en langage naturel
 	On peut interagir avec ChatMD en lui posant des questions en langage naturel
 	ChatMD peut trouver la bonne réponse qui correspond et répondre ainsi de manière pertinente
