@@ -39,7 +39,7 @@ pages:
     - npm ci --cache ../.npm --prefer-offline --no-audit
     - npm run build
 
-    # Supprimer les éléments inutiles dans public
+    # Supprimer les modules nodes dans public
     - rm -r node_modules 
 
     # L'application est construite dans le répertoire app : on déplace tous les fichiers nécessaires à la racine
@@ -51,7 +51,10 @@ pages:
     - cp -r $APP_FOLDER/js/addOns/* .build/js/addOns/
     - cp $APP_FOLDER/*.md .build/
     - cp -r .build/* .
+
+    # On supprime les dossiers qui ne sont plus nécessaires
     - rm -r .build
+    - rm -r app
 
     # Compresser les fichiers spécifiés
     - |
