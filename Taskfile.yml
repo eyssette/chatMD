@@ -90,7 +90,7 @@ tasks:
     cmds:
       - task: server:start
       - defer: {task: server:stop}
-      - npx codeceptjs run --steps
+      - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)'
 
   tests:unit:
     aliases:
