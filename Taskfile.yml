@@ -79,19 +79,19 @@ tasks:
     silent: false
 
   tests:
-    deps:
-      - tests:codeceptjs
-      - test:jasmine
+    cmds:
+      - task: tests:unit
+      - task: tests:e2e
 
-  tests:codeceptjs:
+  tests:e2e:
     aliases:
-      - tests:e2e
+      - tests:codeceptjs
     cmds:
       - npx codeceptjs run --steps
 
-  tests:jasmine:
+  tests:unit:
     aliases:
-      - tests:unit
+      - tests:jasmine
     cmds:
       - npx jasmine --config='tests/unit/.config/jasmine.mjs'
 
