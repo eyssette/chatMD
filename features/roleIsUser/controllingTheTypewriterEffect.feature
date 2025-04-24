@@ -1,5 +1,5 @@
 @core @roleIsUser
-xFeature: Contrôler l'effet de machine à écrire
+Feature: Contrôler l'effet de machine à écrire
 	Par défaut, ChatMD affiche les messages du chatbot avec un effet machine à écrire
 	Mais on peut afficher tout d'un coup en appuyant sur la touche Entrée ou sur le bouton "Envoyer"
 
