@@ -89,8 +89,8 @@ tasks:
       - tests:codeceptjs
     cmds:
       - task: server:start
+      - defer: {task: server:stop}
       - npx codeceptjs run --steps
-      - task: server:stop
 
   tests:unit:
     aliases:
