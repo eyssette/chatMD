@@ -1,16 +1,22 @@
-export function deepMerge(target, source) {
-	const isObject = (obj) => obj && typeof obj === "object";
+function isObject(obj) {
+	return obj && typeof obj === "object" && !Array.isArray(obj);
+}
 
-	for (const key in source) {
-		if (isObject(source[key])) {
-			if (!target[key]) {
-				Object.assign(target, { [key]: {} });
-			}
-			deepMerge(target[key], source[key]);
+export function deepMerge(baseObject, objectToMergeIn) {
+	if (!isObject(objectToMergeIn)) return baseObject;
+	if (!isObject(baseObject)) return objectToMergeIn;
+
+	const mergedObject = Object.assign({}, baseObject);
+
+	for (const [key, incomingValue] of Object.entries(objectToMergeIn)) {
+		const baseValue = mergedObject[key];
+
+		if (isObject(incomingValue) && isObject(baseValue)) {
+			mergedObject[key] = deepMerge(baseValue, incomingValue);
 		} else {
-			Object.assign(target, { [key]: source[key] });
+			mergedObject[key] = incomingValue;
 		}
 	}
 
-	return target;
+	return mergedObject;
 }
