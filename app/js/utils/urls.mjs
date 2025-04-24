@@ -95,22 +95,23 @@ export function loadCSS(src) {
 }
 
 // Pour gérer les paramètres dans l'URL
-export function getParamsFromURL() {
-	const params1 = Object.fromEntries(
-		new URLSearchParams(document.location.search),
-	);
-	// Version sécurisée : les paramètres sont dans le hash et ne sont donc pas envoyés au serveur
-	const hash = window.location.hash;
-	const indexStartParams = hash.indexOf("?");
-	const hasParamsInHash = indexStartParams > -1;
-	const paramsInHash = hasParamsInHash
-		? hash.substring(indexStartParams + 1)
-		: "";
-	const params2 = hasParamsInHash
-		? Object.fromEntries(new URLSearchParams(paramsInHash))
+export function getParamsFromURL(
+	queryString = window.location.search,
+	urlHash = window.location.hash,
+) {
+	const paramsFromQuery = Object.fromEntries(new URLSearchParams(queryString));
+	// Version sécurisée (hashHasParams) : les paramètres sont dans le hash et ne sont donc pas envoyés au serveur
+	const hashHasParams = urlHash.includes("?");
+	const hashQueryPart = hashHasParams ? urlHash.split("?")[1] : "";
+	const paramsFromHash = hashHasParams
+		? Object.fromEntries(new URLSearchParams(hashQueryPart))
 		: {};
-	const params = { ...params1, ...params2 };
-	return params;
+
+	// Les paramètres dans le hash (#hash?p=1) écrasent les paramètres classiques dans l'URL (?p=2)
+	return {
+		...paramsFromQuery,
+		...paramsFromHash,
+	};
 }
 
 // Pour ouvrir un nouveau chatbot
