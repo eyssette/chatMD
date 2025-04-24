@@ -3,7 +3,8 @@ exports.config = {
 	helpers: {
 		Playwright: {
 			browser: "chromium",
-			url: "http://127.0.0.1:5501/app/",
+			url: "http://localhost:8888",
+			bypassCSP: true,
 			show: true,
 			locale: "fr-FR",
 		},

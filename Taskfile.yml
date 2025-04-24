@@ -4,6 +4,7 @@ version: '3'
 
 vars:
   APP_FOLDER: "app"
+  PORT_LOCAL_SERVER: 8888
 
 tasks:
   build:
@@ -87,7 +88,9 @@ tasks:
     aliases:
       - tests:codeceptjs
     cmds:
+      - task: server:start
       - npx codeceptjs run --steps
+      - task: server:stop
 
   tests:unit:
     aliases:
@@ -102,3 +105,12 @@ tasks:
       - package-lock.json
     cmds:
       - cz bump
+
+  server:start:
+    cmds:
+      - node --env-file=.env server.js {{.PORT_LOCAL_SERVER}} & # On lance le serveur en arrière-plan
+      - until nc -z localhost {{.PORT_LOCAL_SERVER}}; do sleep 1; done # On attend que le port soit ouvert avant de lancer la suite
+  
+  server:stop:
+    cmds:
+      - kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null || true
