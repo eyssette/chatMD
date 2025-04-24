@@ -49,6 +49,13 @@ describe("deepMerge", () => {
 		expect(mergedObject).toEqual({ a: { c: 3, d: 4 }, b: 2 });
 	});
 
+	it("overwrites object values in the baseObject with non-object values from objectToMergeIn ", () => {
+		const baseObject = { a: { c: 1, d: 4 }, b: 2 };
+		const objectToMergeIn = { a: 2 };
+		const mergedObject = deepMerge(baseObject, objectToMergeIn);
+		expect(mergedObject).toEqual({ a: 2, b: 2 });
+	});
+
 	it("handles empty objectToMergeIn or baseObject", () => {
 		const baseObject = { a: 1 };
 		const objectToMergeIn = {};
