@@ -46,8 +46,15 @@ import {
 	RAGcontent,
 } from "../LLM/processRAG.mjs";
 import { splitMarkdownAndLLMPrompts } from "../LLM/splitMarkdownAndLLMPrompts.mjs";
+import { sanitizeHtml } from "../utils/strings.mjs";
 
 const sendButton = document.getElementById("send-button");
+const allowedTagsInUserInput = [
+	"<p>",
+	"</p>",
+	'<span class="hidden">',
+	"</span>",
+];
 
 export async function createChatBot(chatData) {
 	let dynamicVariables = {};
@@ -702,8 +709,9 @@ export async function createChatBot(chatData) {
 
 	// Gestion des événéments js
 	sendButton.addEventListener("click", () => {
-		const userInputText = userInput.innerText;
+		let userInputText = userInput.innerText;
 		if (userInputText.trim() !== "") {
+			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
 			createChatMessage(userInputText, true);
 			setTimeout(() => {
 				chatbotResponse(userInputText);

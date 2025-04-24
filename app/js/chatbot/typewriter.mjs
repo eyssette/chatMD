@@ -1,5 +1,4 @@
 import { scrollWindow } from "../utils/ui.mjs";
-import { sanitizeHtml } from "../utils/strings.mjs";
 import { yaml } from "../processMarkdown/yaml.mjs";
 import Typed from "../externals/typed.js";
 import { processCopyCode } from "../processMarkdown/directivesAndSpecialContents.mjs";
@@ -294,13 +293,6 @@ function typeWriter(content, element, accelerateFactor) {
 	});
 }
 
-const allowedTagsInUserInput = [
-	"<p>",
-	"</p>",
-	'<span class="hidden">',
-	"</span>",
-];
-
 export function displayMessage(html, isUser, chatMessage, container) {
 	return new Promise((resolve) => {
 		// On affiche le message dans un container. Par défaut on affiche le message comme un nouveau message dans le chat, mais on peut définir un container (pour afficher le message comme un élément enfant d'un nouveau message en cas de génération de message à la fois via le markdown et un LLM : dans ce cas, il faut que le contenu des messages se suivent, dans un même message, au lieu d'ajouter un nouveau message à chaque fois)
@@ -321,11 +313,7 @@ export function displayMessage(html, isUser, chatMessage, container) {
 			) {
 				// La désactivation de l'effet typewriter avec les backticks n'est plus nécessaire : on les supprime, et on supprime également les pauses (par exemple : ^100)
 				html = html.replaceAll("`", "").replace(/\^\d+/g, "");
-				if (isUser) {
-					chatMessage.innerHTML = sanitizeHtml(html, allowedTagsInUserInput);
-				} else {
-					chatMessage.innerHTML = html;
-				}
+				chatMessage.innerHTML = html;
 				resolve();
 			} else {
 				typeWriter(html, chatMessage).then(() => resolve());
