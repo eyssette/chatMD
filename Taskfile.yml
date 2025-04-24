@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  APP_FOLDER: "app/"
+  APP_FOLDER: "app"
 
 tasks:
   build:
@@ -16,17 +16,17 @@ tasks:
   npm:build:
     deps: [npm:install]
     sources:
-      - "{{.APP_FOLDER}}data/**/*.md"
-      - "{{.APP_FOLDER}}index.md"
-      - "{{.APP_FOLDER}}css/**/*.css"
-      - "{{.APP_FOLDER}}js/**/*.mjs"
-      - "{{.APP_FOLDER}}js/**/*.js"
+      - "{{.APP_FOLDER}}/data/**/*.md"
+      - "{{.APP_FOLDER}}/index.md"
+      - "{{.APP_FOLDER}}/css/**/*.css"
+      - "{{.APP_FOLDER}}/js/**/*.mjs"
+      - "{{.APP_FOLDER}}/js/**/*.js"
       - rollup.config.mjs
     generates:
-      - "{{.APP_FOLDER}}index.md"
-      - "{{.APP_FOLDER}}css/styles.min.css"
-      - "{{.APP_FOLDER}}script.min.js"
-      - "{{.APP_FOLDER}}script.min.js.map"
+      - "{{.APP_FOLDER}}/index.md"
+      - "{{.APP_FOLDER}}/css/styles.min.css"
+      - "{{.APP_FOLDER}}/script.min.js"
+      - "{{.APP_FOLDER}}/script.min.js.map"
     cmds:
       - npm run build
 
