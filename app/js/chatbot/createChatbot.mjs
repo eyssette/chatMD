@@ -235,6 +235,7 @@ export async function createChatBot(chatData) {
 					let attempts = 0;
 					const interval = setInterval(() => {
 						if (window.katex) {
+							clearInterval(interval);
 							timeToDisplayMessage = true;
 							html = isUser
 								? convertLatexExpressions(html, true)
@@ -242,11 +243,11 @@ export async function createChatBot(chatData) {
 						} else {
 							attempts++;
 							if (attempts > 10) {
+								clearInterval(interval);
 								timeToDisplayMessage = true;
 							}
 						}
 						if (timeToDisplayMessage) {
-							clearInterval(interval);
 							displayMessage(html, isUser, chatMessage).then(() => {
 								if (nextMessage.selected) {
 									chatbotResponse(nextMessage.selected);
