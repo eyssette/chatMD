@@ -1,5 +1,51 @@
 # Changelog
 
+## 7.3.0 (2025-04-24)
+
+### Feat
+
+- config jasmine & codeceptjs pour tests e2e & unitaires
+
+### Fix
+
+- sanitizeHtml seulement sur l'userInput
+- automatisation création steps des tests e2e à partir des fichiers .feature
+- organisation des tests dans des sous-dossiers
+- lancement des tests en excluant le tag @WIP (Work In Progress)
+- **Taskfile**: server:stop même si fail des tests codeceptjs
+- configuration de codecept  et task avec serveur local
+- serveur local à la racine plutôt que dans app/
+- refactor et amélioration de deepMerge()
+- **taskfile**: tests en série plutôt qu'en parallèle
+- add unit tests utils/urls
+- ajout extension .mjs pour les imports
+- add unit tests utils/arrays.mjs
+- 2 tests désactivés pour objects.mjs
+- chemin vers l'application pour le serveur local
+- configuration taskfile pour les tests (e2e & unit)
+- désactivation de 2 messages d'erreurs Rollup
+- changement extension modules en .mjs
+
+### Chore
+
+- organisation des fichiers .feature et steps
+- noms des fichiers de tests = noms des features
+- suppression de commentaires inutiles
+- écriture des features en français
+- set root for liveserver
+- suppression de tryTo et retryTo dans config codecept
+- **Taskfile**: juste le nom du dossier dans APP_FOLDER
+- rebuild package-lock.json and script
+
+### Doc
+
+- précisions dans le CHANGELOG
+
+### Refactor
+
+- réécriture goToNewChatbot
+- réécriture getParamsFromURL
+
 ## 7.2.3 (2025-04-23)
 
 ### Fix
