@@ -48,7 +48,10 @@ const server = http.createServer((request, response) => {
 	}
 
 	const parsedUrl = url.parse(request.url);
-	const requestedPath = decodeURIComponent(parsedUrl.pathname); // Nettoyage des caractères encodés
+	const publicPath = decodeURIComponent(
+		parsedUrl.pathname === "/" ? "/index.html" : parsedUrl.pathname,
+	);
+	const requestedPath = path.normalize(path.join("/app", publicPath));
 
 	const isAllowedFontFile =
 		requestedPath.includes("app/js/addOns/katex/fonts/") &&
@@ -140,6 +143,6 @@ const server = http.createServer((request, response) => {
 // Démarrage du serveur
 server.listen(PORT, () => {
 	console.log(
-		`Static file server running at:\n  => http://localhost:${PORT}/app/index.html\nCTRL + C to shutdown`,
+		`Static file server running at:\n  => http://localhost:${PORT}/index.html\nCTRL + C to shutdown`,
 	);
 });
