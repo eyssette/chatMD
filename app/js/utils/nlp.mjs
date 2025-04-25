@@ -87,8 +87,9 @@ export function levenshteinDistance(a, b) {
 export function hasLevenshteinDistanceLessThan(
 	string,
 	keyWord,
-	distance,
-	WORD_LENGTH_FACTOR,
+	distance = 2,
+	wordLengthFactor = 0.1,
+	ngramLengthBoostCoefficient = 3,
 ) {
 	let similarity = 0;
 	// Divise keyWord en mots pour déterminer la longueur des n-grammes
@@ -106,7 +107,9 @@ export function hasLevenshteinDistanceLessThan(
 
 		// Si la distance est inférieure à la distance donnée, on augmente le score de similarité en fonction de la taille du n-gramme
 		if (distanceLevenshtein < distance) {
-			similarity = similarity + nGram.length * WORD_LENGTH_FACTOR * 3;
+			similarity =
+				similarity +
+				nGram.length * wordLengthFactor * ngramLengthBoostCoefficient;
 		}
 	}
 	return similarity;
