@@ -1,66 +1,90 @@
 import { config } from "../config.mjs";
 
+function handleShorcuts(url) {
+	const foundShortcut = config.shortcuts.find(
+		([shortcutUrl]) => shortcutUrl === url,
+	);
+	return foundShortcut ? foundShortcut[1] : url;
+}
+
+function isAuthorized(url) {
+	return config.authorizedChatbots.find((element) => element == url);
+}
+
+// Gestion des fichiers hébergés sur github
+function handleURLfromGithub(url) {
+	return url
+		.replace("https://github.com", "https://raw.githubusercontent.com")
+		.replace("/blob/", "/");
+}
+
+// gestion des fichiers hébergés sur codiMD / le pad gouv / hedgedoc / digipage
+function isCodimdURL(url) {
+	return (
+		url.startsWith("https://codimd") ||
+		url.startsWith("https://pad.numerique.gouv.fr/") ||
+		url.includes("hedgedoc") ||
+		url.includes("digipage")
+	);
+}
+function handleURLfromCodimd(url) {
+	url = url
+		.replace("?edit", "")
+		.replace("?both", "")
+		.replace("?view", "")
+		.replace(/#$/, "")
+		.replace(/\/$/, "");
+	url = url.indexOf("download") === -1 ? url + "/download" : url;
+	return url;
+}
+
+// gestion des fichiers hébergés sur framapad ou digidoc
+function isFramapadURL(url) {
+	return (
+		(url.includes("framapad") || url.includes("digidoc")) &&
+		!url.endsWith("/export/txt")
+	);
+}
+function handleURLfromFramapad(url) {
+	return url.replace(/\?.*/, "") + "/export/txt";
+}
+
+function handleKnownHosts(url, shouldAddCorsProxy) {
+	if (url.includes(".forge")) {
+		shouldAddCorsProxy = false;
+	} else if (url.startsWith("https://github.com")) {
+		shouldAddCorsProxy = false;
+		url = handleURLfromGithub(url);
+	} else if (isCodimdURL(url)) {
+		shouldAddCorsProxy = false;
+		url = handleURLfromCodimd(url);
+	} else if (isFramapadURL(url)) {
+		shouldAddCorsProxy = false;
+		url = handleURLfromFramapad(url);
+	}
+	return { url, shouldAddCorsProxy };
+}
+
 // Pour gérer l'URL de la source du chatbot
 export function handleURL(url, options) {
-	if (url !== "") {
-		let addCorsProxy = options && options.useCorsProxy ? true : false;
-		// Vérification de la présence d'un raccourci
-		const shortcut = config.shortcuts.find((element) => element[0] == url);
-		if (shortcut) {
-			url = shortcut[1];
-			// Si on a un raccourci, on n'a pas besoin de traiter correctement l'url
-			return url;
-		}
-		if (config.secureMode) {
-			const authorizedChatbot = config.authorizedChatbots.find(
-				(element) => element == url,
-			);
-			if (authorizedChatbot) {
-				url = authorizedChatbot;
-			} else {
-				return "";
-			}
-		}
-		// Gestion des fichiers hébergés sur la forge et publiés sur une page web
-		if (url.includes(".forge")) {
-			addCorsProxy = false;
-		}
-		// Gestion des fichiers hébergés sur github
-		if (url.startsWith("https://github.com")) {
-			addCorsProxy = false;
-			url = url.replace(
-				"https://github.com",
-				"https://raw.githubusercontent.com",
-			);
-			url = url.replace("/blob/", "/");
-		}
-		// gestion des fichiers hébergés sur codiMD / le pad gouv / hedgedoc / digipage
-		if (
-			url.startsWith("https://codimd") ||
-			url.startsWith("https://pad.numerique.gouv.fr/") ||
-			url.includes("hedgedoc") ||
-			url.includes("digipage")
-		) {
-			addCorsProxy = false;
-			url = url
-				.replace("?edit", "")
-				.replace("?both", "")
-				.replace("?view", "")
-				.replace(/#$/, "")
-				.replace(/\/$/, "");
-			url = url.indexOf("download") === -1 ? url + "/download" : url;
-		}
-		// gestion des fichiers hébergés sur framapad ou digidoc
-		if (
-			(url.includes("framapad") || url.includes("digidoc")) &&
-			!url.endsWith("/export/txt")
-		) {
-			addCorsProxy = false;
-			url = url.replace(/\?.*/, "") + "/export/txt";
-		}
-		url = addCorsProxy ? config.corsProxy + url : url;
+	if (!url) return url;
+
+	let shouldAddCorsProxy = options && options.useCorsProxy ? true : false;
+
+	// Gestion des éventuels raccourcis
+	url = handleShorcuts(url);
+
+	// Gestion du mode sécurisé qui ne laisse passer que les chatbots autorisés
+	if (config.secureMode && !isAuthorized(url)) {
+		return "";
 	}
-	return url;
+
+	// Traitements spécifiques à certains hébergeurs
+	const hostResult = handleKnownHosts(url, shouldAddCorsProxy);
+	url = hostResult.url;
+	shouldAddCorsProxy = hostResult.shouldAddCorsProxy;
+
+	return shouldAddCorsProxy ? config.corsProxy + url : url;
 }
 
 // Pour charger des scripts
