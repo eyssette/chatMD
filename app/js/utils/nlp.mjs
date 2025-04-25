@@ -54,7 +54,7 @@ export function longestCommonSubstringWeightedLength(
 	return longestCommonSubstringWeightedLength;
 }
 
-function levenshteinDistance(a, b) {
+export function levenshteinDistance(a, b) {
 	/* Fonction pour calculer une similarité plutôt que d'en rester à une identité stricte */
 	const aLength = a.length;
 	const bLength = b.length;
