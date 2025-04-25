@@ -1,6 +1,6 @@
 import { yaml } from "../processMarkdown/yaml.mjs";
 import { handleURL } from "../utils/urls.mjs";
-import { createVector } from "../chatbot/nlp.mjs";
+import { createVector } from "../utils/nlp.mjs";
 import { localRAGinformations } from "./RAG.mjs";
 
 function prepareRAGdata(informations, separator) {

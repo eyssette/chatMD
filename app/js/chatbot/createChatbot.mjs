@@ -38,7 +38,7 @@ import {
 	cosineSimilarity,
 	createVector,
 	longestCommonSubstringWeightedLength,
-} from "./nlp";
+} from "../utils/nlp.mjs";
 import { getAnswerFromLLM } from "../LLM/useLLM.mjs";
 import {
 	getRAGcontent,
