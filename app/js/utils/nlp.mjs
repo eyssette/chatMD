@@ -1,5 +1,3 @@
-import { nextMessage } from "../processMarkdown/directivesAndSpecialContents.mjs";
-
 export function longestCommonSubstringWeightedLength(
 	userInput,
 	keyword,
@@ -175,9 +173,9 @@ function magnitude(vec) {
 	return Math.sqrt(sum);
 }
 
-function tokenize(text, titleResponse) {
-	// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
-
+// Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
+function tokenize(text, options) {
+	const prioritizeTokensInTitle = options && options.prioritizeTokensInTitle;
 	// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
 	let words = text.toLowerCase();
 	words = words.replace(/,|\.|:|\?|!|\(|\)|\[|\||\/\]/g, "");
@@ -195,8 +193,8 @@ function tokenize(text, titleResponse) {
 	const weights = [0, 0, 0, 0, 0.4, 0.6, 0.8];
 	// Si le token correspond au début du mot, le poids est plus important
 	const bonusStart = 0.2;
-	// Si le token est présent dans le titre, le poids est très important
-	const bonusInTitle = nextMessage.goto ? 100 : 10;
+	// Si le token est présent dans le titre, le poids est très important, et encore plus si on a choisi l'option pour booster le poids dans le titre
+	const bonusInTitle = options && options.boostIfKeywordsInTitle ? 100 : 10;
 	// Si le nombre de caractères du token est proche du nombre de caractères du mot de base, alors le poids est plus important
 	const bonusLengthSimilarity = 5;
 
@@ -210,8 +208,11 @@ function tokenize(text, titleResponse) {
 				? weight + bonusLengthSimilarity / lengthDifference
 				: weight;
 		const token = word.substring(index, index + tokenDimension);
-		if (titleResponse) {
-			titleResponse = titleResponse.toLowerCase();
+		if (prioritizeTokensInTitle) {
+			const titleResponse =
+				options && options.titleResponse
+					? options.titleResponse.toLowerCase()
+					: "";
 			// Bonus si le token est dans le titre
 			if (titleResponse.includes(token)) {
 				weight = weight + bonusInTitle;
@@ -246,9 +247,9 @@ function tokenize(text, titleResponse) {
 	return tokens;
 }
 
-export function createVector(text, titleResponse) {
+export function createVector(text, options) {
 	// Fonction pour créer un vecteur pour chaque texte en prenant en compte le poids de chaque token et éventuellement l'index de la réponse du chatbot
-	const tokens = tokenize(text, titleResponse);
+	const tokens = tokenize(text, options);
 	const vec = {};
 	for (const { token, weight } of tokens) {
 		if (token) {
@@ -258,11 +259,11 @@ export function createVector(text, titleResponse) {
 	return vec;
 }
 
-export function cosineSimilarity(str, vector) {
+export function cosineSimilarity(str, vector, options) {
 	// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
 
 	// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)
-	const vectorString = createVector(str);
+	const vectorString = createVector(str, options);
 
 	// Calcule la similarité cosinus
 	const dot = dotProduct(vectorString, vector);

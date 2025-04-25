@@ -342,7 +342,10 @@ export async function createChatBot(chatData) {
 				: responses.toLowerCase();
 			const titleResponse = chatData[i][0];
 			response = titleResponse + " " + response;
-			const vectorResponse = createVector(response, titleResponse);
+			const vectorResponse = createVector(response, {
+				prioritizeTokensInTitle: true,
+				titleResponse: titleResponse,
+			});
 			vectorChatBotResponses.push(vectorResponse);
 		}
 	}
@@ -367,7 +370,9 @@ export async function createChatBot(chatData) {
 			if (yaml.useLLM.RAGinformations) {
 				// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 				const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
-					cosineSimilarity(questionToLLM, vectorRAGinformation),
+					cosineSimilarity(questionToLLM, vectorRAGinformation, {
+						boostIfKeywordsInTitle: nextMessage && nextMessage.goto,
+					}),
 				);
 				const RAGbestMatchesIndexes = topElements(
 					cosSimArray,
@@ -448,6 +453,7 @@ export async function createChatBot(chatData) {
 						const cosSim = cosineSimilarity(
 							userInputTextToLowerCase,
 							vectorChatBotResponses[i],
+							{ boostIfKeywordsInTitle: nextMessage && nextMessage.goto },
 						);
 						matchScore = matchScore + cosSim + 0.5;
 					}
