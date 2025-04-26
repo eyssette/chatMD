@@ -22,14 +22,17 @@ tasks:
       - "{{.APP_FOLDER}}/css/**/*.css"
       - "{{.APP_FOLDER}}/js/**/*.mjs"
       - "{{.APP_FOLDER}}/js/**/*.js"
+      - "{{.APP_FOLDER}}/DEBUG" # On vérifie si ce fichier a changé (parce qu'on a lancé une nouvelle version pour le DEBUG), afin de pouvoir relancer le build pour la version PROD
       - rollup.config.mjs
     generates:
       - "{{.APP_FOLDER}}/index.md"
       - "{{.APP_FOLDER}}/css/styles.min.css"
       - "{{.APP_FOLDER}}/script.min.js"
       - "{{.APP_FOLDER}}/script.min.js.map"
+    method: timestamp
     cmds:
-      - npm run build
+      - npx rollup --config
+      - rm "{{.APP_FOLDER}}/DEBUG" # On supprime le fichier DEBUG si on build en version PROD
 
   npm:install:
     sources:
@@ -39,6 +42,13 @@ tasks:
       - node_modules/.package-lock.json
     cmds:
       - npm install
+
+  debug:
+    deps: [npm:install]
+    sources:
+    cmds:
+      - npx rollup --config --environment DEBUG
+      - touch "{{.APP_FOLDER}}/DEBUG" # On ajoute un fichier DEBUG pour indiquer qu'on n'est pas en mode prod (warning pour ne pas push le build de l'application)
 
   minify-widget:
     sources:

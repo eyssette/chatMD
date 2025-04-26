@@ -87,13 +87,16 @@ const onwarn = (warning) => {
 	console.warn(`(!) ${warning.message}`);
 };
 
+// En mode DEBUG, on ne change pas le nom des variables, afin de pouvoir les vérifier
+const optionsTerser = process.env.DEBUG == "true" ? { mangle: false } : {};
+
 export default {
 	input: appFolder + "js/main.mjs",
 	onwarn,
 	output: {
 		file: appFolder + "script.min.js",
 		format: "iife",
-		plugins: [terser()],
+		plugins: [terser(optionsTerser)],
 		sourcemap: true,
 	},
 	plugins: [

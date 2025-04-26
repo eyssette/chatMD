@@ -1,0 +1,13 @@
+{
+	"configurations": [
+		{
+			"type": "chrome",
+			"name": "ChatMD",
+			"request": "launch",
+			"url": "http://localhost:8888",
+			"webRoot": "${workspaceFolder}/app",
+			"sourceMaps": true,
+			"sourceMapRenames": true
+		}
+	]
+}
