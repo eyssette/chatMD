@@ -31,8 +31,12 @@ tasks:
       - "{{.APP_FOLDER}}/script.min.js.map"
     method: timestamp
     cmds:
-      - npx rollup --config
-      - rm "{{.APP_FOLDER}}/DEBUG" # On supprime le fichier DEBUG si on build en version PROD
+      - cmd: npx rollup --config
+      - cmd: | # On supprime le fichier DEBUG si on build en version PROD
+          if [ -e "{{.APP_FOLDER}}/DEBUG" ]; then
+            rm "{{.APP_FOLDER}}/DEBUG"
+          fi
+        silent: true
 
   npm:install:
     sources:
@@ -47,8 +51,9 @@ tasks:
     deps: [npm:install]
     sources:
     cmds:
-      - npx rollup --config --environment DEBUG
-      - touch "{{.APP_FOLDER}}/DEBUG" # On ajoute un fichier DEBUG pour indiquer qu'on n'est pas en mode prod (warning pour ne pas push le build de l'application)
+      - cmd: npx rollup --config --environment DEBUG
+      - cmd: touch "{{.APP_FOLDER}}/DEBUG" # On ajoute un fichier DEBUG pour indiquer qu'on n'est pas en mode prod (warning pour ne pas push le build de l'application)
+        silent: true
 
   minify-widget:
     sources:
