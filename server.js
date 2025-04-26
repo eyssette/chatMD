@@ -10,6 +10,7 @@ const PORT = process.argv[2] || 8888;
 const ALLOWED_FILES = [
 	"/app/index.html",
 	"/app/script.min.js",
+	"/app/script.min.js.map",
 	"/app/favicon.svg",
 	"/app/css/styles.min.css",
 	"/app/css/themes/bubbles.css",
