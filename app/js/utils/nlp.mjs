@@ -155,7 +155,7 @@ export function removeAccents(str) {
 }
 
 // Calcule le produit scalaire de deux vecteurs
-function dotProduct(vec1, vec2) {
+export function dotProduct(vec1, vec2) {
 	const commonWords = new Set([...Object.keys(vec1), ...Object.keys(vec2)]);
 	let dot = 0;
 	for (const word of commonWords) {
@@ -165,7 +165,7 @@ function dotProduct(vec1, vec2) {
 }
 
 // Calcule la magnitude d'un vecteur
-function magnitude(vec) {
+export function magnitude(vec) {
 	let sum = 0;
 	for (const word in vec) {
 		sum += vec[word] ** 2;
