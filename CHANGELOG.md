@@ -1,5 +1,37 @@
 # Changelog
 
+## 7.3.1 (2025-04-26)
+
+### Fix
+
+- **nlp**: amélioration tokenize
+- **nlp**: fonction removeAccents (prise en compte du caractère ù)
+- **template-ci**: suppression des dossiers pas nécessaires dans public
+- clearInterval le plus tôt possible
+
+### Chore
+
+- **nlp**: export de 2 fonctions
+- export de la fonction levenshteinDistance (pour les tests)
+- déplacement de nlp.mjs dans utils
+- loop pour tâche de push sur les différents repo
+- prise en compte des commits de type test
+
+### Docs
+
+- README avec liens et précisions usages
+
+### Refactor
+
+- **nlp**: objet pour options de vectorisation
+- **nlp**:  hasLevenshteinDistanceLessThan
+- handleURL()
+
+### Test
+
+- ajout tests pour nlp.js
+- ajout d'un test pour deepMerge()
+
 ## 7.3.0 (2025-04-24)
 
 ### Feat
