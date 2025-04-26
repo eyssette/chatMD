@@ -1,9 +1,9 @@
 import { config } from "../config.mjs";
 import { handleURL } from "../utils/urls.mjs";
 import { startsWithAnyOf } from "../utils/strings.mjs";
-import { createChatBot } from "../chatbot/createChatbot.mjs";
-import { processYAML, yaml } from "./yaml.mjs";
-import { processFixedVariables } from "./processFixedVariables.mjs";
+import { createChatBot } from "./manageInteractions.mjs";
+import { processYAML, yaml } from "../markdown/custom/yaml.mjs";
+import { processFixedVariables } from "../markdown/custom/variablesFixed.mjs";
 import defaultMD from "../../index.md";
 
 let md = defaultMD;

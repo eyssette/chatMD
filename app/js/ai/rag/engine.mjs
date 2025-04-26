@@ -1,7 +1,7 @@
-import { yaml } from "../processMarkdown/yaml.mjs";
-import { handleURL } from "../utils/urls.mjs";
-import { createVector } from "../utils/nlp.mjs";
-import { localRAGinformations } from "./RAG.mjs";
+import { yaml } from "../../markdown/custom/yaml.mjs";
+import { handleURL } from "../../utils/urls.mjs";
+import { createVector } from "../../utils/nlp.mjs";
+import { localRAGinformations } from "./sources.mjs";
 
 function prepareRAGdata(informations, separator) {
 	if (separator) {

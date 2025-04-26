@@ -1,5 +1,5 @@
 import { yaml } from "./yaml.mjs";
-import { getRandomElement } from "../utils/arrays.mjs";
+import { getRandomElement } from "../../utils/arrays.mjs";
 
 // Gestion des variables fixes : soit avant de parser le markdown, soit après
 export function processFixedVariables(content, preprocess = false) {

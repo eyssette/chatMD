@@ -1,7 +1,7 @@
 import { scrollWindow } from "../utils/ui.mjs";
-import { yaml } from "../processMarkdown/yaml.mjs";
-import Typed from "../externals/typed.js";
-import { processCopyCode } from "../processMarkdown/directivesAndSpecialContents.mjs";
+import { yaml } from "../markdown/custom/yaml.mjs";
+import Typed from "../lib/typed.js";
+import { processCopyCode } from "../markdown/custom/directivesAndBlocks.mjs";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");

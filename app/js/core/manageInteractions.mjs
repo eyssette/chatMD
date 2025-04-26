@@ -1,5 +1,5 @@
 import { config } from "../config.mjs";
-import { yaml, filterBadWords } from "../processMarkdown/yaml.mjs";
+import { yaml, filterBadWords } from "../markdown/custom/yaml.mjs";
 import {
 	topElements,
 	getRandomElement,
@@ -18,20 +18,20 @@ import {
 	processKroki,
 	processMultipleBots,
 	processRandomMessage,
-} from "../processMarkdown/directivesAndSpecialContents.mjs";
-import { processFixedVariables } from "../processMarkdown/processFixedVariables.mjs";
+} from "../markdown/custom/directivesAndBlocks.mjs";
+import { processFixedVariables } from "../markdown/custom/variablesFixed.mjs";
 import {
 	processDynamicVariables,
 	evaluateExpression,
-} from "../processMarkdown/processDynamicVariables.mjs";
-import { convertLatexExpressions } from "../processMarkdown/convertLatex.mjs";
-import { markdownToHTML } from "../processMarkdown/markdownToHTML.mjs";
+} from "../markdown/custom/variablesDynamic.mjs";
+import { convertLatexExpressions } from "../markdown/latex.mjs";
+import { markdownToHTML } from "../markdown/parser.mjs";
 import {
 	displayMessage,
 	autoFocus,
 	chatContainer,
 	userInput,
-} from "./typewriter.mjs";
+} from "./displayMessages.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
@@ -39,13 +39,13 @@ import {
 	createVector,
 	longestCommonSubstringWeightedLength,
 } from "../utils/nlp.mjs";
-import { getAnswerFromLLM } from "../LLM/useLLM.mjs";
+import { getAnswerFromLLM } from "../ai/api.mjs";
 import {
 	getRAGcontent,
 	vectorRAGinformations,
 	RAGcontent,
-} from "../LLM/processRAG.mjs";
-import { splitMarkdownAndLLMPrompts } from "../LLM/splitMarkdownAndLLMPrompts.mjs";
+} from "../ai/rag/engine.mjs";
+import { splitMarkdownAndLLMPrompts } from "../ai/helpers/extractLLMprompts.mjs";
 import { sanitizeHtml } from "../utils/strings.mjs";
 
 const sendButton = document.getElementById("send-button");
