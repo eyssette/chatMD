@@ -1,7 +1,7 @@
 export function longestCommonSubstringWeightedLength(
 	userInput,
 	keyword,
-	wordLengthFactor,
+	wordLengthFactor = 0.1,
 ) {
 	let longestCommonSubstring = "";
 	let longestCommonSubstringWeightedLength = 0;
