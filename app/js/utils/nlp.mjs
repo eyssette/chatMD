@@ -174,10 +174,10 @@ export function magnitude(vec) {
 }
 
 // Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
-function tokenize(text, options) {
+export function tokenize(text, options) {
 	const prioritizeTokensInTitle = options && options.prioritizeTokensInTitle;
 	// On garde d'abord seulement les mots d'au moins 5 caractères et on remplace les lettres accentuées par l'équivalent sans accent
-	let words = text.toLowerCase();
+	let words = text ? text.toLowerCase() : "";
 	words = words.replace(/,|\.|:|\?|!|\(|\)|\[|\||\/\]/g, "");
 	words = words.replaceAll("/", " ");
 	words = removeAccents(words);
@@ -198,16 +198,22 @@ function tokenize(text, options) {
 	// Si le nombre de caractères du token est proche du nombre de caractères du mot de base, alors le poids est plus important
 	const bonusLengthSimilarity = 5;
 
-	function weightedToken(index, tokenDimension, word) {
-		let weight = weights[tokenDimension - 1]; // Poids en fonction de la taille du token
+	function weightedToken(index, tokenLength, word) {
+		let weight = tokenLength > weights.length ? 1 : weights[tokenLength - 1]; // Poids en fonction de la taille du token
 		weight = index === 0 ? weight + bonusStart : weight; // Bonus si le token est en début du mot
 		// Bonus si le token est proche en nombre de mots, du mot de base
-		const lengthDifference = word.length - tokenDimension;
+		const lengthDifference = word.length - tokenLength;
 		weight =
 			lengthDifference > 0
 				? weight + bonusLengthSimilarity / lengthDifference
 				: weight;
-		const token = word.substring(index, index + tokenDimension);
+		let token;
+		if (lengthDifference == 0) {
+			weight = weight + bonusLengthSimilarity;
+			token = word;
+		} else {
+			token = word.substring(index, index + tokenLength);
+		}
 		if (prioritizeTokensInTitle) {
 			const titleResponse =
 				options && options.titleResponse
@@ -225,7 +231,12 @@ function tokenize(text, options) {
 	for (let wordIndex = 0; wordIndex < wordsLength; wordIndex++) {
 		const word = words[wordIndex];
 		// Premier type de token : le mot en entier ; poids le plus important
-		tokens.push({ token: word, weight: 5 });
+		const weightFullWord =
+			Math.max(5, weightedToken(0, word.length, word).weight) || 5;
+		tokens.push({
+			token: word,
+			weight: weightFullWord,
+		});
 		// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
 		const wordLength = word.length;
 		if (wordLength >= 5) {
