@@ -12,10 +12,10 @@
 ### Chore
 
 - **nlp**: export de 2 fonctions
-- export de la fonction levenshteinDistance (pour les tests)
-- déplacement de nlp.mjs dans utils
-- loop pour tâche de push sur les différents repo
-- prise en compte des commits de type test
+- **nlp**: export de la fonction levenshteinDistance (pour les tests)
+- **nlp**: déplacement de nlp.mjs dans utils
+- **taskfile**: loop pour tâche de push sur les différents repo
+- **commitizen**: prise en compte des commits de type test
 
 ### Docs
 
@@ -29,7 +29,7 @@
 
 ### Test
 
-- ajout tests pour nlp.js
+- **nlp**: ajout tests pour nlp.js
 - ajout d'un test pour deepMerge()
 
 ## 7.3.0 (2025-04-24)
