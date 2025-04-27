@@ -1,16 +1,12 @@
 import { config } from "../../config.mjs";
 import { handleURL } from "../../utils/urls.mjs";
-import { startsWithAnyOf } from "../../utils/strings.mjs";
 import { controlChatbot } from "../interactions/controller.mjs";
-import { processYAML, yaml } from "../../markdown/custom/yaml.mjs";
-import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs";
-import defaultMD from "../../../index.md";
-
-let md = defaultMD;
-let chatData;
+import { processYAML } from "../../markdown/custom/yaml.mjs";
+import { parseMarkdown } from "./parseMarkdown.mjs";
 
 // Pour récupérer le markdown externe via le hash dans l'URL
-export function getMarkdownContentandCreateChatbot() {
+export function createChatbot(defaultMD) {
+	let chatData;
 	// On récupère l'URL du hashtag sans le #
 	const url = window.location.hash.substring(1).replace(/\?.*/, "");
 	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
@@ -18,15 +14,15 @@ export function getMarkdownContentandCreateChatbot() {
 	if (sourceChatBot !== "") {
 		if (Array.isArray(sourceChatBot)) {
 			// Cas où la source est répartie dans plusieurs fichiers
-			const promises = sourceChatBot.map((url) => {
-				const processedUrl = handleURL(url);
+			const promises = sourceChatBot.map((urlToInclude) => {
+				const processedUrl = handleURL(urlToInclude);
 				return fetch(processedUrl).then((response) => response.text());
 			});
 			Promise.all(promises)
 				.then((data) => {
-					md = data.join("\n");
-					processYAML(md);
-					chatData = parseMarkdown(md);
+					const md = data.join("\n");
+					const yaml = processYAML(md);
+					chatData = parseMarkdown(md, yaml);
 					controlChatbot(chatData);
 				})
 				.catch((error) => console.error(error));
@@ -35,8 +31,8 @@ export function getMarkdownContentandCreateChatbot() {
 			fetch(sourceChatBot)
 				.then((response) => response.text())
 				.then((data) => {
-					md = data;
-					processYAML(md);
+					let md = data;
+					const yaml = processYAML(md);
 					if (yaml && yaml.include) {
 						let filesToAdd = yaml.include;
 						filesToAdd =
@@ -55,7 +51,7 @@ export function getMarkdownContentandCreateChatbot() {
 						Promise.all(promises)
 							.then((data) => {
 								md = md + "\n\n" + data.join("\n\n");
-								chatData = parseMarkdown(md);
+								chatData = parseMarkdown(md, yaml);
 								controlChatbot(chatData);
 							})
 							.catch((error) => console.error(error));
@@ -65,7 +61,7 @@ export function getMarkdownContentandCreateChatbot() {
 							md =
 								"# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown";
 						}
-						chatData = parseMarkdown(md);
+						chatData = parseMarkdown(md, yaml);
 						controlChatbot(chatData);
 					}
 				})
@@ -73,150 +69,22 @@ export function getMarkdownContentandCreateChatbot() {
 					fetch(config.corsProxy + sourceChatBot)
 						.then((response) => response.text())
 						.then((data) => {
-							md = data;
+							const md = data;
 							const isNotMarkdown = !md.includes("# ");
 							if (isNotMarkdown) {
 								md =
 									"# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown";
 							}
-							processYAML(md);
-							chatData = parseMarkdown(md);
+							const yaml = processYAML(md);
+							chatData = parseMarkdown(md, yaml);
 							controlChatbot(chatData);
-						}),
+						})
+						.catch((error) => console.error(error)),
 				);
 		}
 	} else {
-		processYAML(md);
-		chatData = parseMarkdown(md);
+		const yaml = processYAML(defaultMD);
+		chatData = parseMarkdown(defaultMD, yaml);
 		controlChatbot(chatData);
 	}
-}
-
-function parseMarkdown(markdownContent) {
-	// Fix pour l'utilisation de \\ dans le Latex
-	markdownContent = markdownContent.replaceAll("\\\\", "&#92;&#92;");
-	markdownContent = markdownContent.replaceAll(`\r`, `\n`);
-	let chatbotData = [];
-	let currentH2Title = null;
-	let currentLiItems = [];
-	let content = [];
-	let lastOrderedList = null;
-	const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
-	const regexOrderedListRandom = /^\d{1,3}\)/;
-	const regexDynamicContentIfBlock = /`if (.*?)`/;
-	let listParsed = false;
-	let initialMessageContentArray = [];
-	let initialMessageOptions = [];
-	let randomOrder = false;
-
-	// On récupère le contenu principal sans l'en-tête YAML s'il existe
-	let indexFirstH1title = markdownContent.indexOf("\n# ");
-	const indexFirstH2title = markdownContent.indexOf("\n## ");
-	if (indexFirstH2title > -1 && indexFirstH2title == indexFirstH1title - 1) {
-		indexFirstH1title = 0;
-	}
-	let mainContent = markdownContent.substring(indexFirstH1title);
-	if (yaml.variables) {
-		mainContent = processFixedVariables(mainContent, true);
-	}
-	const mainContentWithoutH1 = mainContent.substring(1);
-	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
-	const possibleTitles = ["# ", "## ", "### ", "#### ", "##### "];
-	const indexOfFirstTitles = possibleTitles
-		.map((title) => mainContentWithoutH1.indexOf(title))
-		.filter((index) => index > 0);
-	const indexAfterFirstMessage = Math.min(...indexOfFirstTitles);
-
-	// Gestion de la première partie des données : titre + message initial
-	const firstPart = mainContent.substring(0, indexAfterFirstMessage);
-	// Gestion du titre
-	const chatbotTitleMatch = firstPart.match(/# .*/);
-	const chatbotTitle = chatbotTitleMatch ? chatbotTitleMatch[0] : "Chatbot";
-	const chatbotTitleArray = chatbotTitle
-		? [chatbotTitle.replace("# ", "").trim()]
-		: [""];
-	const indexStartTitle = firstPart.indexOf(chatbotTitle);
-	// Gestion du message initial
-	const initialMessageContent = chatbotTitleMatch
-		? firstPart.substring(indexStartTitle + chatbotTitle.length)
-		: firstPart.substring(indexStartTitle);
-	const initialMessageContentLines = initialMessageContent.split("\n");
-	for (let line of initialMessageContentLines) {
-		line = line.replace(/^>\s?/, "");
-		if (regexOrderedList.test(line)) {
-			// Récupération des options dans le message initial, s'il y en a
-			randomOrder = regexOrderedListRandom.test(line);
-			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-			link = yaml.obfuscate ? btoa(link) : link;
-			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			initialMessageOptions.push([text, link, randomOrder]);
-		} else {
-			initialMessageContentArray.push(line);
-		}
-	}
-
-	const contentAfterFirstPart = mainContent.substring(indexAfterFirstMessage);
-	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
-	let ifCondition = "";
-	for (let line of contentAfterFirstPartLines) {
-		if (startsWithAnyOf(line, yaml.responsesTitles)) {
-			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
-			if (currentH2Title) {
-				chatbotData.push([
-					currentH2Title,
-					currentLiItems,
-					content,
-					lastOrderedList,
-				]);
-			}
-			currentH2Title = line
-				.replace(startsWithAnyOf(line, yaml.responsesTitles), "")
-				.trim(); // Titre h2
-			currentLiItems = [];
-			lastOrderedList = null;
-			listParsed = false;
-			content = [];
-		} else if (line.startsWith("- ") && !listParsed) {
-			// Gestion des listes
-			currentLiItems.push(line.replace("- ", "").trim());
-		} else if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
-			ifCondition = line.match(regexDynamicContentIfBlock)[1]
-				? line.match(regexDynamicContentIfBlock)[1]
-				: "";
-			content.push(line + "\n");
-			listParsed = true;
-		} else if (yaml.dynamicContent && line.includes("`endif`")) {
-			ifCondition = "";
-			content.push(line + "\n");
-			listParsed = true;
-		} else if (regexOrderedList.test(line)) {
-			// Cas des listes ordonnées
-			listParsed = false;
-			if (!lastOrderedList) {
-				lastOrderedList = [];
-			}
-			randomOrder = regexOrderedListRandom.test(line);
-			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-			link = yaml.obfuscate ? btoa(link) : link;
-			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			lastOrderedList.push([text, link, randomOrder, ifCondition]);
-			/* lastOrderedList.push(listContent); */
-		} else if (line.length > 0 && !line.startsWith("# ")) {
-			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)
-			// Possibilité de faire des liens à l'intérieur du contenu vers une réponse
-			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g, '<a href="$2">$1</a>');
-			content.push(line);
-			listParsed = true;
-		}
-	}
-
-	chatbotData.push([currentH2Title, currentLiItems, content, lastOrderedList]);
-
-	const initialMessage = [initialMessageContentArray, initialMessageOptions];
-	chatbotData.push(initialMessage);
-	chatbotData.push(chatbotTitleArray);
-
-	return chatbotData;
 }
