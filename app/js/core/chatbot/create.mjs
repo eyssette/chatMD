@@ -37,12 +37,12 @@ export function createChatbot(defaultMD) {
 						let filesToAdd = yaml.include;
 						filesToAdd =
 							typeof filesToAdd == "object" ? filesToAdd : { filesToAdd };
-						const promises = Object.values(filesToAdd).map((url) => {
-							const processedUrl = handleURL(url);
+						const promises = Object.values(filesToAdd).map((urlToInclude) => {
+							const processedUrl = handleURL(urlToInclude);
 							return fetch(processedUrl).then((response) => {
 								if (!response.ok) {
 									throw new Error(
-										`Erreur lors de la récupération du fichier : ${url}`,
+										`Erreur lors de la récupération du fichier : ${processedUrl}`,
 									);
 								}
 								return response.text();
