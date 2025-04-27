@@ -10,4 +10,13 @@
 	},
 	"liveServer.settings.port": 5501,
 	"liveServer.settings.root": "/app",
+	"editor.semanticTokenColorCustomizations": {
+        "enabled": true,
+        "rules": {
+            "variable": {"underline": true },
+            "variable.local": {"underline": false}, 
+            "variable.defaultLibrary": {"underline": false}, 
+            "property.declaration": {"underline": false}, 
+        }
+    },
 }
