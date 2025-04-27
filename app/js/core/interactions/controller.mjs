@@ -1,13 +1,13 @@
-import { config } from "../config.mjs";
-import { yaml, filterBadWords } from "../markdown/custom/yaml.mjs";
+import { config } from "../../config.mjs";
+import { yaml, filterBadWords } from "../../markdown/custom/yaml.mjs";
 import {
 	topElements,
 	getRandomElement,
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
-} from "../utils/arrays.mjs";
-import { scrollWindow } from "../utils/ui.mjs";
-import { getParamsFromURL, goToNewChatbot } from "../utils/urls.mjs";
+} from "../../utils/arrays.mjs";
+import { scrollWindow } from "../../utils/ui.mjs";
+import { getParamsFromURL, goToNewChatbot } from "../../utils/urls.mjs";
 import {
 	nextMessage,
 	processAudio,
@@ -18,35 +18,35 @@ import {
 	processKroki,
 	processMultipleBots,
 	processRandomMessage,
-} from "../markdown/custom/directivesAndBlocks.mjs";
-import { processFixedVariables } from "../markdown/custom/variablesFixed.mjs";
+} from "../../markdown/custom/directivesAndBlocks.mjs";
+import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs";
 import {
 	processDynamicVariables,
 	evaluateExpression,
-} from "../markdown/custom/variablesDynamic.mjs";
-import { convertLatexExpressions } from "../markdown/latex.mjs";
-import { markdownToHTML } from "../markdown/parser.mjs";
+} from "../../markdown/custom/variablesDynamic.mjs";
+import { convertLatexExpressions } from "../../markdown/latex.mjs";
+import { markdownToHTML } from "../../markdown/parser.mjs";
 import {
 	displayMessage,
 	autoFocus,
 	chatContainer,
 	userInput,
-} from "./displayMessages.mjs";
+} from "../messages/display.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
 	cosineSimilarity,
 	createVector,
 	longestCommonSubstringWeightedLength,
-} from "../utils/nlp.mjs";
-import { getAnswerFromLLM } from "../ai/api.mjs";
+} from "../../utils/nlp.mjs";
+import { getAnswerFromLLM } from "../../ai/api.mjs";
 import {
 	getRAGcontent,
 	vectorRAGinformations,
 	RAGcontent,
-} from "../ai/rag/engine.mjs";
-import { splitMarkdownAndLLMPrompts } from "../ai/helpers/extractLLMprompts.mjs";
-import { sanitizeHtml } from "../utils/strings.mjs";
+} from "../../ai/rag/engine.mjs";
+import { splitMarkdownAndLLMPrompts } from "../../ai/helpers/extractLLMprompts.mjs";
+import { sanitizeHtml } from "../../utils/strings.mjs";
 
 const sendButton = document.getElementById("send-button");
 const allowedTagsInUserInput = [
@@ -56,7 +56,7 @@ const allowedTagsInUserInput = [
 	"</span>",
 ];
 
-export async function createChatBot(chatData) {
+export async function controlChatbot(chatData) {
 	let dynamicVariables = {};
 	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables

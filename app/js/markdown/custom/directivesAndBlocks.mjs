@@ -1,5 +1,5 @@
 import { getRandomElement, shuffleArray } from "../../utils/arrays.mjs";
-import { pauseTypeWriterMultipleBots } from "../../core/displayMessages.mjs";
+import { pauseTypeWriterMultipleBots } from "../../core/messages/display.mjs";
 import { yaml } from "./yaml.mjs";
 
 export let nextMessage = {

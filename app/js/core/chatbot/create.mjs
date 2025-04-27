@@ -1,10 +1,10 @@
-import { config } from "../config.mjs";
-import { handleURL } from "../utils/urls.mjs";
-import { startsWithAnyOf } from "../utils/strings.mjs";
-import { createChatBot } from "./manageInteractions.mjs";
-import { processYAML, yaml } from "../markdown/custom/yaml.mjs";
-import { processFixedVariables } from "../markdown/custom/variablesFixed.mjs";
-import defaultMD from "../../index.md";
+import { config } from "../../config.mjs";
+import { handleURL } from "../../utils/urls.mjs";
+import { startsWithAnyOf } from "../../utils/strings.mjs";
+import { controlChatbot } from "../interactions/controller.mjs";
+import { processYAML, yaml } from "../../markdown/custom/yaml.mjs";
+import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs";
+import defaultMD from "../../../index.md";
 
 let md = defaultMD;
 let chatData;
@@ -27,7 +27,7 @@ export function getMarkdownContentandCreateChatbot() {
 					md = data.join("\n");
 					processYAML(md);
 					chatData = parseMarkdown(md);
-					createChatBot(chatData);
+					controlChatbot(chatData);
 				})
 				.catch((error) => console.error(error));
 		} else {
@@ -56,7 +56,7 @@ export function getMarkdownContentandCreateChatbot() {
 							.then((data) => {
 								md = md + "\n\n" + data.join("\n\n");
 								chatData = parseMarkdown(md);
-								createChatBot(chatData);
+								controlChatbot(chatData);
 							})
 							.catch((error) => console.error(error));
 					} else {
@@ -66,7 +66,7 @@ export function getMarkdownContentandCreateChatbot() {
 								"# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown";
 						}
 						chatData = parseMarkdown(md);
-						createChatBot(chatData);
+						controlChatbot(chatData);
 					}
 				})
 				.catch((error) =>
@@ -81,14 +81,14 @@ export function getMarkdownContentandCreateChatbot() {
 							}
 							processYAML(md);
 							chatData = parseMarkdown(md);
-							createChatBot(chatData);
+							controlChatbot(chatData);
 						}),
 				);
 		}
 	} else {
 		processYAML(md);
 		chatData = parseMarkdown(md);
-		createChatBot(chatData);
+		controlChatbot(chatData);
 	}
 }
 

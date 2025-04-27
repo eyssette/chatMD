@@ -1,4 +1,4 @@
-import { chatContainer } from "../core/displayMessages.mjs";
+import { chatContainer } from "../core/messages/display.mjs";
 import { markdownToHTML } from "../markdown/parser.mjs";
 import { yaml } from "../markdown/custom/yaml.mjs";
 import { hasSentenceEndMark } from "../utils/strings.mjs";
