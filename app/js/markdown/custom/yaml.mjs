@@ -247,4 +247,5 @@ export function processYAML(markdownContent) {
 			console.log("erreur processYAML : " + e);
 		}
 	}
+	return yaml;
 }
