@@ -92,7 +92,8 @@ const onwarn = (warning) => {
 };
 
 // En mode DEBUG, on ne change pas le nom des variables, afin de pouvoir les vérifier
-const optionsTerser = process.env.DEBUG == "true" ? { mangle: false } : {};
+const optionsTerser =
+	process.env.DEBUG == "true" ? { mangle: false, ecma: 2015 } : { ecma: 2015 };
 
 // Configuration de la compilation avec Rollup
 export default {
