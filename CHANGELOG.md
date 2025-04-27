@@ -1,5 +1,25 @@
 # Changelog
 
+## 7.3.2 (2025-04-27)
+
+### Fix
+
+- organisation en sous-dossiers de core (architecture MVC)
+- task push seulement si le fichier DEBUG n'existe pas
+- compilation/minification en ECMA 2015
+- amélioration du code pour le fichier de compilation
+- amélioration des tâches pour gérer le mode DEBUG
+- configuration du débuggage
+- ajout de script.min.js.map dans les fichiers autorisés pour le serveur local
+
+### Chore
+
+- restructuration du dossier JS
+
+### Docs
+
+- précisions dans le changelog
+
 ## 7.3.1 (2025-04-26)
 
 ### Fix
