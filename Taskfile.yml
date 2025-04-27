@@ -66,6 +66,8 @@ tasks:
   push:
     vars:
       GIT_REPO_NAMES: [apps, drane, chatmd, github]
+    preconditions:
+      - test ! -f app/DEBUG
     cmds:
       - for: { var: GIT_REPO_NAMES }
         cmd:  git push {{.ITEM}} && git push {{.ITEM}} --tags
