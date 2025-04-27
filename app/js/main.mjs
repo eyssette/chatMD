@@ -1,4 +1,5 @@
 import "../css/styles.css";
-import { getMarkdownContentandCreateChatbot } from "./core/chatbot/create.mjs";
+import { createChatbot } from "./core/chatbot/create.mjs";
+import defaultMD from "../index.md";
 
-getMarkdownContentandCreateChatbot();
+createChatbot(defaultMD);
