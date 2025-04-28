@@ -1,5 +1,5 @@
 import { startsWithAnyOf } from "../../../utils/strings.mjs";
-import { regexOrderedList, regexOrderedListRandom } from "../parseMarkdown.mjs";
+import { detectChoiceOption } from "./detectChoiceOption.mjs";
 
 const regexDynamicContentIfBlock = /`if (.*?)`/;
 
@@ -13,12 +13,12 @@ export function getMainContentInformations(
 	let content = [];
 	let lastOrderedList = null;
 	let listParsed = false;
-	let randomOrder = false;
 	const contentAfterFirstPart = mdWithoutYaml.substring(indexEndIntroduction);
 	const contentAfterFirstPartLines = contentAfterFirstPart.split("\n");
 	let ifCondition = "";
 	let chatbotData = [];
 	for (let line of contentAfterFirstPartLines) {
+		const choiceStatus = detectChoiceOption(line);
 		if (startsWithAnyOf(line, yaml.responsesTitles)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
 			if (currentH2Title) {
@@ -49,18 +49,17 @@ export function getMainContentInformations(
 			ifCondition = "";
 			content.push(line + "\n");
 			listParsed = true;
-		} else if (regexOrderedList.test(line)) {
+		} else if (choiceStatus.isChoice) {
 			// Cas des listes ordonnées
 			listParsed = false;
 			if (!lastOrderedList) {
 				lastOrderedList = [];
 			}
-			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			link = yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			lastOrderedList.push([text, link, randomOrder, ifCondition]);
+			lastOrderedList.push([text, link, choiceStatus.isRandom, ifCondition]);
 			/* lastOrderedList.push(listContent); */
 		} else if (line.length > 0 && !line.startsWith("# ")) {
 			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)

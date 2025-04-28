@@ -1,4 +1,4 @@
-import { regexOrderedList, regexOrderedListRandom } from "../parseMarkdown.mjs";
+import { detectChoiceOption } from "./detectChoiceOption.mjs";
 
 export function extractIntroduction(mdWithoutYaml) {
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
@@ -31,17 +31,16 @@ export function extractInformationsFromInitialMessage(
 	const initialMessageContentLines = chatbotInitialMessage.split("\n");
 	let initialChoices = [];
 	let initialMessageContentArray = [];
-	let randomOrder = false;
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "");
-		if (regexOrderedList.test(line)) {
+		const choiceStatus = detectChoiceOption(line);
+		if (choiceStatus.isChoice) {
 			// Récupération des options dans le message initial, s'il y en a
-			randomOrder = regexOrderedListRandom.test(line);
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			link = yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			initialChoices.push([text, link, randomOrder]);
+			initialChoices.push([text, link, choiceStatus.isRandom]);
 		} else {
 			initialMessageContentArray.push(line);
 		}

@@ -6,9 +6,6 @@ import {
 import { getMainContentInformations } from "./parsers/extractMainContent.mjs";
 import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs";
 
-export const regexOrderedList = /^\d{1,3}(\.|\))\s\[/;
-export const regexOrderedListRandom = /^\d{1,3}\)/;
-
 export function parseMarkdown(md, yaml) {
 	// Fix pour l'utilisation de \\ dans le Latex
 	md = md.replaceAll("\\\\", "&#92;&#92;");
