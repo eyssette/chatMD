@@ -12,7 +12,7 @@ export let nextMessage = {
 	messageIfKeywordsNotFound: "",
 };
 
-const pauseTypeWriterValue = Math.min(config.defaultPauseTypeWriter, 100);
+const pauseTypeWriterValue = Math.max(config.defaultPauseTypeWriter, 100);
 const pauseTypeWriterMultipleBots = `^${pauseTypeWriterValue - 50} `; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse

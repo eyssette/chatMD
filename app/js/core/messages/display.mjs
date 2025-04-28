@@ -21,7 +21,7 @@ const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions">[\s\S]*<\/ul>)/gm;
 const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm;
 
-const pauseTypeWriterValue = Math.min(config.defaultPauseTypeWriter, 100);
+const pauseTypeWriterValue = Math.max(config.defaultPauseTypeWriter, 100);
 const pauseTypeWriter = `^${pauseTypeWriterValue} `;
 const pauseTypeWriterMultipleBots = `^${pauseTypeWriterValue - 50} `; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 
