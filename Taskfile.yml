@@ -11,7 +11,7 @@ tasks:
     aliases:
       - default
     cmds:
-      - task: npm:build
+      - task: rollup:build
       - task: minify-widget
 
   rollup:build:
@@ -135,3 +135,7 @@ tasks:
   server:stop:
     cmds:
       - kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null || true
+
+  ecma:
+    cmds:
+      - npx es-check es2018 "app/**/*.mjs" --module
