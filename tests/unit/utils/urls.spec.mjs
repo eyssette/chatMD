@@ -5,7 +5,46 @@ import {
 	loadCSS,
 	getParamsFromURL,
 	goToNewChatbot,
+	normalizeUrl,
 } from "../../../app/js/utils/urls.mjs";
+
+describe("normalizeUrl", function () {
+	const originalConfig = { ...config }; // Store the original config to restore after tests
+
+	beforeEach(function () {
+		// Save and mock config
+		Object.assign(config, {
+			corsProxy: "https://proxy.example.com/",
+		});
+	});
+
+	afterEach(() => {
+		// Restore the original config after each test
+		Object.assign(config, originalConfig);
+	});
+
+	it("returns URL without proxy when no CORS proxy is requested and host does not require it", function () {
+		const result = normalizeUrl("https://example.com", { useCorsProxy: false });
+		expect(result).toBe("https://example.com");
+	});
+
+	it("prepends CORS proxy when useCorsProxy is true and host does not override", function () {
+		const result = normalizeUrl("https://example.com", { useCorsProxy: true });
+		expect(result).toBe("https://proxy.example.com/https://example.com");
+	});
+
+	it("returns updated URL if handleKnownHosts modifies it", function () {
+		const result = normalizeUrl("https://codimd/test?both", {
+			useCorsProxy: true,
+		});
+		expect(result).toBe("https://codimd/test/download");
+	});
+
+	it("defaults options to undefined and processes without proxy if options not provided", function () {
+		const result = normalizeUrl("https://example.com");
+		expect(result).toBe("https://example.com");
+	});
+});
 
 describe("handleURL", () => {
 	const originalConfig = { ...config }; // Store the original config to restore after tests
@@ -13,7 +52,16 @@ describe("handleURL", () => {
 	beforeEach(() => {
 		// Mock the config object for testing purposes
 		Object.assign(config, {
-			shortcuts: [["monRaccourci", "https://shortened.com"]],
+			shortcuts: [
+				["monRaccourci", "https://shortened.com"],
+				[
+					"monRaccourciAvecPlusieursURLs",
+					[
+						"https://test1.com",
+						"https://codimd.apps.education.fr/iChROsR5Sce9suRp3G3r8Q?both",
+					],
+				],
+			],
 			secureMode: false,
 			authorizedChatbots: ["https://chatbot.com"],
 			corsProxy: "http://corsproxy.io/?url=",
@@ -25,11 +73,21 @@ describe("handleURL", () => {
 		Object.assign(config, originalConfig);
 	});
 
-	it("returns the shortened URL when a shortcut is found", () => {
+	it("returns the correct URL when a shortcut is found", () => {
 		const url = "monRaccourci";
 		const options = {};
 		const result = handleURL(url, options);
 		expect(result).toBe("https://shortened.com");
+	});
+
+	it("returns the correct URLs when a shortcut is found and ", () => {
+		const url = "monRaccourciAvecPlusieursURLs";
+		const options = {};
+		const result = handleURL(url, options);
+		expect(result).toEqual([
+			"https://test1.com",
+			"https://codimd.apps.education.fr/iChROsR5Sce9suRp3G3r8Q/download",
+		]);
 	});
 
 	it("returns an empty string if the URL is not in the authorized chatbots list in secureMode", () => {
