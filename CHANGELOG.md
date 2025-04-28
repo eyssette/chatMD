@@ -4,14 +4,8 @@
 
 ### Fix
 
-- définition de badWordsFR seulement si cette constante n'existe pas déjà
+- **addons**: définition de badWordsFR seulement si cette constante n'existe pas déjà
 - **utils**: gestion des shortcuts avec plusieurs URLs
-
-### Chore
-
-- shortcuts avec plusieurs URLs possibles sans prétraitement
-- distinction des variables représentant des URL
-- soulignement des variables non-locales dans l'éditeur
 
 ### Refactor
 
