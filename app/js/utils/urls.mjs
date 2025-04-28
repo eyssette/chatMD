@@ -65,26 +65,31 @@ function handleKnownHosts(url, shouldAddCorsProxy) {
 	return { url, shouldAddCorsProxy };
 }
 
+export function normalizeUrl(url, options) {
+	let shouldAddCorsProxy = options && options.useCorsProxy ? true : false;
+	const hostResult = handleKnownHosts(url, shouldAddCorsProxy);
+	url = hostResult.url;
+	shouldAddCorsProxy = hostResult.shouldAddCorsProxy;
+	return shouldAddCorsProxy ? config.corsProxy + url : url;
+}
+
 // Pour gérer l'URL de la source du chatbot
 export function handleURL(url, options) {
 	if (!url) return url;
-
-	let shouldAddCorsProxy = options && options.useCorsProxy ? true : false;
-
-	// Gestion des éventuels raccourcis
-	url = handleShorcuts(url);
 
 	// Gestion du mode sécurisé qui ne laisse passer que les chatbots autorisés
 	if (config.secureMode && !isAuthorized(url)) {
 		return "";
 	}
 
-	// Traitements spécifiques à certains hébergeurs
-	const hostResult = handleKnownHosts(url, shouldAddCorsProxy);
-	url = hostResult.url;
-	shouldAddCorsProxy = hostResult.shouldAddCorsProxy;
+	// Gestion des éventuels raccourcis
+	url = handleShorcuts(url);
 
-	return shouldAddCorsProxy ? config.corsProxy + url : url;
+	if (typeof url == "string") {
+		return normalizeUrl(url, options);
+	} else {
+		return url.map((element) => normalizeUrl(element, options));
+	}
 }
 
 // Pour charger des scripts
