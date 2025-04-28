@@ -14,7 +14,7 @@ tasks:
       - task: npm:build
       - task: minify-widget
 
-  npm:build:
+  rollup:build:
     deps: [npm:install]
     sources:
       - "{{.APP_FOLDER}}/data/**/*.md"
