@@ -55,8 +55,8 @@ config.shortcuts = [
 	[
 		"multiple-urls",
 		[
-			"https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg/download",
-			"https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g/download",
+			"https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg",
+			"https://codimd.apps.education.fr/fqjqvdIkQvWD-PVGONrq2g",
 		],
 	],
 ];
