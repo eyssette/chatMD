@@ -30,7 +30,7 @@ function isJSONComplete(str) {
 	try {
 		JSON.parse(str);
 		return true;
-	} catch {
+	} catch (error) {
 		return false;
 	}
 }
