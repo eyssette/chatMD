@@ -2,6 +2,7 @@ import { scrollWindow } from "../../utils/ui.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import Typed from "../../lib/typed.js";
 import { processCopyCode } from "../../markdown/custom/directivesAndBlocks.mjs";
+import { config } from "../../config.mjs";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
@@ -19,6 +20,10 @@ const thresholdMouseMovement = 10;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
 const regexMessageOptions = /(<ul class="messageOptions">[\s\S]*<\/ul>)/gm;
 const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm;
+
+const pauseTypeWriterValue = Math.min(config.defaultPauseTypeWriter, 100);
+const pauseTypeWriter = `^${pauseTypeWriterValue} `;
+const pauseTypeWriterMultipleBots = `^${pauseTypeWriterValue - 50} `; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 
 // Configuration de MutationObserver
 let mutationObserver;
@@ -182,8 +187,6 @@ function chunkByNChars(html, n) {
 }
 
 let typed;
-const pauseTypeWriter = "^300 ";
-export const pauseTypeWriterMultipleBots = "^200 "; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 
 // Effet machine à écrire
 function typeWriter(content, element, accelerateFactor) {
