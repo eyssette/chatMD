@@ -83,10 +83,8 @@ if (fs.existsSync(folderWithMarkdownFilesToCombine)) {
 
 // On supprime certains messages d'erreurs qu'affiche Rollup et qui ne sont pas très utiles
 const onwarn = (warning) => {
-	if (
-		warning.code === "CIRCULAR_DEPENDENCY" ||
-		warning.code === "THIS_IS_UNDEFINED"
-	) {
+	if (warning.code === "THIS_IS_UNDEFINED") {
+		// On désactive le message d'erreur affiché à cause du module showdown
 		return;
 	}
 	console.warn(`(!) ${warning.message}`);
