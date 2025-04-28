@@ -1,5 +1,29 @@
 # Changelog
 
+## 7.3.3 (2025-04-28)
+
+### Fix
+
+- définition de badWordsFR seulement si cette constante n'existe pas déjà
+- **utils**: gestion des shortcuts avec plusieurs URLs
+
+### Chore
+
+- shortcuts avec plusieurs URLs possibles sans prétraitement
+- distinction des variables représentant des URL
+- soulignement des variables non-locales dans l'éditeur
+
+### Refactor
+
+- **chatbot**: simplification & modularisation de createChatbot()
+- **chatbot**: fonction createChatbot() et import defaultMD dans main
+- **chatbot**: fonction parseMarkdown() dans un fichier à part
+- **markdown**: processYAML() returns yaml
+
+### Test
+
+- **utils**: test pour la fonction normalizeUrl et pour la gestion des urls multiples dans les shortcuts
+
 ## 7.3.2 (2025-04-27)
 
 ### Fix
