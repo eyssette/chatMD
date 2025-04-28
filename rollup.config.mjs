@@ -5,6 +5,7 @@ import path from "path";
 import postcss from "rollup-plugin-postcss";
 import cssnano from "cssnano";
 
+const ECMA_VERSION = 2018;
 const appFolder = "app/";
 const folderWithMarkdownFilesToCombine = appFolder + "data/";
 const mainMdFileName = "index.md";
@@ -93,7 +94,9 @@ const onwarn = (warning) => {
 
 // En mode DEBUG, on ne change pas le nom des variables, afin de pouvoir les vérifier
 const optionsTerser =
-	process.env.DEBUG == "true" ? { mangle: false, ecma: 2015 } : { ecma: 2015 };
+	process.env.DEBUG == "true"
+		? { mangle: false, ecma: ECMA_VERSION }
+		: { ecma: ECMA_VERSION };
 
 // Configuration de la compilation avec Rollup
 export default {
