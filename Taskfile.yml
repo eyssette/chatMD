@@ -70,6 +70,7 @@ tasks:
     preconditions:
       - test ! -f app/DEBUG
     cmds:
+      - task: lint
       - for: { var: GIT_REPO_NAMES }
         cmd:  git push {{.ITEM}} && git push {{.ITEM}} --tags
 
@@ -144,3 +145,7 @@ tasks:
   ecma:
     cmds:
       - npx es-check es2018 "app/**/*.mjs" --module
+
+  lint:
+    cmds:
+      - npx eslint "app/**/*.mjs"
