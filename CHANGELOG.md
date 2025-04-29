@@ -5,8 +5,7 @@
 ### Fix
 
 - **utils**: fonction splitHtmlIntoChunks() améliorée
-- calcul pauseTypeWriterValue avec Math.max et non pas Math.min
-- ajout de config.defaultPauseTypeWriter (permet aussi d'éviter une dépendance circulaire)
+- **config**: ajout de config.defaultPauseTypeWriter (permet aussi d'éviter une dépendance circulaire) et calcul pauseTypeWriterValue et pauseTypeWriterMultipleBots en fonction de config.defaultPauseTypeWriter
 
 ### Chore
 
@@ -25,8 +24,8 @@
 ### Refactor
 
 - **messages**: déplacement dans un module des fonctions pour créer les chunks si on veut accélerer l'effet typewriter
-- fonction detectChoiceOption() pour éviter une dépendance circulaire
-- fonction parseMarkdown modularisée
+- **chatbot**: fonction detectChoiceOption() pour éviter une dépendance circulaire
+- **chatbot**: fonction parseMarkdown modularisée
 
 ### Test
 
