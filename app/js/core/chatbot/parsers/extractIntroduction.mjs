@@ -2,12 +2,16 @@ import { detectChoiceOption } from "./detectChoiceOption.mjs";
 
 export function extractIntroduction(mdWithoutYaml) {
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
+	mdWithoutYaml = mdWithoutYaml.trim();
 	const mdWithoutYamlAndWithoutH1 = mdWithoutYaml.substring(1);
 	const possibleTitles = ["# ", "## ", "### ", "#### ", "##### "];
 	const indexOfFirstTitles = possibleTitles
 		.map((title) => mdWithoutYamlAndWithoutH1.indexOf(title))
 		.filter((index) => index > 0);
-	const indexEndIntroduction = Math.min(...indexOfFirstTitles);
+	const indexEndIntroduction =
+		indexOfFirstTitles.length > 0
+			? Math.min(...indexOfFirstTitles) + 1
+			: mdWithoutYaml.length;
 	const chatbotIntroduction = mdWithoutYaml.substring(0, indexEndIntroduction);
 	// Gestion du titre
 	const chatbotTitleMatch = chatbotIntroduction.match(/# .*/);
