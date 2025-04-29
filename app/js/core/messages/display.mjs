@@ -3,6 +3,7 @@ import { yaml } from "../../markdown/custom/yaml.mjs";
 import Typed from "../../lib/typed.js";
 import { processCopyCode } from "../../markdown/custom/directivesAndBlocks.mjs";
 import { config } from "../../config.mjs";
+import { splitHtmlIntoChunks } from "../../utils/strings.mjs";
 
 export const chatContainer = document.getElementById("chat");
 export const userInput = document.getElementById("user-input");
@@ -151,41 +152,6 @@ function stopTypeWriter(content, typedElement) {
 	manageScrollDetection(false);
 }
 
-// Pour ajouter des backticks tous les n caractères
-function wrapWithBackticksEveryNcharacters(text, n) {
-	let wrappedText = "";
-	let i = 0;
-	while (i < text.length) {
-		const substring = text.slice(i, i + n);
-		wrappedText += "`" + substring + "`";
-		i += n;
-	}
-	return wrappedText;
-}
-
-// Pour découper un texte en chunks de N caractères (afin de l'afficher plus rapidement), sans découper les balises HTML et sans découper le texte qui est déjà entre des backticks
-function chunkByNChars(html, n) {
-	// Divise le texte sur les backticks
-	const parts = html.split(/(`[^`]*`)/);
-	// Traite chaque partie
-	const processedParts = parts.map((part) => {
-		// Si la partie est entre backticks, on la garde telle quelle
-		if (part.startsWith("`") && part.endsWith("`")) {
-			return part;
-		} else {
-			// Traite le texte à l'intérieur des balises HTML
-			return part.replace(/>([^<]*)</g, (match, textBetweenTags) => {
-				// Traiter le texte entre balises HTML : on ajoute des backticks tous les N caractères, sauf si le texte correspond à une pause du type "^nombre"
-				const processedText = /\^\d+/.test(textBetweenTags)
-					? textBetweenTags
-					: wrapWithBackticksEveryNcharacters(textBetweenTags, n);
-				return ">" + processedText + "<";
-			});
-		}
-	});
-	return processedParts.join("");
-}
-
 let typed;
 
 // Effet machine à écrire
@@ -207,13 +173,13 @@ function typeWriter(content, element, accelerateFactor) {
 
 		// On peut accéler l'effet machine à écrire en regroupant les caractères : au lieu de les afficher un par, on les affiche N par N (N = le facteur d'accélération)
 		if (accelerateFactor) {
-			content = chunkByNChars(content, accelerateFactor);
+			content = splitHtmlIntoChunks(content, accelerateFactor);
 		} else {
 			// Accélération par défaut pour Firefox sur Windows
 			const isFirefoxOnWindows =
 				userAgent.includes("Firefox") && userAgent.includes("Windows");
 			if (isFirefoxOnWindows) {
-				content = chunkByNChars(content, 5);
+				content = splitHtmlIntoChunks(content, 5);
 			}
 		}
 
