@@ -1,5 +1,37 @@
 # Changelog
 
+## 7.3.5 (2025-04-29)
+
+### Fix
+
+- déplacement des plugins de "addOns" vers "plugins"
+
+### Chore
+
+- ESlint disable no-undef pour le fichier server.js
+- ajout de task "build" avant task "push"
+- tests unitaires avant de push
+- définition de la tâche "lint" et ajout de cette tâche dans "push"
+- insertions de "eslint-disable" inutiles
+- correction de la config ESlint
+- corrections de petites erreurs notifiées par ESlint
+- configuration ESlint pour les fichiers en .mjs
+- ajout des sources à vérifier pour la task tests:unit
+
+### Docs
+
+- précisions dans le changelog
+
+### Refactor
+
+- **messages**: modularisation plus avancée de display.mjs
+- **messages**: modularisation de display.mjs
+- **messages**: formatContentStopTypeWriter dans un fichier à part et regex dans constants.mjs
+- ajout de isFirefoxOnWindows dans constants.mjs
+- définition des constantes userAgent, isMobile et autoFocus dans constants.mjs
+- constantes pour les pauses de l'effet machine à écrire, dans un fichier à part
+- définition des sélecteurs d'éléments HTML dans un fichier à part
+
 ## 7.3.4 (2025-04-29)
 
 ### Fix
