@@ -13,7 +13,7 @@ import {
 	pauseTypeWriterMultipleBots,
 	autoFocus,
 	isMobile,
-	userAgent,
+	isFirefoxOnWindows,
 } from "../../shared/constants.mjs";
 
 const thresholdMouseMovement = 10;
@@ -171,8 +171,6 @@ function typeWriter(content, element, accelerateFactor) {
 			content = splitHtmlIntoChunks(content, accelerateFactor);
 		} else {
 			// Accélération par défaut pour Firefox sur Windows
-			const isFirefoxOnWindows =
-				userAgent.includes("Firefox") && userAgent.includes("Windows");
 			if (isFirefoxOnWindows) {
 				content = splitHtmlIntoChunks(content, 5);
 			}
