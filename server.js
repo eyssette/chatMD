@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const http = require("http");
 const url = require("url");
 const path = require("path");
@@ -14,13 +15,13 @@ const ALLOWED_FILES = [
 	"/app/favicon.svg",
 	"/app/css/styles.min.css",
 	"/app/css/themes/bubbles.css",
-	"/app/js/addOns/badWords-fr.js",
-	"/app/js/addOns/kroki.js",
-	"/app/js/addOns/leo-profanity.js",
-	"/app/js/addOns/pako.min.js",
-	"/app/js/addOns/textFit.min.js",
-	"/app/js/addOns/katex/katex.min.js",
-	"/app/js/addOns/katex/katex.min.css",
+	"/app/js/plugins/badWords-fr.js",
+	"/app/js/plugins/kroki.js",
+	"/app/js/plugins/leo-profanity.js",
+	"/app/js/plugins/pako.min.js",
+	"/app/js/plugins/textFit.min.js",
+	"/app/js/plugins/katex/katex.min.js",
+	"/app/js/plugins/katex/katex.min.css",
 ];
 
 // Type MIME sécurisé
@@ -55,7 +56,7 @@ const server = http.createServer((request, response) => {
 	const requestedPath = path.normalize(path.join("/app", publicPath));
 
 	const isAllowedFontFile =
-		requestedPath.includes("app/js/addOns/katex/fonts/") &&
+		requestedPath.includes("app/js/plugins/katex/fonts/") &&
 		(requestedPath.endsWith(".woff2") ||
 			requestedPath.endsWith(".woff") ||
 			requestedPath.endsWith(".ttf"));
