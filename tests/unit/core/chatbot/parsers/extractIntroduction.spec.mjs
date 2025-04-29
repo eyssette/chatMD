@@ -1,4 +1,7 @@
-import { extractIntroduction } from "../../../../../app/js/core/chatbot/parsers/extractIntroduction.mjs";
+import {
+	extractIntroduction,
+	extractInformationsFromInitialMessage,
+} from "../../../../../app/js/core/chatbot/parsers/extractIntroduction.mjs";
 
 describe("extractIntroduction", () => {
 	it("extracts the title, the initial message and the end of the introduction correctly", () => {
@@ -60,5 +63,45 @@ describe("extractIntroduction", () => {
 			"This is an intro.\nAnd there is no other content.",
 		);
 		expect(result.indexEnd).toBe(input.trim().length);
+	});
+});
+
+describe("extractInformationsFromInitialMessage", () => {
+	const yaml = { obfuscate: false };
+
+	it("splits intro, detects choices (with choice text, choice link and random status)", () => {
+		const input = `Welcome!\n1. [First choice](First option)\n2) [Second choice](Second option)`;
+		const [content, choices] = extractInformationsFromInitialMessage(
+			input,
+			yaml,
+		);
+
+		expect(content).toEqual(["Welcome!"]);
+		expect(choices.length).toBe(2);
+		expect(choices[0]).toEqual(["First choice", "First option", false]);
+		expect(choices[1]).toEqual(["Second choice", "Second option", true]);
+	});
+
+	it("handles obfuscation when enabled", () => {
+		const obfuscatedYaml = { obfuscate: true };
+		const input = `1. [text](obfuscated Link)`;
+		const [_, choices] = extractInformationsFromInitialMessage(
+			input,
+			obfuscatedYaml,
+		);
+
+		const expectedLink = btoa("obfuscated Link");
+		expect(choices[0][1]).toBe(expectedLink);
+	});
+
+	it("returns only content when no list is found", () => {
+		const input = `Line one\nLine two`;
+		const [content, choices] = extractInformationsFromInitialMessage(
+			input,
+			yaml,
+		);
+
+		expect(content).toEqual(["Line one", "Line two"]);
+		expect(choices).toEqual([]);
 	});
 });
