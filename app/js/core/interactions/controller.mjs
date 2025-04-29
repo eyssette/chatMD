@@ -26,7 +26,7 @@ import {
 } from "../../markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../markdown/latex.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
-import { displayMessage, autoFocus } from "../messages/display.mjs";
+import { displayMessage } from "../messages/display.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
@@ -47,6 +47,7 @@ import {
 	sendButton,
 	userInput,
 } from "../../shared/selectors.mjs";
+import { autoFocus } from "../../shared/constants.mjs";
 
 const allowedTagsInUserInput = [
 	"<p>",

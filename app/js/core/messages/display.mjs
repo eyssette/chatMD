@@ -11,15 +11,10 @@ import {
 import {
 	pauseTypeWriter,
 	pauseTypeWriterMultipleBots,
+	autoFocus,
+	isMobile,
+	userAgent,
 } from "../../shared/constants.mjs";
-
-// Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
-const userAgent = window.navigator.userAgent;
-const isMobile =
-	/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-		userAgent,
-	);
-export const autoFocus = isMobile ? false : true;
 
 const thresholdMouseMovement = 10;
 const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
