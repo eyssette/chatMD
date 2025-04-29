@@ -4,6 +4,7 @@ version: '3'
 
 vars:
   APP_FOLDER: "app"
+  TEST_FOLDER: "tests"
   PORT_LOCAL_SERVER: 8888
 
 tasks:
@@ -109,6 +110,9 @@ tasks:
   tests:unit:
     aliases:
       - tests:jasmine
+    sources:
+      - "{{.APP_FOLDER}}/js/**/*.mjs"
+      - "{{.TEST_FOLDER}}/unit/**/*.mjs"
     cmds:
       - npx jasmine --config='tests/unit/.config/jasmine.mjs'
 
