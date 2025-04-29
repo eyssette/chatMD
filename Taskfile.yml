@@ -72,6 +72,7 @@ tasks:
     cmds:
       - task: lint
       - task: tests:unit
+      - task: build
       - for: { var: GIT_REPO_NAMES }
         cmd:  git push {{.ITEM}} && git push {{.ITEM}} --tags
 
