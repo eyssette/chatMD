@@ -43,12 +43,12 @@ pages:
     - rm -r node_modules 
 
     # L'application est construite dans le répertoire app : on déplace tous les fichiers nécessaires à la racine
-    - mkdir -p .build .build/widget/ .build/css/themes .build/js/addOns
+    - mkdir -p .build .build/widget/ .build/css/themes .build/js/plugins
     - cp $APP_FOLDER/*.svg $APP_FOLDER/index.html $APP_FOLDER/script.min.js $APP_FOLDER/script.min.js.map widget/widget.min.js .build/
     - cp $APP_FOLDER/css/styles.min.css .build/css/
     - cp $APP_FOLDER/css/themes/* .build/css/themes/
     - cp widget/message.svg .build/widget/
-    - cp -r $APP_FOLDER/js/addOns/* .build/js/addOns/
+    - cp -r $APP_FOLDER/js/plugins/* .build/js/plugins/
     - cp $APP_FOLDER/*.md .build/
     - cp -r .build/* .
 

@@ -119,8 +119,8 @@ export async function controlChatbot(chatData) {
 			// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
 			message = processDirectiveSelectNext(message);
 
-			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
-			if (yaml.addOns && yaml.addOns.includes("kroki")) {
+			// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en plugin si on veut l'utiliser)
+			if (yaml.plugins && yaml.plugins.includes("kroki")) {
 				message = processKroki(message);
 			}
 		}

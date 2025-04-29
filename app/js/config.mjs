@@ -66,27 +66,27 @@ config.corsProxy = "https://corsproxy.io/?url=";
 // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 config.responsesTitles = ["## "];
 
-// Gestion des addOns
-config.allowedAddOns = {
+// Gestion des Plugins
+config.allowedPlugins = {
 	maths: {
-		js: "js/addOns/katex/katex.min.js",
-		css: "js/addOns/katex/katex.min.css",
+		js: "js/plugins/katex/katex.min.js",
+		css: "js/plugins/katex/katex.min.css",
 	},
-	pako: { js: "js/addOns/pako.min.js" },
-	kroki: { js: "js/addOns/kroki.js" },
+	pako: { js: "js/plugins/pako.min.js" },
+	kroki: { js: "js/plugins/kroki.js" },
 	textFit: {
-		js: "js/addOns/textFit.min.js",
+		js: "js/plugins/textFit.min.js",
 		css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>",
 	},
 };
 
-config.addOnsDependencies = {
+config.pluginDependencies = {
 	kroki: ["pako"],
 };
 
 // Paramètres dans l'en-tête YAML
 config.yaml = {
-	addOns: "",
+	plugins: "",
 	avatar: "",
 	avatarCircle: false,
 	bots: {},

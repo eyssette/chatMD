@@ -167,7 +167,7 @@ export function processAudio(message) {
 	return message;
 }
 
-// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en addOn si on veut l'utiliser)
+// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en plugin si on veut l'utiliser)
 
 export function processKroki(message) {
 	message = message.replaceAll(

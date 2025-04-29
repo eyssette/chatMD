@@ -11,7 +11,7 @@ import {
 } from "../../shared/selectors.mjs";
 
 export let yaml = {
-	addOns: config.yaml.addOns,
+	plugins: config.yaml.plugins,
 	avatar: config.yaml.avatar,
 	avatarCircle: config.yaml.avatarCircle,
 	bots: config.yaml.bots,
@@ -43,37 +43,43 @@ export function processYAML(markdownContent) {
 			const yamlData = loadYAML(markdownContent.split("---")[1]);
 			yaml = yamlData ? deepMerge(yaml, yamlData) : yaml;
 			if (yaml.maths === true) {
-				yaml.addOns = yaml.addOns
-					? yaml.addOns + ",maths,textFit"
+				yaml.plugins = yaml.plugins
+					? yaml.plugins + ",maths,textFit"
 					: "maths,textFit";
 			}
-			if (yaml.addOns) {
-				// Gestion des addOns (scripts et css en plus)
-				yaml.addOns = yaml.addOns.replaceAll(" ", "").split(",");
-				let addOnsDependenciesArray = [];
-				// On ajoute aussi les dépendances pour chaque addOn
-				for (const [addOn, addOnDependencies] of Object.entries(
-					config.addOnsDependencies,
+			if (yaml.plugins || yaml.addOns) {
+				// Gestion des plugins (scripts et css en plus)
+				yaml.plugins = yaml.addOns
+					? yaml.plugins + "," + yaml.addOns
+					: yaml.plugins;
+				yaml.plugins = yaml.plugins
+					.replaceAll(" ", "")
+					.split(",")
+					.filter((el) => el);
+				let pluginDependenciesArray = [];
+				// On ajoute aussi les dépendances pour chaque plugin
+				for (const [plugin, pluginDependencies] of Object.entries(
+					config.pluginDependencies,
 				)) {
-					if (yaml.addOns.includes(addOn)) {
-						for (const addOnDependencie of addOnDependencies) {
-							addOnsDependenciesArray.push(addOnDependencie);
+					if (yaml.plugins.includes(plugin)) {
+						for (const dependency of pluginDependencies) {
+							pluginDependenciesArray.push(dependency);
 						}
 					}
 				}
-				yaml.addOns.push(...addOnsDependenciesArray);
-				// Pour chaque addOn, on charge le JS ou le CSS correspondant
-				for (const desiredAddOn of yaml.addOns) {
-					const addOnsPromises = [];
-					const addDesiredAddOn = config.allowedAddOns[desiredAddOn];
-					if (addDesiredAddOn) {
-						if (addDesiredAddOn.js) {
-							addOnsPromises.push(loadScript(addDesiredAddOn.js));
+				yaml.plugins.push(...pluginDependenciesArray);
+				// Pour chaque plugin, on charge le JS ou le CSS correspondant
+				for (const desiredPlugin of yaml.plugins) {
+					const pluginsPromises = [];
+					const addDesiredPlugin = config.allowedPlugins[desiredPlugin];
+					if (addDesiredPlugin) {
+						if (addDesiredPlugin.js) {
+							pluginsPromises.push(loadScript(addDesiredPlugin.js));
 						}
-						if (addDesiredAddOn.css) {
-							addOnsPromises.push(loadCSS(addDesiredAddOn.css));
+						if (addDesiredPlugin.css) {
+							pluginsPromises.push(loadCSS(addDesiredPlugin.css));
 						}
-						Promise.all(addOnsPromises);
+						Promise.all(pluginsPromises);
 					}
 				}
 			}
@@ -114,8 +120,8 @@ export function processYAML(markdownContent) {
 					: yaml.detectBadWords;
 				if (yaml.detectBadWords === true) {
 					Promise.all([
-						loadScript("js/addOns/leo-profanity.js"),
-						loadScript("js/addOns/badWords-fr.js"),
+						loadScript("js/plugins/leo-profanity.js"),
+						loadScript("js/plugins/badWords-fr.js"),
 					])
 						.then(() => {
 							// Les deux scripts sont chargés et prêts à être utilisés
