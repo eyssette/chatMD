@@ -17,6 +17,7 @@ export async function fetchContentWithProxyIfNeeded(url) {
 	} catch (error) {
 		const proxiedUrl = config.corsProxy + url;
 		console.warn(`Fetch direct échoué, tentative avec proxy : ${proxiedUrl}`);
+		console.log(error);
 		return await fetchContent(proxiedUrl);
 	}
 }

@@ -241,7 +241,8 @@ export function processYAML(markdownContent) {
 						);
 					} else {
 						yaml.useLLM.apiKey =
-							process && process.env && process.env.LLM_API_KEY
+							// eslint-disable-next-line no-undef
+							process && process.env && process.env.LLM_API_KEY // eslint-disable-next-line no-undef
 								? process.env.LLM_API_KEY
 								: ""; // Attention à ne pas diffuser publiquement votre clé API, il vaut mieux la définir dans une variable d'environnement
 					}

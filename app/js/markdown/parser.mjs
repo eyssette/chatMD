@@ -5,7 +5,7 @@ import Showdown from "../lib/showdown.js";
 function fixSpoilerAdmonitionCodi(text) {
 	// Dans CodiMD on peut définir le type de l'admonition spoiler en la mettant avant dans un autre admonition
 	const spoilerInAdmonitionRegex =
-		/<div class="admonition \w*?"><div class="admonitionTitle"><\/div><div class="admonitionContent">\n(<div class="admonition spoiler">\`.*?\`<\/div>\n<\/div>)<\/div>/s;
+		/<div class="admonition \w*?"><div class="admonitionTitle"><\/div><div class="admonitionContent">\n(<div class="admonition spoiler">`.*?`<\/div>\n<\/div>)<\/div>/s;
 	const spoilerMatch = text.match(spoilerInAdmonitionRegex);
 	if (spoilerMatch) {
 		text = text.replace(spoilerMatch[0], spoilerMatch[1]);
@@ -142,7 +142,7 @@ function allowInternalLinksWithSpaces() {
 	return [
 		{
 			type: "output",
-			regex: /\[([^\]]+)\]\(\#([^\)]+)\)/g, // Reconnaît les liens internes avec #
+			regex: /\[([^\]]+)\]\(#([^)]+)\)/g, // Reconnaît les liens internes avec #
 			replace: function (_, text, anchor) {
 				return `<a href="#${anchor}">${text}</a>`;
 			},
@@ -178,7 +178,6 @@ export function markdownToHTML(text) {
 	text = text.replaceAll("\n|", "|");
 	// gestion des dimensions des images avec la syntaxe CodiMD
 	text = fixImageDimensionsCodiMD(text);
-	// eslint-disable-next-line no-useless-escape
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
 	return html;
 }

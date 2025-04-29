@@ -27,7 +27,6 @@ export function convertLatexExpressions(string, noBackticks) {
 				.replaceAll("&amp;", "&")
 				.replaceAll("\\left{", "\\left\\{")
 				.replaceAll("\\right}", "\\right\\}")
-				// eslint-disable-next-line no-useless-escape
 				.replaceAll(" ", "\\ ")
 				// Fix pour l'utilisation de \\ dans le Latex
 				.replaceAll("&#92;&#92;", "\\\\");

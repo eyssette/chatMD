@@ -459,7 +459,7 @@ export async function controlChatbot(chatData) {
 					for (let keyword of keywords) {
 						// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
 						const isNegativeKeyword = keyword.startsWith("! ");
-						keyword = keyword.replace(/^\! /, "");
+						keyword = keyword.replace(/^!\s/, "");
 						keyword = removeAccents(keyword);
 						if (
 							userInputTextToLowerCase.includes(keyword) &&
@@ -560,7 +560,6 @@ export async function controlChatbot(chatData) {
 						? bestMatch.join("\n\n")
 						: bestMatch
 					: "";
-				const titleBestMatch = bestMatch ? chatData[indexBestMatch][0] : "";
 				let optionsSelectedResponse = bestMatch
 					? chatData[indexBestMatch][3]
 					: [];
