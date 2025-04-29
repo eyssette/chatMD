@@ -3,6 +3,8 @@ import {
 	tryConvertStringToNumber,
 	startsWithAnyOf,
 	hasSentenceEndMark,
+	chunkWithBackticks,
+	splitHtmlIntoChunks,
 } from "../../../app/js/utils/strings.mjs";
 
 describe("sanitizeHtml", () => {
@@ -202,5 +204,84 @@ describe("hasSentenceEndMark", () => {
 	it("ignores trailing whitespace", () => {
 		expect(hasSentenceEndMark("Hi !   ")).toBe(true);
 		expect(hasSentenceEndMark("Hello   ")).toBe(false);
+	});
+});
+
+describe("chunkWithBackticks", () => {
+	it("wraps text in backticks every chunkSize characters", () => {
+		const result = chunkWithBackticks("HelloWorld", 5);
+		expect(result).toBe("`Hello``World`");
+	});
+
+	it("wraps text correctly when length is not divisible by chunkSize", () => {
+		const result = chunkWithBackticks("HelloWorld!", 5);
+		expect(result).toBe("`Hello``World``!`");
+	});
+
+	it("returns an empty string when input is empty", () => {
+		const result = chunkWithBackticks("", 5);
+		expect(result).toBe("");
+	});
+
+	it("wraps the entire text when chunkSize is greater than text length", () => {
+		const result = chunkWithBackticks("Hi", 10);
+		expect(result).toBe("`Hi`");
+	});
+
+	it("wraps every character individually when chunkSize is 1", () => {
+		const result = chunkWithBackticks("ABC", 1);
+		expect(result).toBe("`A``B``C`");
+	});
+
+	it("handles special characters correctly", () => {
+		const result = chunkWithBackticks("A&B<C>", 2);
+		expect(result).toBe("`A&``B<``C>`");
+	});
+});
+
+describe("splitHtmlIntoChunks", () => {
+	it("splits plain text into chunks of specified size", () => {
+		const html = "<p>HelloWorld</p>";
+		const result = splitHtmlIntoChunks(html, 5);
+		expect(result).toBe("<p>`Hello``World`</p>");
+	});
+
+	it("preserves text inside backticks without modification", () => {
+		const html = "<p>`HelloWorld`</p>";
+		const result = splitHtmlIntoChunks(html, 5);
+		expect(result).toBe("<p>`HelloWorld`</p>");
+	});
+
+	it("does not split pause markers inside HTML tags", () => {
+		const html = "<p>^1000</p>";
+		const result = splitHtmlIntoChunks(html, 5);
+		expect(result).toBe("<p>^1000</p>");
+	});
+
+	it("handles multiple HTML elements correctly", () => {
+		const html = "<div>HelloWorld</div><span>TestText</span>";
+		const result = splitHtmlIntoChunks(html, 4);
+		expect(result).toBe("<div>`Hell``oWor``ld`</div><span>`Test``Text`</span>");
+	});
+
+	it("handles single tags HTML element correctly", () => {
+		const html = `<div>Hello <br />World<img src="test"/></div><span><img src="test"/></span>`;
+		const result = splitHtmlIntoChunks(html, 4);
+		expect(result).toBe(
+			`<div>\`Hell\`\`o \`<br />\`Worl\`\`d\`<img src="test"/></div><span><img src="test"/></span>`,
+		);
+	});
+
+	it("ignores empty text between HTML tags", () => {
+		const html = "<div></div>";
+		const result = splitHtmlIntoChunks(html, 4);
+		expect(result).toBe("<div></div>");
+	});
+
+	it("splits complex mixed content correctly", () => {
+		const html = "<div>Start`ProtectedText`End</div>";
+		// ajouter : const html = "<div>Start`ProtectedText`End<img src="test"/>Test</div>";
+		const result = splitHtmlIntoChunks(html, 5);
+		expect(result).toBe("<div>`Start``ProtectedText``End`</div>");
 	});
 });
