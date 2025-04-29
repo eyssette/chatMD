@@ -1,3 +1,5 @@
+import { scrollWindow } from "../../../utils/ui.mjs";
+import { manageScrollDetection } from "../helpers/scroll";
 import {
 	pauseTypeWriter,
 	pauseTypeWriterMultipleBots,
@@ -5,7 +7,7 @@ import {
 } from "../../../shared/constants.mjs";
 
 // Formate le contenu quand on veut utiliser la fonction stopwriter
-export function formatContentStopTypeWriter(content) {
+function formatContentStopTypeWriter(content) {
 	content = content.replaceAll("`", "").replace(regex.messageOptions, "`$1`");
 	// On doit conserver les retours à la ligne dans les blocs "pre"
 	const contentKeepReturnInCode = content.replaceAll(
@@ -33,4 +35,16 @@ export function formatContentStopTypeWriter(content) {
 		.join(" ")
 		.replace(/\^\d+/g, "");
 	return contentWithNoPause;
+}
+
+// Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
+export function stopTypeWriter(content, typedElement, observer) {
+	typedElement.stop();
+	typedElement.reset();
+	content = formatContentStopTypeWriter(content);
+	typedElement.strings = [content];
+	typedElement.start();
+	typedElement.destroy();
+	scrollWindow({ scrollMode: "instant" });
+	manageScrollDetection(false, observer);
 }
