@@ -4,7 +4,7 @@
 
 ### Fix
 
-- déplacement des plugins de "addOns" vers "plugins"
+- **plugins**: déplacement des plugins de "addOns" vers "plugins"
 
 ### Chore
 
@@ -18,19 +18,15 @@
 - configuration ESlint pour les fichiers en .mjs
 - ajout des sources à vérifier pour la task tests:unit
 
-### Docs
-
-- précisions dans le changelog
-
 ### Refactor
 
 - **messages**: modularisation plus avancée de display.mjs
 - **messages**: modularisation de display.mjs
 - **messages**: formatContentStopTypeWriter dans un fichier à part et regex dans constants.mjs
-- ajout de isFirefoxOnWindows dans constants.mjs
-- définition des constantes userAgent, isMobile et autoFocus dans constants.mjs
-- constantes pour les pauses de l'effet machine à écrire, dans un fichier à part
-- définition des sélecteurs d'éléments HTML dans un fichier à part
+- **shared**: ajout de isFirefoxOnWindows dans constants.mjs
+- **shared**:définition des constantes userAgent, isMobile et autoFocus dans constants.mjs
+- **shared**:constantes pour les pauses de l'effet machine à écrire, dans un fichier à part
+- **shared**:définition des sélecteurs d'éléments HTML dans un fichier à part
 
 ## 7.3.4 (2025-04-29)
 
@@ -48,10 +44,6 @@
 - plus besoin de désactiver l'erreur "circular dependency" pendant la compilation
 - compilation avec ECMA 2018
 - typo corrigé sur catch (error)
-
-### Docs
-
-- précisions et suppressions pour le changelog
 
 ### Refactor
 
@@ -96,10 +88,6 @@
 ### Chore
 
 - restructuration du dossier JS
-
-### Docs
-
-- précisions dans le changelog
 
 ## 7.3.1 (2025-04-26)
 
@@ -170,10 +158,6 @@
 - **Taskfile**: juste le nom du dossier dans APP_FOLDER
 - rebuild package-lock.json and script
 
-### Doc
-
-- précisions dans le CHANGELOG
-
 ### Refactor
 
 - réécriture goToNewChatbot
@@ -233,7 +217,6 @@
 ### Chore
 
 - précision pour les montées de version majeure
-- suppression commits inutiles dans Changelog
 
 ## 7.0.1 (2025-04-21)
 
