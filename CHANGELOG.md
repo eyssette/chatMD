@@ -1,5 +1,37 @@
 # Changelog
 
+## 7.3.4 (2025-04-29)
+
+### Fix
+
+- **utils**: fonction splitHtmlIntoChunks() améliorée
+- calcul pauseTypeWriterValue avec Math.max et non pas Math.min
+- ajout de config.defaultPauseTypeWriter (permet aussi d'éviter une dépendance circulaire)
+
+### Chore
+
+- ajout de es-check dans les dépendances pour le développement
+- ajout de la task "ecma" à la tâche "tests"
+- ajout d'une task "ecma" pour vérifier si le code est conforme à ES2018
+- changement du nom de la Task de compilation
+- plus besoin de désactiver l'erreur "circular dependency" pendant la compilation
+- compilation avec ECMA 2018
+- typo corrigé sur catch (error)
+
+### Docs
+
+- précisions et suppressions pour le changelog
+
+### Refactor
+
+- **messages**: déplacement dans un module des fonctions pour créer les chunks si on veut accélerer l'effet typewriter
+- fonction detectChoiceOption() pour éviter une dépendance circulaire
+- fonction parseMarkdown modularisée
+
+### Test
+
+- **utils**: chunkWithBackticks et splitHtmlIntoChunks
+
 ## 7.3.3 (2025-04-28)
 
 ### Fix
