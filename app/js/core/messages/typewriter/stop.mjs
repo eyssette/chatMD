@@ -1,14 +1,22 @@
 import { scrollWindow } from "../../../utils/ui.mjs";
-import { manageScrollDetection } from "../helpers/scroll";
+import { manageScrollDetection } from "../helpers/scroll.mjs";
 import {
 	pauseTypeWriter,
 	pauseTypeWriterMultipleBots,
 	regex,
 } from "../../../shared/constants.mjs";
+import {
+	removeInstantDisplayDelimiters,
+	removeTypewriterPauses,
+} from "./sanitize.mjs";
 
 // Formate le contenu quand on veut utiliser la fonction stopwriter
 function formatContentStopTypeWriter(content) {
-	content = content.replaceAll("`", "").replace(regex.messageOptions, "`$1`");
+	// On enlève les marqueurs de texte à afficher immédiatement (car on va en ajouter pour chaque paragraphe), mais on les conserve pour les choix d'options en fin de réponse
+	content = removeInstantDisplayDelimiters(content).replace(
+		regex.messageOptions,
+		"`$1`",
+	);
 	// On doit conserver les retours à la ligne dans les blocs "pre"
 	const contentKeepReturnInCode = content.replaceAll(
 		regex.pre,
@@ -31,10 +39,7 @@ function formatContentStopTypeWriter(content) {
 						.replace(pauseTypeWriterMultipleBots, "") +
 					"`",
 	);
-	const contentWithNoPause = contentArrayFiltered
-		.join(" ")
-		.replace(/\^\d+/g, "");
-	return contentWithNoPause;
+	return removeTypewriterPauses(contentArrayFiltered.join(" "));
 }
 
 // Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)

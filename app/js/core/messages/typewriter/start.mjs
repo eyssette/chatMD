@@ -1,5 +1,5 @@
 import Typed from "../../../lib/typed.js";
-import { manageScrollDetection } from "../helpers/scroll.js";
+import { manageScrollDetection } from "../helpers/scroll.mjs";
 import { stopTypeWriter } from "./stop.mjs";
 import { splitHtmlIntoChunks } from "../../../utils/strings.mjs";
 import {
