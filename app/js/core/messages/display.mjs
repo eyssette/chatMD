@@ -10,16 +10,14 @@ import {
 } from "../../shared/selectors.mjs";
 import {
 	pauseTypeWriter,
-	pauseTypeWriterMultipleBots,
 	autoFocus,
 	isMobile,
 	isFirefoxOnWindows,
+	regex,
 } from "../../shared/constants.mjs";
+import { formatContentStopTypeWriter } from "./typewriter/stopTypewriter.mjs";
 
 const thresholdMouseMovement = 10;
-const regexPre = /(<pre(.|\n)*<\/pre>)/gm;
-const regexMessageOptions = /(<ul class="messageOptions">[\s\S]*<\/ul>)/gm;
-const regexIframe = /(<iframe(.|\n)*<\/iframe>)/gm;
 
 // Configuration de MutationObserver
 let mutationObserver;
@@ -34,37 +32,6 @@ const messageTypeEnterToStopTypeWriter = isMobile
 	: window.innerWidth > 880
 		? "Appuyez sur “Enter” pour stopper l'effet “machine à écrire” et afficher la réponse immédiatement"
 		: "“Enter” pour stopper l'effet “machine à écrire”";
-
-// Formate le contenu quand on veut utiliser la fonction stopwriter
-function formatContentStopTypeWriter(content) {
-	content = content.replaceAll("`", "").replace(regexMessageOptions, "`$1`");
-	// On doit conserver les retours à la ligne dans les blocs "pre"
-	const contentKeepReturnInCode = content.replaceAll(
-		regexPre,
-		function (match) {
-			return match.replaceAll("\n", "RETURNCHARACTER");
-		},
-	);
-	const contentArray = contentKeepReturnInCode.split("\n");
-	// On découpe chaque paragraphe pour pouvoir ensuite l'afficher d'un coup
-	const contentArrayFiltered = contentArray.map((element) =>
-		element.startsWith(pauseTypeWriter)
-			? element
-					.replace(pauseTypeWriter, "")
-					.replaceAll("RETURNCHARACTER", "\n") + "`"
-			: element.endsWith("`")
-				? "`" + element.replaceAll("RETURNCHARACTER", "\n")
-				: "`" +
-					element
-						.replaceAll("RETURNCHARACTER", "\n")
-						.replace(pauseTypeWriterMultipleBots, "") +
-					"`",
-	);
-	const contentWithNoPause = contentArrayFiltered
-		.join(" ")
-		.replace(/\^\d+/g, "");
-	return contentWithNoPause;
-}
 
 // Active ou désactive la détection des mouvements pour l’auto-scroll
 function manageScrollDetection(enable) {
@@ -161,10 +128,10 @@ function typeWriter(content, element, accelerateFactor) {
 		}
 
 		// S'il y a des options en fin de message, on les fait apparaître d'un coup, sans effet typeWriter
-		content = content.replace(regexMessageOptions, pauseTypeWriter + "`$1`");
+		content = content.replace(regex.messageOptions, pauseTypeWriter + "`$1`");
 
 		// On fait apparaître d'un coup les iframes
-		content = content.replaceAll(regexIframe, "`$1`");
+		content = content.replaceAll(regex.iframe, "`$1`");
 
 		// On peut accéler l'effet machine à écrire en regroupant les caractères : au lieu de les afficher un par, on les affiche N par N (N = le facteur d'accélération)
 		if (accelerateFactor) {
