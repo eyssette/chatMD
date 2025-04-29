@@ -26,12 +26,7 @@ import {
 } from "../../markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../markdown/latex.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
-import {
-	displayMessage,
-	autoFocus,
-	chatContainer,
-	userInput,
-} from "../messages/display.mjs";
+import { displayMessage, autoFocus } from "../messages/display.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
@@ -47,8 +42,12 @@ import {
 } from "../../ai/rag/engine.mjs";
 import { splitMarkdownAndLLMPrompts } from "../../ai/helpers/extractLLMprompts.mjs";
 import { sanitizeHtml } from "../../utils/strings.mjs";
+import {
+	chatContainer,
+	sendButton,
+	userInput,
+} from "../../shared/selectors.mjs";
 
-const sendButton = document.getElementById("send-button");
 const allowedTagsInUserInput = [
 	"<p>",
 	"</p>",

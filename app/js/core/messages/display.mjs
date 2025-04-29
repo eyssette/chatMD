@@ -4,10 +4,11 @@ import Typed from "../../lib/typed.js";
 import { processCopyCode } from "../../markdown/custom/directivesAndBlocks.mjs";
 import { config } from "../../config.mjs";
 import { splitHtmlIntoChunks } from "../../utils/strings.mjs";
-
-export const chatContainer = document.getElementById("chat");
-export const userInput = document.getElementById("user-input");
-const sendButton = document.getElementById("send-button");
+import {
+	chatContainer,
+	sendButton,
+	userInput,
+} from "../../shared/selectors.mjs";
 
 // Le focus automatique sur l'userInput est désactivé sur les téléphones mobiles
 const userAgent = window.navigator.userAgent;

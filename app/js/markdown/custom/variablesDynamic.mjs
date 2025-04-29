@@ -3,6 +3,7 @@ import { yaml } from "./yaml.mjs";
 import { nextMessage } from "./directivesAndBlocks.mjs";
 import { tryConvertStringToNumber } from "../../utils/strings.mjs";
 import { getRandomElement } from "../../utils/arrays.mjs";
+import { sendButton } from "../../shared/selectors.mjs";
 
 let getLastMessage = false;
 
@@ -104,7 +105,6 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			.replaceAll("<!--<!--", "<!--")
 			.replaceAll("-->-->", "-->");
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
-		const sendButton = document.getElementById("send-button");
 		if (yaml.userInput === false) {
 			// Cas où le clavier est désactivé par défaut
 			if (dynamicVariables["KEYBOARD"] == "true") {

@@ -86,26 +86,29 @@ describe("hideFooter", () => {
 	});
 
 	it("should hide the footer element", () => {
-		hideFooter();
+		hideFooter(footer, controls);
 		expect(footer.style.display).toBe("none");
 	});
-	it("should hide the footer element if parameter false", () => {
-		hideFooter(false);
+	it("should hide the footer element if isUserInputVisible is false", () => {
+		const isUserInputVisible = false;
+		hideFooter(footer, controls, isUserInputVisible);
 		expect(footer.style.display).toBe("none");
 	});
 
 	it("should set the height of #controls to 70px", () => {
-		hideFooter();
+		hideFooter(footer, controls);
 		expect(controls.style.height).toBe("70px");
 	});
 
 	it("should inject a responsive style with height 70px when userInput is false", () => {
-		hideFooter(false);
+		const isUserInputVisible = false;
+		hideFooter(footer, controls, isUserInputVisible);
 		expect(controls.style.height).toBe("70px");
 	});
 
 	it("should inject a responsive style with height 110px when userInput is true", () => {
-		hideFooter(true);
+		const isUserInputVisible = true;
+		hideFooter(footer, controls, true);
 		const styleTag = document.getElementById("styleControlsIfNoFooter");
 		expect(styleTag.textContent).toContain("110px");
 	});

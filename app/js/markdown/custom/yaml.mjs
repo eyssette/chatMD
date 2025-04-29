@@ -4,6 +4,11 @@ import { loadScript, loadCSS } from "../../utils/urls.mjs";
 import { deepMerge } from "../../utils/objects.mjs";
 import { hideFooter, setContentOfFooter } from "../../utils/ui.mjs";
 import { decodeApiKey } from "../../ai/helpers/keyDecoder.mjs";
+import {
+	sendButton,
+	footerElement,
+	controlsElement,
+} from "../../shared/selectors.mjs";
 
 export let yaml = {
 	addOns: config.yaml.addOns,
@@ -96,7 +101,6 @@ export function processYAML(markdownContent) {
 			) {
 				yaml.userInput = false;
 				document.body.classList.add("hideControls");
-				const sendButton = document.getElementById("send-button");
 				sendButton.innerHTML = "Afficher tout";
 			}
 			if (yaml.searchInContent || yaml.rechercheContenu) {
@@ -153,9 +157,9 @@ export function processYAML(markdownContent) {
 			}
 			if (yaml.footer === false) {
 				const isUserInputVisible = yaml.userInput;
-				hideFooter(isUserInputVisible);
+				hideFooter(footerElement, controlsElement, isUserInputVisible);
 			} else if (typeof yaml.footer == "string") {
-				setContentOfFooter(yaml.footer);
+				setContentOfFooter(footerElement, yaml.footer);
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith(".css")

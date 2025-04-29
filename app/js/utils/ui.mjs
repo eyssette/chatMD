@@ -44,10 +44,7 @@ function resizeFooterForSmallScreenToSpecificHeight(CSSheight) {
 }
 
 // Pour cacher le footer
-export function hideFooter(isUserInputVisible) {
-	const controlsElement = document.getElementById("controls");
-	const footerElement = document.getElementById("footer");
-
+export function hideFooter(footerElement, controlsElement, isUserInputVisible) {
 	footerElement.style.display = "none";
 	controlsElement.style.height = "70px";
 
@@ -56,7 +53,6 @@ export function hideFooter(isUserInputVisible) {
 }
 
 // Pour définir le contenu du footer
-export function setContentOfFooter(html) {
-	const footerElement = document.getElementById("footer");
+export function setContentOfFooter(footerElement, html) {
 	footerElement.innerHTML = html;
 }
