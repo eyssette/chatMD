@@ -1,6 +1,6 @@
 import { getRandomElement, shuffleArray } from "../../utils/arrays.mjs";
 import { yaml } from "./yaml.mjs";
-import { config } from "../../config.mjs";
+import { pauseTypeWriterMultipleBots } from "../../shared/constants.mjs";
 
 export let nextMessage = {
 	goto: "",
@@ -11,9 +11,6 @@ export let nextMessage = {
 	maxErrors: 3,
 	messageIfKeywordsNotFound: "",
 };
-
-const pauseTypeWriterValue = Math.max(config.defaultPauseTypeWriter, 100);
-const pauseTypeWriterMultipleBots = `^${pauseTypeWriterValue - 50} `; // Valeur qui doit être différente de pauseTypeWriter pour ne pas créer de conflit dans la fonction stopTypeWriter
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 export function processDirectiveNext(message) {
