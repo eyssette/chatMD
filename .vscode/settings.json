@@ -19,4 +19,5 @@
             "property.declaration": {"underline": false}, 
         }
     },
+	 "eslint.validate": [".mjs", "javascript", "html", "markdown", "json"],
 }
