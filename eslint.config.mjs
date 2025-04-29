@@ -10,7 +10,7 @@ export default [
 	},
 	pluginJs.configs.recommended,
 	{
-		files: ["app/**/*.js", "app/**/*.mjs"],
+		files: ["/app/**/*.js", "/app/**/*.mjs"],
 		rules: {
 			semi: ["error", "always"],
 			indent: "off",
