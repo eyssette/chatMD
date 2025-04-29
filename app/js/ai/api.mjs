@@ -217,14 +217,10 @@ export function getAnswerFromLLM(
 		let bodyObject = {
 			model: yaml.useLLM.model,
 			stream: true,
-			// eslint-disable-next-line camelcase
 			max_tokens: yaml.useLLM.maxTokens,
-			// eslint-disable-next-line camelcase
 			frequency_penalty: 0,
-			// eslint-disable-next-line camelcase
 			presence_penalty: 0,
 			temperature: 0.7,
-			// eslint-disable-next-line camelcase
 			top_p: 0.95,
 		};
 		if (informations.length > 0) {
