@@ -1,5 +1,5 @@
 import "../css/styles.css";
 import { createChatbot } from "./core/chatbot/create.mjs";
-import defaultMD from "../index.md";
+import defaultMd from "../index.md";
 
-createChatbot(defaultMD);
+createChatbot(defaultMd);
