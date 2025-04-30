@@ -1,5 +1,35 @@
 # Changelog
 
+## 7.3.6 (2025-04-30)
+
+### Fix
+
+- **chatbot**: extractMainContent refactorisé et amélioré
+- **chatbot**: extractIntroduction() plus robuste
+- **chatbot**: detectChoiceOption plus précis
+
+### Chore
+
+- correction erreurs notifiées par ESlint dans fichiers tests
+- gestion ESlint pour éviter les erreurs dans les fichiers tests Jasmine
+
+### Docs
+
+- suppressions et précisions dans le Changelog
+
+### Refactor
+
+- **chatbot**: fonctions utilitaires secondaires pour le parse du Markdown déplacées dans parsers/helpers/
+
+### Test
+
+- **chatbot**: ajout de tests pour extractMainContent
+- **chatbot**: detectResponseTitles
+- **chatbot**: extractMainContent
+- **chatbot**: extractInformationsFromInitialMessage
+- **chatbot**: extractIntroduction
+- **chatbot**: detectChoiceOption
+
 ## 7.3.5 (2025-04-29)
 
 ### Fix
