@@ -42,7 +42,7 @@ export function extractInformationsFromInitialMessage(
 			// Récupération des options dans le message initial, s'il y en a
 			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
-			link = yaml.obfuscate ? btoa(link) : link;
+			link = yaml && yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			initialChoices.push([text, link, choiceStatus.isRandom]);
 		} else {

@@ -39,7 +39,7 @@ export async function controlChatbot(chatData) {
 	function precalculateVectorChatbotReponses(chatData) {
 		// On précalcule les vecteurs des réponses du chatbot
 		let vectorChatBotResponses = [];
-		if (yaml.searchInContent || yaml.useLLM.url) {
+		if ((yaml && yaml.searchInContent) || (yaml && yaml.useLLM.url)) {
 			for (let i = 0; i < chatData.length; i++) {
 				const responses = chatData[i][2];
 				let response = Array.isArray(responses)

@@ -31,7 +31,7 @@ export function handleKeywords(line, currentData) {
 
 // Gestion des blocs conditionnels si on a du contenu dynamique
 export function handleDynamicContent(line, currentData, yaml) {
-	if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
+	if (yaml && yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
 		currentData.ifCondition =
 			(line.match(regexDynamicContentIfBlock) &&
 				line.match(regexDynamicContentIfBlock)[1]) ||
@@ -41,7 +41,7 @@ export function handleDynamicContent(line, currentData, yaml) {
 		currentData.listParsed = true;
 		return true;
 	}
-	if (yaml.dynamicContent && line.includes("`endif`")) {
+	if (yaml && yaml.dynamicContent && line.includes("`endif`")) {
 		currentData.ifCondition = "";
 		currentData.content.push(line + "\n");
 		currentData.listParsed = true;

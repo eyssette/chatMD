@@ -93,7 +93,7 @@ export function startTypeWriter(content, element, accelerateFactor) {
 			showCursor: false,
 			onBegin: () => {
 				// Si on a désactivé le clavier, on remet l'opacité du bouton à 1 pour pouvoir voir le bouton "Afficher tout"
-				if (yaml.userInput == false) {
+				if (yaml && yaml.userInput == false) {
 					sendButton.style.opacity = "1";
 				}
 				// Quand l'effet démarre, on refocalise sur userInput (sauf sur les smartphones)
@@ -119,7 +119,7 @@ export function startTypeWriter(content, element, accelerateFactor) {
 					sendButton.style.opacity = "0.5";
 				}
 				// Gestion de textFit pour les éléments en Latex
-				if (yaml.plugins && yaml.plugins.includes("textFit")) {
+				if (yaml && yaml.plugins && yaml.plugins.includes("textFit")) {
 					window.textFit(element.querySelectorAll(".katex-display"));
 				}
 				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet

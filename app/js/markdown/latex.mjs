@@ -44,7 +44,7 @@ export function convertLatexExpressions(string, noBackticks) {
 	}
 	// Optimisation pour le Latex avec l'effet typeWriter
 	// On peut empêcher l'utilisation des backticks en mettant noBackticks à "true"
-	if (yaml.typeWriter === true && !noBackticks) {
+	if (yaml && yaml.typeWriter === true && !noBackticks) {
 		string = string.replaceAll(
 			/(<span class="katex-mathml">(.|\n)*?<\/span>)/gm,
 			"`$1`",

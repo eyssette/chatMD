@@ -9,7 +9,7 @@ export function processFixedVariables(content, preprocess = false) {
 		regex,
 		function (match, variableName, positionMatch) {
 			const positionLastMatch = content.lastIndexOf(match);
-			if (yaml.variables && yaml.variables[variableName]) {
+			if (yaml && yaml.variables && yaml.variables[variableName]) {
 				const variableValue = yaml.variables[variableName];
 				const variableValueSplit = variableValue.split("///");
 				const variableValueChoice = getRandomElement(variableValueSplit);

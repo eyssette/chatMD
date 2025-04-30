@@ -83,7 +83,12 @@ function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	return calcResult;
 }
 
-export function processDynamicVariables(chatbot, message, dynamicVariables, isUser) {
+export function processDynamicVariables(
+	chatbot,
+	message,
+	dynamicVariables,
+	isUser,
+) {
 	// Cas où le message vient du bot
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
@@ -104,7 +109,7 @@ export function processDynamicVariables(chatbot, message, dynamicVariables, isUs
 			.replaceAll("<!--<!--", "<!--")
 			.replaceAll("-->-->", "-->");
 		// Possibilité d'activer ou de désactiver le clavier au cas par cas
-		if (yaml.userInput === false) {
+		if (yaml && yaml.userInput === false) {
 			// Cas où le clavier est désactivé par défaut
 			if (dynamicVariables["KEYBOARD"] == "true") {
 				// Cas où dans une réponse on décide d'afficher le clavier

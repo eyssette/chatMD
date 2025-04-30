@@ -26,7 +26,7 @@ const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'ident
 const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
 const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
-if (yaml.useLLM.url && yaml.useLLM.RAGinformations) {
+if (yaml && yaml.useLLM.url && yaml.useLLM.RAGinformations) {
 	getRAGcontent(yaml.useLLM.RAGinformations);
 }
 
@@ -40,13 +40,13 @@ export function chatbotResponse(chatbot, inputText) {
 	}
 	let RAGbestMatchesInformation = "";
 	let questionToLLM;
-	if (yaml.useLLM.url) {
+	if (yaml && yaml.useLLM.url) {
 		inputText = inputText.replace(
 			'<span class="hidden">!useLLM</span>',
 			"!useLLM",
 		);
 		questionToLLM = inputText.trim().replace("!useLLM", "");
-		if (yaml.useLLM.RAGinformations) {
+		if (yaml && yaml.useLLM.RAGinformations) {
 			// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 			const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
 				cosineSimilarity(questionToLLM, vectorRAGinformation, {
@@ -65,7 +65,7 @@ export function chatbotResponse(chatbot, inputText) {
 	}
 
 	// Choix de la réponse que le chatbot va envoyer
-	if (yaml.detectBadWords === true && filterBadWords) {
+	if (yaml && yaml.detectBadWords === true && filterBadWords) {
 		if (filterBadWords.check(inputText)) {
 			createChatMessage(
 				chatbot,
@@ -136,7 +136,7 @@ export function chatbotResponse(chatbot, inputText) {
 				const responses = chatData[i][2];
 				let matchScore = 0;
 				let distanceScore = 0;
-				if (yaml.searchInContent) {
+				if (yaml && yaml.searchInContent) {
 					const vectorChatBotResponses = chatbot.vectorChatBotResponses;
 					const cosSim = cosineSimilarity(
 						userInputTextToLowerCase,
@@ -314,7 +314,12 @@ export function chatbotResponse(chatbot, inputText) {
 				}
 				randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
 				let messageNoAnswer = config.defaultMessage[randomDefaultMessageIndex];
-				if (yaml.useLLM.url && yaml.useLLM.model && !yaml.useLLM.always) {
+				if (
+					yaml &&
+					yaml.useLLM.url &&
+					yaml.useLLM.model &&
+					!yaml.useLLM.always
+				) {
 					const optionMessageNoAnswer = [
 						[
 							"Voir une réponse générée par une IA",

@@ -15,7 +15,7 @@ export function parseMarkdown(md, yaml) {
 	md = removeYaml(md);
 
 	// On traite les variables fixes s'il y en a
-	if (yaml.variables) {
+	if (yaml && yaml.variables) {
 		md = processFixedVariables(md, true);
 	}
 

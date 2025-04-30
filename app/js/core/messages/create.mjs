@@ -36,14 +36,14 @@ export function createChatMessage(
 	}
 	chatbot.nextMessage.selected = undefined;
 	// Gestion des variables fixes prédéfinies
-	if (yaml.variables) {
+	if (yaml && yaml.variables) {
 		message = processFixedVariables(message);
 	}
 	if (!isUser) {
 		message = processRandomMessage(message);
 	}
 
-	if (yaml.dynamicContent) {
+	if (yaml && yaml.dynamicContent) {
 		// On traite les variables dynamiques
 		message = processDynamicVariables(
 			chatbot,
@@ -56,7 +56,7 @@ export function createChatMessage(
 	// Cas où c'est un message du bot
 	if (!isUser) {
 		// Gestion de la directive !Bot: botName
-		if (yaml.bots) {
+		if (yaml && yaml.bots) {
 			message = processDirectiveBot(message, chatMessage);
 		}
 
@@ -70,12 +70,12 @@ export function createChatMessage(
 		message = processDirectiveSelectNext(chatbot, message);
 
 		// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en plugin si on veut l'utiliser)
-		if (yaml.plugins && yaml.plugins.includes("kroki")) {
+		if (yaml && yaml.plugins && yaml.plugins.includes("kroki")) {
 			message = processKroki(message);
 		}
 	}
 	let hasPromptInMessage = false;
-	if (yaml.useLLM.url) {
+	if (yaml && yaml.useLLM.url) {
 		message = splitMarkdownAndLLMPrompts(message);
 		hasPromptInMessage = Array.isArray(message);
 	}
@@ -95,7 +95,7 @@ export function createChatMessage(
 						() => resolve(),
 					);
 				} else {
-					if (yaml.maths === true) {
+					if (yaml && yaml.maths === true) {
 						// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 						let timeToDisplayMessage = false;
 						let attempts = 0;
@@ -141,7 +141,7 @@ export function createChatMessage(
 						if (index % 2 == 0) {
 							// Gestion du contenu en Markdown
 							content = markdownToHTML(currentPart);
-							if (yaml.bots) {
+							if (yaml && yaml.bots) {
 								content = processMultipleBots(content);
 							}
 						} else {
@@ -175,10 +175,10 @@ export function createChatMessage(
 	} else {
 		let html = markdownToHTML(message);
 		if (html.trim() !== "") {
-			if (yaml.bots) {
+			if (yaml && yaml.bots) {
 				html = processMultipleBots(html);
 			}
-			if (yaml.maths === true) {
+			if (yaml && yaml.maths === true) {
 				// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
 				// Si le message est celui de l'utilisateur, on n'utilise pas les backticks (car ils ne sont utiles que pour l'effet typewriter qui n'est pas utilisé pour les messages de l'utilisateur)
 				let timeToDisplayMessage = false;

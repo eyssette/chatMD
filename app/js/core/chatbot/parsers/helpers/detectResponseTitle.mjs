@@ -1,7 +1,7 @@
 import { startsWithAnyOf } from "../../../../utils/strings.mjs";
 
 export function detectedResponseTitle(line, yaml) {
-	return startsWithAnyOf(line, yaml.responsesTitles);
+	return yaml ? startsWithAnyOf(line, yaml.responsesTitles) : "";
 }
 
 export function getStructureTitles(yaml) {
