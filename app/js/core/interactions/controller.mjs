@@ -1,7 +1,6 @@
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { scrollWindow } from "../../utils/ui.mjs";
 import { getParamsFromURL, goToNewChatbot } from "../../utils/urls.mjs";
-import { nextMessage } from "../../markdown/custom/directivesAndBlocks.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { sanitizeHtml } from "../../utils/strings.mjs";
 import { createVector } from "../../utils/nlp.mjs";
@@ -66,6 +65,15 @@ export async function controlChatbot(chatData) {
 		vectorChatBotResponses: vectorChatBotResponses,
 		initialMessage: initialMessage,
 		optionsLastResponse: null,
+		nextMessage: {
+			goto: "",
+			lastMessageFromBot: "",
+			selected: "",
+			onlyIfKeywords: false,
+			errorsCounter: 0,
+			maxErrors: 3,
+			messageIfKeywordsNotFound: "",
+		},
 	};
 
 	// Gestion des événéments js
@@ -158,9 +166,9 @@ export async function controlChatbot(chatData) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
 				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
-				nextMessage.lastMessageFromBot = "";
-				nextMessage.goto = "";
-				nextMessage.onlyIfKeywords = false;
+				chatbot.nextMessage.lastMessageFromBot = "";
+				chatbot.nextMessage.goto = "";
+				chatbot.nextMessage.onlyIfKeywords = false;
 				let messageFromLink = yaml.maths ? target.innerHTML : target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yaml.obfuscate
@@ -189,7 +197,7 @@ export async function controlChatbot(chatData) {
 					}
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
-				nextMessage.errorsCounter = 0;
+				chatbot.nextMessage.errorsCounter = 0;
 				scrollWindow({ scrollMode: "instant" });
 			}
 		}

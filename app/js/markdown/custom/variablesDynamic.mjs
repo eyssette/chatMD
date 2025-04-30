@@ -1,6 +1,5 @@
 import { config } from "../../config.mjs";
 import { yaml } from "./yaml.mjs";
-import { nextMessage } from "./directivesAndBlocks.mjs";
 import { tryConvertStringToNumber } from "../../utils/strings.mjs";
 import { getRandomElement } from "../../utils/arrays.mjs";
 import { sendButton } from "../../shared/selectors.mjs";
@@ -84,7 +83,7 @@ function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	return calcResult;
 }
 
-export function processDynamicVariables(message, dynamicVariables, isUser) {
+export function processDynamicVariables(chatbot, message, dynamicVariables, isUser) {
 	// Cas où le message vient du bot
 	if (!isUser) {
 		// On traite le cas des assignations de valeurs à une variable, et on masque dans le texte ces assignations
@@ -277,13 +276,15 @@ export function processDynamicVariables(message, dynamicVariables, isUser) {
 			// Puis on renvoie vers le message correspondant
 			if (getLastMessage && getLastMessage.length > 0) {
 				dynamicVariables[getLastMessage[0]] = message;
-				nextMessage.goto = getLastMessage[1];
+				chatbot.nextMessage.goto = getLastMessage[1];
 				getLastMessage = false;
 			} else {
-				nextMessage.goto = "";
+				chatbot.nextMessage.goto = "";
 			}
 		} else {
-			nextMessage.goto = nextMessage.onlyIfKeywords ? nextMessage.goto : "";
+			chatbot.nextMessage.goto = chatbot.nextMessage.onlyIfKeywords
+				? chatbot.nextMessage.goto
+				: "";
 		}
 	}
 	return message;

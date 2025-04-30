@@ -2,18 +2,8 @@ import { getRandomElement, shuffleArray } from "../../utils/arrays.mjs";
 import { yaml } from "./yaml.mjs";
 import { pauseTypeWriterMultipleBots } from "../../shared/constants.mjs";
 
-export let nextMessage = {
-	goto: "",
-	lastMessageFromBot: "",
-	selected: "",
-	onlyIfKeywords: false,
-	errorsCounter: 0,
-	maxErrors: 3,
-	messageIfKeywordsNotFound: "",
-};
-
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-export function processDirectiveNext(message) {
+export function processDirectiveNext(chatbot, message) {
 	message = message.replaceAll(
 		/!Next ?:(.*)/g,
 		function (match, nextDirectiveContent) {
@@ -27,23 +17,28 @@ export function processDirectiveNext(message) {
 			}
 			const isLoopMode = nextDirectiveContent.includes("!loop");
 
-			nextMessage.lastMessageFromBot = message;
-			nextMessage.goto = nextDirectiveContent.replace("!loop", "").trim();
-			nextMessage.onlyIfKeywords = true;
-			nextMessage.messageIfKeywordsNotFound = messageIfError
+			chatbot.nextMessage.lastMessageFromBot = message;
+			chatbot.nextMessage.goto = nextDirectiveContent
+				.replace("!loop", "")
+				.trim();
+			chatbot.nextMessage.onlyIfKeywords = true;
+			chatbot.nextMessage.messageIfKeywordsNotFound = messageIfError
 				? messageIfError.trim()
 				: "Ce n'était pas la bonne réponse, merci de réessayer !";
-			nextMessage.messageIfKeywordsNotFound =
-				nextMessage.messageIfKeywordsNotFound + "\n\n";
-			nextMessage.errorsCounter++;
+			chatbot.nextMessage.messageIfKeywordsNotFound =
+				chatbot.nextMessage.messageIfKeywordsNotFound + "\n\n";
+			chatbot.nextMessage.errorsCounter++;
 			if (
 				match &&
-				(nextMessage.errorsCounter < nextMessage.maxErrors || isLoopMode)
+				(chatbot.nextMessage.errorsCounter < chatbot.nextMessage.maxErrors ||
+					isLoopMode)
 			) {
 				return "";
 			} else {
 				const skipMessage = `<ul class="messageOptions"><li><a href="#${
-					yaml.obfuscate ? btoa(nextMessage.goto) : nextMessage.goto
+					yaml.obfuscate
+						? btoa(chatbot.nextMessage.goto)
+						: chatbot.nextMessage.goto
 				}">Passer à la suite !</a></li></ul>`;
 				return skipMessage;
 			}
@@ -53,17 +48,17 @@ export function processDirectiveNext(message) {
 }
 
 // Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-export function processDirectiveSelectNext(message) {
+export function processDirectiveSelectNext(chatbot, message) {
 	message = message.replaceAll(/!SelectNext:(.*)/g, function (match, v1) {
 		if (match) {
 			const v1Split = v1.split("/");
-			nextMessage.lastMessageFromBot = "";
-			nextMessage.goto = "";
-			nextMessage.onlyIfKeywords = false;
-			nextMessage.selected = getRandomElement(v1Split).trim();
+			chatbot.nextMessage.lastMessageFromBot = "";
+			chatbot.nextMessage.goto = "";
+			chatbot.nextMessage.onlyIfKeywords = false;
+			chatbot.nextMessage.selected = getRandomElement(v1Split).trim();
 			return "";
 		} else {
-			nextMessage.selected = "";
+			chatbot.nextMessage.selected = "";
 		}
 	});
 	return message;

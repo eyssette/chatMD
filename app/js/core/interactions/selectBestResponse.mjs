@@ -13,7 +13,6 @@ import {
 	vectorRAGinformations,
 	RAGcontent,
 } from "../../ai/rag/engine.mjs";
-import { nextMessage } from "../../markdown/custom/directivesAndBlocks.mjs";
 import { createChatMessage } from "../messages/create.mjs";
 import { responseToSelectedOption, gestionOptions } from "./choiceOptions.mjs";
 
@@ -36,8 +35,8 @@ export function chatbotResponse(chatbot, inputText) {
 
 	const chatDataLength = chatData.length;
 	// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
-	if (nextMessage.goto != "" && !nextMessage.onlyIfKeywords) {
-		inputText = nextMessage.goto;
+	if (chatbot.nextMessage.goto != "" && !chatbot.nextMessage.onlyIfKeywords) {
+		inputText = chatbot.nextMessage.goto;
 	}
 	let RAGbestMatchesInformation = "";
 	let questionToLLM;
@@ -51,7 +50,8 @@ export function chatbotResponse(chatbot, inputText) {
 			// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
 			const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
 				cosineSimilarity(questionToLLM, vectorRAGinformation, {
-					boostIfKeywordsInTitle: nextMessage && nextMessage.goto,
+					boostIfKeywordsInTitle:
+						chatbot.nextMessage && chatbot.nextMessage.goto,
 				}),
 			);
 			const RAGbestMatchesIndexes = topElements(
@@ -107,26 +107,28 @@ export function chatbotResponse(chatbot, inputText) {
 				const keywordsResponse = chatData[i][1];
 				// Si on a la directive !Next ou !SelectNext, on teste seulement la similarité avec la réponse vers laquelle on doit aller et on saute toutes les autres réponses
 				if (
-					(nextMessage.onlyIfKeywords && titleResponse != nextMessage.goto) ||
-					(nextMessage.selected && titleResponse != nextMessage.selected)
+					(chatbot.nextMessage.onlyIfKeywords &&
+						titleResponse != chatbot.nextMessage.goto) ||
+					(chatbot.nextMessage.selected &&
+						titleResponse != chatbot.nextMessage.selected)
 				) {
 					continue;
 				}
 				// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
 				if (
-					nextMessage.onlyIfKeywords &&
-					titleResponse == nextMessage.goto &&
+					chatbot.nextMessage.onlyIfKeywords &&
+					titleResponse == chatbot.nextMessage.goto &&
 					keywordsResponse.length == 0
 				) {
 					userInputTextToLowerCase = removeAccents(
-						nextMessage.goto.toLowerCase(),
+						chatbot.nextMessage.goto.toLowerCase(),
 					);
 				}
 				// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords (sauf s'il n'y a pas de keyword)
 				// Sinon on inclut le titre
 				// On met tout en minuscule
 				const keywords =
-					nextMessage.onlyIfKeywords && keywordsResponse.length > 0
+					chatbot.nextMessage.onlyIfKeywords && keywordsResponse.length > 0
 						? keywordsResponse.map((keyword) => keyword.toLowerCase())
 						: keywordsResponse
 								.concat(titleResponse)
@@ -139,7 +141,10 @@ export function chatbotResponse(chatbot, inputText) {
 					const cosSim = cosineSimilarity(
 						userInputTextToLowerCase,
 						vectorChatBotResponses[i],
-						{ boostIfKeywordsInTitle: nextMessage && nextMessage.goto },
+						{
+							boostIfKeywordsInTitle:
+								chatbot.nextMessage && chatbot.nextMessage.goto,
+						},
 					);
 					matchScore = matchScore + cosSim + 0.5;
 				}
@@ -154,7 +159,7 @@ export function chatbotResponse(chatbot, inputText) {
 					) {
 						// Test de l'identité stricte
 						let strictIdentityMatch = false;
-						if (nextMessage.onlyIfKeywords) {
+						if (chatbot.nextMessage.onlyIfKeywords) {
 							// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
 							const regexStrictIdentityMatch = new RegExp(`\\b${keyword}\\b`);
 							if (regexStrictIdentityMatch.test(userInputTextToLowerCase)) {
@@ -187,7 +192,7 @@ export function chatbotResponse(chatbot, inputText) {
 							: levenshteinDistance > 1
 								? distanceScore + levenshteinDistance
 								: distanceScore;
-						if (!isNegativeKeyword && !nextMessage.onlyIfKeywords) {
+						if (!isNegativeKeyword && !chatbot.nextMessage.onlyIfKeywords) {
 							// Si on n'a pas de keyword négatif on prend en compte la plus longue chaîne commune de caractères (sauf si on doit passer au message seulement s'il y a présence du keyword [cas d'un quiz] : dans ce cas, on doit être plus strict et tester seulement la proximité avec la distance de Levenshtein pour simplement autoriser quelques fautes d'orthographe)
 							distanceScore =
 								distanceScore +
@@ -205,7 +210,7 @@ export function chatbotResponse(chatbot, inputText) {
 				}
 				if (
 					(matchScore == 0 || yaml.searchInContent) &&
-					!nextMessage.onlyIfKeywords
+					!chatbot.nextMessage.onlyIfKeywords
 				) {
 					// En cas de simple similarité : on monte quand même le score. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 					if (distanceScore > bestDistanceScore) {
@@ -216,8 +221,8 @@ export function chatbotResponse(chatbot, inputText) {
 				// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0.5 et que la réponse correspond au titre de la réponse voulue dans la directive
 				if (
 					matchScore > 0.5 &&
-					nextMessage.onlyIfKeywords &&
-					titleResponse == nextMessage.goto
+					chatbot.nextMessage.onlyIfKeywords &&
+					titleResponse == chatbot.nextMessage.goto
 				) {
 					matchScore = matchScore + MATCH_SCORE_IDENTITY;
 				}
@@ -229,17 +234,17 @@ export function chatbotResponse(chatbot, inputText) {
 			}
 		}
 		// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
-		if (bestMatch || nextMessage.onlyIfKeywords) {
+		if (bestMatch || chatbot.nextMessage.onlyIfKeywords) {
 			if (
 				bestMatch &&
-				nextMessage.onlyIfKeywords &&
+				chatbot.nextMessage.onlyIfKeywords &&
 				bestMatchScore > BESTMATCH_THRESHOLD
 			) {
 				// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
-				nextMessage.lastMessageFromBot = "";
-				nextMessage.goto = "";
-				nextMessage.errorsCounter = 0;
-				nextMessage.onlyIfKeywords = false;
+				chatbot.nextMessage.lastMessageFromBot = "";
+				chatbot.nextMessage.goto = "";
+				chatbot.nextMessage.errorsCounter = 0;
+				chatbot.nextMessage.onlyIfKeywords = false;
 			}
 			// On envoie le meilleur choix s'il en existe un
 			let selectedResponseWithoutOptions = bestMatch
@@ -252,14 +257,18 @@ export function chatbotResponse(chatbot, inputText) {
 				: [];
 			// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 			let selectedResponseWithOptions;
-			if (nextMessage.onlyIfKeywords && bestMatchScore < BESTMATCH_THRESHOLD) {
+			if (
+				chatbot.nextMessage.onlyIfKeywords &&
+				bestMatchScore < BESTMATCH_THRESHOLD
+			) {
 				// En cas de mauvaise réponse
-				selectedResponseWithOptions = nextMessage.lastMessageFromBot.includes(
-					nextMessage.messageIfKeywordsNotFound,
-				)
-					? nextMessage.lastMessageFromBot
-					: nextMessage.messageIfKeywordsNotFound +
-						nextMessage.lastMessageFromBot;
+				selectedResponseWithOptions =
+					chatbot.nextMessage.lastMessageFromBot.includes(
+						chatbot.nextMessage.messageIfKeywordsNotFound,
+					)
+						? chatbot.nextMessage.lastMessageFromBot
+						: chatbot.nextMessage.messageIfKeywordsNotFound +
+							chatbot.nextMessage.lastMessageFromBot;
 			} else {
 				// En cas de bonne réponse
 				selectedResponseWithOptions = gestionOptions(

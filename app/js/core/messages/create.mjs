@@ -1,5 +1,4 @@
 import {
-	nextMessage,
 	processAudio,
 	processDirectiveBot,
 	processDirectiveNext,
@@ -35,7 +34,7 @@ export function createChatMessage(
 	} else {
 		chatMessage = chatMessageElement;
 	}
-	nextMessage.selected = undefined;
+	chatbot.nextMessage.selected = undefined;
 	// Gestion des variables fixes prédéfinies
 	if (yaml.variables) {
 		message = processFixedVariables(message);
@@ -46,7 +45,12 @@ export function createChatMessage(
 
 	if (yaml.dynamicContent) {
 		// On traite les variables dynamiques
-		message = processDynamicVariables(message, dynamicVariables, isUser);
+		message = processDynamicVariables(
+			chatbot,
+			message,
+			dynamicVariables,
+			isUser,
+		);
 	}
 
 	// Cas où c'est un message du bot
@@ -60,10 +64,10 @@ export function createChatMessage(
 		message = processAudio(message);
 
 		// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-		message = processDirectiveNext(message);
+		message = processDirectiveNext(chatbot, message);
 
 		// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-		message = processDirectiveSelectNext(message);
+		message = processDirectiveSelectNext(chatbot, message);
 
 		// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en plugin si on veut l'utiliser)
 		if (yaml.plugins && yaml.plugins.includes("kroki")) {
@@ -195,8 +199,8 @@ export function createChatMessage(
 					}
 					if (timeToDisplayMessage) {
 						displayMessage(html, isUser, chatMessage).then(() => {
-							if (nextMessage.selected) {
-								chatbotResponse(chatbot, nextMessage.selected);
+							if (chatbot.nextMessage.selected) {
+								chatbotResponse(chatbot, chatbot.nextMessage.selected);
 							}
 						});
 						// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
@@ -210,8 +214,8 @@ export function createChatMessage(
 				}, 100);
 			} else {
 				displayMessage(html, isUser, chatMessage).then(() => {
-					if (nextMessage.selected) {
-						chatbotResponse(chatbot, nextMessage.selected);
+					if (chatbot.nextMessage.selected) {
+						chatbotResponse(chatbot, chatbot.nextMessage.selected);
 					}
 				});
 				// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
