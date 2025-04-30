@@ -40,6 +40,7 @@ on multiples lines
 ## First
 - item A
 Some content A
+1. [goto](Second)
 ## Second
 Some content B`;
 		const result = getMainContentInformations(markdown, 11, yaml);
@@ -47,6 +48,7 @@ Some content B`;
 		expect(result.length).toBe(2);
 		expect(result[0][0]).toBe("First");
 		expect(result[0][1]).toEqual(["item A"]);
+		expect(result[0][3]).toEqual([["goto", "Second", false, ""]]);
 		expect(result[1][0]).toBe("Second");
 		expect(result[1][1]).toEqual([]);
 	});
@@ -133,5 +135,19 @@ Another line of text.`;
 
 		expect(result3[0][2]).toEqual(["Some informative text here."]);
 		expect(result3[0][2]).not.toContain("This is an H3 title");
+	});
+
+	it("returns empty chatbotData if no response title exists", () => {
+		const md = "Some intro\nContent continues\nTest";
+		const result = getMainContentInformations(md, 0, yaml);
+		expect(result).toEqual([
+			[null, [], ["Some intro", "Content continues", "Test"], null],
+		]);
+	});
+
+	it("ignores structure-only titles based on isStructureTitle", () => {
+		const md = "# Hidden\n### Actual\nVisible content";
+		const result = getMainContentInformations(md, 0, yaml);
+		expect(result).toEqual([["Actual", [], ["Visible content"], null]]);
 	});
 });
