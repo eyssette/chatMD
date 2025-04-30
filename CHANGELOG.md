@@ -13,10 +13,6 @@
 - correction erreurs notifiées par ESlint dans fichiers tests
 - gestion ESlint pour éviter les erreurs dans les fichiers tests Jasmine
 
-### Docs
-
-- suppressions et précisions dans le Changelog
-
 ### Refactor
 
 - **chatbot**: fonctions utilitaires secondaires pour le parse du Markdown déplacées dans parsers/helpers/
