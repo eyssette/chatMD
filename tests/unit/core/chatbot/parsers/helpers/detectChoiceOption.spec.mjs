@@ -28,6 +28,15 @@ describe("detectChoiceOption", () => {
 		expect(result2.isRandom).toBeFalse();
 	});
 
+	it("detects ordered list line with a link as a choice option, even if there is no text in the link", () => {
+		const result1 = detectChoiceOption("1) [text with whitespaces]()");
+		const result2 = detectChoiceOption("12. [ text ]()");
+		expect(result1.isChoice).toBeTrue();
+		expect(result1.isRandom).toBeTrue();
+		expect(result2.isChoice).toBeTrue();
+		expect(result2.isRandom).toBeFalse();
+	});
+
 	it("detects ordered list line with a link as a choice option, even if the text or the link of the links contains non alphanumeric characters", () => {
 		const result1 = detectChoiceOption("1) [text ! ? , ; .](link)");
 		const result2 = detectChoiceOption("12. [text](text ! ? , ; .)");
