@@ -84,14 +84,15 @@ describe("extractInformationsFromInitialMessage", () => {
 
 	it("handles obfuscation when enabled", () => {
 		const obfuscatedYaml = { obfuscate: true };
-		const input = `1. [text](obfuscated Link)`;
-		const [_, choices] = extractInformationsFromInitialMessage(
+		const input = `Test\n1. [text](obfuscated Link)`;
+		const [content, choices] = extractInformationsFromInitialMessage(
 			input,
 			obfuscatedYaml,
 		);
 
 		const expectedLink = btoa("obfuscated Link");
 		expect(choices[0][1]).toBe(expectedLink);
+		expect(content).toEqual(["Test"]);
 	});
 
 	it("returns only content when no list is found", () => {

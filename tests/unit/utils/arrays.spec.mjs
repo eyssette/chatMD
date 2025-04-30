@@ -119,10 +119,6 @@ describe("shuffleArray", () => {
 });
 
 describe("randomizeArrayWithFixedElements", () => {
-	function isSameOrder(a, b) {
-		return a.every((val, idx) => val === b[idx]);
-	}
-
 	it("returns an array of the same length as the input", () => {
 		const input = [
 			["A", 0, false],
