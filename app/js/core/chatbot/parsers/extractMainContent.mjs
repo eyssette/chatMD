@@ -1,5 +1,8 @@
-import { startsWithAnyOf } from "../../../utils/strings.mjs";
 import { detectChoiceOption } from "./detectChoiceOption.mjs";
+import {
+	detectedResponseTitle,
+	isStructureTitle,
+} from "./detectResponseTitle.mjs";
 
 const regexDynamicContentIfBlock = /`if (.*?)`/;
 
@@ -8,7 +11,7 @@ export function getMainContentInformations(
 	indexEndIntroduction,
 	yaml,
 ) {
-	let currentH2Title = null;
+	let currentResponseTitle = null;
 	let currentLiItems = [];
 	let content = [];
 	let lastOrderedList = null;
@@ -19,19 +22,19 @@ export function getMainContentInformations(
 	let chatbotData = [];
 	for (let line of contentAfterFirstPartLines) {
 		const choiceStatus = detectChoiceOption(line);
-		if (startsWithAnyOf(line, yaml.responsesTitles)) {
+		if (detectedResponseTitle(line, yaml)) {
 			// Gestion des identifiants de réponse, et début de traitement du contenu de chaque réponse
-			if (currentH2Title) {
+			if (currentResponseTitle) {
 				chatbotData.push([
-					currentH2Title,
+					currentResponseTitle,
 					currentLiItems,
 					content,
 					lastOrderedList,
 				]);
 			}
-			currentH2Title = line
-				.replace(startsWithAnyOf(line, yaml.responsesTitles), "")
-				.trim(); // Titre h2
+			currentResponseTitle = line
+				.replace(detectedResponseTitle(line, yaml), "")
+				.trim();
 			currentLiItems = [];
 			lastOrderedList = null;
 			listParsed = false;
@@ -40,6 +43,7 @@ export function getMainContentInformations(
 			// Gestion des listes
 			currentLiItems.push(line.replace("- ", "").trim());
 		} else if (yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
+			// Cas des blocs dynamiques conditionnels
 			ifCondition = line.match(regexDynamicContentIfBlock)[1]
 				? line.match(regexDynamicContentIfBlock)[1]
 				: "";
@@ -60,15 +64,22 @@ export function getMainContentInformations(
 			link = yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
 			lastOrderedList.push([text, link, choiceStatus.isRandom, ifCondition]);
-			/* lastOrderedList.push(listContent); */
-		} else if (line.length > 0 && !line.startsWith("# ")) {
-			// Gestion du reste du contenu (sans prendre en compte les éventuels titres 1 dans le contenu)
+		} else if (line.length > 0 && !isStructureTitle(line, yaml)) {
+			// Gestion du reste du contenu de la réponse
+
+			// Pour définir le contenu d'une réponse, le chatbot ne prend pas en compte les lignes qui contiennent un titre qui sert simplent à structurer le chatbot (pour le créateur, sans affichage dans le chatbot côté utilisateur)
+
 			// Possibilité de faire des liens à l'intérieur du contenu vers une réponse
 			line = line.replaceAll(/\[(.*?)\]\((#.*?)\)/g, '<a href="$2">$1</a>');
 			content.push(line);
 			listParsed = true;
 		}
 	}
-	chatbotData.push([currentH2Title, currentLiItems, content, lastOrderedList]);
+	chatbotData.push([
+		currentResponseTitle,
+		currentLiItems,
+		content,
+		lastOrderedList,
+	]);
 	return chatbotData;
 }
