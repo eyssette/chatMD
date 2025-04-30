@@ -118,7 +118,9 @@ export function chatbotResponse(chatbot, inputText) {
 					titleResponse == nextMessage.goto &&
 					keywordsResponse.length == 0
 				) {
-					userInputTextToLowerCase = nextMessage.goto.toLowerCase();
+					userInputTextToLowerCase = removeAccents(
+						nextMessage.goto.toLowerCase(),
+					);
 				}
 				// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords (sauf s'il n'y a pas de keyword)
 				// Sinon on inclut le titre
