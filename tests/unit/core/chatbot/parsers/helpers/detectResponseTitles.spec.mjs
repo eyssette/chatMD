@@ -1,7 +1,7 @@
 import {
 	getStructureTitles,
 	isStructureTitle,
-} from "../../../../../app/js/core/chatbot/parsers/detectResponseTitle.mjs";
+} from "../../../../../../app/js/core/chatbot/parsers/helpers/detectResponseTitle.mjs";
 
 describe("structureTitles", () => {
 	it("returns empty array when yaml is undefined", () => {

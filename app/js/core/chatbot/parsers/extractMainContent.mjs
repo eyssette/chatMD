@@ -1,5 +1,5 @@
-import { detectChoiceOption } from "./detectChoiceOption.mjs";
-import { detectedResponseTitle } from "./detectResponseTitle.mjs";
+import { detectChoiceOption } from "./helpers/detectChoiceOption.mjs";
+import { detectedResponseTitle } from "./helpers/detectResponseTitle.mjs";
 import {
 	handleNewResponseTitle,
 	handleKeywords,

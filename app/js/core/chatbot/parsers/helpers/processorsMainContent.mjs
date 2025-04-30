@@ -1,7 +1,7 @@
 import {
 	detectedResponseTitle,
 	isStructureTitle,
-} from "../detectResponseTitle.mjs";
+} from "./detectResponseTitle.mjs";
 
 const regexDynamicContentIfBlock = /`if (.*?)`/;
 

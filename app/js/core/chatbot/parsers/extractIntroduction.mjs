@@ -1,4 +1,4 @@
-import { detectChoiceOption } from "./detectChoiceOption.mjs";
+import { detectChoiceOption } from "./helpers/detectChoiceOption.mjs";
 
 export function extractIntroduction(mdWithoutYaml) {
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles

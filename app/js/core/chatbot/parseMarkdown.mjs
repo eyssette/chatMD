@@ -1,4 +1,4 @@
-import { removeYaml } from "./parsers/removeYaml.mjs";
+import { removeYaml } from "./parsers/helpers/removeYaml.mjs";
 import {
 	extractIntroduction,
 	extractInformationsFromInitialMessage,

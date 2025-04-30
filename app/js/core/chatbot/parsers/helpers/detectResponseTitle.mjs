@@ -1,4 +1,4 @@
-import { startsWithAnyOf } from "../../../utils/strings.mjs";
+import { startsWithAnyOf } from "../../../../utils/strings.mjs";
 
 export function detectedResponseTitle(line, yaml) {
 	return startsWithAnyOf(line, yaml.responsesTitles);

@@ -1,4 +1,4 @@
-import { detectChoiceOption } from "../../../../../app/js/core/chatbot/parsers/detectChoiceOption.mjs";
+import { detectChoiceOption } from "../../../../../../app/js/core/chatbot/parsers/helpers/detectChoiceOption.mjs";
 
 describe("detectChoiceOption", () => {
 	it("detects ordered list line with a link starting with a dot (in Markdown), as a non-random choice option", () => {
@@ -67,6 +67,8 @@ describe("detectChoiceOption", () => {
 		expect(result1.isRandom).toBeFalse();
 		expect(result2.isChoice).toBeFalse();
 		expect(result2.isRandom).toBeFalse();
+		expect(result3.isChoice).toBeTrue();
+		expect(result3.isRandom).toBeFalse();
 		expect(result4.isChoice).toBeFalse();
 		expect(result4.isRandom).toBeFalse();
 	});
