@@ -12,12 +12,7 @@ import { createChatMessage } from "../messages/create.mjs";
 import { chatbotResponse } from "./selectBestResponse.mjs";
 import { responseToSelectedOption } from "./choiceOptions.mjs";
 
-const allowedTagsInUserInput = [
-	"<p>",
-	"</p>",
-	'<span class="hidden">',
-	"</span>",
-];
+const allowedTagsInUserInput = ["<p>", "</p>"];
 
 export async function controlEvents(chatbot) {
 	// Gestion des événéments js
