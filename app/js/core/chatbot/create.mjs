@@ -1,6 +1,6 @@
 import { getContent } from "./getContent.mjs";
 import { parseMarkdown } from "./parseMarkdown.mjs";
-import { controlChatbot } from "../interactions/controller.mjs";
+import { initializeChatbot } from "./initialize.mjs";
 
 // Pour créer le chatbot à partir d'une source en Markdown
 export async function createChatbot(defaultMd) {
@@ -12,7 +12,7 @@ export async function createChatbot(defaultMd) {
 		const chatbotData = parseMarkdown(content.markdown, content.yaml);
 
 		// On initialise le chatbot à partir de cette structure
-		controlChatbot(chatbotData);
+		initializeChatbot(chatbotData, content.yaml);
 	} catch (error) {
 		console.error(error);
 	}
