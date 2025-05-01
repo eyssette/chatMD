@@ -108,4 +108,10 @@ describe("detectChoiceOption", () => {
 		expect(result.isChoice).toBeFalse();
 		expect(result.isRandom).toBeFalse();
 	});
+
+	it("does not detect an ordered list with link to a URL starting with http… as a choice option", () => {
+		const result = detectChoiceOption("1. [text](https://example.com)");
+		expect(result.isChoice).toBeFalse();
+		expect(result.isRandom).toBeFalse();
+	});
 });
