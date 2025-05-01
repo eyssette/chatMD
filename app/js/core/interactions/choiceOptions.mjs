@@ -22,14 +22,14 @@ export function responseToSelectedOption(chatbot, optionLink) {
 			response = Array.isArray(response) ? response.join("\n\n") : response;
 			chatbot.optionsLastResponse = options;
 			response = options
-				? shouldDisplayChoiceOption(chatbot, response, options)
+				? processMessageWithChoiceOptions(chatbot, response, options)
 				: response;
 			return response;
 		}
 	}
 }
 
-export function shouldDisplayChoiceOption(chatbot, response, options) {
+export function processMessageWithChoiceOptions(chatbot, response, options) {
 	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
 	let dynamicVariables = chatbot.dynamicVariables;
 	if (yaml && yaml.dynamicContent && Object.keys(dynamicVariables).length > 0) {

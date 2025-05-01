@@ -15,7 +15,7 @@ import {
 } from "../../ai/rag/engine.mjs";
 import {
 	responseToSelectedOption,
-	shouldDisplayChoiceOption,
+	processMessageWithChoiceOptions,
 } from "./choiceOptions.mjs";
 
 let randomDefaultMessageIndex = Math.floor(
@@ -269,7 +269,7 @@ export function chatbotResponse(chatbot, inputText) {
 							chatbot.nextMessage.lastMessageFromBot;
 			} else {
 				// En cas de bonne réponse
-				selectedResponseWithOptions = shouldDisplayChoiceOption(
+				selectedResponseWithOptions = processMessageWithChoiceOptions(
 					chatbot,
 					selectedResponseWithoutOptions,
 					optionsSelectedResponse,
@@ -324,7 +324,7 @@ export function chatbotResponse(chatbot, inputText) {
 							"!useLLM " + inputText.replaceAll('"', "“"),
 						],
 					];
-					messageNoAnswer = shouldDisplayChoiceOption(
+					messageNoAnswer = processMessageWithChoiceOptions(
 						chatbot,
 						messageNoAnswer,
 						optionMessageNoAnswer,

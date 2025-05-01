@@ -1,7 +1,7 @@
 import { getParamsFromURL } from "../../utils/urls.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { createVector } from "../../utils/nlp.mjs";
-import { shouldDisplayChoiceOption } from "../interactions/choiceOptions.mjs";
+import { processMessageWithChoiceOptions } from "../interactions/choiceOptions.mjs";
 import { createChatMessage } from "../messages/create.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 
@@ -66,7 +66,7 @@ export function initializeChatbot(chatbotdata, yaml) {
 	const initialMessageOptions = initialMessage[1];
 
 	// Envoi du message d'accueil du chatbot
-	initialMessage = shouldDisplayChoiceOption(
+	initialMessage = processMessageWithChoiceOptions(
 		chatbot,
 		initialMessageContent,
 		initialMessageOptions,
