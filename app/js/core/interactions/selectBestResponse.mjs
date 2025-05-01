@@ -16,7 +16,7 @@ import {
 import {
 	responseToSelectedOption,
 	processMessageWithChoiceOptions,
-} from "./choiceOptions.mjs";
+} from "./helpers/choiceOptions.mjs";
 
 let randomDefaultMessageIndex = Math.floor(
 	Math.random() * config.defaultMessage.length,
@@ -32,7 +32,7 @@ if (yaml && yaml.useLLM.url && yaml.useLLM.RAGinformations) {
 	getRAGcontent(yaml.useLLM.RAGinformations);
 }
 
-export function chatbotResponse(chatbot, inputText) {
+export function selectBestResponse(chatbot, inputText) {
 	let chatData = chatbot.data;
 
 	const chatDataLength = chatData.length;

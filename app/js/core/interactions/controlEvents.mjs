@@ -9,8 +9,8 @@ import {
 } from "../../shared/selectors.mjs";
 import { autoFocus } from "../../shared/constants.mjs";
 import { createChatMessage } from "../messages/create.mjs";
-import { chatbotResponse } from "./selectBestResponse.mjs";
-import { responseToSelectedOption } from "./choiceOptions.mjs";
+import { selectBestResponse } from "./selectBestResponse.mjs";
+import { responseToSelectedOption } from "./helpers/choiceOptions.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
 
@@ -22,7 +22,7 @@ export async function controlEvents(chatbot) {
 			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
 			createChatMessage(chatbot, userInputText, true);
 			setTimeout(() => {
-				const response = chatbotResponse(chatbot, userInputText);
+				const response = selectBestResponse(chatbot, userInputText);
 				if (response) {
 					createChatMessage(chatbot, response, false);
 				}
@@ -126,7 +126,7 @@ export async function controlEvents(chatbot) {
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
 						.trim();
 					createChatMessage(chatbot, messageFromLink, true);
-					const response = chatbotResponse(chatbot, messageFromLink);
+					const response = selectBestResponse(chatbot, messageFromLink);
 					if (response) {
 						createChatMessage(chatbot, response, false);
 					}

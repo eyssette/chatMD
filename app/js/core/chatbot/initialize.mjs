@@ -1,7 +1,7 @@
 import { getParamsFromURL } from "../../utils/urls.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { createVector } from "../../utils/nlp.mjs";
-import { processMessageWithChoiceOptions } from "../interactions/choiceOptions.mjs";
+import { processMessageWithChoiceOptions } from "../interactions/helpers/choiceOptions.mjs";
 import { createChatMessage } from "../messages/create.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 

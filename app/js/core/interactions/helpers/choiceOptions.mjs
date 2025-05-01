@@ -1,10 +1,10 @@
-import { yaml } from "../../markdown/custom/yaml.mjs";
+import { yaml } from "../../../markdown/custom/yaml.mjs";
 import {
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
-} from "../../utils/arrays.mjs";
-import { evaluateExpression } from "../../markdown/custom/variablesDynamic.mjs";
-import { processDirectiveSelect } from "../../markdown/custom/directivesAndBlocks.mjs";
+} from "../../../utils/arrays.mjs";
+import { evaluateExpression } from "../../../markdown/custom/variablesDynamic.mjs";
+import { processDirectiveSelect } from "../../../markdown/custom/directivesAndBlocks.mjs";
 
 export function responseToSelectedOption(chatbot, optionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
