@@ -6,12 +6,12 @@
 
 - **chatbot**: les liens vers des URL en http… dans une liste ordonnée ne sont pas pris pour des options de choix du chatbot
 - **core**: refactor fonction pour sélectionner la meilleure réponse (selectBestResponse) et utilisation ensuite de createChatMessage pour envoyer la réponse
-- allowedTagsInUserInput : seulement la balise “p”
-- résolution problème de dépendance circulaire à cause de createChatMessage
+- **interactions**: allowedTagsInUserInput : seulement la balise “p”
+- **core**: résolution problème de dépendance circulaire à cause de createChatMessage
 
 ### Refactor
 
-- nom plus explicite pour la fonction qui traiter les messages avec options : processMessageWithChoiceOptions
+- **interactions**: nom plus explicite pour la fonction qui traite les messages avec options : processMessageWithChoiceOptions
 
 ## 7.3.7 (2025-05-01)
 
