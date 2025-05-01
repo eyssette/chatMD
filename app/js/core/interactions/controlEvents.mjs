@@ -19,7 +19,7 @@ const allowedTagsInUserInput = [
 	"</span>",
 ];
 
-export async function handleEvents(chatbot) {
+export async function controlEvents(chatbot) {
 	// Gestion des événéments js
 	sendButton.addEventListener("click", () => {
 		let userInputText = userInput.innerText;

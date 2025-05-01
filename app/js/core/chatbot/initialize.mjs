@@ -3,7 +3,7 @@ import { markdownToHTML } from "../../markdown/parser.mjs";
 import { createVector } from "../../utils/nlp.mjs";
 import { gestionOptions } from "../interactions/choiceOptions.mjs";
 import { createChatMessage } from "../messages/create.mjs";
-import { handleEvents } from "../interactions/controller.mjs";
+import { controlEvents } from "../interactions/controlEvents.mjs";
 
 export function initializeChatbot(chatbotdata, yaml) {
 	let dynamicVariables = {};
@@ -79,5 +79,5 @@ export function initializeChatbot(chatbotdata, yaml) {
 	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 	chatbot.initialMessage = initialMessage;
 
-	handleEvents(chatbot);
+	controlEvents(chatbot);
 }
