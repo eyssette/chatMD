@@ -6476,12 +6476,7 @@ var Showdown = function () {
 
 				// LEGACY_SUPPORT CODE
 				if (showdown.extensions[ext]) {
-					console.warn(
-						"DEPRECATION WARNING: " +
-							ext +
-							" is an old extension that uses a deprecated loading method." +
-							"Please inform the developer that the extension should be updated!",
-					);
+					console.warn("DEPRECATION WARNING: " + ext + " = old extension");
 					legacyExtensionLoading(showdown.extensions[ext], ext);
 					return;
 					// END LEGACY SUPPORT CODE
@@ -6489,9 +6484,7 @@ var Showdown = function () {
 					ext = extensions[ext];
 				} else {
 					throw Error(
-						'Extension "' +
-							ext +
-							'" could not be loaded. It was either not found or is not a valid extension.',
+						'Extension "' + ext + '" : not found or not a valid extension.',
 					);
 				}
 			}
