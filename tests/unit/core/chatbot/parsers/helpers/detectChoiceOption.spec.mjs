@@ -109,9 +109,15 @@ describe("detectChoiceOption", () => {
 		expect(result.isRandom).toBeFalse();
 	});
 
-	it("does not detect an ordered list with link to a URL starting with http… as a choice option", () => {
-		const result = detectChoiceOption("1. [text](https://example.com)");
-		expect(result.isChoice).toBeFalse();
-		expect(result.isRandom).toBeFalse();
+	it("does not detect an ordered list with link to an external URL, as a choice option", () => {
+		const result1 = detectChoiceOption("1. [text](https://example.com)");
+		expect(result1.isChoice).toBeFalse();
+		expect(result1.isRandom).toBeFalse();
+		const result2 = detectChoiceOption("1. [text](mailto:my@email.com)");
+		expect(result2.isChoice).toBeFalse();
+		expect(result2.isRandom).toBeFalse();
+		const result3 = detectChoiceOption("1. [text](tel:12312399R)");
+		expect(result3.isChoice).toBeFalse();
+		expect(result3.isRandom).toBeFalse();
 	});
 });
