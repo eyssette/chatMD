@@ -1,5 +1,22 @@
 # Changelog
 
+## 7.3.7 (2025-05-01)
+
+### Fix
+
+- **lib**: messages d'erreur plus courts dans la librairie showdown
+- test de l'existence de yaml avant de chercher les propriétés de cet objet
+- **interactions**: directive !Next sans conditions (pas de keywords dans la réponse) renvoie directement vers la réponse
+- **chatbot**: autorisation des choix d'options avec texte de lien vide "1. [texte]()", car on peut les utiliser pour faire des retours au menu principal
+
+### Refactor
+
+- **interactions**: renommage de "gestionOptions" en "shouldDisplayChoiceOption"
+- **interactions**: fonction controlEvents (renommage fonction et dossier)
+- **chatbot**: création de initializeChatbot() dans create.mjs plutôt que dans controller.mjs
+- **chatbot**: modularisation de create.mjs
+- **interactions**:  variable nextMessage intégrée dans l'objet chatbot dans controller.mjs
+
 ## 7.3.6 (2025-04-30)
 
 ### Fix
