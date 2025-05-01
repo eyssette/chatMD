@@ -14,7 +14,10 @@ import {
 	RAGcontent,
 } from "../../ai/rag/engine.mjs";
 import { createChatMessage } from "../messages/create.mjs";
-import { responseToSelectedOption, gestionOptions } from "./choiceOptions.mjs";
+import {
+	responseToSelectedOption,
+	shouldDisplayChoiceOption,
+} from "./choiceOptions.mjs";
 
 let randomDefaultMessageIndex = Math.floor(
 	Math.random() * config.defaultMessage.length,
@@ -271,7 +274,7 @@ export function chatbotResponse(chatbot, inputText) {
 							chatbot.nextMessage.lastMessageFromBot;
 			} else {
 				// En cas de bonne réponse
-				selectedResponseWithOptions = gestionOptions(
+				selectedResponseWithOptions = shouldDisplayChoiceOption(
 					chatbot,
 					selectedResponseWithoutOptions,
 					optionsSelectedResponse,
@@ -326,7 +329,7 @@ export function chatbotResponse(chatbot, inputText) {
 							"!useLLM " + inputText.replaceAll('"', "“"),
 						],
 					];
-					messageNoAnswer = gestionOptions(
+					messageNoAnswer = shouldDisplayChoiceOption(
 						chatbot,
 						messageNoAnswer,
 						optionMessageNoAnswer,
