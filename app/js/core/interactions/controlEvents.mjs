@@ -27,7 +27,10 @@ export async function controlEvents(chatbot) {
 			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
 			createChatMessage(chatbot, userInputText, true);
 			setTimeout(() => {
-				chatbotResponse(chatbot, userInputText);
+				const response = chatbotResponse(chatbot, userInputText);
+				if (response) {
+					createChatMessage(chatbot, response, false);
+				}
 				scrollWindow({ scrollMode: "instant" });
 			}, 100);
 			userInput.innerText = "";
@@ -128,11 +131,15 @@ export async function controlEvents(chatbot) {
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
 						.trim();
 					createChatMessage(chatbot, messageFromLink, true);
-					chatbotResponse(chatbot, messageFromLink);
+					const response = chatbotResponse(chatbot, messageFromLink);
+					if (response) {
+						createChatMessage(chatbot, response, false);
+					}
 				} else {
 					createChatMessage(chatbot, messageFromLink, true);
 					const optionLink = link.substring(1);
-					responseToSelectedOption(chatbot, optionLink);
+					const response = responseToSelectedOption(chatbot, optionLink);
+					createChatMessage(chatbot, response);
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur();
 					// Refocaliser sur userInput

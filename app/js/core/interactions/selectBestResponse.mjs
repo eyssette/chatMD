@@ -13,7 +13,6 @@ import {
 	vectorRAGinformations,
 	RAGcontent,
 } from "../../ai/rag/engine.mjs";
-import { createChatMessage } from "../messages/create.mjs";
 import {
 	responseToSelectedOption,
 	shouldDisplayChoiceOption,
@@ -70,12 +69,7 @@ export function chatbotResponse(chatbot, inputText) {
 	// Choix de la réponse que le chatbot va envoyer
 	if (yaml && yaml.detectBadWords === true && filterBadWords) {
 		if (filterBadWords.check(inputText)) {
-			createChatMessage(
-				chatbot,
-				getRandomElement(config.badWordsMessage),
-				false,
-			);
-			return;
+			return getRandomElement(config.badWordsMessage);
 		}
 	}
 
@@ -101,7 +95,8 @@ export function chatbotResponse(chatbot, inputText) {
 	if (optionsLastResponse && indexLastResponseKeyMatch > -1) {
 		// Si le message de l'utilisateur correspond à une des options proposées, on renvoie directement vers cette option
 		const optionLink = optionsLastResponse[indexLastResponseKeyMatch][1];
-		responseToSelectedOption(chatbot, optionLink);
+		const response = responseToSelectedOption(chatbot, optionLink);
+		return response;
 	} else {
 		/* Sinon, on cherche la meilleure réponse possible en testant l'identité ou la similarité entre les mots ou expressions clés de chaque réponse possible et le message envoyé */
 		if (chatDataLength > 0 && chatData[0][0]) {
@@ -291,7 +286,7 @@ export function chatbotResponse(chatbot, inputText) {
 				);
 				return;
 			} else {
-				createChatMessage(chatbot, selectedResponseWithOptions, false);
+				return selectedResponseWithOptions;
 			}
 		} else {
 			if (
@@ -335,7 +330,7 @@ export function chatbotResponse(chatbot, inputText) {
 						optionMessageNoAnswer,
 					);
 				}
-				createChatMessage(chatbot, messageNoAnswer, false);
+				return messageNoAnswer;
 			}
 		}
 	}
