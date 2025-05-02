@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.3.9 (2025-05-02)
+
+### Fix
+
+- **interactions**: refactoring et modularisation de la fonction principale (getChatbotResponse) et fix pour le RAG
+- **chatbot**: detectChoiceOption exclut maintenant aussi les liens mailto: et tel:
+
+### Chore
+
+- configuration debug
+
 ## 7.3.8 (2025-05-01)
 
 ### Fix
