@@ -11,7 +11,7 @@ import { processFixedVariables } from "../../../js//markdown/custom/variablesFix
 import { processDynamicVariables } from "../../../js//markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";
 import { displayMessage } from "../messages/display.mjs";
-import { splitMarkdownAndLLMPrompts } from "../../ai/helpers/extractLLMprompts.mjs";
+import { splitMarkdownAndLLMprompts } from "../../ai/helpers/extractLLMprompts.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { getAnswerFromLLM } from "../../ai/api.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
@@ -76,7 +76,7 @@ export function createChatMessage(
 	}
 	let hasPromptInMessage = false;
 	if (yaml && yaml.useLLM.url) {
-		message = splitMarkdownAndLLMPrompts(message);
+		message = splitMarkdownAndLLMprompts(message);
 		hasPromptInMessage = Array.isArray(message);
 	}
 
