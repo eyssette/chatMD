@@ -4,6 +4,7 @@ import { createVector } from "../../utils/nlp.mjs";
 import { processMessageWithChoiceOptions } from "../interactions/helpers/choiceOptions.mjs";
 import { createChatMessage } from "../messages/create.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
+import { getRAGcontent } from "../../ai/rag/engine.mjs";
 
 export function initializeChatbot(chatbotdata, yaml) {
 	let dynamicVariables = {};
@@ -42,6 +43,10 @@ export function initializeChatbot(chatbotdata, yaml) {
 	}
 
 	const vectorChatBotResponses = precalculateVectorChatbotReponses(chatbotdata);
+
+	if (yaml.useLLM.RAGinformations) {
+		getRAGcontent(yaml.useLLM.RAGinformations);
+	}
 
 	let chatbot = {
 		dynamicVariables: dynamicVariables,

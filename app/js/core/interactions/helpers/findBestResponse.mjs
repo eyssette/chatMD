@@ -1,78 +1,25 @@
-import { config } from "../../config.mjs";
-import { yaml, filterBadWords } from "../../markdown/custom/yaml.mjs";
-import { topElements, getRandomElement } from "../../utils/arrays.mjs";
+import { yaml } from "../../../markdown/custom/yaml.mjs";
 import {
 	removeAccents,
 	hasLevenshteinDistanceLessThan,
 	cosineSimilarity,
 	longestCommonSubstringWeightedLength,
-} from "../../utils/nlp.mjs";
-import { getAnswerFromLLM } from "../../ai/api.mjs";
-import {
-	getRAGcontent,
-	vectorRAGinformations,
-	RAGcontent,
-} from "../../ai/rag/engine.mjs";
+} from "../../../utils/nlp.mjs";
 import {
 	responseToSelectedOption,
 	processMessageWithChoiceOptions,
-} from "./helpers/choiceOptions.mjs";
-
-let randomDefaultMessageIndex = Math.floor(
-	Math.random() * config.defaultMessage.length,
-);
-let randomDefaultMessageIndexLastChoice = [];
+} from "./choiceOptions.mjs";
+import { getDefaultMessage } from "./getDefaultMessage.mjs";
+import { processQuestionToLLM } from "./processQuestionToLLM.mjs";
 
 const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité (tolérance des fautes d'orthographe et des fautes de frappe)
 const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
 const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
 const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
-if (yaml && yaml.useLLM.url && yaml.useLLM.RAGinformations) {
-	getRAGcontent(yaml.useLLM.RAGinformations);
-}
-
-export function selectBestResponse(chatbot, inputText) {
+export function findBestResponse(chatbot, inputText) {
 	let chatData = chatbot.data;
-
 	const chatDataLength = chatData.length;
-	// Cas où on va directement à un prochain message (sans même avoir à tester la présence de keywords)
-	if (chatbot.nextMessage.goto != "" && !chatbot.nextMessage.onlyIfKeywords) {
-		inputText = chatbot.nextMessage.goto;
-	}
-	let RAGbestMatchesInformation = "";
-	let questionToLLM;
-	if (yaml && yaml.useLLM.url) {
-		inputText = inputText.replace(
-			'<span class="hidden">!useLLM</span>',
-			"!useLLM",
-		);
-		questionToLLM = inputText.trim().replace("!useLLM", "");
-		if (yaml && yaml.useLLM.RAGinformations) {
-			// On ne retient dans les informations RAG que les informations pertinentes par rapport à la demande de l'utilisateur
-			const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
-				cosineSimilarity(questionToLLM, vectorRAGinformation, {
-					boostIfKeywordsInTitle:
-						chatbot.nextMessage && chatbot.nextMessage.goto,
-				}),
-			);
-			const RAGbestMatchesIndexes = topElements(
-				cosSimArray,
-				yaml.useLLM.RAGmaxTopElements,
-			);
-			RAGbestMatchesInformation = RAGbestMatchesIndexes.map(
-				(element) => RAGcontent[element[1]],
-			).join("\n");
-		}
-	}
-
-	// Choix de la réponse que le chatbot va envoyer
-	if (yaml && yaml.detectBadWords === true && filterBadWords) {
-		if (filterBadWords.check(inputText)) {
-			return getRandomElement(config.badWordsMessage);
-		}
-	}
-
 	let bestMatch = null;
 	let bestMatchScore = 0;
 	let bestDistanceScore = 0;
@@ -276,61 +223,25 @@ export function selectBestResponse(chatbot, inputText) {
 				);
 			}
 			// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
-			if (
-				(yaml.useLLM.url && yaml.useLLM.model && yaml.useLLM.always) ||
-				inputText.includes("!useLLM")
-			) {
-				getAnswerFromLLM(
-					questionToLLM.trim(),
-					selectedResponseWithoutOptions + "\n" + RAGbestMatchesInformation,
-				);
-				return;
+			if (yaml.useLLM.always) {
+				const answerFromLLM = processQuestionToLLM(chatbot, inputText, {
+					useLLM: true,
+					RAG: selectedResponseWithoutOptions,
+				});
+				if (answerFromLLM) return null;
 			} else {
 				return selectedResponseWithOptions;
 			}
 		} else {
-			if (
-				(yaml.useLLM.url && yaml.useLLM.model && yaml.useLLM.always) ||
-				inputText.includes("!useLLM")
-			) {
-				getAnswerFromLLM(questionToLLM, RAGbestMatchesInformation);
-				return;
+			if (yaml.useLLM.always) {
+				const answerFromLLM = processQuestionToLLM(chatbot, inputText, {
+					useLLM: true,
+				});
+				if (answerFromLLM) return null;
 			} else {
 				// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
 				// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
-				while (
-					randomDefaultMessageIndexLastChoice.includes(
-						randomDefaultMessageIndex,
-					)
-				) {
-					randomDefaultMessageIndex = Math.floor(
-						Math.random() * config.defaultMessage.length,
-					);
-				}
-				if (randomDefaultMessageIndexLastChoice.length > 4) {
-					randomDefaultMessageIndexLastChoice.shift();
-				}
-				randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-				let messageNoAnswer = config.defaultMessage[randomDefaultMessageIndex];
-				if (
-					yaml &&
-					yaml.useLLM.url &&
-					yaml.useLLM.model &&
-					!yaml.useLLM.always
-				) {
-					const optionMessageNoAnswer = [
-						[
-							"Voir une réponse générée par une IA",
-							"!useLLM " + inputText.replaceAll('"', "“"),
-						],
-					];
-					messageNoAnswer = processMessageWithChoiceOptions(
-						chatbot,
-						messageNoAnswer,
-						optionMessageNoAnswer,
-					);
-				}
-				return messageNoAnswer;
+				return getDefaultMessage(chatbot, inputText);
 			}
 		}
 	}

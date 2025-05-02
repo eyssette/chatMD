@@ -15,7 +15,7 @@ import { splitMarkdownAndLLMPrompts } from "../../ai/helpers/extractLLMprompts.m
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { getAnswerFromLLM } from "../../ai/api.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
-import { selectBestResponse } from "../interactions/selectBestResponse.mjs";
+import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 
 // Création du message par le bot ou l'utilisateur
 export function createChatMessage(
@@ -200,7 +200,7 @@ export function createChatMessage(
 					if (timeToDisplayMessage) {
 						displayMessage(html, isUser, chatMessage).then(() => {
 							if (chatbot.nextMessage.selected) {
-								const response = selectBestResponse(
+								const response = getChatbotResponse(
 									chatbot,
 									chatbot.nextMessage.selected,
 								);
@@ -221,7 +221,7 @@ export function createChatMessage(
 			} else {
 				displayMessage(html, isUser, chatMessage).then(() => {
 					if (chatbot.nextMessage.selected) {
-						const response = selectBestResponse(
+						const response = getChatbotResponse(
 							chatbot,
 							chatbot.nextMessage.selected,
 						);
