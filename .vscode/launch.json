@@ -4,7 +4,7 @@
 			"type": "chrome",
 			"name": "ChatMD",
 			"request": "launch",
-			"url": "http://localhost:8888",
+			"url": "http://localhost:5501",
 			"webRoot": "${workspaceFolder}/app",
 			"sourceMaps": true,
 			"sourceMapRenames": true
