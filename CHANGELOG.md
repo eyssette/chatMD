@@ -1,5 +1,23 @@
 # Changelog
 
+## 7.3.11 (2025-05-04)
+
+### Fix
+
+- **interactions**: processMessageWithChoiceOptions()  : on doit filtrer les options d'après les conditions dynamiques mêmes si dynamicVariables n'existe pas
+
+### Chore
+
+- fichier en double supprimé
+
+### Refactor
+
+- **messages**: on évite la répétition de codes en transférant dans displayMessage la conversion en HTML du Markdown, la gestion des bots multiples et la gestion du Latex
+- **messages**: modularisation de la fonction de création de messages : createChatMessage()
+- **messages**: waitForKatex dans un module à part
+- **interactions**: modularisation de controlEvents
+- **ai**: modularisation de api.mjs et renommage en getAnswerFromLLM
+
 ## 7.3.10 (2025-05-03)
 
 ### Fix
