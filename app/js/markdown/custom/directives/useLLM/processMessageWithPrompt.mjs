@@ -1,10 +1,5 @@
-import { yaml } from "../../yaml.mjs";
 import { getAnswerFromLLM } from "../../../../ai/getAnswerFromLLM.mjs";
-import { convertLatexExpressions } from "../../../latex.mjs";
 import { displayMessage } from "../../../../core/messages/display.mjs";
-import { markdownToHTML } from "../../../parser.mjs";
-import { processMultipleBots } from "../bot.mjs";
-import { waitForKaTeX } from "../../../../core/messages/helpers/plugins/waitForKatex.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(sequence, chatMessage, isUser) {
@@ -19,20 +14,7 @@ export async function processMessageWithPrompt(sequence, chatMessage, isUser) {
 				await getAnswerFromLLM(content, "", chatMessageElement, chatMessage);
 			} else if (type === "markdown") {
 				// Gestion du contenu en Markdown
-				let htmlContent = markdownToHTML(content);
-				if (yaml && yaml.bots) {
-					htmlContent = processMultipleBots(htmlContent);
-				}
-				if (yaml && yaml.maths) {
-					await waitForKaTeX();
-					htmlContent = convertLatexExpressions(htmlContent);
-				}
-				await displayMessage(
-					htmlContent,
-					isUser,
-					chatMessageElement,
-					chatMessage,
-				);
+				await displayMessage(content, isUser, chatMessageElement, chatMessage);
 			}
 		} catch (error) {
 			console.error(

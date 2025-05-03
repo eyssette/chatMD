@@ -1,9 +1,5 @@
-import { yaml } from "../../markdown/custom/yaml.mjs";
-import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
-import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";
 import { displayMessage } from "../messages/display.mjs";
 import { extractMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/extractMarkdownAndPrompts.mjs";
-import { markdownToHTML } from "../../markdown/parser.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 import { processMessageWithPrompt } from "../../markdown/custom/directives/useLLM/processMessageWithPrompt.mjs";
 import { createMessageElement } from "./helpers/dom.mjs";
@@ -44,61 +40,20 @@ export function createChatMessage(
 		const markdownAndPromptSequence = checkPromptsinMessage.sequence;
 		processMessageWithPrompt(markdownAndPromptSequence, container, isUser);
 	} else {
-		let html = markdownToHTML(message);
-		if (html.trim() !== "") {
-			if (yaml && yaml.bots) {
-				html = processMultipleBots(html);
-			}
-			if (yaml && yaml.maths === true) {
-				// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
-				// Si le message est celui de l'utilisateur, on n'utilise pas les backticks (car ils ne sont utiles que pour l'effet typewriter qui n'est pas utilisé pour les messages de l'utilisateur)
-				let timeToDisplayMessage = false;
-				let attempts = 0;
-				const interval = setInterval(() => {
-					if (window.katex) {
-						clearInterval(interval);
-						timeToDisplayMessage = true;
-						html = isUser
-							? convertLatexExpressions(html, true)
-							: convertLatexExpressions(html);
-					} else {
-						attempts++;
-						if (attempts > 10) {
-							clearInterval(interval);
-							timeToDisplayMessage = true;
-						}
-					}
-					if (timeToDisplayMessage) {
-						displayMessage(html, isUser, container).then(() => {
-							const response = handleBotResponse(chatbot);
-							if (response) {
-								createChatMessage(chatbot, response, false);
-							}
-						});
-						// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
-						message = processSelectElements(
-							chatbot,
-							message,
-							originalMessage,
-							container,
-						);
-					}
-				}, 100);
-			} else {
-				displayMessage(html, isUser, container).then(() => {
-					const response = handleBotResponse(chatbot);
-					if (response) {
-						createChatMessage(chatbot, response, false);
-					}
-				});
-				// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
-				message = processSelectElements(
-					chatbot,
-					message,
-					originalMessage,
-					container,
-				);
-			}
+		if (message.trim() !== "") {
+			displayMessage(message, isUser, container).then(() => {
+				const response = handleBotResponse(chatbot);
+				if (response) {
+					createChatMessage(chatbot, response, false);
+				}
+			});
+			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
+			message = processSelectElements(
+				chatbot,
+				message,
+				originalMessage,
+				container,
+			);
 		}
 	}
 }

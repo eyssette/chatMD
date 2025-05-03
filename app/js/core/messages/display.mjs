@@ -1,10 +1,23 @@
+import { yaml } from "../../markdown/custom/yaml.mjs";
+import { markdownToHTML } from "../../markdown/parser.mjs";
 import { processCopyCode } from "./helpers/plugins/copyCode.mjs";
 import { startTypeWriter } from "./typewriter/start.mjs";
 import { shouldDisableTypewriter } from "./typewriter/disabled.mjs";
 import { cleanTypewriterSyntax } from "./typewriter/sanitize.mjs";
 import { appendMessageToContainer } from "./helpers/dom.mjs";
+import { waitForKaTeX } from "./helpers/plugins/waitForKatex.mjs";
+import { convertLatexExpressions } from "../../markdown/latex.mjs";
+import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
 
-export function displayMessage(html, isUser, chatMessage, container) {
+export async function displayMessage(md, isUser, chatMessage, container) {
+	let html = markdownToHTML(md);
+	if (yaml && yaml.bots && !isUser) {
+		html = processMultipleBots(html);
+	}
+	if (yaml && yaml.maths) {
+		await waitForKaTeX();
+		html = convertLatexExpressions(html);
+	}
 	return new Promise((resolve) => {
 		if (!html) return resolve();
 
