@@ -11,7 +11,7 @@ import { processFixedVariables } from "../../../js//markdown/custom/variablesFix
 import { processDynamicVariables } from "../../../js//markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";
 import { displayMessage } from "../messages/display.mjs";
-import { separateMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/separateMarkdownAndPrompts.mjs";
+import { extractMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/extractMarkdownAndPrompts.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
@@ -74,16 +74,13 @@ export function createChatMessage(
 			message = processKroki(message);
 		}
 	}
-	let hasPromptInMessage = false;
-	if (yaml && yaml.useLLM.url) {
-		message = separateMarkdownAndPrompts(message);
-		hasPromptInMessage = Array.isArray(message);
-	}
+	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
+	const hasPromptInmessage = checkPromptsinMessage.useLLM;
 
-	if (hasPromptInMessage) {
+	if (hasPromptInmessage) {
 		// On gère le cas où il y a une partie dans le message qui doit être gérée par un LLM
-
-		processMessageWithPrompt(message, chatMessage, isUser);
+		const markdownAndPromptSequence = checkPromptsinMessage.sequence;
+		processMessageWithPrompt(markdownAndPromptSequence, chatMessage, isUser);
 	} else {
 		let html = markdownToHTML(message);
 		if (html.trim() !== "") {

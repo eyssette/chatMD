@@ -42,9 +42,9 @@ function waitForKaTeX() {
 }
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
-export async function processMessageWithPrompt(parts, chatMessage, isUser) {
-	for (let i = 0; i < parts.length; i++) {
-		const part = parts[i];
+export async function processMessageWithPrompt(sequence, chatMessage, isUser) {
+	for (let i = 0; i < sequence.length; i++) {
+		const part = sequence[i];
 		const isLLMPart = i % 2 === 1;
 		const chatMessageElement = document.createElement("div");
 		let content;
