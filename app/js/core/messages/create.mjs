@@ -1,12 +1,12 @@
+import { processAudio } from "../../markdown/custom/blocks/audio.mjs";
+import { processRandomMessage } from "../../markdown/custom/blocks/random.mjs";
 import {
-	processAudio,
 	processDirectiveBot,
-	processDirectiveNext,
-	processDirectiveSelectNext,
-	processKroki,
 	processMultipleBots,
-	processRandomMessage,
-} from "../../../js//markdown/custom/directivesAndBlocks.mjs";
+} from "../../markdown/custom/directives/bot.mjs";
+import { processKroki } from "./helpers/plugins/processKroki.mjs";
+import { processDirectiveNext } from "../../markdown/custom/directives/next.mjs";
+import { processDirectiveSelectNext } from "../../markdown/custom/directives/selectNext.mjs";
 import { processFixedVariables } from "../../../js//markdown/custom/variablesFixed.mjs";
 import { processDynamicVariables } from "../../../js//markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";

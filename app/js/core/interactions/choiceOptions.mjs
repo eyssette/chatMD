@@ -1,35 +1,39 @@
-import { yaml } from "../../../markdown/custom/yaml.mjs";
+import { yaml } from "../../markdown/custom/yaml.mjs";
 import {
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
-} from "../../../utils/arrays.mjs";
-import { evaluateExpression } from "../../../markdown/custom/variablesDynamic.mjs";
-import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
+} from "../../utils/arrays.mjs";
+import { evaluateExpression } from "../../markdown/custom/variablesDynamic.mjs";
+import { processDirectiveSelect } from "../../markdown/custom/directives/select.mjs";
+import { createChatMessage } from "../messages/create.mjs";
 
 export function responseToSelectedOption(chatbot, optionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
-	if (!optionLink) {
-		return chatbot.initialMessage;
-	}
-	const chatData = chatbot.data;
-	const chatDataLength = chatData.length;
-	for (let i = 0; i < chatDataLength; i++) {
-		let title = chatData[i][0];
-		title = yaml.obfuscate ? btoa(title) : title;
-		if (optionLink == title) {
-			let response = chatData[i][2];
-			const options = chatData[i][3];
-			response = Array.isArray(response) ? response.join("\n\n") : response;
-			chatbot.optionsLastResponse = options;
-			response = options
-				? processMessageWithChoiceOptions(chatbot, response, options)
-				: response;
-			return response;
+	if (optionLink != "") {
+		const chatData = chatbot.data;
+		const chatDataLength = chatData.length;
+		for (let i = 0; i < chatDataLength; i++) {
+			let title = chatData[i][0];
+			title = yaml.obfuscate ? btoa(title) : title;
+			if (optionLink == title) {
+				let response = chatData[i][2];
+				const options = chatData[i][3];
+				response = Array.isArray(response) ? response.join("\n\n") : response;
+				chatbot.optionsLastResponse = options;
+				response = options
+					? shouldDisplayChoiceOption(chatbot, response, options)
+					: response;
+				createChatMessage(chatbot, response, false);
+				break;
+			}
 		}
+	} else {
+		const initialMessage = chatbot.initialMessage;
+		createChatMessage(chatbot, initialMessage, false);
 	}
 }
 
-export function processMessageWithChoiceOptions(chatbot, response, options) {
+export function shouldDisplayChoiceOption(chatbot, response, options) {
 	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
 	let dynamicVariables = chatbot.dynamicVariables;
 	if (yaml && yaml.dynamicContent && Object.keys(dynamicVariables).length > 0) {

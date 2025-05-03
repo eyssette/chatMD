@@ -1,4 +1,4 @@
-import { processCopyCode } from "../../markdown/custom/directivesAndBlocks.mjs";
+import { processCopyCode } from "./helpers/plugins/copyCode.mjs";
 import { startTypeWriter } from "./typewriter/start.mjs";
 import { shouldDisableTypewriter } from "./typewriter/disabled.mjs";
 import { cleanTypewriterSyntax } from "./typewriter/sanitize.mjs";
