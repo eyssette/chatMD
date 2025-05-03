@@ -8,7 +8,7 @@ import {
 import {
 	responseToSelectedOption,
 	processMessageWithChoiceOptions,
-} from "./choiceOptions.mjs";
+} from "../helpers/choiceOptions.mjs";
 import { getDefaultMessage } from "./getDefaultMessage.mjs";
 import { processQuestionToLLM } from "./processQuestionToLLM.mjs";
 
