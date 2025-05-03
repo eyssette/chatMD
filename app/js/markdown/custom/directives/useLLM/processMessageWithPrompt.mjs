@@ -4,21 +4,7 @@ import { convertLatexExpressions } from "../../../latex.mjs";
 import { displayMessage } from "../../../../core/messages/display.mjs";
 import { markdownToHTML } from "../../../parser.mjs";
 import { processMultipleBots } from "../bot.mjs";
-
-// On attend que la librairie de gestion de Latex soit disponible (avec un maximum d'essais pour éviter une boucle infinie)
-function waitForKaTeX() {
-	return new Promise((resolve) => {
-		let attempts = 0;
-		const interval = setInterval(() => {
-			if (window.katex || attempts > 10) {
-				clearInterval(interval);
-				resolve();
-			} else {
-				attempts++;
-			}
-		}, 100);
-	});
-}
+import { waitForKaTeX } from "../../../../core/messages/helpers/plugins/waitForKatex.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(sequence, chatMessage, isUser) {
