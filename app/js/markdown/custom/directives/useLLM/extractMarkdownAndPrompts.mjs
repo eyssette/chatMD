@@ -42,7 +42,7 @@ export function extractMarkdownAndPrompts(message) {
 	}
 
 	return {
-		useLLM: true,
+		useLLM: result.some((part) => part.type === "prompt"),
 		sequence: result,
 	};
 }
