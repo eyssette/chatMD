@@ -4,7 +4,7 @@
 
 ### Fix
 
-- extractMarkdownAndPrompts retourne useLLM: false s'il n'y a pas de prompts dans le message
+- **markdown**: extractMarkdownAndPrompts retourne useLLM: false s'il n'y a pas de prompts dans le message
 - **CSS**: résolution d'un problème pour l'affichage des options de choix
 - **CSS**: résolution d'un problème sur les admonitions en première ligne d'un message du chatbot
 
@@ -14,13 +14,13 @@
 
 ### Refactor
 
-- extractMarkdownAndPrompts et processMessageWithPrompts : utilisation d'un tableaux d'objets pour la séquence de contenus en markdown et de prompts
-- simplification de processMessageWithPrompt
-- déplacement de processAudio dans le dossier "directives"
+- **markdown**: extractMarkdownAndPrompts et processMessageWithPrompts : utilisation d'un tableaux d'objets pour la séquence de contenus en markdown et de prompts
+- **markdown**: simplification de processMessageWithPrompt
+- **markdown**: déplacement de processAudio dans le dossier "directives"
 - **markdown**: refactor fonctions de gestions des messages avec prompts
-- fonction processMessageWithPrompts simplifiée
+- **markdown**: fonction processMessageWithPrompts simplifiée
 - **markdown**: réorganisation des dossiers et noms de fichiers pour les directives et notamment l'utilisation d'un LLM
-- modularisation de la gestion des directives et des blocs particuliers
+- **markdown**: modularisation de la gestion des directives et des blocs particuliers
 - **messages**: gestion des messages avec prompt dans un module à part
 
 ## 7.3.9 (2025-05-02)
