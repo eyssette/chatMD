@@ -5,27 +5,6 @@ import { displayMessage } from "../../../../core/messages/display.mjs";
 import { markdownToHTML } from "../../../parser.mjs";
 import { processMultipleBots } from "../bot.mjs";
 
-// Affiche un message ou récupère une réponse du LLM
-async function handleContent({
-	useLLM,
-	content,
-	isUser,
-	chatMessageElement,
-	chatMessage,
-}) {
-	if (useLLM && content.trim()) {
-		await getAnswerFromLLM(content, "", chatMessageElement, chatMessage);
-		return;
-	}
-
-	if (yaml && yaml.maths) {
-		await waitForKaTeX();
-		content = convertLatexExpressions(content);
-	}
-
-	await displayMessage(content, isUser, chatMessageElement, chatMessage);
-}
-
 // Attend que KaTeX soit prêt (ou timeout après 10 tentatives)
 function waitForKaTeX() {
 	return new Promise((resolve) => {
@@ -44,30 +23,36 @@ function waitForKaTeX() {
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(sequence, chatMessage, isUser) {
 	for (let i = 0; i < sequence.length; i++) {
-		const part = sequence[i];
+		let sequenceContent = sequence[i];
 		const isLLMPart = i % 2 === 1;
 		const chatMessageElement = document.createElement("div");
-		let content;
 
 		try {
 			if (isLLMPart) {
 				// Gestion du contenu qui fait appel à un LLM
-				content = part;
+				await getAnswerFromLLM(
+					sequenceContent,
+					"",
+					chatMessageElement,
+					chatMessage,
+				);
 			} else {
 				// Gestion du contenu en Markdown
-				content = markdownToHTML(part);
+				sequenceContent = markdownToHTML(sequenceContent);
 				if (yaml && yaml.bots) {
-					content = processMultipleBots(content);
+					sequenceContent = processMultipleBots(sequenceContent);
 				}
+				if (yaml && yaml.maths) {
+					await waitForKaTeX();
+					sequenceContent = convertLatexExpressions(sequenceContent);
+				}
+				await displayMessage(
+					sequenceContent,
+					isUser,
+					chatMessageElement,
+					chatMessage,
+				);
 			}
-
-			await handleContent({
-				useLLM: isLLMPart,
-				content,
-				isUser,
-				chatMessageElement,
-				chatMessage,
-			});
 		} catch (error) {
 			console.error(
 				"Une erreur s'est produite lors du traitement des messages :",
