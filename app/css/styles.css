@@ -178,6 +178,10 @@ button {
 section.unique > *:first-child:not(.admonition) {
 	display: inline;
 }
+.bot-message > div:first-child:not(.admonition) > .messageOptions {
+	display: block;
+}
+
 .bot-message > div:first-child .admonition {
 	display: block;
 }
