@@ -1,5 +1,5 @@
 import { yaml } from "../../yaml.mjs";
-import { getAnswerFromLLM } from "../../../../ai/api.mjs";
+import { getAnswerFromLLM } from "../../../../ai/getAnswerFromLLM.mjs";
 import { convertLatexExpressions } from "../../../latex.mjs";
 import { displayMessage } from "../../../../core/messages/display.mjs";
 import { markdownToHTML } from "../../../parser.mjs";

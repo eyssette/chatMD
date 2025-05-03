@@ -2,7 +2,7 @@ import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { RAGcontent, vectorRAGinformations } from "../../../ai/rag/engine.mjs";
 import { cosineSimilarity } from "../../../utils/nlp.mjs";
 import { topElements } from "../../../utils/arrays.mjs";
-import { getAnswerFromLLM } from "../../../ai/api.mjs";
+import { getAnswerFromLLM } from "../../../ai/getAnswerFromLLM.mjs";
 
 export function processQuestionToLLM(chatbot, inputText, options) {
 	if (!yaml || !yaml.useLLM || !yaml.useLLM.url || !yaml.useLLM.model)
