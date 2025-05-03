@@ -1,55 +1,48 @@
 import { yaml } from "../../yaml.mjs";
 
-const startLLMsyntax = "`!useLLM`";
-const startLLMsyntaxLenght = startLLMsyntax.length;
-const endLLMsyntax = "`END !useLLM`";
-const endLLMsyntaxLenght = endLLMsyntax.length;
+const START_PROMPT_TAG = "`!useLLM`";
+const END_PROMPT_TAG = "`END !useLLM`";
 
+// Pour distinguer dans un message les parties qui correspondent à du contenu en Markdown et les parties qui correspondent à des prompts pour un LLM
 export function extractMarkdownAndPrompts(message) {
 	if (!yaml || !yaml.useLLM.url) return { useLLM: false };
 
-	// Pour distinguer dans un message les parties qui correspondent à du contenu en Markdown et les parties qui correspondent à des prompts pour un LLM
-	let sequence = [];
+	const result = [];
 	let currentIndex = 0;
 
 	while (true) {
-		// Cherche le prochain bloc `!useLLM`
-		let startLLM = message.indexOf(startLLMsyntax, currentIndex);
-		if (startLLM === -1) {
-			// S'il n'y a plus de !useLLM, on ajoute ce qui reste du message
-			sequence.push(message.slice(currentIndex).trim());
+		// Cherche le prochain bloc de prompt
+		const start = message.indexOf(START_PROMPT_TAG, currentIndex);
+		// S'il n'y en a pas, on ajoute le reste en tant que contenu Markdown à la fin de la séquence (s'il y a encore du contenu), et on sort de la boucle
+		if (start === -1) {
+			const remaining = message.slice(currentIndex).trim();
+			if (remaining) result.push({ type: "markdown", content: remaining });
 			break;
 		}
 
-		// Ajoute le message avant !useLLM
-		sequence.push(message.slice(currentIndex, startLLM).trim());
+		// S'il y a un message avant le premier prompt, on l'ajoute en tant que contenu Markdown
+		const before = message.slice(currentIndex, start).trim();
+		if (before) result.push({ type: "markdown", content: before });
 
-		// Cherche la fin du bloc END !useLLM
-		let endLLM = message.indexOf(endLLMsyntax, startLLM);
-		if (endLLM === -1) {
-			// S'il n'y a pas de END !useLLM correspondant, on prend le reste du message
-			sequence.push(message.slice(startLLM + startLLMsyntaxLenght).trim());
+		// On cherche la fin du bloc de prompt
+		const end = message.indexOf(END_PROMPT_TAG, start);
+		if (end === -1) {
+			// S'il n'y a pas de fin de bloc explicite, on prend le contenu jusqu'à la fin du message comme contenu du prompt, et on sort de la boucle
+			const prompt = message.slice(start + START_PROMPT_TAG.length).trim();
+			if (prompt) result.push({ type: "prompt", content: prompt });
 			break;
 		}
 
-		// Ajoute le bloc entre `!useLLM` et `END !useLLM`
-		sequence.push(
-			message.slice(startLLM + startLLMsyntaxLenght, endLLM).trim(),
-		);
+		// On ajoute le bloc de prompt trouvé entre le tag de début et le tag de fin qui marquent la présence d'un prompt
+		const prompt = message.slice(start + START_PROMPT_TAG.length, end).trim();
+		if (prompt) result.push({ type: "prompt", content: prompt });
 
-		// Mise à jour de l'index pour continuer à chercher après END !useLLM
-		currentIndex = endLLM + endLLMsyntaxLenght;
+		// On met à jour l'index pour continuer à chercher s'il y a encore des blocs de prompts après celui qu'on vient de repérer.
+		currentIndex = end + END_PROMPT_TAG.length;
 	}
-
-	// S'assure qu'on a bien un élément vide après la dernière occurrence si nécessaire
-	if (currentIndex === message.length) {
-		sequence.push("");
-	}
-
-	// Si on n'a pas utilisé de prompt à l'intérieur du markdown, on renvoie le markdown directement
 
 	return {
 		useLLM: true,
-		sequence,
+		sequence: result,
 	};
 }
