@@ -5,90 +5,74 @@ import { displayMessage } from "../../../../core/messages/display.mjs";
 import { markdownToHTML } from "../../../parser.mjs";
 import { processMultipleBots } from "../bot.mjs";
 
-function displayMessageOrGetAnswerFromLLM(
+// Affiche un message ou récupère une réponse du LLM
+async function handleContent({
 	useLLM,
 	content,
 	isUser,
 	chatMessageElement,
 	chatMessage,
-) {
+}) {
+	if (useLLM && content.trim()) {
+		await getAnswerFromLLM(content, "", chatMessageElement, chatMessage);
+		return;
+	}
+
+	if (yaml && yaml.maths) {
+		await waitForKaTeX();
+		content = convertLatexExpressions(content);
+	}
+
+	await displayMessage(content, isUser, chatMessageElement, chatMessage);
+}
+
+// Attend que KaTeX soit prêt (ou timeout après 10 tentatives)
+function waitForKaTeX() {
 	return new Promise((resolve) => {
-		if (useLLM && content.trim() !== "") {
-			getAnswerFromLLM(content, "", chatMessageElement, chatMessage).then(() =>
-				resolve(),
-			);
-		} else {
-			if (yaml && yaml.maths === true) {
-				// S'il y a des maths, on doit gérer le Latex avant d'afficher le message
-				let timeToDisplayMessage = false;
-				let attempts = 0;
-				const interval = setInterval(() => {
-					if (window.katex) {
-						content = convertLatexExpressions(content);
-						timeToDisplayMessage = true;
-					} else {
-						attempts++;
-						if (attempts > 10) {
-							timeToDisplayMessage = true;
-						}
-					}
-					if (timeToDisplayMessage) {
-						clearInterval(interval);
-						displayMessage(
-							content,
-							isUser,
-							chatMessageElement,
-							chatMessage,
-						).then(() => resolve());
-					}
-				}, 100);
+		let attempts = 0;
+		const interval = setInterval(() => {
+			if (window.katex || attempts > 10) {
+				clearInterval(interval);
+				resolve();
 			} else {
-				displayMessage(content, isUser, chatMessageElement, chatMessage).then(
-					() => resolve(),
-				);
+				attempts++;
 			}
-		}
+		}, 100);
 	});
 }
 
-export function processMessageWithPrompt(parts, chatMessage, isUser) {
-	// On a découpé en parties le message et selon qu'on est dans une partie Markdown ou une partie LLM : on gère le contenu en fonction en enchaînant des Promesses, afin d'attendre que le contenu soit généré jusqu'à la fin pour pouvoir passer à la suite
-	return parts
-		.reduce((promiseChain, currentPart, index) => {
-			const chatMessageElement = document.createElement("div");
-			let content;
-			let useLLM = false;
-			try {
-				if (index % 2 == 0) {
-					// Gestion du contenu en Markdown
-					content = markdownToHTML(currentPart);
-					if (yaml && yaml.bots) {
-						content = processMultipleBots(content);
-					}
-				} else {
-					// Gestion du contenu qui fait appel à un LLM
-					useLLM = true;
-					content = currentPart;
+// Traite chaque partie d’un message découpé (Markdown / LLM)
+export async function processMessageWithPrompt(parts, chatMessage, isUser) {
+	for (let i = 0; i < parts.length; i++) {
+		const part = parts[i];
+		const isLLMPart = i % 2 === 1;
+		const chatMessageElement = document.createElement("div");
+		let content;
+
+		try {
+			if (isLLMPart) {
+				// Gestion du contenu qui fait appel à un LLM
+				content = part;
+			} else {
+				// Gestion du contenu en Markdown
+				content = markdownToHTML(part);
+				if (yaml && yaml.bots) {
+					content = processMultipleBots(content);
 				}
-			} catch (error) {
-				console.error("Erreur lors du traitement de la partie :", error);
-				return promiseChain; // Passer à la prochaine partie
 			}
-			// Pour chaque élément, on ajoute une promesse à la chaîne
-			return promiseChain.then(() =>
-				displayMessageOrGetAnswerFromLLM(
-					useLLM,
-					content,
-					isUser,
-					chatMessageElement,
-					chatMessage,
-				),
-			);
-		}, Promise.resolve())
-		.catch((error) => {
+
+			await handleContent({
+				useLLM: isLLMPart,
+				content,
+				isUser,
+				chatMessageElement,
+				chatMessage,
+			});
+		} catch (error) {
 			console.error(
 				"Une erreur s'est produite lors du traitement des messages :",
 				error,
 			);
-		});
+		}
+	}
 }
