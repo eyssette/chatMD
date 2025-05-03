@@ -1,21 +1,21 @@
-import { processAudio } from "../../markdown/custom/directives/audio.mjs";
-import { processRandomMessage } from "../../markdown/custom/random.mjs";
-import {
-	processDirectiveBot,
-	processMultipleBots,
-} from "../../markdown/custom/directives/bot.mjs";
-import { processKroki } from "./helpers/plugins/processKroki.mjs";
-import { processDirectiveNext } from "../../markdown/custom/directives/next.mjs";
-import { processDirectiveSelectNext } from "../../markdown/custom/directives/selectNext.mjs";
-import { processFixedVariables } from "../../../js//markdown/custom/variablesFixed.mjs";
-import { processDynamicVariables } from "../../../js//markdown/custom/variablesDynamic.mjs";
+import { yaml } from "../../markdown/custom/yaml.mjs";
+import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
 import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";
 import { displayMessage } from "../messages/display.mjs";
 import { extractMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/extractMarkdownAndPrompts.mjs";
-import { yaml } from "../../markdown/custom/yaml.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 import { processMessageWithPrompt } from "../../markdown/custom/directives/useLLM/processMessageWithPrompt.mjs";
+import { createMessageElement } from "./helpers/dom.mjs";
+import { processVariables } from "./helpers/processVariables.mjs";
+import { processDirectives } from "./helpers/processDirectives.mjs";
+import { processPlugins } from "./helpers/processPlugins.mjs";
+
+function handleBotResponse(chatbot) {
+	if (chatbot.nextMessage.selected) {
+		return getChatbotResponse(chatbot, chatbot.nextMessage.selected);
+	}
+}
 
 // Création du message par le bot ou l'utilisateur
 export function createChatMessage(
@@ -24,55 +24,17 @@ export function createChatMessage(
 	isUser,
 	chatMessageElement,
 ) {
-	let dynamicVariables = chatbot.dynamicVariables;
 	const originalMessage = message;
-	let chatMessage;
-	if (!chatMessageElement) {
-		chatMessage = document.createElement("div");
-		chatMessage.classList.add("message");
-		chatMessage.classList.add(isUser ? "user-message" : "bot-message");
-	} else {
-		chatMessage = chatMessageElement;
-	}
-	chatbot.nextMessage.selected = undefined;
-	// Gestion des variables fixes prédéfinies
-	if (yaml && yaml.variables) {
-		message = processFixedVariables(message);
-	}
-	if (!isUser) {
-		message = processRandomMessage(message);
-	}
+	let container = chatMessageElement || createMessageElement(isUser);
 
-	if (yaml && yaml.dynamicContent) {
-		// On traite les variables dynamiques
-		message = processDynamicVariables(
-			chatbot,
-			message,
-			dynamicVariables,
-			isUser,
-		);
-	}
+	chatbot.nextMessage.selected = undefined;
+
+	message = processVariables(chatbot, message, isUser);
 
 	// Cas où c'est un message du bot
 	if (!isUser) {
-		// Gestion de la directive !Bot: botName
-		if (yaml && yaml.bots) {
-			message = processDirectiveBot(message, chatMessage);
-		}
-
-		// Gestion de l'audio
-		message = processAudio(message);
-
-		// Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
-		message = processDirectiveNext(chatbot, message);
-
-		// Gestion de la directive !SelectNext pour sélectionner aléatoirement le prochain message du chatbot
-		message = processDirectiveSelectNext(chatbot, message);
-
-		// Gestion de schémas et images créés avec mermaid, tikz, graphviz, plantuml …  grâce à Kroki (il faut l'inclure en plugin si on veut l'utiliser)
-		if (yaml && yaml.plugins && yaml.plugins.includes("kroki")) {
-			message = processKroki(message);
-		}
+		message = processDirectives(chatbot, message, container);
+		message = processPlugins(message);
 	}
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
 	const hasPromptInmessage = checkPromptsinMessage.useLLM;
@@ -80,7 +42,7 @@ export function createChatMessage(
 	if (hasPromptInmessage) {
 		// On gère le cas où il y a une partie dans le message qui doit être gérée par un LLM
 		const markdownAndPromptSequence = checkPromptsinMessage.sequence;
-		processMessageWithPrompt(markdownAndPromptSequence, chatMessage, isUser);
+		processMessageWithPrompt(markdownAndPromptSequence, container, isUser);
 	} else {
 		let html = markdownToHTML(message);
 		if (html.trim() !== "") {
@@ -107,15 +69,10 @@ export function createChatMessage(
 						}
 					}
 					if (timeToDisplayMessage) {
-						displayMessage(html, isUser, chatMessage).then(() => {
-							if (chatbot.nextMessage.selected) {
-								const response = getChatbotResponse(
-									chatbot,
-									chatbot.nextMessage.selected,
-								);
-								if (response) {
-									createChatMessage(chatbot, response, false);
-								}
+						displayMessage(html, isUser, container).then(() => {
+							const response = handleBotResponse(chatbot);
+							if (response) {
+								createChatMessage(chatbot, response, false);
 							}
 						});
 						// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
@@ -123,20 +80,15 @@ export function createChatMessage(
 							chatbot,
 							message,
 							originalMessage,
-							chatMessage,
+							container,
 						);
 					}
 				}, 100);
 			} else {
-				displayMessage(html, isUser, chatMessage).then(() => {
-					if (chatbot.nextMessage.selected) {
-						const response = getChatbotResponse(
-							chatbot,
-							chatbot.nextMessage.selected,
-						);
-						if (response) {
-							createChatMessage(chatbot, response, false);
-						}
+				displayMessage(html, isUser, container).then(() => {
+					const response = handleBotResponse(chatbot);
+					if (response) {
+						createChatMessage(chatbot, response, false);
 					}
 				});
 				// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
@@ -144,7 +96,7 @@ export function createChatMessage(
 					chatbot,
 					message,
 					originalMessage,
-					chatMessage,
+					container,
 				);
 			}
 		}

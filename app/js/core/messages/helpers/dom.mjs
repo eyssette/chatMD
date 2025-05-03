@@ -11,3 +11,9 @@ export function appendMessageToContainer(htmlMessage, customContainer) {
 		defaultContainer.appendChild(htmlMessage);
 	}
 }
+
+export function createMessageElement(isUser) {
+	const el = document.createElement("div");
+	el.classList.add("message", isUser ? "user-message" : "bot-message");
+	return el;
+}
