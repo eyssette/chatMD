@@ -1,4 +1,4 @@
-import { processAudio } from "../../markdown/custom/audio.mjs";
+import { processAudio } from "../../markdown/custom/directives/audio.mjs";
 import { processRandomMessage } from "../../markdown/custom/random.mjs";
 import {
 	processDirectiveBot,
