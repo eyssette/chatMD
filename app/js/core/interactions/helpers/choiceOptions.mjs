@@ -32,7 +32,7 @@ export function responseToSelectedOption(chatbot, optionLink) {
 export function processMessageWithChoiceOptions(chatbot, response, options) {
 	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
 	let dynamicVariables = chatbot.dynamicVariables;
-	if (yaml && yaml.dynamicContent && Object.keys(dynamicVariables).length > 0) {
+	if (yaml && yaml.dynamicContent) {
 		if (options) {
 			options = options.filter((element) => {
 				let condition = element[3];
