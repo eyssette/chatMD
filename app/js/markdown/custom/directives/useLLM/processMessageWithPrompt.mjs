@@ -1,9 +1,9 @@
-import { yaml } from "./yaml.mjs";
-import { getAnswerFromLLM } from "../../ai/api.mjs";
-import { convertLatexExpressions } from "../latex.mjs";
-import { displayMessage } from "../../core/messages/display.mjs";
-import { markdownToHTML } from "../parser.mjs";
-import { processMultipleBots } from "./directives/bot.mjs";
+import { yaml } from "../../yaml.mjs";
+import { getAnswerFromLLM } from "../../../../ai/api.mjs";
+import { convertLatexExpressions } from "../../../latex.mjs";
+import { displayMessage } from "../../../../core/messages/display.mjs";
+import { markdownToHTML } from "../../../parser.mjs";
+import { processMultipleBots } from "../bot.mjs";
 
 function displayMessageOrGetAnswerFromLLM(
 	useLLM,

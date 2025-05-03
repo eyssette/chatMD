@@ -1,5 +1,5 @@
-import { processAudio } from "../../markdown/custom/blocks/audio.mjs";
-import { processRandomMessage } from "../../markdown/custom/blocks/random.mjs";
+import { processAudio } from "../../markdown/custom/audio.mjs";
+import { processRandomMessage } from "../../markdown/custom/random.mjs";
 import {
 	processDirectiveBot,
 	processMultipleBots,
@@ -11,11 +11,11 @@ import { processFixedVariables } from "../../../js//markdown/custom/variablesFix
 import { processDynamicVariables } from "../../../js//markdown/custom/variablesDynamic.mjs";
 import { convertLatexExpressions } from "../../../js//markdown/latex.mjs";
 import { displayMessage } from "../messages/display.mjs";
-import { splitMarkdownAndLLMprompts } from "../../ai/helpers/extractLLMprompts.mjs";
+import { separateMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/separateMarkdownAndPrompts.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
-import { processMessageWithPrompt } from "../../markdown/custom/prompts.mjs";
+import { processMessageWithPrompt } from "../../markdown/custom/directives/useLLM/processMessageWithPrompt.mjs";
 
 // Création du message par le bot ou l'utilisateur
 export function createChatMessage(
@@ -76,7 +76,7 @@ export function createChatMessage(
 	}
 	let hasPromptInMessage = false;
 	if (yaml && yaml.useLLM.url) {
-		message = splitMarkdownAndLLMprompts(message);
+		message = separateMarkdownAndPrompts(message);
 		hasPromptInMessage = Array.isArray(message);
 	}
 

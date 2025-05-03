@@ -3,7 +3,7 @@ const startLLMsyntaxLenght = startLLMsyntax.length;
 const endLLMsyntax = "`END !useLLM`";
 const endLLMsyntaxLenght = endLLMsyntax.length;
 
-export function splitMarkdownAndLLMprompts(message) {
+export function separateMarkdownAndPrompts(message) {
 	// Pour distinguer dans un message les parties qui correspondent à du contenu en Markdown et les parties qui correspondent à des prompts pour un LLM
 	let parts = [];
 	let currentIndex = 0;
