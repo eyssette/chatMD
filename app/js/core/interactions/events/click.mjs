@@ -9,7 +9,7 @@ import {
 	sendButton,
 } from "../../../shared/selectors.mjs";
 import { autoFocus } from "../../../shared/constants.mjs";
-import { responseToSelectedOption } from "../helpers/choiceOptions.mjs";
+import { responseToSelectedChoiceOption } from "../helpers/choiceOptions.mjs";
 import { getChatbotResponse } from "../getChatbotResponse.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
@@ -106,7 +106,7 @@ function handleClickOnChatContainer(chatbot) {
 				} else {
 					createMessage(chatbot, messageFromLink, { isUser: true });
 					const optionLink = link.substring(1);
-					const response = responseToSelectedOption(chatbot, optionLink);
+					const response = responseToSelectedChoiceOption(chatbot, optionLink);
 					createMessage(chatbot, response, { isUser: false });
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur();

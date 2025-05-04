@@ -6,7 +6,7 @@ import {
 import { evaluateExpression } from "../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
 import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
 
-export function responseToSelectedOption(chatbot, choiceOptionLink) {
+export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
 	if (!choiceOptionLink) {
 		return chatbot.initialMessage;

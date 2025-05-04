@@ -1,4 +1,4 @@
-import { responseToSelectedOption } from "../choiceOptions.mjs";
+import { responseToSelectedChoiceOption } from "../choiceOptions.mjs";
 import { removeAccents } from "../../../../utils/nlp.mjs";
 
 export function matchOptionFromLastResponse(chatbot, userInput) {
@@ -10,7 +10,7 @@ export function matchOptionFromLastResponse(chatbot, userInput) {
 	);
 	if (matchIndex > -1) {
 		const choiceOptionLink = choiceOptions[matchIndex].link;
-		return responseToSelectedOption(chatbot, choiceOptionLink);
+		return responseToSelectedChoiceOption(chatbot, choiceOptionLink);
 	}
 	return null;
 }
