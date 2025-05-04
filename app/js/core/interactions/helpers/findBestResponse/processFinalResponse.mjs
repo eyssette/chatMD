@@ -12,7 +12,7 @@ export function processFinalResponse(
 	bestMatchScore,
 	indexBestMatch,
 ) {
-	let chatData = chatbot.data;
+	let chatbotData = chatbot.data;
 	// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 	if (bestMatch || chatbot.nextMessage.onlyIfKeywords) {
 		if (
@@ -32,7 +32,9 @@ export function processFinalResponse(
 				? bestMatch.join("\n\n")
 				: bestMatch
 			: "";
-		let optionsSelectedResponse = bestMatch ? chatData[indexBestMatch][3] : [];
+		let optionsSelectedResponse = bestMatch
+			? chatbotData[indexBestMatch][3]
+			: [];
 		// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 		let selectedResponseWithOptions;
 		if (

@@ -11,14 +11,14 @@ export function responseToSelectedOption(chatbot, optionLink) {
 	if (!optionLink) {
 		return chatbot.initialMessage;
 	}
-	const chatData = chatbot.data;
-	const chatDataLength = chatData.length;
-	for (let i = 0; i < chatDataLength; i++) {
-		let title = chatData[i][0];
+	const chatbotData = chatbot.data;
+	const chatbotDataLength = chatbotData.length;
+	for (let i = 0; i < chatbotDataLength; i++) {
+		let title = chatbotData[i][0];
 		title = yaml.obfuscate ? btoa(title) : title;
 		if (optionLink == title) {
-			let response = chatData[i][2];
-			const options = chatData[i][3];
+			let response = chatbotData[i][2];
+			const options = chatbotData[i][3];
 			response = Array.isArray(response) ? response.join("\n\n") : response;
 			chatbot.optionsLastResponse = options;
 			response = options
