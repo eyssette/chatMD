@@ -20,7 +20,7 @@ export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
 			let response = chatbotResponses[i].content;
 			const choiceOptions = chatbotResponses[i].choiceOptions;
 			response = Array.isArray(response) ? response.join("\n\n") : response;
-			chatbot.optionsLastResponse = choiceOptions;
+			chatbot.choiceOptionsLastResponse = choiceOptions;
 			response = choiceOptions
 				? processMessageWithChoiceOptions(chatbot, response, choiceOptions)
 				: response;
@@ -78,7 +78,7 @@ export function processMessageWithChoiceOptions(
 		choiceOptions = randomizeArrayWithFixedElements(choiceOptions);
 	}
 	if (choiceOptions) {
-		chatbot.optionsLastResponse = choiceOptions;
+		chatbot.choiceOptionsLastResponse = choiceOptions;
 		// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
 		let messageOptions = '\n<ul class="messageOptions">';
 		const choiceOptionsLength = choiceOptions.length;
@@ -97,7 +97,7 @@ export function processMessageWithChoiceOptions(
 		messageOptions = messageOptions + "</ul>";
 		response = response + messageOptions;
 	} else {
-		chatbot.optionsLastResponse = null;
+		chatbot.choiceOptionsLastResponse = null;
 	}
 	return response;
 }

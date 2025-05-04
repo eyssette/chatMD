@@ -56,7 +56,7 @@ export function initializeChatbot(chatbotData, yaml) {
 		responses: chatbotResponses,
 		vectorChatBotResponses: vectorChatBotResponses,
 		initialMessage: initialMessage,
-		optionsLastResponse: null,
+		choiceOptionsLastResponse: null,
 		nextMessage: {
 			goto: "",
 			lastMessageFromBot: "",
