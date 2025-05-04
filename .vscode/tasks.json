@@ -11,6 +11,15 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "Test",
+			"type": "shell",
+			"command": "npx task debug",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
 		}
 	]
 }
