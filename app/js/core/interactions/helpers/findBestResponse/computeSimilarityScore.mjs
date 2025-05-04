@@ -11,18 +11,18 @@ const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'ident
 const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
 export function computeSimilarityScore(chatbot, userInput) {
-	let chatbotData = chatbot.data;
-	const chatbotDataLength = chatbotData.length;
+	let chatbotResponses = chatbot.responses;
+	const chatbotResponsesLength = chatbotResponses.length;
 	let bestMatch = null;
 	let bestMatchScore = 0;
 	let bestDistanceScore = 0;
 
 	let indexBestMatch;
 
-	if (chatbotDataLength > 0 && chatbotData[0][0]) {
-		for (let i = 0; i < chatbotDataLength; i++) {
-			const titleResponse = chatbotData[i][0];
-			const keywordsResponse = chatbotData[i][1];
+	if (chatbotResponsesLength > 0 && chatbotResponses[0].title) {
+		for (let i = 0; i < chatbotResponsesLength; i++) {
+			const titleResponse = chatbotResponses[i].title;
+			const keywordsResponse = chatbotResponses[i].keywords;
 			// Si on a la directive !Next ou !SelectNext, on teste seulement la similarité avec la réponse vers laquelle on doit aller et on saute toutes les autres réponses
 			if (
 				(chatbot.nextMessage.onlyIfKeywords &&
@@ -49,7 +49,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 					: keywordsResponse
 							.concat(titleResponse)
 							.map((keyword) => keyword.toLowerCase());
-			const responses = chatbotData[i][2];
+			const responses = chatbotResponses[i];
 			let matchScore = 0;
 			let distanceScore = 0;
 			if (yaml && yaml.searchInContent) {
@@ -136,7 +136,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 				matchScore = matchScore + MATCH_SCORE_IDENTITY;
 			}
 			if (matchScore > bestMatchScore) {
-				bestMatch = responses;
+				bestMatch = responses.content;
 				bestMatchScore = matchScore;
 				indexBestMatch = i;
 			}

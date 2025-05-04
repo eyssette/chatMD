@@ -22,10 +22,10 @@ export function getDefaultMessage(chatbot, inputText) {
 	let defaultMessage = config.defaultMessage[randomDefaultMessageIndex];
 	if (yaml && yaml.useLLM.url && yaml.useLLM.model && !yaml.useLLM.always) {
 		const optionDefaultMessage = [
-			[
-				"Voir une réponse générée par une IA",
-				"!useLLM " + inputText.replaceAll('"', "“"),
-			],
+			{
+				text: "Voir une réponse générée par une IA",
+				link: "!useLLM " + inputText.replaceAll('"', "“"),
+			},
 		];
 		defaultMessage = processMessageWithChoiceOptions(
 			chatbot,

@@ -8,12 +8,12 @@ const regexDynamicContentIfBlock = /`if (.*?)`/;
 // Gestion des titres de réponse
 export function handleNewResponseTitle(line, yaml, currentData, chatbotData) {
 	if (currentData.responseTitle) {
-		chatbotData.push([
-			currentData.responseTitle,
-			currentData.keywords,
-			currentData.content,
-			currentData.choiceOptions,
-		]);
+		chatbotData.push({
+			title: currentData.responseTitle,
+			keywords: currentData.keywords,
+			choiceOptions: currentData.choiceOptions,
+			content: currentData.content,
+		});
 	}
 	currentData.responseTitle = line
 		.replace(detectedResponseTitle(line, yaml), "")
@@ -32,7 +32,7 @@ export function handleKeywords(line, currentData) {
 // Gestion des blocs conditionnels si on a du contenu dynamique
 export function handleDynamicContent(line, currentData, yaml) {
 	if (yaml && yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
-		currentData.ifCondition =
+		currentData.condition =
 			(line.match(regexDynamicContentIfBlock) &&
 				line.match(regexDynamicContentIfBlock)[1]) ||
 			"";
@@ -42,7 +42,7 @@ export function handleDynamicContent(line, currentData, yaml) {
 		return true;
 	}
 	if (yaml && yaml.dynamicContent && line.includes("`endif`")) {
-		currentData.ifCondition = "";
+		currentData.condition = "";
 		currentData.content.push(line + "\n");
 		currentData.listParsed = true;
 		return true;
@@ -60,12 +60,12 @@ export function handleChoiceOptions(line, choiceStatus, yaml, currentData) {
 	let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 	link = yaml.obfuscate ? btoa(link) : link;
 	const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-	currentData.choiceOptions.push([
-		text,
-		link,
-		choiceStatus.isRandom,
-		currentData.ifCondition,
-	]);
+	currentData.choiceOptions.push({
+		text: text,
+		link: link,
+		isRandom: choiceStatus.isRandom,
+		condition: currentData.condition,
+	});
 }
 
 // Gestion du reste du contenu de la réponse

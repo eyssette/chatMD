@@ -6,36 +6,40 @@ import {
 import { evaluateExpression } from "../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
 import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
 
-export function responseToSelectedOption(chatbot, optionLink) {
+export function responseToSelectedOption(chatbot, choiceOptionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
-	if (!optionLink) {
+	if (!choiceOptionLink) {
 		return chatbot.initialMessage;
 	}
-	const chatbotData = chatbot.data;
-	const chatbotDataLength = chatbotData.length;
-	for (let i = 0; i < chatbotDataLength; i++) {
-		let title = chatbotData[i][0];
+	const chatbotResponses = chatbot.responses;
+	const chatbotResponsesLength = chatbotResponses.length;
+	for (let i = 0; i < chatbotResponsesLength; i++) {
+		let title = chatbotResponses[i].title;
 		title = yaml.obfuscate ? btoa(title) : title;
-		if (optionLink == title) {
-			let response = chatbotData[i][2];
-			const options = chatbotData[i][3];
+		if (choiceOptionLink == title) {
+			let response = chatbotResponses[i].content;
+			const choiceOptions = chatbotResponses[i].choiceOptions;
 			response = Array.isArray(response) ? response.join("\n\n") : response;
-			chatbot.optionsLastResponse = options;
-			response = options
-				? processMessageWithChoiceOptions(chatbot, response, options)
+			chatbot.optionsLastResponse = choiceOptions;
+			response = choiceOptions
+				? processMessageWithChoiceOptions(chatbot, response, choiceOptions)
 				: response;
 			return response;
 		}
 	}
 }
 
-export function processMessageWithChoiceOptions(chatbot, response, options) {
+export function processMessageWithChoiceOptions(
+	chatbot,
+	response,
+	choiceOptions,
+) {
 	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
 	let dynamicVariables = chatbot.dynamicVariables;
 	if (yaml && yaml.dynamicContent) {
-		if (options) {
-			options = options.filter((element) => {
-				let condition = element[3];
+		if (choiceOptions) {
+			choiceOptions = choiceOptions.filter((option) => {
+				let condition = option.condition;
 				if (!condition) {
 					return true;
 				} else {
@@ -67,27 +71,27 @@ export function processMessageWithChoiceOptions(chatbot, response, options) {
 	}
 
 	// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
-	[response, options] = processDirectiveSelect(response, options);
+	[response, choiceOptions] = processDirectiveSelect(response, choiceOptions);
 
 	// On teste s'il faut mettre de l'aléatoire dans les options
-	if (shouldBeRandomized(options)) {
-		options = randomizeArrayWithFixedElements(options);
+	if (shouldBeRandomized(choiceOptions)) {
+		choiceOptions = randomizeArrayWithFixedElements(choiceOptions);
 	}
-	if (options) {
-		chatbot.optionsLastResponse = options;
+	if (choiceOptions) {
+		chatbot.optionsLastResponse = choiceOptions;
 		// Gestion du cas où il y a un choix possible entre différentes options après la réponse du chatbot
 		let messageOptions = '\n<ul class="messageOptions">';
-		const optionsLength = options.length;
-		for (let i = 0; i < optionsLength; i++) {
-			const option = options[i];
-			const optionText = option[0];
-			const optionLink = option[1];
+		const choiceOptionsLength = choiceOptions.length;
+		for (let i = 0; i < choiceOptionsLength; i++) {
+			const choiceOption = choiceOptions[i];
+			const choiceOptionText = choiceOption.text;
+			const choiceOptionLink = choiceOption.link;
 			messageOptions =
 				messageOptions +
 				'<li><a href="#' +
-				optionLink +
+				choiceOptionLink +
 				'">' +
-				optionText +
+				choiceOptionText +
 				"</a></li>\n";
 		}
 		messageOptions = messageOptions + "</ul>";

@@ -23,7 +23,7 @@ export function getMainContentInformations(
 		content: [],
 		choiceOptions: null,
 		listParsed: false,
-		ifCondition: "",
+		condition: "",
 	};
 
 	for (let line of mainContentLines) {
@@ -54,13 +54,12 @@ export function getMainContentInformations(
 		// Gestion du reste du contenu de la réponse
 		handleRegularContent(line, yaml, currentData);
 	}
-
-	chatbotData.push([
-		currentData.responseTitle,
-		currentData.keywords,
-		currentData.content,
-		currentData.choiceOptions,
-	]);
+	chatbotData.push({
+		title: currentData.responseTitle,
+		keywords: currentData.keywords,
+		choiceOptions: currentData.choiceOptions,
+		content: currentData.content,
+	});
 
 	return chatbotData;
 }

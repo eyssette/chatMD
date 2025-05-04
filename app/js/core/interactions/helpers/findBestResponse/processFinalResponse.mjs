@@ -12,7 +12,7 @@ export function processFinalResponse(
 	bestMatchScore,
 	indexBestMatch,
 ) {
-	let chatbotData = chatbot.data;
+	let chatbotResponses = chatbot.responses;
 	// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
 	if (bestMatch || chatbot.nextMessage.onlyIfKeywords) {
 		if (
@@ -27,22 +27,22 @@ export function processFinalResponse(
 			chatbot.nextMessage.onlyIfKeywords = false;
 		}
 		// On envoie le meilleur choix s'il en existe un
-		let selectedResponseWithoutOptions = bestMatch
+		let selectedResponseWithoutChoiceOptions = bestMatch
 			? Array.isArray(bestMatch)
 				? bestMatch.join("\n\n")
 				: bestMatch
 			: "";
-		let optionsSelectedResponse = bestMatch
-			? chatbotData[indexBestMatch][3]
+		let choiceOptionsSelectedResponse = bestMatch
+			? chatbotResponses[indexBestMatch].choiceOptions
 			: [];
 		// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
-		let selectedResponseWithOptions;
+		let selectedResponseWithChoiceOptions;
 		if (
 			chatbot.nextMessage.onlyIfKeywords &&
 			bestMatchScore < BESTMATCH_THRESHOLD
 		) {
 			// En cas de mauvaise réponse
-			selectedResponseWithOptions =
+			selectedResponseWithChoiceOptions =
 				chatbot.nextMessage.lastMessageFromBot.includes(
 					chatbot.nextMessage.messageIfKeywordsNotFound,
 				)
@@ -51,21 +51,21 @@ export function processFinalResponse(
 						chatbot.nextMessage.lastMessageFromBot;
 		} else {
 			// En cas de bonne réponse
-			selectedResponseWithOptions = processMessageWithChoiceOptions(
+			selectedResponseWithChoiceOptions = processMessageWithChoiceOptions(
 				chatbot,
-				selectedResponseWithoutOptions,
-				optionsSelectedResponse,
+				selectedResponseWithoutChoiceOptions,
+				choiceOptionsSelectedResponse,
 			);
 		}
 		// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
 		if (yaml.useLLM.always) {
 			const answerFromLLM = processQuestionToLLM(chatbot, userInput, {
 				useLLM: true,
-				RAG: selectedResponseWithoutOptions,
+				RAG: selectedResponseWithoutChoiceOptions,
 			});
 			if (answerFromLLM) return null;
 		} else {
-			return selectedResponseWithOptions;
+			return selectedResponseWithChoiceOptions;
 		}
 	} else {
 		if (yaml.useLLM.always) {

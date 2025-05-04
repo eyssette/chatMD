@@ -6,7 +6,7 @@ import { createMessage } from "../messages/createMessage.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 import { getRAGcontent } from "../../ai/rag/engine.mjs";
 
-export function initializeChatbot(chatbotdata, yaml) {
+export function initializeChatbot(chatbotData, yaml) {
 	let dynamicVariables = {};
 	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
@@ -15,22 +15,24 @@ export function initializeChatbot(chatbotdata, yaml) {
 		dynamicVariables["GET" + key] = value;
 	}
 
-	const chatbotName = chatbotdata.pop()[0];
-	let initialMessage = chatbotdata.pop();
+	const chatbotName = chatbotData.title;
+	let initialMessage = chatbotData.initialMessage;
 	const chatbotNameHTML = markdownToHTML(chatbotName).replace(/<\/?p>/g, "");
 	document.getElementById("chatbot-name").innerHTML = chatbotNameHTML;
 	document.title = chatbotNameHTML.replace(/<[^>]*>?/gm, "");
 
-	function precalculateVectorChatbotReponses(chatbotdata) {
+	const chatbotResponses = chatbotData.responses;
+
+	function precalculateVectorChatbotResponses(chatbotResponses) {
 		// On précalcule les vecteurs des réponses du chatbot
 		let vectorChatBotResponses = [];
 		if ((yaml && yaml.searchInContent) || (yaml && yaml.useLLM.url)) {
-			for (let i = 0; i < chatbotdata.length; i++) {
-				const responses = chatbotdata[i][2];
-				let response = Array.isArray(responses)
-					? responses.join(" ").toLowerCase()
-					: responses.toLowerCase();
-				const titleResponse = chatbotdata[i][0];
+			for (let i = 0; i < chatbotResponses.length; i++) {
+				const responseContent = chatbotResponses[i].content;
+				let response = Array.isArray(responseContent)
+					? responseContent.join(" ").toLowerCase()
+					: responseContent.toLowerCase();
+				const titleResponse = chatbotResponses[i].title;
 				response = titleResponse + " " + response;
 				const vectorResponse = createVector(response, {
 					prioritizeTokensInTitle: true,
@@ -42,7 +44,8 @@ export function initializeChatbot(chatbotdata, yaml) {
 		return vectorChatBotResponses;
 	}
 
-	const vectorChatBotResponses = precalculateVectorChatbotReponses(chatbotdata);
+	const vectorChatBotResponses =
+		precalculateVectorChatbotResponses(chatbotResponses);
 
 	if (yaml.useLLM.RAGinformations) {
 		getRAGcontent(yaml.useLLM.RAGinformations);
@@ -50,7 +53,7 @@ export function initializeChatbot(chatbotdata, yaml) {
 
 	let chatbot = {
 		dynamicVariables: dynamicVariables,
-		data: chatbotdata,
+		responses: chatbotResponses,
 		vectorChatBotResponses: vectorChatBotResponses,
 		initialMessage: initialMessage,
 		optionsLastResponse: null,
@@ -65,10 +68,10 @@ export function initializeChatbot(chatbotdata, yaml) {
 		},
 	};
 
-	const initialMessageContent = initialMessage[0]
+	const initialMessageContent = initialMessage.content
 		.join("\n")
 		.replace('<section class="unique">', '<section class="unique" markdown>');
-	const initialMessageOptions = initialMessage[1];
+	const initialMessageOptions = initialMessage.choiceOptions;
 
 	// Envoi du message d'accueil du chatbot
 	initialMessage = processMessageWithChoiceOptions(

@@ -30,13 +30,15 @@ export function parseMarkdown(md, yaml) {
 		);
 
 	// On récupère les informations contenues dans le contenu principal et on crée la structure de données du chatbot
-	let chatbotData = getMainContentInformations(
-		md,
-		chatbotIntroduction.indexEnd,
-		yaml,
-	);
-	chatbotData.push(chatbotInitialMessageInformations);
-	chatbotData.push(chatbotIntroduction.chatbotTitle);
+	let chatbotData = {
+		responses: getMainContentInformations(
+			md,
+			chatbotIntroduction.indexEnd,
+			yaml,
+		),
+		initialMessage: chatbotInitialMessageInformations,
+		title: chatbotIntroduction.chatbotTitle,
+	};
 
 	return chatbotData;
 }

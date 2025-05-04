@@ -21,17 +21,17 @@ on multiples lines
 		const result = getMainContentInformations(markdown, 11, yaml);
 
 		expect(result.length).toBe(1);
-		expect(result[0][0]).toBe("First title");
-		expect(result[0][1]).toEqual(["keyword 1", "keyword 2"]);
-		expect(result[0][2]).toEqual([
+		expect(result[0].title).toBe("First title");
+		expect(result[0].keywords).toEqual(["keyword 1", "keyword 2"]);
+		expect(result[0].content).toEqual([
 			"Some content",
 			"on multiples lines",
 			"1. With markup",
 			"- in Markdown",
 		]);
-		expect(result[0][3]).toEqual([
-			["Option 1", "link 1", false, ""],
-			["Option 2", "link 2", true, ""],
+		expect(result[0].choiceOptions).toEqual([
+			{ text: "Option 1", link: "link 1", isRandom: false, condition: "" },
+			{ text: "Option 2", link: "link 2", isRandom: true, condition: "" },
 		]);
 	});
 
@@ -46,11 +46,13 @@ Some content B`;
 		const result = getMainContentInformations(markdown, 11, yaml);
 
 		expect(result.length).toBe(2);
-		expect(result[0][0]).toBe("First");
-		expect(result[0][1]).toEqual(["item A"]);
-		expect(result[0][3]).toEqual([["goto", "Second", false, ""]]);
-		expect(result[1][0]).toBe("Second");
-		expect(result[1][1]).toEqual([]);
+		expect(result[0].title).toBe("First");
+		expect(result[0].keywords).toEqual(["item A"]);
+		expect(result[0].choiceOptions).toEqual([
+			{ text: "goto", link: "Second", isRandom: false, condition: "" },
+		]);
+		expect(result[1].title).toBe("Second");
+		expect(result[1].keywords).toEqual([]);
 	});
 
 	it("handles ordered choice options with random flag and conditions", () => {
@@ -67,8 +69,18 @@ Some content B`;
 
 		const result = getMainContentInformations(markdown, 0, yamlWithObfuscation);
 
-		const [text1, link1, random1, condition1] = result[0][3][0];
-		const [text2, link2, random2, condition2] = result[0][3][1];
+		const {
+			text: text1,
+			link: link1,
+			isRandom: random1,
+			condition: condition1,
+		} = result[0].choiceOptions[0];
+		const {
+			text: text2,
+			link: link2,
+			isRandom: random2,
+			condition: condition2,
+		} = result[0].choiceOptions[1];
 
 		expect(text1).toBe("First Option");
 		expect(atob(link1)).toBe("link 1");
@@ -86,9 +98,9 @@ Some content B`;
 See [section one](#section-one) and [section two](#Section two).`;
 		const result = getMainContentInformations(markdown, 0, yaml);
 
-		expect(result[0][2][0]).toBe(
+		expect(result[0].content).toEqual([
 			'See <a href="#section-one">section one</a> and <a href="#Section two">section two</a>.',
-		);
+		]);
 	});
 
 	it("does not consider as part of the content of a section a line that marks the structure of the chabot by using headers whose level is inferior to the level that are used to mark the possible answers of the chatbot ", () => {
@@ -99,8 +111,8 @@ Some informative text here.
 Another line of text.`;
 		const result1 = getMainContentInformations(markdown1, 0, yaml);
 
-		expect(result1[0][2]).toEqual(["Some informative text here."]);
-		expect(result1[0][2]).not.toContain("This is an H1 title");
+		expect(result1[0].content).toEqual(["Some informative text here."]);
+		expect(result1[0].content).not.toContain("This is an H1 title");
 
 		const yaml2 = {
 			responsesTitles: ["### "],
@@ -115,8 +127,8 @@ Some informative text here.
 Another line of text.`;
 		const result2 = getMainContentInformations(markdown2, 0, yaml2);
 
-		expect(result2[0][2]).toEqual(["Some informative text here."]);
-		expect(result2[0][2]).not.toContain("This is an H2 title");
+		expect(result2[0].content).toEqual(["Some informative text here."]);
+		expect(result2[0].content).not.toContain("This is an H2 title");
 
 		const yaml3 = {
 			responsesTitles: ["#### "],
@@ -133,21 +145,33 @@ Some informative text here.
 Another line of text.`;
 		const result3 = getMainContentInformations(markdown3, 0, yaml3);
 
-		expect(result3[0][2]).toEqual(["Some informative text here."]);
-		expect(result3[0][2]).not.toContain("This is an H3 title");
+		expect(result3[0].content).toEqual(["Some informative text here."]);
+		expect(result3[0].content).not.toContain("This is an H3 title");
 	});
 
 	it("returns empty chatbotData if no response title exists", () => {
 		const md = "Some intro\nContent continues\nTest";
 		const result = getMainContentInformations(md, 0, yaml);
 		expect(result).toEqual([
-			[null, [], ["Some intro", "Content continues", "Test"], null],
+			{
+				title: null,
+				keywords: [],
+				content: ["Some intro", "Content continues", "Test"],
+				choiceOptions: null,
+			},
 		]);
 	});
 
 	it("ignores structure-only titles based on isStructureTitle", () => {
 		const md = "# Hidden\n### Actual\nVisible content";
 		const result = getMainContentInformations(md, 0, yaml);
-		expect(result).toEqual([["Actual", [], ["Visible content"], null]]);
+		expect(result).toEqual([
+			{
+				title: "Actual",
+				content: ["Visible content"],
+				choiceOptions: null,
+				keywords: [],
+			},
+		]);
 	});
 });

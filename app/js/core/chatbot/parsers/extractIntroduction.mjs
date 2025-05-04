@@ -24,7 +24,7 @@ export function extractIntroduction(mdWithoutYaml) {
 	return {
 		indexEnd: indexEndIntroduction,
 		chatbotInitialMessage: initialMessageContent,
-		chatbotTitle: chatbotTitle ? [chatbotTitle.replace("# ", "").trim()] : [""],
+		chatbotTitle: chatbotTitle ? chatbotTitle.replace("# ", "").trim() : "",
 	};
 }
 
@@ -44,11 +44,17 @@ export function extractInformationsFromInitialMessage(
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			link = yaml && yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			initialChoices.push([text, link, choiceStatus.isRandom]);
+			initialChoices.push({
+				text: text,
+				link: link,
+				isRandom: choiceStatus.isRandom,
+			});
 		} else {
 			initialMessageContentArray.push(line);
 		}
 	}
-	//return { choices: initialChoices, contentArray: initialMessageContentArray };
-	return [initialMessageContentArray, initialChoices];
+	return {
+		content: initialMessageContentArray,
+		choiceOptions: initialChoices,
+	};
 }
