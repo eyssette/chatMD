@@ -2,7 +2,8 @@
 
 Translations :
 
-[![](https://img.shields.io/badge/%F0%9F%87%AC%F0%9F%87%A7_README-EN-A1C)](./blob/main/README.en.md)
+[![](https://img.shields.io/badge/%F0%9F%87%AC%F0%9F%87%A7_README-EN-A1C)](https://github.com/eyssette/chatMD/blob/main/README.en.md)
+
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
