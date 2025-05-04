@@ -16,6 +16,9 @@ export async function displayMessage(md, options) {
 	const appendTarget =
 		options && options.appendTo ? options.appendTo : chatContainer;
 	const changeExistingMessage = options && options.changeExistingMessage;
+	const useTypewriter = shouldDisableTypewriter(md);
+	const noTypewriter = useTypewriter.status;
+	md = noTypewriter ? useTypewriter.md : md;
 	let html = markdownToHTML(md);
 	if (yaml && yaml.bots && !isUser) {
 		html = processMultipleBots(html);
@@ -24,6 +27,7 @@ export async function displayMessage(md, options) {
 		await waitForKaTeX();
 		html = convertLatexExpressions(html);
 	}
+
 	return new Promise((resolve) => {
 		if (!html) return resolve();
 
@@ -35,7 +39,7 @@ export async function displayMessage(md, options) {
 
 		// Effet machine à écrire : seulement quand c'est le chatbot qui répond, sinon affichage direct
 		// Pas d'effet machine à écrire s'il a été désactivé par l'utilisateur ou le créateur du chatbot
-		if (isUser || shouldDisableTypewriter()) {
+		if (isUser || noTypewriter) {
 			// Si on n'utilise pas l'effet typewriter, on supprime la syntaxe spécifique à cet effet dans le message
 			messageHtmlElement.innerHTML = cleanTypewriterSyntax(html);
 			resolve();
