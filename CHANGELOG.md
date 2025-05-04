@@ -4,8 +4,8 @@
 
 ### Fix
 
-- processSelectElements: fonction améliorée
-- refactor options fonctions, fix messages erreurs LLM, fix displayMessage pour actualiser le contenu d'un message
+- **messages**: processSelectElements: fonction améliorée
+- **core** refactor options fonctions, fix messages erreurs LLM, fix displayMessage pour actualiser le contenu d'un message
 
 ### Refactor
 
