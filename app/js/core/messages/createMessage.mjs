@@ -58,7 +58,7 @@ export function createMessage(chatbot, message, options) {
 // Pour traiter l'événement 'change' d'un élément <select>, afin de mettre à jour le message concerné en traitant les variables dynamiques contenues dans le message
 function processSelectElements(chatbot, originalMessage, htmlElement) {
 	// Sélectionne tous les éléments <select> de la page
-	const allSelectElements = document.querySelectorAll("select");
+	const allSelectElements = htmlElement.querySelectorAll("select");
 	// Parcours chaque <select> et ajoute un écouteur d'événement 'change'
 	allSelectElements.forEach((selectElement) => {
 		const selectedValue = selectElement.getAttribute("data-selected");
