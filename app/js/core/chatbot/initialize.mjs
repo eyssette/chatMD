@@ -77,7 +77,7 @@ export function initializeChatbot(chatbotdata, yaml) {
 		initialMessageOptions,
 	);
 
-	createChatMessage(chatbot, initialMessage, false);
+	createChatMessage(chatbot, initialMessage, { isUser: false });
 	initialMessage = initialMessage
 		.replace(/<span class="unique">.*?<\/span>/g, "")
 		.replace(/<section class="unique".*?>[\s\S]*?<\/section>/gm, "");

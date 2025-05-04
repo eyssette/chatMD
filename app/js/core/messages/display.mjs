@@ -8,8 +8,14 @@ import { appendMessageToContainer } from "./helpers/dom.mjs";
 import { waitForKaTeX } from "./helpers/plugins/waitForKatex.mjs";
 import { convertLatexExpressions } from "../../markdown/latex.mjs";
 import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
+import { chatContainer } from "../../shared/selectors.mjs";
 
-export async function displayMessage(md, isUser, chatMessage, container) {
+export async function displayMessage(md, options) {
+	const isUser = options && options.isUser;
+	const messageHtmlElement = options && options.htmlElement;
+	const appendTarget =
+		options && options.appendTo ? options.appendTo : chatContainer;
+	const changeExistingMessage = options && options.changeExistingMessage;
 	let html = markdownToHTML(md);
 	if (yaml && yaml.bots && !isUser) {
 		html = processMultipleBots(html);
@@ -22,7 +28,8 @@ export async function displayMessage(md, isUser, chatMessage, container) {
 		if (!html) return resolve();
 
 		// On ajoute dans le DOM le message HTML dans le container spécifié
-		appendMessageToContainer(chatMessage, container);
+		if (!changeExistingMessage)
+			appendMessageToContainer(messageHtmlElement, appendTarget);
 
 		html = isUser ? html : processCopyCode(html);
 
@@ -30,10 +37,10 @@ export async function displayMessage(md, isUser, chatMessage, container) {
 		// Pas d'effet machine à écrire s'il a été désactivé par l'utilisateur ou le créateur du chatbot
 		if (isUser || shouldDisableTypewriter()) {
 			// Si on n'utilise pas l'effet typewriter, on supprime la syntaxe spécifique à cet effet dans le message
-			chatMessage.innerHTML = cleanTypewriterSyntax(html);
+			messageHtmlElement.innerHTML = cleanTypewriterSyntax(html);
 			resolve();
 		} else {
-			startTypeWriter(html, chatMessage).then(() => resolve());
+			startTypeWriter(html, messageHtmlElement).then(() => resolve());
 		}
 	});
 }

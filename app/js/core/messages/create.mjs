@@ -14,14 +14,12 @@ function handleBotResponse(chatbot) {
 }
 
 // Création du message par le bot ou l'utilisateur
-export function createChatMessage(
-	chatbot,
-	message,
-	isUser,
-	chatMessageElement,
-) {
+export function createChatMessage(chatbot, message, options) {
 	const originalMessage = message;
-	let container = chatMessageElement || createMessageElement(isUser);
+	const isUser = options && options.isUser;
+	const changeExistingMessage = options && options.changeExistingMessage;
+	let messageElement =
+		(options && options.messageElement) || createMessageElement(isUser);
 
 	chatbot.nextMessage.selected = undefined;
 
@@ -29,7 +27,7 @@ export function createChatMessage(
 
 	// Cas où c'est un message du bot
 	if (!isUser) {
-		message = processDirectives(chatbot, message, container);
+		message = processDirectives(chatbot, message, messageElement);
 		message = processPlugins(message);
 	}
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
@@ -38,13 +36,17 @@ export function createChatMessage(
 	if (hasPromptInmessage) {
 		// On gère le cas où il y a une partie dans le message qui doit être gérée par un LLM
 		const markdownAndPromptSequence = checkPromptsinMessage.sequence;
-		processMessageWithPrompt(markdownAndPromptSequence, container, isUser);
+		processMessageWithPrompt(markdownAndPromptSequence, messageElement, isUser);
 	} else {
 		if (message.trim() !== "") {
-			displayMessage(message, isUser, container).then(() => {
+			displayMessage(message, {
+				isUser: isUser,
+				htmlElement: messageElement,
+				changeExistingMessage,
+			}).then(() => {
 				const response = handleBotResponse(chatbot);
 				if (response) {
-					createChatMessage(chatbot, response, false);
+					createChatMessage(chatbot, response, { isUser: false });
 				}
 			});
 			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
@@ -52,13 +54,13 @@ export function createChatMessage(
 				chatbot,
 				message,
 				originalMessage,
-				container,
+				messageElement,
 			);
 		}
 	}
 }
 
-function processSelectElements(chatbot, message, originalMessage, chatMessage) {
+function processSelectElements(chatbot, message, originalMessage, htmlElement) {
 	// Sélectionne tous les éléments <select> de la page
 	const allSelectElements = document.querySelectorAll("select");
 	// Parcours chaque <select> et ajoute un écouteur d'événement 'change'
@@ -80,7 +82,11 @@ function processSelectElements(chatbot, message, originalMessage, chatMessage) {
 				.replaceAll(regex, "")
 				.replaceAll(/`.*= calc\(@GET.*/g, "");
 			message = `\`@${selectedName} = ${selectedValue}\`` + message;
-			createChatMessage(chatbot, message, false, chatMessage);
+			createChatMessage(chatbot, message, {
+				isUser: false,
+				messageElement: htmlElement,
+				changeExistingMessage: true,
+			});
 		});
 	});
 	return message;

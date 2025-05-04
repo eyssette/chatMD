@@ -4,12 +4,11 @@ import { errorMessage } from "./helpers/error.mjs";
 import { readStreamFromLLM } from "./helpers/readStream.mjs";
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
-export function getAnswerFromLLM(
-	userPrompt,
-	informations,
-	chatMessageElement,
-	container,
-) {
+export function getAnswerFromLLM(userPrompt, options) {
+	let RAGinformations = options && options.RAG;
+	let messageElement = options && options.messageElement;
+	let container = options && options.container;
+	let inline = options && options.inline;
 	return new Promise((resolve) => {
 		// Configuration de l'accès au LLM
 		let bodyObject = {
@@ -21,8 +20,8 @@ export function getAnswerFromLLM(
 			temperature: 0.7,
 			top_p: 0.95,
 		};
-		if (informations.length > 0) {
-			informations = yaml.useLLM.RAGprompt + informations;
+		if (RAGinformations.length > 0) {
+			RAGinformations = yaml.useLLM.RAGprompt + RAGinformations;
 		}
 		const isCohere = yaml && yaml.useLLM.url.includes("cohere");
 		const APItype = isCohere ? "cohere" : undefined;
@@ -32,7 +31,7 @@ export function getAnswerFromLLM(
 				yaml.useLLM.preprompt +
 				userPrompt +
 				yaml.useLLM.postprompt +
-				informations;
+				RAGinformations;
 		} else {
 			bodyObject.messages = [
 				{
@@ -44,7 +43,7 @@ export function getAnswerFromLLM(
 						yaml.useLLM.preprompt +
 						userPrompt +
 						yaml.useLLM.postprompt +
-						informations,
+						RAGinformations,
 					role: "user",
 				},
 			];
@@ -59,22 +58,22 @@ export function getAnswerFromLLM(
 				body: JSON.stringify(bodyObject),
 			})
 				.then((response) => {
+					if (!container) {
+						container = chatContainer;
+					}
 					if (response.ok) {
 						// Si on n'a pas indiqué d'élément et de container, on met la réponse du LLM dans un nouveau message du chatbot, sinon on utilise l'élément et le container indiqué
-						if (!chatMessageElement) {
-							chatMessageElement = document.createElement("div");
-							chatMessageElement.classList.add("message");
-							chatMessageElement.classList.add("bot-message");
+						if (!messageElement) {
+							messageElement = document.createElement("div");
+							messageElement.classList.add("message");
+							messageElement.classList.add("bot-message");
 						}
-						if (!container) {
-							container = chatContainer;
-						}
-						container.appendChild(chatMessageElement);
-						readStreamFromLLM(response.body, chatMessageElement, APItype).then(
-							() => resolve(),
+						container.appendChild(messageElement);
+						readStreamFromLLM(response.body, messageElement, APItype).then(() =>
+							resolve(),
 						);
 					} else {
-						errorMessage({ container: chatContainer });
+						errorMessage({ container, inline });
 						resolve();
 					}
 				})

@@ -29,10 +29,10 @@ export function processQuestionToLLM(chatbot, inputText, options) {
 			(element) => RAGcontent[element[1]],
 		).join("\n");
 	}
-	const RAG =
+	const RAGinformations =
 		options && options.RAG
 			? options.RAG + "\n" + RAGbestMatchesInformation
 			: RAGbestMatchesInformation;
-	getAnswerFromLLM(questionToLLM, RAG);
+	getAnswerFromLLM(questionToLLM, { RAG: RAGinformations });
 	return true;
 }
