@@ -3,7 +3,7 @@ import {
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
 } from "../../../utils/arrays.mjs";
-import { evaluateExpression } from "../../../markdown/custom/variablesDynamic.mjs";
+import { evaluateExpression } from "../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
 import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
 
 export function responseToSelectedOption(chatbot, optionLink) {
