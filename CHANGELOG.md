@@ -1,5 +1,24 @@
 # Changelog
 
+## 7.4.0 (2025-05-04)
+
+### Feat
+
+- directive !Typewriter pour activer/désactiver l'effet machine à écrire dans un message
+
+### Fix
+
+- **messages**: selectElements seulement dans le message et pas dans le document en entier
+
+### Chore
+
+- config tâche test pour debug dans l'éditeur
+- changement de nom d'une variable (chatData -> chatbotData)
+
+### Refactor
+
+- **core**: chatbotData sous la forme d'un objet structuré plutôt que d'un tableau de données
+
 ## 7.3.12 (2025-05-04)
 
 ### Fix
