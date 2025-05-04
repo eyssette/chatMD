@@ -4,7 +4,7 @@
 
 ### Feat
 
-- directive !Typewriter pour activer/désactiver l'effet machine à écrire dans un message
+- **messages**: directive !Typewriter pour activer/désactiver l'effet machine à écrire dans un message
 
 ### Fix
 
