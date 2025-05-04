@@ -71,13 +71,13 @@ export function initializeChatbot(chatbotData, yaml) {
 	const initialMessageContent = initialMessage.content
 		.join("\n")
 		.replace('<section class="unique">', '<section class="unique" markdown>');
-	const initialMessageOptions = initialMessage.choiceOptions;
+	const initialMessageChoiceOptions = initialMessage.choiceOptions;
 
 	// Envoi du message d'accueil du chatbot
 	initialMessage = processMessageWithChoiceOptions(
 		chatbot,
 		initialMessageContent,
-		initialMessageOptions,
+		initialMessageChoiceOptions,
 	);
 
 	createMessage(chatbot, initialMessage, { isUser: false });

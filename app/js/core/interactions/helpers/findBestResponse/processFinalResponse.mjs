@@ -32,7 +32,7 @@ export function processFinalResponse(
 				? bestMatch.join("\n\n")
 				: bestMatch
 			: "";
-		let choiceOptionsSelectedResponse = bestMatch
+		let selectedResponseChoiceOptions = bestMatch
 			? chatbotResponses[indexBestMatch].choiceOptions
 			: [];
 		// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
@@ -54,7 +54,7 @@ export function processFinalResponse(
 			selectedResponseWithChoiceOptions = processMessageWithChoiceOptions(
 				chatbot,
 				selectedResponseWithoutChoiceOptions,
-				choiceOptionsSelectedResponse,
+				selectedResponseChoiceOptions,
 			);
 		}
 		// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question

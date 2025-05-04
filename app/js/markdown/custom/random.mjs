@@ -4,12 +4,20 @@ import { getRandomElement } from "../../utils/arrays.mjs";
 export function processRandomMessage(message) {
 	const messageSplitHR = message.split("\n---\n");
 	if (messageSplitHR.length > 1) {
-		const messageHasOptions = message.indexOf('<ul class="messageOptions">');
-		if (messageHasOptions > -1) {
-			const messageWithoutOptions = message.substring(0, messageHasOptions);
-			const messageOptions = message.substring(messageHasOptions);
-			const messageWithoutOptionsSplitHR = messageWithoutOptions.split("---");
-			message = getRandomElement(messageWithoutOptionsSplitHR) + messageOptions;
+		const messageHasChoiceOptions = message.indexOf(
+			'<ul class="messageOptions">',
+		);
+		if (messageHasChoiceOptions > -1) {
+			const messageWithoutChoiceOptions = message.substring(
+				0,
+				messageHasChoiceOptions,
+			);
+			const messageChoiceOptions = message.substring(messageHasChoiceOptions);
+			const messageWithoutChoiceOptionsSplitHR =
+				messageWithoutChoiceOptions.split("---");
+			message =
+				getRandomElement(messageWithoutChoiceOptionsSplitHR) +
+				messageChoiceOptions;
 		} else {
 			message = getRandomElement(messageSplitHR);
 		}

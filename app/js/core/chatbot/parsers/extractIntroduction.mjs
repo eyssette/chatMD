@@ -33,7 +33,7 @@ export function extractInformationsFromInitialMessage(
 	yaml,
 ) {
 	const initialMessageContentLines = chatbotInitialMessage.split("\n");
-	let initialChoices = [];
+	let initialChoiceOptions = [];
 	let initialMessageContentArray = [];
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "");
@@ -44,7 +44,7 @@ export function extractInformationsFromInitialMessage(
 			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
 			link = yaml && yaml.obfuscate ? btoa(link) : link;
 			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
-			initialChoices.push({
+			initialChoiceOptions.push({
 				text: text,
 				link: link,
 				isRandom: choiceStatus.isRandom,
@@ -55,6 +55,6 @@ export function extractInformationsFromInitialMessage(
 	}
 	return {
 		content: initialMessageContentArray,
-		choiceOptions: initialChoices,
+		choiceOptions: initialChoiceOptions,
 	};
 }
