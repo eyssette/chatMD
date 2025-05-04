@@ -1,5 +1,5 @@
 import { getAnswerFromLLM } from "../../../../ai/getAnswerFromLLM.mjs";
-import { displayMessage } from "../../../../core/messages/display.mjs";
+import { displayMessage } from "../../../../core/messages/displayMessage.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(

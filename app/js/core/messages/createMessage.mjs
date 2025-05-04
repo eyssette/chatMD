@@ -1,4 +1,4 @@
-import { displayMessage } from "../messages/display.mjs";
+import { displayMessage } from "./displayMessage.mjs";
 import { extractMarkdownAndPrompts } from "../../markdown/custom/directives/useLLM/extractMarkdownAndPrompts.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 import { processMessageWithPrompt } from "../../markdown/custom/directives/useLLM/processMessageWithPrompt.mjs";
@@ -14,7 +14,7 @@ function handleBotResponse(chatbot) {
 }
 
 // Création du message par le bot ou l'utilisateur
-export function createChatMessage(chatbot, message, options) {
+export function createMessage(chatbot, message, options) {
 	const originalMessage = message;
 	const isUser = options && options.isUser;
 	const changeExistingMessage = options && options.changeExistingMessage;
@@ -46,7 +46,7 @@ export function createChatMessage(chatbot, message, options) {
 			}).then(() => {
 				const response = handleBotResponse(chatbot);
 				if (response) {
-					createChatMessage(chatbot, response, { isUser: false });
+					createMessage(chatbot, response, { isUser: false });
 				}
 			});
 			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
@@ -82,7 +82,7 @@ function processSelectElements(chatbot, message, originalMessage, htmlElement) {
 				.replaceAll(regex, "")
 				.replaceAll(/`.*= calc\(@GET.*/g, "");
 			message = `\`@${selectedName} = ${selectedValue}\`` + message;
-			createChatMessage(chatbot, message, {
+			createMessage(chatbot, message, {
 				isUser: false,
 				messageElement: htmlElement,
 				changeExistingMessage: true,

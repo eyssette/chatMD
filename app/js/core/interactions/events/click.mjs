@@ -2,7 +2,7 @@ import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { goToNewChatbot } from "../../../utils/urls.mjs";
 import { scrollWindow } from "../../../utils/ui.mjs";
 import { sanitizeHtml } from "../../../utils/strings.mjs";
-import { createChatMessage } from "../../messages/create.mjs";
+import { createMessage } from "../../messages/createMessage.mjs";
 import {
 	chatContainer,
 	userInput,
@@ -19,11 +19,11 @@ function handleClickOnSendButton(chatbot) {
 		let userInputText = userInput.innerText;
 		if (userInputText.trim() !== "") {
 			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
-			createChatMessage(chatbot, userInputText, { isUser: true });
+			createMessage(chatbot, userInputText, { isUser: true });
 			setTimeout(() => {
 				const response = getChatbotResponse(chatbot, userInputText);
 				if (response) {
-					createChatMessage(chatbot, response, { isUser: false });
+					createMessage(chatbot, response, { isUser: false });
 				}
 				scrollWindow({ scrollMode: "instant" });
 			}, 100);
@@ -98,16 +98,16 @@ function handleClickOnChatContainer(chatbot) {
 						.replace("#", "")
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
 						.trim();
-					createChatMessage(chatbot, messageFromLink, { isUser: true });
+					createMessage(chatbot, messageFromLink, { isUser: true });
 					const response = getChatbotResponse(chatbot, messageFromLink);
 					if (response) {
-						createChatMessage(chatbot, response, { isUser: false });
+						createMessage(chatbot, response, { isUser: false });
 					}
 				} else {
-					createChatMessage(chatbot, messageFromLink, { isUser: true });
+					createMessage(chatbot, messageFromLink, { isUser: true });
 					const optionLink = link.substring(1);
 					const response = responseToSelectedOption(chatbot, optionLink);
-					createChatMessage(chatbot, response, { isUser: false });
+					createMessage(chatbot, response, { isUser: false });
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur();
 					// Refocaliser sur userInput

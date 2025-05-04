@@ -2,7 +2,7 @@ import { getParamsFromURL } from "../../utils/urls.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { createVector } from "../../utils/nlp.mjs";
 import { processMessageWithChoiceOptions } from "../interactions/helpers/choiceOptions.mjs";
-import { createChatMessage } from "../messages/create.mjs";
+import { createMessage } from "../messages/createMessage.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 import { getRAGcontent } from "../../ai/rag/engine.mjs";
 
@@ -77,7 +77,7 @@ export function initializeChatbot(chatbotdata, yaml) {
 		initialMessageOptions,
 	);
 
-	createChatMessage(chatbot, initialMessage, { isUser: false });
+	createMessage(chatbot, initialMessage, { isUser: false });
 	initialMessage = initialMessage
 		.replace(/<span class="unique">.*?<\/span>/g, "")
 		.replace(/<section class="unique".*?>[\s\S]*?<\/section>/gm, "");
