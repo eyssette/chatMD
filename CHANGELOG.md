@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.3.12 (2025-05-04)
+
+### Fix
+
+- processSelectElements: fonction améliorée
+- refactor options fonctions, fix messages erreurs LLM, fix displayMessage pour actualiser le contenu d'un message
+
+### Refactor
+
+- **markdown**: modularisation de la gestion des variables dynamiques
+- **interactions**: modularisation de findBestResponse.mjs
+- noms de fichiers et de fonctions plus explicites (createChatbot, createMessage)
+
 ## 7.3.11 (2025-05-04)
 
 ### Fix
