@@ -50,17 +50,13 @@ export function createMessage(chatbot, message, options) {
 				}
 			});
 			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
-			message = processSelectElements(
-				chatbot,
-				message,
-				originalMessage,
-				messageElement,
-			);
+			processSelectElements(chatbot, originalMessage, messageElement);
 		}
 	}
 }
 
-function processSelectElements(chatbot, message, originalMessage, htmlElement) {
+// Pour traiter l'événement 'change' d'un élément <select>, afin de mettre à jour le message concerné en traitant les variables dynamiques contenues dans le message
+function processSelectElements(chatbot, originalMessage, htmlElement) {
 	// Sélectionne tous les éléments <select> de la page
 	const allSelectElements = document.querySelectorAll("select");
 	// Parcours chaque <select> et ajoute un écouteur d'événement 'change'
@@ -75,19 +71,22 @@ function processSelectElements(chatbot, message, originalMessage, htmlElement) {
 			}
 		}
 		selectElement.addEventListener("change", (event) => {
-			const selectedName = event.target.name;
-			const selectedValue = event.target.value;
-			const regex = new RegExp(`^\`@${selectedName} =.*`, "g");
-			message = originalMessage
-				.replaceAll(regex, "")
-				.replaceAll(/`.*= calc\(@GET.*/g, "");
-			message = `\`@${selectedName} = ${selectedValue}\`` + message;
-			createMessage(chatbot, message, {
-				isUser: false,
-				messageElement: htmlElement,
-				changeExistingMessage: true,
-			});
+			handleChange(event, chatbot, originalMessage, htmlElement);
 		});
 	});
-	return message;
+}
+
+function handleChange(event, chatbot, originalMessage, htmlElement) {
+	const selectedName = event.target.name;
+	const selectedValue = event.target.value;
+	const regex = new RegExp(`^\`@${selectedName} =.*`, "gm");
+	let message = originalMessage
+		.replaceAll(regex, "")
+		.replaceAll(/`.*= calc\(@GET.*/g, "");
+	message = `\`@${selectedName} = ${selectedValue}\`\n` + message;
+	createMessage(chatbot, message, {
+		isUser: false,
+		messageElement: htmlElement,
+		changeExistingMessage: true,
+	});
 }
