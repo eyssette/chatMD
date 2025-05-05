@@ -444,8 +444,11 @@ iframe {
 		padding-left: 25px !important;
 	}
 	pre {
-		margin: 0em;
-		width: 75%;
+		margin: 1em;
+		width: 54vw;
+	}
+	.message.bot-message > pre:first-child {
+		width: 42vw;
 	}
 	.message > div > .admonition {
 		margin-left: 0.5em;
