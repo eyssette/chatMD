@@ -1,5 +1,25 @@
 # Changelog
 
+## 7.4.1 (2025-05-05)
+
+### Fix
+
+- **messages**:  directive !Typewriter fonctionne maintenant correctement + désactivation automatique de l'effet typewriter si on utilise un élément HTML select
+- **CSS**: résolution d'un problème avec la zone de texte, qui était cachée sur petit écran + footer:false + keyboard:false mais temporairement activée à true avec la variable dynamique @KEYBOARD
+- **CSS**: taille éléments “pre” sur petits écrans, et en cas de bloc “pre” en première ligne d'un message du chatbot
+
+### Chore
+
+- ci-template renommé
+- correction du lien vers le README en Anglais
+- renommage variables pour garder la cohérence de nom "choiceOptions"
+- renommage chatbot.optionsLastResponse -> choiceOptionsLastResponse
+- renommage fonction responseToSelectedOption -> responseToSelectedChoiceOption
+
+### Docs
+
+- ajout d'un README en anglais
+
 ## 7.4.0 (2025-05-04)
 
 ### Feat
