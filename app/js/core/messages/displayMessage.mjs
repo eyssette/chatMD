@@ -2,7 +2,7 @@ import { yaml } from "../../markdown/custom/yaml.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { processCopyCode } from "./helpers/plugins/copyCode.mjs";
 import { startTypeWriter } from "./typewriter/start.mjs";
-import { shouldDisableTypewriter } from "./typewriter/disabled.mjs";
+import { checkTypewriterPreferences } from "./typewriter/checkPreferences.mjs";
 import { cleanTypewriterSyntax } from "./typewriter/sanitize.mjs";
 import { appendMessageToContainer } from "./helpers/dom.mjs";
 import { waitForKaTeX } from "./helpers/plugins/waitForKatex.mjs";
@@ -16,9 +16,11 @@ export async function displayMessage(md, options) {
 	const appendTarget =
 		options && options.appendTo ? options.appendTo : chatContainer;
 	const changeExistingMessage = options && options.changeExistingMessage;
-	const useTypewriter = shouldDisableTypewriter(md);
-	const noTypewriter = useTypewriter.status;
-	md = noTypewriter ? useTypewriter.md : md;
+	const checkTypeWriter = checkTypewriterPreferences(md);
+	md = checkTypeWriter.md;
+	const isMessageWithSelectElement = md.includes("<select ");
+	const noTypewriter =
+		checkTypeWriter.useTypewriter === false || isMessageWithSelectElement;
 	let html = markdownToHTML(md);
 	if (yaml && yaml.bots && !isUser) {
 		html = processMultipleBots(html);
