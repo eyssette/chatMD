@@ -74,7 +74,7 @@ if (fs.existsSync(folderWithMarkdownFilesToCombine)) {
 	}
 } else {
 	// Si le dossier n'existe pas, on utilise le fichier index.md pour définir le contenu principal, mais ce fichier n'existe pas, on crée un fichier index.md avec un contenu par défaut
-	if (!fs.existsSync(mainMdFileName)) {
+	if (!fs.existsSync(appFolder + mainMdFileName)) {
 		const defaultContent =
 			"# Chatbot\nAucun chatbot par défaut n'a été configuré.\nIl faut créer un fichier index.md dans votre dépôt pour définir le chatbot par défaut.";
 		fs.writeFileSync(appFolder + "index.md", defaultContent);
