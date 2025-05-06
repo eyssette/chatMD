@@ -94,8 +94,8 @@ main {
 	margin-bottom: 0.8em;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 1px 12px;
 	overflow-y: auto;
-	max-height: 200px;
-	height: 2em;
+	min-height: 2em;
+	max-height: 5em;
 }
 
 #user-input {
@@ -104,7 +104,6 @@ main {
 	line-break: auto;
 	text-align: left;
 	padding: 5px;
-	height: 1em;
 }
 
 .placeholder {
