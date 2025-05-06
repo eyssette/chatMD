@@ -7,7 +7,7 @@
 - **interactions**: si on rentre du contenu dans la zone de textes, ajustement automatique (visibilité du footer) aussi en fonction du nombre de caractères
 - **interactions**: ajout de shift+Enter pour retours à la ligne dans userInput
 - **interactions**: possibilité d'entrer du contenu sur plusieurs lignes dans la zone de texte
-- **build**: correction du chemin pour vérifier la présence d'un fichier index.m
+- **build**: correction du chemin pour vérifier la présence d'un fichier index.md
 
 ## 7.4.1 (2025-05-05)
 
