@@ -29,7 +29,7 @@ export function setKeypressListener() {
 	document.addEventListener("keydown", (event) => {
 		// Si on clique sur Entrée
 		if (event.key === "Enter") {
-			const isSpecialKey = event.ctrlKey || event.altKey;
+			const isSpecialKey = event.ctrlKey || event.altKey || event.shiftKey;
 			// Si on n'a pas utilisé de touche spéciale en combinaison avec Entrée (Clic+Enter ou Alt+Enter)
 			if (!isSpecialKey) {
 				event.preventDefault();
