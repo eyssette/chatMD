@@ -7,13 +7,35 @@ Translations :
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
+## ✨ Fonctionnalités clés
+
+**Simplicité**
+- Créez un chatbot en quelques minutes grâce à une syntaxe facile à apprendre
+- Utilisation directe en ligne — aucune installation serveur nécessaire
+
+**Personnalisation et flexibilité**
+- Interface entièrement configurable
+- Syntaxe étendue (variables, conditions, etc.) pour concevoir des chatbots plus avancés
+
+**Intégration possible de l'IA**
+- Pas d'IA par défaut, mais possibilité de l'intégrer de manière sobre et ciblée
+- Prise en charge du RAG (Retrieval-Augmented Generation) pour que les réponses de l'IA intègrent une base de connaissances personnalisée.
+
+**Compatibilité RGPD**
+- Pas de compte à créer
+- Aucune collecte de données personnelles
+
+**Code optimisé et écoresponsable**
+- Code très léger, rapide et à faible empreinte carbone (note A+)
+- Scores parfaits (100 %) sur tous les indicateurs Lighthouse
+- 100 % de réussite aux tests automatisés d’accessibilité (audit manuel complet en attente)
+
+
 ## ⚙️ Comment ça marche ?
 
 1. Créez un fichier en Markdown accessible en ligne.
 2. Respectez la syntaxe de ChatMD pour définir votre chatbot.
 3. Votre chatbot est alors accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL` (Mettez l'url de votre fichier à la place de URL) !
-
-La syntaxe de base est simple, mais ChatMD peut être configuré pour des usages plus complexes : personnalisation de l'interface, utilisation de variables, de choix aléatoires, intégration avec un LLM, possibilité de faire du RAG …
 
 Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://chatmd.forge.apps.education.fr/).
 

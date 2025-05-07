@@ -2,6 +2,29 @@
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) is a free, open-source tool that enables you to create custom chatbots from simple Markdown files.
 
+## ✨ Key Features
+
+**Simplicity**
+- Build a chatbot in minutes with an easy-to-learn syntax
+- Use the tool directly online, no server installation needed
+
+**Customization and Flexibility**
+- Fully configurable interface
+- Extended syntax (variables, conditions, etc.) to create more advanced chatbots
+
+**Optional AI Integration**
+- AI is not enabled by default, but can be integrated in a targeted and efficient way
+- RAG (Retrieval-Augmented Generation) support for custom knowledge base integration
+
+**GDPR Compliance**
+- No account required
+- No personal data collected
+
+**Optimized and Eco-Friendly Code**
+- Lightweight, fast, and energy-efficient (A+ eco-rating)
+- Perfect scores (100%) across all Lighthouse metrics
+- 100% success on automated accessibility checks (full manual audit pending)
+
 ## ⚙️ How It Works
 
 1. Create a publicly accessible Markdown file
