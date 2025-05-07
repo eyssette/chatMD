@@ -14,7 +14,7 @@ For comprehensive guidance, explore our [starter chatbot](https://chatmd.forge.a
 
 ## 🎯 Potential Applications
 
-ChatMD offers versatile applications across a wide range of educational and institutionnal contexts:
+ChatMD offers versatile applications across a wide range of educational and institutional contexts:
 
 - Interactive FAQs (Frequently Asked Questions)
 - Software tool tutorials and walkthroughs
