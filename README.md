@@ -25,7 +25,8 @@ On peut imaginer de nombreux usages :
 - Guide méthodologique
 - Soutien pour la révision d'un cours, quiz interactif,
 - Discussion avec un personnage historique,
-- Histoire dont vous êtes le héros …
+- Histoire dont vous êtes le héros
+- Escape games …
 
 ## 🙋‍♀️ Contribuer
 

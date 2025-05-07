@@ -22,6 +22,7 @@ ChatMD offers versatile applications across a wide range of educational and inst
 - Course revision support and interactive quizzes
 - Historical figure simulations and dialogues
 - Choose-your-own-adventure narratives
+- Escape games
 - And much more...
 
 ## 🙋‍♀️ Contributing
