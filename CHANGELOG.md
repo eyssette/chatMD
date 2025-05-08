@@ -131,7 +131,7 @@
 ### Fix
 
 - **lib**: messages d'erreur plus courts dans la librairie showdown
-- test de l'existence de yaml avant de chercher les propriétés de cet objet
+- **core**: test de l'existence de yaml avant de chercher les propriétés de cet objet
 - **interactions**: directive !Next sans conditions (pas de keywords dans la réponse) renvoie directement vers la réponse
 - **chatbot**: autorisation des choix d'options avec texte de lien vide "1. [texte]()", car on peut les utiliser pour faire des retours au menu principal
 
