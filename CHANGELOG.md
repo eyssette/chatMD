@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.5.0 (2025-05-08)
+
+### Feat
+
+- **chatbot**: possibilité d'avoir comme source un texte en base64 dans le hash
+
+### Chore
+
+- configuration commitizen pour check des commits et commit via cz
+
+### Docs
+
+- ajout des fonctionnalités clés dans le README.md
+- ajout de l'exemple des Escape games comme type d'usage possible
+
 ## 7.4.2 (2025-05-06)
 
 ### Fix
