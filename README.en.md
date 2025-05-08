@@ -42,7 +42,7 @@ ChatMD offers versatile applications across a wide range of educational and inst
 - Interactive FAQs (Frequently Asked Questions)
 - Software tool tutorials and walkthroughs
 - Methodological guides and learning resources
-- Course revision support and interactive quizzes
+- Knowledge reviewing and interactive quizzes
 - Historical figure simulations and dialogues
 - Choose-your-own-adventure narratives
 - Escape games

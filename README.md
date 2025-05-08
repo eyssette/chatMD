@@ -45,8 +45,8 @@ On peut imaginer de nombreux usages :
 - Outil interactif pour pouvoir répondre à des questions fréquentes (FAQ)
 - Tutoriel pour un outil informatique
 - Guide méthodologique
-- Soutien pour la révision d'un cours, quiz interactif,
-- Discussion avec un personnage historique,
+- Révision de connaissances, quiz interactif
+- Discussion avec un personnage historique
 - Histoire dont vous êtes le héros
 - Escape games …
 
