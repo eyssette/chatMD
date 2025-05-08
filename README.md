@@ -27,8 +27,8 @@ Translations :
 
 **Code optimisé et écoresponsable**
 - Code très léger, rapide et à faible empreinte carbone (note A+)
-- Scores parfaits (100 %) sur tous les indicateurs Lighthouse
-- 100 % de réussite aux tests automatisés d’accessibilité (audit manuel complet en attente)
+- 100 % sur tous les indicateurs Lighthouse
+- 100 % de réussite aux tests automatisés d’accessibilité (en attente pour un audit complet)
 
 
 ## ⚙️ Comment ça marche ?

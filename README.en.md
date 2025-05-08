@@ -23,7 +23,7 @@
 **Optimized and Eco-Friendly Code**
 - Lightweight, fast, and energy-efficient (A+ eco-rating)
 - Perfect scores (100%) across all Lighthouse metrics
-- 100% success on automated accessibility checks (full manual audit pending)
+- 100% success on automated accessibility checks (awaiting a full audit)
 
 ## ⚙️ How It Works
 
