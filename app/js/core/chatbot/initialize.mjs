@@ -1,4 +1,3 @@
-import { getParamsFromURL } from "../../utils/urls.mjs";
 import { markdownToHTML } from "../../markdown/parser.mjs";
 import { createVector } from "../../utils/nlp.mjs";
 import { processMessageWithChoiceOptions } from "../interactions/helpers/choiceOptions.mjs";
@@ -6,13 +5,14 @@ import { createMessage } from "../messages/createMessage.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 import { getRAGcontent } from "../../ai/rag/engine.mjs";
 
-export function initializeChatbot(chatbotData, yaml) {
+export function initializeChatbot(chatbotData, yaml, params) {
 	let dynamicVariables = {};
-	// On récupère les paramètres dans l'URL et on les place dans dynamicVariables
+	// On place les paramètres de l'URL dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
-	const params = getParamsFromURL();
-	for (const [key, value] of Object.entries(params)) {
-		dynamicVariables["GET" + key] = value;
+	if (params) {
+		for (const [key, value] of Object.entries(params)) {
+			dynamicVariables["GET" + key] = value;
+		}
 	}
 
 	const chatbotName = chatbotData.title;

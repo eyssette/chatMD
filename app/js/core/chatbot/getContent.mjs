@@ -6,13 +6,19 @@ import {
 import { processYAML } from "../../markdown/custom/yaml.mjs";
 import { validateMarkdown } from "./helpers/validate.mjs";
 
-export async function getContent(defaultMd) {
+export async function getContent(defaultMd, params) {
 	let content = defaultMd;
 	let yaml;
 	// On récupère la source du chatbot dans le hash s'il y en a une
-	const url = window.location.hash.substring(1).replace(/\?.*/, "");
-	// On traite l'URL pour pouvoir récupérer correctement la source du chatbot
-	const sourceChatBot = handleURL(url);
+	const hash = window.location.hash.substring(1).replace(/\?.*/, "");
+
+	// Si la source n'est pas une URL, mais directement le texte du chatbot (encodé en base64), on renvoie ce texte comme source
+	if (params && params.raw) {
+		const rawContent = decodeURIComponent(window.atob(hash));
+		return { markdown: rawContent, yaml: processYAML(rawContent) };
+	}
+	// Si la source est une URL, on la traite pour pouvoir récupérer correctement la source du chatbot
+	const sourceChatBot = handleURL(hash);
 
 	if (sourceChatBot) {
 		if (Array.isArray(sourceChatBot)) {
