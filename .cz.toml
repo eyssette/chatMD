@@ -10,8 +10,66 @@ version_files = [
 	"package.json:version"
 ]
 pre_bump_hooks = "npx task build"
+use_shortcuts = true
 [tool.commitizen.customize]
-message_template = "{{change_type}}:{% if show_message %} {{message}}{% endif %}"
+message_template = "{{change_type}}{% if scope %}({{scope}}){% endif %}{% if breaking %}!{% endif %}: {{message}}"
 commit_parser = '^((?P<change_type>feat|fix|refactor|perf|style|test|ci|build|doc|docs|chore|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?|\w+!):\s(?P<message>.*)?'
 change_type_order = ["BREAKING CHANGE", "Feat", "Fix", "refactor", "perf", "test", "style", "doc", "docs", "CI", "Build", "Chore"]
 change_type_map = {"feat"= "Feat","fix"= "Fix","refactor"= "Refactor","perf"= "Perf","chore"= "Chore", "ci" = "CI", "build" = "Build", "style" = "Style", "doc" = "Docs", "docs" = "Docs", "test" = "Test"}
+schema_pattern = '''(?x)  # mode verbose
+  (  # Type group
+    (fix|feat)\([^)]+\)         # fix(...) or feat(...) → scope obligatoire
+    |                           # ou
+    (?!fix|feat)(build|ci|docs|perf|refactor|style|test|chore|revert|bump|edit)(\(\S+\))?  # autres → scope facultatif
+  )
+  !?                            # optionnel breaking change "!"
+  :\s                           # le ":" suivi d'un espace obligatoire
+  [^\n\r]+                      # message sur la même ligne
+  (?:\n\n.*)?                   # optionnel : paragraphe de body
+  $
+'''
+types = [
+  { type = "feat", description = "A new feature" },
+  { type = "fix", description = "A bug fix" },
+  { type = "edit", description = "Internal change (not in changelog)" },
+  { type = "docs", description = "Documentation only changes" },
+  { type = "refactor", description = "Code changes without bug fix or feature" },
+  { type = "test", description = "Add or fix tests" },
+  { type = "chore", description = "Other changes" }
+]
+
+[[tool.commitizen.customize.questions]]
+
+type = "list"
+name = "change_type"
+message = "Select the type of change you are committing"
+choices = [
+      { value = "fix", name = "fix: A bug fix. Correlates with PATCH in SemVer", key = "x" },
+      { value = "feat", name = "feat: A new feature. Correlates with MINOR in SemVer", key = "f" },
+      { value = "docs", name = "docs: Documentation only changes", key = "d" },
+      { value = "style", name = "style: Changes that do not affect code meaning", key = "s" },
+      { value = "refactor", name = "refactor: A code change that neither fixes a bug nor adds a feature", key = "r" },
+      { value = "perf", name = "perf: A code change that improves performance", key = "p" },
+      { value = "test", name = "test: Adding missing or correcting existing tests", key = "t" },
+      { value = "build", name = "build: Changes that affect the build system or external dependencies", key = "b" },
+      { value = "ci", name = "ci: Changes to CI configuration files and scripts", key = "c" },
+      { value = "edit", name = "edit: Internal change (not in changelog)", key = "e" }
+  ]
+
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "scope"
+message = "What is the scope of this change? (class or file name): (press [enter] to skip)"
+
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "message"
+message = "Write a short and imperative summary of the code changes: (lower case and no period)"
+
+[[tool.commitizen.customize.questions]]
+type = "confirm"
+message = "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer"
+name = "breaking"
+default = "False"
