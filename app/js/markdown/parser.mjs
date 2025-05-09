@@ -88,6 +88,8 @@ function showdownExtensionAdmonitions() {
 		{
 			type: "output",
 			filter: (text) => {
+				// Fix pour les admonitions qui finissent par une balise particulière
+				text = text.replace(/:::(<\/li>)/g, "$1\n:::");
 				// Supprimer les balises <p> ou les balises <br /> autour ou à la fin des admonitions
 				text = text.replace(/(<p>)?(:::.*?)(<\/p>|<br \/>)/g, "$2");
 				let level = 3;
