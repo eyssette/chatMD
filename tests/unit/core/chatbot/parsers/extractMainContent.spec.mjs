@@ -174,4 +174,26 @@ Another line of text.`;
 			},
 		]);
 	});
+
+	it("handles choiceOption with no text", () => {
+		const md = "## Test\nContenu\n1. [](Lien)";
+		const result = getMainContentInformations(md, 0, yaml);
+		const defaultChoiceOptionText = "suite";
+
+		expect(result).toEqual([
+			{
+				title: "Test",
+				content: ["Contenu"],
+				choiceOptions: [
+					{
+						text: defaultChoiceOptionText,
+						link: "Lien",
+						isRandom: false,
+						condition: "",
+					},
+				],
+				keywords: [],
+			},
+		]);
+	});
 });

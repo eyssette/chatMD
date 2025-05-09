@@ -103,6 +103,17 @@ describe("extractInformationsFromInitialMessage", () => {
 		expect(content).toEqual(["Test"]);
 	});
 
+	it("handles choiceOption with no text", () => {
+		const input = `Test\n1. [](my link)`;
+		const defaultChoiceOptionText = "suite";
+		const { content, choiceOptions } =
+			extractInformationsFromInitialMessage(input);
+
+		expect(content).toEqual(["Test"]);
+		expect(choiceOptions[0].text).toBe(defaultChoiceOptionText);
+		expect(choiceOptions[0].link).toBe("my link");
+	});
+
 	it("returns only content when no list is found", () => {
 		const input = `Line one\nLine two`;
 		const { content, choiceOptions } = extractInformationsFromInitialMessage(

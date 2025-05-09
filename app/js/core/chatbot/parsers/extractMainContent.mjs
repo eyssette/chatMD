@@ -45,9 +45,9 @@ export function getMainContentInformations(
 		}
 
 		// Gestion des éventuelles options de choix proposées en fin de réponse
-		const choiceStatus = detectChoiceOption(line);
-		if (choiceStatus.isChoice) {
-			handleChoiceOptions(line, choiceStatus, yaml, currentData);
+		const choiceInformations = detectChoiceOption(line);
+		if (choiceInformations.isChoice) {
+			handleChoiceOptions(choiceInformations, yaml, currentData);
 			continue;
 		}
 

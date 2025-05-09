@@ -145,3 +145,5 @@ config.yaml.useLLM = { ...config.yaml.useLLM, ...RAG };
 
 // Temps de pause par défaut quand on demande une pause pour l'effet machine à écrire
 config.defaultPauseTypeWriter = 300;
+
+config.defaultChoiceOptionText = "suite";

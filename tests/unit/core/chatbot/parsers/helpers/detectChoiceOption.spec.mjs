@@ -28,9 +28,29 @@ describe("detectChoiceOption", () => {
 		expect(result2.isRandom).toBeFalse();
 	});
 
+	it("detects ordered list line with a link as a choice option, if the link contains whitespaces", () => {
+		const result1 = detectChoiceOption(
+			"1) [text with whitespaces](link with whitespaces)",
+		);
+		const result2 = detectChoiceOption("12. [ text ]( link )");
+		expect(result1.isChoice).toBeTrue();
+		expect(result1.isRandom).toBeTrue();
+		expect(result2.isChoice).toBeTrue();
+		expect(result2.isRandom).toBeFalse();
+	});
+
 	it("detects ordered list line with a link as a choice option, even if there is no text in the link", () => {
 		const result1 = detectChoiceOption("1) [text with whitespaces]()");
 		const result2 = detectChoiceOption("12. [ text ]()");
+		expect(result1.isChoice).toBeTrue();
+		expect(result1.isRandom).toBeTrue();
+		expect(result2.isChoice).toBeTrue();
+		expect(result2.isRandom).toBeFalse();
+	});
+
+	it("detects ordered list line with a link as a choice option, even if there is a link but no text for the description", () => {
+		const result1 = detectChoiceOption("1) [](link with whitespaces)");
+		const result2 = detectChoiceOption("12. [](link)");
 		expect(result1.isChoice).toBeTrue();
 		expect(result1.isRandom).toBeTrue();
 		expect(result2.isChoice).toBeTrue();

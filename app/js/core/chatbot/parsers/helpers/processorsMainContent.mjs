@@ -1,3 +1,4 @@
+import { config } from "../../../../config.mjs";
 import {
 	detectedResponseTitle,
 	isStructureTitle,
@@ -51,19 +52,18 @@ export function handleDynamicContent(line, currentData, yaml) {
 }
 
 // Gestion des éventuelles options de choix proposées en fin de réponse
-export function handleChoiceOptions(line, choiceStatus, yaml, currentData) {
+export function handleChoiceOptions(choiceInformations, yaml, currentData) {
 	currentData.listParsed = false;
 	if (!currentData.choiceOptions) {
 		currentData.choiceOptions = [];
 	}
-	const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-	let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+	let link = choiceInformations.url;
 	link = yaml.obfuscate ? btoa(link) : link;
-	const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
+	let text = choiceInformations.text;
 	currentData.choiceOptions.push({
-		text: text,
+		text: text ? text : config.defaultChoiceOptionText,
 		link: link,
-		isRandom: choiceStatus.isRandom,
+		isRandom: choiceInformations.isRandom,
 		condition: currentData.condition,
 	});
 }

@@ -1,3 +1,4 @@
+import { config } from "../../../config.mjs";
 import { detectChoiceOption } from "./helpers/detectChoiceOption.mjs";
 
 export function extractIntroduction(mdWithoutYaml) {
@@ -37,17 +38,16 @@ export function extractInformationsFromInitialMessage(
 	let initialMessageContentArray = [];
 	for (let line of initialMessageContentLines) {
 		line = line.replace(/^>\s?/, "");
-		const choiceStatus = detectChoiceOption(line);
-		if (choiceStatus.isChoice) {
+		const choiceInformations = detectChoiceOption(line);
+		if (choiceInformations.isChoice) {
 			// Récupération des options dans le message initial, s'il y en a
-			const listContent = line.replace(/^\d+(\.|\))\s/, "").trim();
-			let link = listContent.replace(/^\[.*?\]\(/, "").replace(/\)$/, "");
+			let link = choiceInformations.url;
 			link = yaml && yaml.obfuscate ? btoa(link) : link;
-			const text = listContent.replace(/\]\(.*/, "").replace(/^\[/, "");
+			let text = choiceInformations.text;
 			initialChoiceOptions.push({
-				text: text,
+				text: text ? text : config.defaultChoiceOptionText,
 				link: link,
-				isRandom: choiceStatus.isRandom,
+				isRandom: choiceInformations.isRandom,
 			});
 		} else {
 			initialMessageContentArray.push(line);
