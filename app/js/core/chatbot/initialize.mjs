@@ -4,6 +4,7 @@ import { processMessageWithChoiceOptions } from "../interactions/helpers/choiceO
 import { createMessage } from "../messages/createMessage.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 import { getRAGcontent } from "../../ai/rag/engine.mjs";
+import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 
 export function initializeChatbot(chatbotData, yaml, params) {
 	let dynamicVariables = {};
@@ -68,24 +69,57 @@ export function initializeChatbot(chatbotData, yaml, params) {
 		},
 	};
 
+	// On récupère le contenu du message initial
 	const initialMessageContent = initialMessage.content
 		.join("\n")
 		.replace('<section class="unique">', '<section class="unique" markdown>');
 	const initialMessageChoiceOptions = initialMessage.choiceOptions;
 
-	// Envoi du message d'accueil du chatbot
 	initialMessage = processMessageWithChoiceOptions(
 		chatbot,
 		initialMessageContent,
 		initialMessageChoiceOptions,
 	);
-
-	createMessage(chatbot, initialMessage, { isUser: false });
+	// On regarde s'il y a des actions à accomplir dans le paramètre de URL "?actions"
+	const hasActions = params && params.actions;
+	// On affiche le message d'accueil, sans typewriter s'il y a des actions à accomplir
+	createMessage(chatbot, initialMessage, {
+		isUser: false,
+		disableTypewriter: hasActions,
+	});
+	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 	initialMessage = initialMessage
 		.replace(/<span class="unique">.*?<\/span>/g, "")
 		.replace(/<section class="unique".*?>[\s\S]*?<\/section>/gm, "");
-	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 	chatbot.initialMessage = initialMessage;
+
+	// S'il y a des actions à accomplir …
+	if (hasActions) {
+		const actions = hasActions.split("|");
+		// Pour chaque action …
+		actions.forEach((action, index) => {
+			// On récupère les informations  de l'action (type et données)
+			const separator = action.indexOf(":");
+			const actionType = action.slice(0, separator);
+			const actionData = action.slice(separator + 1);
+			const isLast = index === actions.length - 1;
+
+			// Si l'action consiste à entrer à un message dans la zone de texte
+			if (actionType == "e") {
+				// On affiche ce message
+				const userMessage = actionData;
+				createMessage(chatbot, userMessage, { isUser: true });
+				// Puis on affiche la réponse, sans typewriter sauf si on en est à la dernière action
+				const response = getChatbotResponse(chatbot, userMessage);
+				if (response) {
+					createMessage(chatbot, response, {
+						isUser: false,
+						disableTypewriter: !isLast,
+					});
+				}
+			}
+		});
+	}
 
 	controlEvents(chatbot);
 }

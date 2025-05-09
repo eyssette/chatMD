@@ -18,6 +18,7 @@ export function createMessage(chatbot, message, options) {
 	const originalMessage = message;
 	const isUser = options && options.isUser;
 	const changeExistingMessage = options && options.changeExistingMessage;
+	const disableTypewriter = options && options.disableTypewriter;
 	let messageElement =
 		(options && options.messageElement) || createMessageElement(isUser);
 
@@ -43,6 +44,7 @@ export function createMessage(chatbot, message, options) {
 				isUser: isUser,
 				htmlElement: messageElement,
 				changeExistingMessage,
+				disableTypewriter: disableTypewriter,
 			}).then(() => {
 				const response = handleBotResponse(chatbot);
 				if (response) {

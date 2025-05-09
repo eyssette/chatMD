@@ -16,11 +16,14 @@ export async function displayMessage(md, options) {
 	const appendTarget =
 		options && options.appendTo ? options.appendTo : chatContainer;
 	const changeExistingMessage = options && options.changeExistingMessage;
+	const disableTypewriter = options && options.disableTypewriter;
 	const checkTypeWriter = checkTypewriterPreferences(md);
 	md = checkTypeWriter.md;
 	const isMessageWithSelectElement = md.includes("<select ");
 	const noTypewriter =
-		checkTypeWriter.useTypewriter === false || isMessageWithSelectElement;
+		disableTypewriter ||
+		checkTypeWriter.useTypewriter === false ||
+		isMessageWithSelectElement;
 	let html = markdownToHTML(md);
 	if (yaml && yaml.bots && !isUser) {
 		html = processMultipleBots(html);
