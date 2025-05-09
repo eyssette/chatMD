@@ -75,6 +75,7 @@ function handleClickOnChatContainer(chatbot) {
 			const link = target.getAttribute("href");
 			if (link.startsWith(currentUrl)) {
 				// Si le lien est vers un autre chatbot (avec la même url d'origine), alors on ouvre le chatbot dans un autre onglet
+				event.preventDefault();
 				window.open(link);
 			}
 			if (link.startsWith("#")) {
