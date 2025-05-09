@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.6.0 (2025-05-10)
+
+### Feat
+
+- **chatbot**: initialisation possible du chatbot avec des actions à accomplir (écrire un message dans la zone de texte …)
+
+### Fix
+
+- **interactions**: ouverture d'un lien vers un autre chatbot avec la même URL d'origine
+- **chatbot**: autorisation des choiceOptions sans texte (affichage d'un texte par défaut) et simplification de handleChoiceOptions
+- **markdown**: fix pour les admonitions qui finissent par une balise (li, ol …)
+
+### Test
+
+- ajout du test des URL en http (et pas https) pour detectChoiceOption
+
 ## 7.5.0 (2025-05-08)
 
 ### Feat
