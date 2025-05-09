@@ -133,11 +133,14 @@ describe("detectChoiceOption", () => {
 		const result1 = detectChoiceOption("1. [text](https://example.com)");
 		expect(result1.isChoice).toBeFalse();
 		expect(result1.isRandom).toBeFalse();
-		const result2 = detectChoiceOption("1. [text](mailto:my@email.com)");
+		const result2 = detectChoiceOption("1. [text](http://example.com)");
 		expect(result2.isChoice).toBeFalse();
 		expect(result2.isRandom).toBeFalse();
-		const result3 = detectChoiceOption("1. [text](tel:12312399R)");
+		const result3 = detectChoiceOption("1. [text](mailto:my@email.com)");
 		expect(result3.isChoice).toBeFalse();
 		expect(result3.isRandom).toBeFalse();
+		const result4 = detectChoiceOption("1. [text](tel:12312399R)");
+		expect(result4.isChoice).toBeFalse();
+		expect(result4.isRandom).toBeFalse();
 	});
 });
