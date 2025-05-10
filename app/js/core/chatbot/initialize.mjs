@@ -67,6 +67,7 @@ export function initializeChatbot(chatbotData, yaml, params) {
 			maxErrors: 3,
 			messageIfKeywordsNotFound: "",
 		},
+		actions: [],
 	};
 
 	controlEvents(chatbot);

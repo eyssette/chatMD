@@ -19,6 +19,8 @@ function handleClickOnSendButton(chatbot) {
 		let userInputText = userInput.innerText;
 		if (userInputText.trim() !== "") {
 			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
+			// On enregistre l'action "écrire un message" dans l'historique des actions du chatbot
+			chatbot.actions.push("e:" + userInputText);
 			createMessage(chatbot, userInputText, { isUser: true });
 			setTimeout(() => {
 				const response = getChatbotResponse(chatbot, userInputText);
@@ -81,6 +83,11 @@ function handleClickOnChatContainer(chatbot) {
 			if (link.startsWith("#")) {
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
+				// On enregistre l'action "clic sur un bouton de réponse" dans l'historique des actions du chatbot
+				const choiceOptions = document.querySelectorAll(".messageOptions li a");
+				// On récupère l'index du bouton de réponse sur lequel on a cliqué, parmi l'ensemble des boutons de réponse affichés
+				const indexTarget = Array.from(choiceOptions).indexOf(target) + 1;
+				chatbot.actions.push("c:n" + indexTarget);
 				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
 				chatbot.nextMessage.lastMessageFromBot = "";
 				chatbot.nextMessage.goto = "";
