@@ -60,9 +60,11 @@ Interested in contributing to or discussing this project? Please review our [CON
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) was developed with institutional support from DRANE Lyon and the DNE as part of their initiative to promote digital commons and open-source educational software.
 
-Special thanks to Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert for their valuable improvement suggestions, and to all beta testers who provided essential feedback!
+[ChatMD](https://chatmd.forge.apps.education.fr/) also benefited from the support of the [Incubator of the French Ministry of National Education]((https://incubateur.education.gouv.fr/)), and in particular from the assistance of Thomas Sanson. Many thanks for the valuable guidance, which helped structure the development of this application in a more professional way!
 
-ChatMD builds upon several excellent open-source projects:
+Special thanks to Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert, Jean-Marc Viglino for their valuable improvement suggestions, and to all beta testers who provided essential feedback!
+
+[ChatMD](https://chatmd.forge.apps.education.fr/) builds upon several excellent open-source projects:
 
 - [js-yaml](https://github.com/nodeca/js-yaml) - YAML front-matter processing
 - [typed.js](https://github.com/mattboldt/typed.js) - Typewriter animation effects
