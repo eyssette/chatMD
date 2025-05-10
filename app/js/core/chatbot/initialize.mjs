@@ -103,7 +103,7 @@ export function initializeChatbot(chatbotData, yaml, params) {
 			// On récupère les informations  de l'action (type et données)
 			const separator = action.indexOf(":");
 			const actionType = action.slice(0, separator);
-			const actionData = action.slice(separator + 1);
+			const actionData = action.slice(separator + 1).trim();
 			const isLast = index === actions.length - 1;
 
 			// Si l'action consiste à entrer un message dans la zone de texte
@@ -125,16 +125,26 @@ export function initializeChatbot(chatbotData, yaml, params) {
 			if (actionType == "c") {
 				// On récupère les boutons de réponse
 				const choiceOptions = document.querySelectorAll(".messageOptions li a");
-				// On met la liste dans le sens inverse pour pouvoir chercher en premier dans les dernières options affichées
-				const choiceArray = Array.from(choiceOptions).reverse();
-				// On recherche le bouton de réponse (en partant des derniers) qui contient le contenu du texte à chercher
-				// On fait la recherche sans prendre en compte les accents et les majuscules
-				const actionDataNormalized = removeAccents(actionData.toLowerCase());
-				const selectedChoiceOption = choiceArray.find((option) =>
-					removeAccents(option.innerHTML.toLowerCase()).includes(
-						actionDataNormalized,
-					),
-				);
+				let choiceArray = Array.from(choiceOptions);
+				const selectChoiceOptionByPosition = /^n\d+$/.test(actionData);
+				let selectedChoiceOption;
+				if (selectChoiceOptionByPosition) {
+					// Première possibilité : on identifie un bouton de réponse par son numéro parmi l'ensemble des boutons de réponse affichées
+					const choiceOptionPosition = actionData.replace("n", "");
+					selectedChoiceOption = choiceArray[choiceOptionPosition - 1];
+				} else {
+					// Deuxième possibilité : on identifie un bouton de réponse, en cherchant le bouton de réponse, en partant des derniers, qui contient le contenu d'un texte à chercher
+					// On met la liste dans le sens inverse pour pouvoir chercher en premier dans les dernières options affichées
+					choiceArray = choiceArray.reverse();
+					// On fait la recherche sans prendre en compte les accents et les majuscules
+					const actionDataNormalized = removeAccents(actionData.toLowerCase());
+					selectedChoiceOption = choiceArray.find((option) =>
+						removeAccents(option.innerHTML.toLowerCase()).includes(
+							actionDataNormalized,
+						),
+					);
+				}
+
 				// Si on a trouvé un bouton de réponse qui correspond
 				if (selectedChoiceOption) {
 					// On récupère le message à afficher
