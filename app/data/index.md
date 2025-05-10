@@ -527,7 +527,9 @@ C'est un logiciel libre sous licence MIT. Les sources sont disponibles sur [la F
 
 ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
 
-Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
+ChatMD a également pu bénéficier du soutien de l'[Incubateur de l'Éducation Nationale](https://incubateur.education.gouv.fr/) et plus particulièrement de l'aide de Thomas Sanson. Merci beaucoup pour l'accompagnement proposé qui a permis de structurer le développement de cette application de manière plus professionnelle !
+
+Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert, Jean-Marc Viglino pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
 
 ChatMD est un logiciel libre qui repose également sur d'autres logiciels libres :
 - [js-yaml](https://github.com/nodeca/js-yaml) pour la gestion des en-têtes yaml
