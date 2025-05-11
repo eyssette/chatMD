@@ -2,35 +2,15 @@ export function showModal(html) {
 	// Créer le fond de la modale
 	const overlay = document.createElement("div");
 	overlay.id = "systemModal";
-	overlay.style.position = "fixed";
-	overlay.style.top = 0;
-	overlay.style.left = 0;
-	overlay.style.width = "100vw";
-	overlay.style.height = "100vh";
-	overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-	overlay.style.display = "flex";
-	overlay.style.alignItems = "center";
-	overlay.style.justifyContent = "center";
-	overlay.style.zIndex = 1000;
 
 	// Créer la boîte modale
 	const modal = document.createElement("div");
-	modal.style.background = "#fff";
-	modal.style.padding = "20px";
-	modal.style.borderRadius = "8px";
-	modal.style.position = "relative";
-	modal.style.maxWidth = "450px";
-	modal.style.maxHeight = "90vh";
-	modal.style.overflow = "auto";
+	modal.classList.add("modal-content");
 
 	// Ajouter la croix de fermeture
 	const closeBtn = document.createElement("span");
 	closeBtn.innerHTML = "&times;";
-	closeBtn.style.position = "absolute";
-	closeBtn.style.top = "10px";
-	closeBtn.style.right = "15px";
-	closeBtn.style.fontSize = "24px";
-	closeBtn.style.cursor = "pointer";
+	closeBtn.classList.add("close-button");
 	modal.appendChild(closeBtn);
 
 	// Ajouter le contenu HTML
