@@ -35,7 +35,12 @@ export async function createMessage(chatbot, message, options) {
 	if (!isUser) {
 		message = processDirectives(chatbot, message, messageElement);
 		message = processPlugins(message);
-		if (!isUser && !noMessageMenu && !hasPromptInmessage) {
+		// On affiche un bouton de menu pour chaque message du bot, sauf si on a l'option noMessageMenu, si on est en train de traiter une partie d'un message qui contient un mélange de prompt et de Markdown, ou si le message affiché est le message initial
+		if (
+			!noMessageMenu &&
+			!hasPromptInmessage &&
+			message != chatbot.initialMessage
+		) {
 			const actionsHistory = chatbot.actions.join(`|`);
 			const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
 			message = message + "\n\n" + messageMenu;
