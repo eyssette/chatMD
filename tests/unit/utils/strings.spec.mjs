@@ -5,6 +5,8 @@ import {
 	hasSentenceEndMark,
 	chunkWithBackticks,
 	splitHtmlIntoChunks,
+	encodeString,
+	decodeString,
 } from "../../../app/js/utils/strings.mjs";
 
 describe("sanitizeHtml", () => {
@@ -283,5 +285,49 @@ describe("splitHtmlIntoChunks", () => {
 		// ajouter : const html = "<div>Start`ProtectedText`End<img src="test"/>Test</div>";
 		const result = splitHtmlIntoChunks(html, 5);
 		expect(result).toBe("<div>`Start``ProtectedText``End`</div>");
+	});
+});
+
+describe("encodeString", () => {
+	it("returns a Base64-encoded URI component for a regular string", () => {
+		const input = "Hello, world!";
+		const result = encodeString(input);
+		const expected = window.btoa(encodeURIComponent(input));
+		expect(result).toEqual(expected);
+	});
+
+	it("correctly encodes special characters", () => {
+		const input = "éà&%$";
+		const result = encodeString(input);
+		const expected = window.btoa(encodeURIComponent(input));
+		expect(result).toEqual(expected);
+	});
+
+	it("produces a string that can be decoded back to the original", () => {
+		const input = "Test string with spaces and !@#";
+		const encoded = encodeString(input);
+		const decoded = decodeString(encoded);
+		expect(decoded).toEqual(input);
+	});
+});
+
+describe("decodeString", () => {
+	it("returns the original string from a valid encoded input", () => {
+		const input = "Hello, encode-decode!";
+		const encoded = encodeString(input);
+		const result = decodeString(encoded);
+		expect(result).toEqual(input);
+	});
+
+	it("handles decoding of special characters", () => {
+		const input = "çñøß€";
+		const encoded = encodeString(input);
+		const result = decodeString(encoded);
+		expect(result).toEqual(input);
+	});
+
+	it("throws an error for invalid Base64 input", () => {
+		const invalidInput = "not_base64!!!";
+		expect(() => decodeString(invalidInput)).toThrow();
 	});
 });
