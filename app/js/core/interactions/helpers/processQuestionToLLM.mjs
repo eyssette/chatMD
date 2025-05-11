@@ -33,6 +33,6 @@ export function processQuestionToLLM(chatbot, inputText, options) {
 		options && options.RAG
 			? options.RAG + "\n" + RAGbestMatchesInformation
 			: RAGbestMatchesInformation;
-	getAnswerFromLLM(questionToLLM, { RAG: RAGinformations });
+	getAnswerFromLLM(chatbot, questionToLLM, { RAG: RAGinformations });
 	return true;
 }

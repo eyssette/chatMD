@@ -3,6 +3,7 @@ import { displayMessage } from "../../../../core/messages/displayMessage.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
+	chatbot,
 	sequence,
 	messageElement,
 	isUser,
@@ -15,7 +16,7 @@ export async function processMessageWithPrompt(
 		try {
 			if (type === "prompt") {
 				// Gestion du contenu qui fait appel à un LLM
-				await getAnswerFromLLM(content, {
+				await getAnswerFromLLM(chatbot, content, {
 					RAG: "",
 					messageElement: sectionElement,
 					container: messageElement,
@@ -27,6 +28,7 @@ export async function processMessageWithPrompt(
 					isUser: isUser,
 					htmlElement: sectionElement,
 					appendTo: messageElement,
+					noMessageMenu: true,
 				});
 			}
 		} catch (error) {

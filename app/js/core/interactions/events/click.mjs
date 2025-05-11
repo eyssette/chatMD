@@ -12,7 +12,7 @@ import { autoFocus } from "../../../shared/constants.mjs";
 import { responseToSelectedChoiceOption } from "../helpers/choiceOptions.mjs";
 import { getChatbotResponse } from "../getChatbotResponse.mjs";
 import { showModal } from "./helpers/modal.mjs";
-import { getLastElement } from "../../../utils/arrays.mjs";
+import { getElementFromEnd } from "../../../utils/arrays.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
 
@@ -73,7 +73,8 @@ function handleClickOnChatContainer(chatbot) {
 		// gestion des clics sur le bouton de menu d'une réponse du chatbot
 		if (target.classList.contains("messageMenu")) {
 			const actionsHistory = target.getAttribute("data-actions-history");
-			let actionsLatest = getLastElement(actionsHistory.split("|"));
+			const actionsHistoryArray = actionsHistory.split("|");
+			let actionsLatest = getElementFromEnd(actionsHistoryArray, 1);
 			// Si la dernière action était un clic sur un bouton et qu'on veut renvoyer à la dernière réponse, on doit récupérer le contenu du dernier message envoyé pour déclenché cette réponse
 			if (actionsLatest.startsWith("c:n")) {
 				let idChoiceOption = actionsLatest.replace("c:n", "");
@@ -84,6 +85,11 @@ function handleClickOnChatContainer(chatbot) {
 					.getAttribute("href")
 					.replace("#", "");
 				actionsLatest = "e:" + actionMessage;
+			}
+			// Si la dernière action était une réponse d'un LLM, il faut intégrer la question dans l'historique des actions pour ce message
+			if (actionsLatest.startsWith("llmr:")) {
+				const llmQuestion = getElementFromEnd(actionsHistoryArray, 2);
+				actionsLatest = llmQuestion + "|" + actionsLatest;
 			}
 			const baseURL = window.location.origin;
 			const hash = window.location.hash;
@@ -98,10 +104,10 @@ function handleClickOnChatContainer(chatbot) {
 			// On crée le contenu de la boîte modale et on l'affiche
 			const hasDynamicVariables =
 				Object.keys(chatbot.dynamicVariables).length > 0;
-			const linkToHistoryOfActions = `<p><a href="${baseURL}${queryActionsHistory}${hash}" target="_blank">Parcours complet de cette conversation</a></p>`;
+			const linkToHistoryOfActions = `<p><a href="${baseURL}${hash}${queryActionsHistory}" target="_blank">Parcours complet de cette conversation</a></p>`;
 			const linkToSpecificResponse = hasDynamicVariables
 				? ""
-				: `<p><a href="${baseURL}${queryActionsLatest}${hash}" target="_blank">Lien direct vers cette réponse</a></p>`;
+				: `<p><a href="${baseURL}${hash}${queryActionsLatest}" target="_blank">Lien direct vers cette réponse</a></p>`;
 			const modalContent = `
 				<p>Voici des liens pour accéder à l’historique de vos échanges avec ce chatbot :</p>
 				${linkToHistoryOfActions}

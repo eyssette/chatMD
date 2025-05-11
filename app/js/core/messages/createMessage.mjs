@@ -6,6 +6,7 @@ import { createMessageElement } from "./helpers/dom.mjs";
 import { processVariables } from "./helpers/processVariables.mjs";
 import { processDirectives } from "./helpers/processDirectives.mjs";
 import { processPlugins } from "./helpers/processPlugins.mjs";
+import { encodeString } from "../../utils/strings.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -14,7 +15,7 @@ function handleBotResponse(chatbot) {
 }
 
 // Création du message par le bot ou l'utilisateur
-export function createMessage(chatbot, message, options) {
+export async function createMessage(chatbot, message, options) {
 	const originalMessage = message;
 	const isUser = options && options.isUser;
 	const changeExistingMessage = options && options.changeExistingMessage;
@@ -27,23 +28,41 @@ export function createMessage(chatbot, message, options) {
 
 	message = processVariables(chatbot, message, isUser);
 
+	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
+	const hasPromptInmessage = checkPromptsinMessage.useLLM;
+
 	// Cas où c'est un message du bot
 	if (!isUser) {
 		message = processDirectives(chatbot, message, messageElement);
 		message = processPlugins(message);
-		if (!isUser && !noMessageMenu) {
+		if (!isUser && !noMessageMenu && !hasPromptInmessage) {
 			const actionsHistory = chatbot.actions.join(`|`);
 			const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
 			message = message + "\n\n" + messageMenu;
 		}
 	}
-	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
-	const hasPromptInmessage = checkPromptsinMessage.useLLM;
 
 	if (hasPromptInmessage) {
 		// On gère le cas où il y a une partie dans le message qui doit être gérée par un LLM
 		const markdownAndPromptSequence = checkPromptsinMessage.sequence;
-		processMessageWithPrompt(markdownAndPromptSequence, messageElement, isUser);
+		await processMessageWithPrompt(
+			chatbot,
+			markdownAndPromptSequence,
+			messageElement,
+			isUser,
+		);
+		// On récupère le contenu de la question posée au LLM et la réponse pour la mettre dans l'historique des actions
+		chatbot.actions.pop();
+		const llmAnswer = messageElement.innerHTML;
+		const llmQuestion = messageElement.previousElementSibling.textContent;
+		const llmQuestionEncoded = "llmq:" + encodeString(llmQuestion);
+		const llmAnswerEncoded = "llmr:" + encodeString(llmAnswer);
+		chatbot.actions.push(llmQuestionEncoded);
+		chatbot.actions.push(llmAnswerEncoded);
+		const actionsHistory = chatbot.actions.join(`|`);
+		// On ajoute le bouton de menu avec l'historique des actions
+		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
+		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
 		if (message.trim() !== "") {
 			displayMessage(message, {

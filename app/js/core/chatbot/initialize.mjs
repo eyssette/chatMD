@@ -5,6 +5,7 @@ import { createMessage } from "../messages/createMessage.mjs";
 import { controlEvents } from "../interactions/controlEvents.mjs";
 import { getRAGcontent } from "../../ai/rag/engine.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
+import { decodeString } from "../../utils/strings.mjs";
 
 export function initializeChatbot(chatbotData, yaml, params) {
 	let dynamicVariables = {};
@@ -168,6 +169,20 @@ export function initializeChatbot(chatbotData, yaml, params) {
 						});
 					}
 				}
+			}
+
+			if (actionType == "llmq") {
+				const userMessage = decodeString(actionData);
+				createMessage(chatbot, userMessage, {
+					isUser: true,
+				});
+			}
+			if (actionType == "llmr") {
+				const botMessage = decodeString(actionData);
+				createMessage(chatbot, botMessage, {
+					isUser: false,
+					disableTypewriter: !isLast,
+				});
 			}
 		});
 	}
