@@ -19,6 +19,7 @@ export function createMessage(chatbot, message, options) {
 	const isUser = options && options.isUser;
 	const changeExistingMessage = options && options.changeExistingMessage;
 	const disableTypewriter = options && options.disableTypewriter;
+	const noMessageMenu = options && options.noMessageMenu;
 	let messageElement =
 		(options && options.messageElement) || createMessageElement(isUser);
 
@@ -30,6 +31,11 @@ export function createMessage(chatbot, message, options) {
 	if (!isUser) {
 		message = processDirectives(chatbot, message, messageElement);
 		message = processPlugins(message);
+		if (!isUser && !noMessageMenu) {
+			const actionsHistory = chatbot.actions.join(`|`);
+			const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
+			message = message + "\n\n" + messageMenu;
+		}
 	}
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
 	const hasPromptInmessage = checkPromptsinMessage.useLLM;
@@ -45,6 +51,7 @@ export function createMessage(chatbot, message, options) {
 				htmlElement: messageElement,
 				changeExistingMessage,
 				disableTypewriter: disableTypewriter,
+				noMessageMenu: noMessageMenu,
 			}).then(() => {
 				const response = handleBotResponse(chatbot);
 				if (response) {

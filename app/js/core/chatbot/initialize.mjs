@@ -85,10 +85,11 @@ export function initializeChatbot(chatbotData, yaml, params) {
 	);
 	// On regarde s'il y a des actions à accomplir dans le paramètre de URL "?actions"
 	const hasActions = params && params.actions;
-	// On affiche le message d'accueil, sans typewriter s'il y a des actions à accomplir
+	// On affiche le message d'accueil, sans typewriter s'il y a des actions à accomplir, et sans menu de message
 	createMessage(chatbot, initialMessage, {
 		isUser: false,
 		disableTypewriter: hasActions,
+		noMessageMenu: true,
 	});
 	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 	initialMessage = initialMessage

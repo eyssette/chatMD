@@ -383,6 +383,10 @@ iframe {
 	max-width: 100%;
 }
 
+.messageMenu {
+	text-align: right;
+}
+
 @media screen and (max-width: 500px) {
 	body {
 		font-size: 1.05em !important;
