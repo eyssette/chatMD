@@ -77,3 +77,10 @@ export function shouldBeRandomized(array) {
 	}
 	return false;
 }
+
+// Pour récupérer le dernier élément d'un tableau
+export function getLastElement(array) {
+	return !Array.isArray(array) || array.length === 0
+		? undefined
+		: array[array.length - 1];
+}

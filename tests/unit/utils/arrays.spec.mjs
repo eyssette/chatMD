@@ -4,6 +4,7 @@ import {
 	shuffleArray,
 	randomizeArrayWithFixedElements,
 	shouldBeRandomized,
+	getLastElement,
 } from "../../../app/js/utils/arrays.mjs";
 
 describe("getRandomElement", () => {
@@ -247,4 +248,36 @@ describe("shouldBeRandomized", () => {
 	// 	const result = shouldBeRandomized(input);
 	// 	expect(result).toBeTrue();
 	// });
+});
+
+describe("getLastElement", () => {
+	it("returns the last element of a non-empty array", () => {
+		const result = getLastElement([1, 2, 3]);
+		expect(result).toBe(3);
+	});
+
+	it("returns undefined for an empty array", () => {
+		const result = getLastElement([]);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns undefined when input is not an array", () => {
+		const result = getLastElement("not an array");
+		expect(result).toBeUndefined();
+	});
+
+	it("returns the last element even if it is falsy (0)", () => {
+		const result = getLastElement([1, 0]);
+		expect(result).toBe(0);
+	});
+
+	it("returns the last element even if it is falsy (null)", () => {
+		const result = getLastElement([1, null]);
+		expect(result).toBeNull();
+	});
+
+	it("returns the last element even if it is falsy (false)", () => {
+		const result = getLastElement([true, false]);
+		expect(result).toBe(false);
+	});
 });
