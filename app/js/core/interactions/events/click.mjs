@@ -13,6 +13,7 @@ import { responseToSelectedChoiceOption } from "../helpers/choiceOptions.mjs";
 import { getChatbotResponse } from "../getChatbotResponse.mjs";
 import { showModal } from "./helpers/modal.mjs";
 import { getElementFromEnd } from "../../../utils/arrays.mjs";
+import { getParamsFromURL } from "../../../utils/urls.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
 
@@ -93,7 +94,7 @@ function handleClickOnChatContainer(chatbot) {
 			}
 			const baseURL = window.location.origin;
 			const hash = window.location.hash;
-			let baseQuery = window.location.search;
+			let baseQuery = getParamsFromURL();
 			// On supprime le paramètre "actions" dans l'URL s'il existe
 			const params = new URLSearchParams(baseQuery);
 			params.delete("actions");
