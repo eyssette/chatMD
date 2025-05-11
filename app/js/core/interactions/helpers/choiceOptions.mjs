@@ -8,6 +8,7 @@ import { processDirectiveSelect } from "../../../markdown/custom/directives/sele
 
 export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
+	// Si le lien est vide : on revient au message initial (permet un retour au menu initial)
 	if (!choiceOptionLink) {
 		return chatbot.initialMessage;
 	}
