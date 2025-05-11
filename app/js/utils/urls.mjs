@@ -130,7 +130,7 @@ export function getParamsFromURL(
 ) {
 	const paramsFromQuery = Object.fromEntries(new URLSearchParams(queryString));
 	// Version sécurisée (hashHasParams) : les paramètres sont dans le hash et ne sont donc pas envoyés au serveur
-	const hashHasParams = urlHash.includes("?");
+	const hashHasParams = urlHash.includes("?") && urlHash.includes("=");
 	const hashQueryPart = hashHasParams ? urlHash.split("?")[1] : "";
 	const paramsFromHash = hashHasParams
 		? Object.fromEntries(new URLSearchParams(hashQueryPart))
