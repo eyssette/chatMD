@@ -78,9 +78,9 @@ export function shouldBeRandomized(array) {
 	return false;
 }
 
-// Pour récupérer le dernier élément d'un tableau
-export function getLastElement(array) {
+// Pour récupérer le i-ème élément d'un tableau en partant de la fin
+export function getElementFromEnd(array, index = 1) {
 	return !Array.isArray(array) || array.length === 0
 		? undefined
-		: array[array.length - 1];
+		: array[array.length - index];
 }

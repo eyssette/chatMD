@@ -4,7 +4,7 @@ import {
 	shuffleArray,
 	randomizeArrayWithFixedElements,
 	shouldBeRandomized,
-	getLastElement,
+	getElementFromEnd,
 } from "../../../app/js/utils/arrays.mjs";
 
 describe("getRandomElement", () => {
@@ -250,34 +250,74 @@ describe("shouldBeRandomized", () => {
 	// });
 });
 
-describe("getLastElement", () => {
+describe("getElementFromEnd", () => {
 	it("returns the last element of a non-empty array", () => {
-		const result = getLastElement([1, 2, 3]);
+		const result = getElementFromEnd([1, 2, 3]);
 		expect(result).toBe(3);
 	});
 
 	it("returns undefined for an empty array", () => {
-		const result = getLastElement([]);
+		const result = getElementFromEnd([]);
 		expect(result).toBeUndefined();
 	});
 
 	it("returns undefined when input is not an array", () => {
-		const result = getLastElement("not an array");
+		const result = getElementFromEnd("not an array");
 		expect(result).toBeUndefined();
 	});
 
 	it("returns the last element even if it is falsy (0)", () => {
-		const result = getLastElement([1, 0]);
+		const result = getElementFromEnd([1, 0]);
 		expect(result).toBe(0);
 	});
 
 	it("returns the last element even if it is falsy (null)", () => {
-		const result = getLastElement([1, null]);
+		const result = getElementFromEnd([1, null]);
 		expect(result).toBeNull();
 	});
 
 	it("returns the last element even if it is falsy (false)", () => {
-		const result = getLastElement([true, false]);
+		const result = getElementFromEnd([true, false]);
+		expect(result).toBe(false);
+	});
+
+	it("returns the last element when n is 1", () => {
+		const result = getElementFromEnd([10, 20, 30], 1);
+		expect(result).toBe(30);
+	});
+
+	it("returns the second-to-last element when n is 2", () => {
+		const result = getElementFromEnd([10, 20, 30], 2);
+		expect(result).toBe(20);
+	});
+
+	it("returns the correct element when n is equal to array length", () => {
+		const result = getElementFromEnd([10, 20, 30], 3);
+		expect(result).toBe(10);
+	});
+
+	it("returns undefined when n is greater than array length", () => {
+		const result = getElementFromEnd([10, 20, 30], 4);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns undefined when n is zero", () => {
+		const result = getElementFromEnd([10, 20, 30], 0);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns undefined when n is negative", () => {
+		const result = getElementFromEnd([10, 20, 30], -1);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns undefined when array is empty", () => {
+		const result = getElementFromEnd([], 1);
+		expect(result).toBeUndefined();
+	});
+
+	it("returns falsy value if it exists at the target position", () => {
+		const result = getElementFromEnd([true, null, false], 1);
 		expect(result).toBe(false);
 	});
 });
