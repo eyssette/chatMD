@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.7.3 (2025-05-11)
+
+### Fix
+
+- **ai**: possibilité d'avoir plusieurs fichiers sources pour le RAG
+
 ## 7.7.2 (2025-05-11)
 
 ### Fix
