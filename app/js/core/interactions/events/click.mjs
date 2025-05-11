@@ -93,8 +93,11 @@ function handleClickOnChatContainer(chatbot) {
 				actionsLatest = llmQuestion + "|" + actionsLatest;
 			}
 			const baseURL = window.location.origin;
-			const hash = window.location.hash;
+			let hash = window.location.hash;
 			let baseQuery = getParamsFromURL();
+			// On garde dans le hash seulement l'URL de la source et on supprime les paramètres (qu'on vient de récupérer dans baseQuery)
+			// Permet de supprimer les paramètres vides qui restent éventuellement dans l'URL par exemple des fichiers CodiMD (?both, ?edit, ?view)
+			hash = hash.replace(/\?.*/, "");
 			// On supprime le paramètre "actions" dans l'URL s'il existe
 			const params = new URLSearchParams(baseQuery);
 			params.delete("actions");
