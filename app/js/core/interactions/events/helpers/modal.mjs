@@ -18,7 +18,7 @@ export function showModal(html) {
 	modal.style.padding = "20px";
 	modal.style.borderRadius = "8px";
 	modal.style.position = "relative";
-	modal.style.maxWidth = "90vw";
+	modal.style.maxWidth = "450px";
 	modal.style.maxHeight = "90vh";
 	modal.style.overflow = "auto";
 

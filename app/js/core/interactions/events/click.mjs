@@ -105,14 +105,16 @@ function handleClickOnChatContainer(chatbot) {
 			// On crée le contenu de la boîte modale et on l'affiche
 			const hasDynamicVariables =
 				Object.keys(chatbot.dynamicVariables).length > 0;
-			const linkToHistoryOfActions = `<p><a href="${baseURL}${hash}${queryActionsHistory}" target="_blank">Parcours complet de cette conversation</a></p>`;
+			const linkToHistoryOfActions = `<li><a href="${baseURL}${hash}${queryActionsHistory}" target="_blank">Parcours complet de cette conversation</a> (jusqu'à ce message)</li>`;
 			const linkToSpecificResponse = hasDynamicVariables
 				? ""
-				: `<p><a href="${baseURL}${hash}${queryActionsLatest}" target="_blank">Lien direct vers cette réponse</a></p>`;
+				: `<li><a href="${baseURL}${hash}${queryActionsLatest}" target="_blank">Lien direct vers cette réponse</a></li>`;
 			const modalContent = `
 				<p>Voici des liens pour accéder à l’historique de vos échanges avec ce chatbot :</p>
-				${linkToHistoryOfActions}
-				${linkToSpecificResponse}`;
+				<ul>
+					${linkToHistoryOfActions}
+					${linkToSpecificResponse}
+				</ul>`;
 			showModal(modalContent);
 		}
 		while (target && target.tagName !== "A") {
