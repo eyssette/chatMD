@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.8.0 (2025-05-11)
+
+### Feat
+
+- **plugins**: plugin Lightbox pour les images, les pdfs et les iframes
+
+### Fix
+
+- **interactions**: gestion, dans l'historique des conversations, du cas où on a cliqué à un moment donné sur un lien vide qui permet le retour au message initial
+- **messages**: pas de bouton de menu quand on réaffiche le message initial
+
 ## 7.7.3 (2025-05-11)
 
 ### Fix
