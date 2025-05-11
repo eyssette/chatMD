@@ -7,6 +7,16 @@ import { getNumberOfLines } from "./helpers/getNumberOfLines.mjs";
 
 export function setKeypressListener() {
 	document.addEventListener("keydown", (event) => {
+		const modal = document.querySelector("#systemModal");
+		// Si la fenêtre modale est ouverte
+		if (modal) {
+			// On désactive l'entrée clavier dans la zone texte
+			event.preventDefault();
+			// Mais si on appuie sur “Escape”, on sort de la fenêtre modale
+			if (event.key === "Escape") {
+				document.body.removeChild(modal);
+			}
+		}
 		// Si on clique sur Entrée
 		if (event.key === "Enter") {
 			const isSpecialKey = event.ctrlKey || event.altKey || event.shiftKey;
