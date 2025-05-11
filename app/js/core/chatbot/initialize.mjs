@@ -13,7 +13,7 @@ export function initializeChatbot(chatbotData, yaml, params) {
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
 	if (params) {
 		for (const [key, value] of Object.entries(params)) {
-			if (key != "actions") {
+			if (key != "actions" && value) {
 				dynamicVariables["GET" + key] = value;
 			}
 		}
