@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.7.2 (2025-05-11)
+
+### Fix
+
+- **interactions**: pour définir l'URL qui renvoie à l'historique d'une conversation, on supprime les paramètres vides
+- **chatbot**: on n'ajoute dans les variables dynamiques que les paramètres de l'URL qui ont une valeur définie
+- **utils**: getParamsFromURL récupère des paramètres seulement s'il y en a un au moins de défini
+- **interactions**: désactivation du clavier si la fenêtre modale est ouverte (sauf pour pouvoir la fermer avec “Escape”)
+- **CSS**: styles de la modale dans la feuille CSS
+- **interactions**: ajout d'un id "systemModal" à la fenêtre modale
+- **interactions**: amélioration style et contenu de la modale pour récupérer l'historique des échanges
+- **interactions**: récupération des paramètres dans l'URL pour l'historique des actions : intégration aussi des paramètres dans le hash
+
 ## 7.7.1 (2025-05-11)
 
 ### Fix
