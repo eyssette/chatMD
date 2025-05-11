@@ -1,5 +1,28 @@
 # Changelog
 
+## 7.7.0 (2025-05-11)
+
+### Feat
+
+- **interactions**: clic sur le bouton de menu dans chaque message ouvre une modale avec des liens vers l'historique des conversations avec le chatbot
+- **messages**: ajout d'un bouton de menu pour chaque message
+- **interactions**: enregistrement des interactions  de l'utilisateur pour garder un historique
+
+### Fix
+
+- **html**: footer plus court et discret
+- **chatbot**: action "clic" sur un bouton de réponse : identification possible d'un bouton de réponse à sélectionner par son numéro parmi l'ensemble des boutons de réponse affichés
+- **chatbot**: possibilité d'utiliser une action "clic" sur un bouton de réponse, dans le paramètre "actions" dans l'URL  pour initialiser le chatbot avec une série d'actions
+
+### Chore
+
+- **utils**: ajout de la fonction getLastElement(array)
+
+### Docs
+
+- ajout des précisions sur les remerciements dans le chatbot d'accueil également
+- ajout de remerciements (incubateur / thomas sanson)
+
 ## 7.6.0 (2025-05-10)
 
 ### Feat
