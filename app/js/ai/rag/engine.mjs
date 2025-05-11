@@ -2,6 +2,10 @@ import { yaml } from "../../markdown/custom/yaml.mjs";
 import { handleURL } from "../../utils/urls.mjs";
 import { createVector } from "../../utils/nlp.mjs";
 import { localRAGinformations } from "./sources.mjs";
+import {
+	fetchContent,
+	fetchContentFromMultipleSources,
+} from "../../core/chatbot/helpers/fetch.mjs";
 
 function prepareRAGdata(informations, separator) {
 	if (separator) {
@@ -51,17 +55,32 @@ function createVectorRAGinformations(informations) {
 	}
 }
 
-export function getRAGcontent(informations) {
+export async function getRAGcontent(informations) {
 	if (informations) {
-		if (informations.includes("http")) {
-			const urlRAGfile = handleURL(informations, { useCorsProxy: true });
-			fetch(urlRAGfile)
-				.then((response) => response.text())
-				.then((data) => {
-					RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator);
-					const RAGvectors = createVectorRAGinformations(RAGcontent);
-					return RAGvectors;
-				});
+		const isArray = Array.isArray(informations);
+		if (isArray || informations.includes("http")) {
+			let sourceRAG;
+			if (isArray) {
+				sourceRAG = informations.map((element) =>
+					handleURL(element, { useCorsProxy: true }),
+				);
+			} else {
+				sourceRAG = handleURL(informations, { useCorsProxy: true });
+			}
+			try {
+				const data = isArray
+					? await fetchContentFromMultipleSources(sourceRAG)
+					: await fetchContent(sourceRAG);
+				RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator);
+				const RAGvectors = createVectorRAGinformations(RAGcontent);
+				return RAGvectors;
+			} catch (error) {
+				console.error(
+					"Erreur lors du fetch ou du traitement des données RAG :",
+					error,
+				);
+				return null;
+			}
 		} else {
 			let RAGinformations;
 			if (informations.toString().includes("useFile")) {
