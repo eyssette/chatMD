@@ -385,6 +385,7 @@ iframe {
 
 .messageMenu {
 	text-align: right;
+	cursor: pointer;
 }
 
 @media screen and (max-width: 500px) {
