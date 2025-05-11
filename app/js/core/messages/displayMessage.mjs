@@ -9,6 +9,7 @@ import { waitForKaTeX } from "./helpers/plugins/waitForKatex.mjs";
 import { convertLatexExpressions } from "../../markdown/latex.mjs";
 import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
 import { chatContainer } from "../../shared/selectors.mjs";
+import { processLightbox } from "./helpers/plugins/lighbox.mjs";
 
 export async function displayMessage(md, options) {
 	const isUser = options && options.isUser;
@@ -47,9 +48,15 @@ export async function displayMessage(md, options) {
 		if (isUser || noTypewriter) {
 			// Si on n'utilise pas l'effet typewriter, on supprime la syntaxe spécifique à cet effet dans le message
 			messageHtmlElement.innerHTML = cleanTypewriterSyntax(html);
+			if (!isUser) {
+				processLightbox();
+			}
 			resolve();
 		} else {
-			startTypeWriter(html, messageHtmlElement).then(() => resolve());
+			startTypeWriter(html, messageHtmlElement).then(() => {
+				processLightbox();
+				resolve();
+			});
 		}
 	});
 }

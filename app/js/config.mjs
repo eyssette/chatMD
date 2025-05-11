@@ -78,6 +78,7 @@ config.allowedPlugins = {
 		js: "js/plugins/textFit.min.js",
 		css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>",
 	},
+	lightbox: { js: "js/plugins/lightbox.js" },
 };
 
 config.pluginDependencies = {
