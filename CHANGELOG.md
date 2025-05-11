@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.7.1 (2025-05-11)
+
+### Fix
+
+- **core**: gestion de l'historique des actions quand on utilise un LLM (enregistrement de la question et de la réponse générée par le LLM)
+- **CSS**: cursor:pointer sur le bouton de menu de chaque message
+
+### Chore
+
+- **chatbot**: utilisation de decodeString si le texte du chatbot est encodé en base64 dans l'URL
+- **utils**: getElementFromEnd au lieu de getLastElement (généralisation de la fonction)
+- **utils**: ajout des fonctions encodeString et decodeString
+
 ## 7.7.0 (2025-05-11)
 
 ### Feat
