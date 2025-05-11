@@ -139,7 +139,15 @@ function handleClickOnChatContainer(chatbot) {
 				const choiceOptions = document.querySelectorAll(".messageOptions li a");
 				// On récupère l'index du bouton de réponse sur lequel on a cliqué, parmi l'ensemble des boutons de réponse affichés
 				const indexTarget = Array.from(choiceOptions).indexOf(target) + 1;
-				chatbot.actions.push("c:n" + indexTarget);
+				// Permet de gérer les liens vides (retour au menu intial)
+				// dans ce cas, il ne faut pas mettre le numéro du bouton, mais le texte du bouton
+				const isBlankTarget = link == "#";
+				if (!isBlankTarget) {
+					chatbot.actions.push("c:n" + indexTarget);
+				} else {
+					const actionMessage = choiceOptions[indexTarget - 1].textContent;
+					chatbot.actions.push("e:" + actionMessage);
+				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
 				chatbot.nextMessage.lastMessageFromBot = "";
 				chatbot.nextMessage.goto = "";
