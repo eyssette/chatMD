@@ -1,6 +1,8 @@
-export function validateMarkdown(md) {
+export function validateMarkdown(md, defaultMd) {
 	if (!md.includes("# ")) {
-		return "# Erreur\nL'URL indiquée ne renvoie pas à un fichier en Markdown avec une syntaxe correcte";
+		alert(
+			"L'URL indiquée ne renvoie pas à un fichier en Markdown avec une syntaxe correcte",
+		);
 	}
-	return md;
+	return defaultMd;
 }

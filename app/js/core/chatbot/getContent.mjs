@@ -40,7 +40,7 @@ export async function getContent(defaultMd, params) {
 			content = content + "\n\n" + contentToInclude;
 		}
 		// On valide le Markdown, sinon on obtient un message d'erreur
-		content = validateMarkdown(content);
+		content = validateMarkdown(content, defaultMd);
 	}
 	return { markdown: content, yaml: yaml ? yaml : processYAML(content) };
 }
