@@ -3,6 +3,7 @@ export function validateMarkdown(md, defaultMd) {
 		alert(
 			"L'URL indiquée ne renvoie pas à un fichier en Markdown avec une syntaxe correcte",
 		);
+		md = defaultMd;
 	}
-	return defaultMd;
+	return md;
 }
