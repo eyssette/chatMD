@@ -7,8 +7,9 @@ pages:
   before_script:
     - apk update && apk add gzip brotli
   script:
-    - mkdir -p .public .public/widget/ .public/css/themes .public/js/plugins
+    - mkdir -p .public .public/widget/ .public/css/themes .public/js/plugins .public/i18n/
     - cp $APP_FOLDER/*.svg $APP_FOLDER/index.html $APP_FOLDER/script.min.js $APP_FOLDER/script.min.js.map widget/widget.min.js .public/
+    - cp $APP_FOLDER/i18n/*.md .public/i18n/
     - cp $APP_FOLDER/css/styles.min.css .public/css/
     - cp $APP_FOLDER/css/themes/* .public/css/themes/
     - cp widget/message.svg .public/widget/

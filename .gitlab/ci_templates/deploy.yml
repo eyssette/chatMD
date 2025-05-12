@@ -43,6 +43,7 @@ pages:
     - rm -r node_modules 
 
     # L'application est construite dans le répertoire app : on déplace tous les fichiers nécessaires à la racine
+    # On ne copie pas par défaut les fichiers du dossier i18n original : c'est à l'utilisateur de les créer s'il le souhaite
     - mkdir -p .build .build/widget/ .build/css/themes .build/js/plugins
     - cp $APP_FOLDER/*.svg $APP_FOLDER/index.html $APP_FOLDER/script.min.js $APP_FOLDER/script.min.js.map widget/widget.min.js .build/
     - cp $APP_FOLDER/css/styles.min.css .build/css/

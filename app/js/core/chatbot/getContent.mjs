@@ -19,7 +19,11 @@ export async function getContent(defaultMd, params) {
 		return { markdown: rawContent, yaml: processYAML(rawContent) };
 	}
 	// Si la source est une URL, on la traite pour pouvoir récupérer correctement la source du chatbot
-	const sourceChatBot = handleURL(hash);
+	let sourceChatBot = handleURL(hash);
+
+	if (!sourceChatBot && navigator.language.includes("en-")) {
+		sourceChatBot = "i18n/index.en.md";
+	}
 
 	if (sourceChatBot) {
 		if (Array.isArray(sourceChatBot)) {
