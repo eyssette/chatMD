@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.8.1 (2025-05-12)
+
+### Fix
+
+- **data**: version plus courte du chatbot de la page d'accueil (lien vers la documentation plus complète)
+
 ## 7.8.0 (2025-05-11)
 
 ### Feat
