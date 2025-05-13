@@ -1,5 +1,4 @@
 import { getRandomElement } from "../../../utils/arrays.mjs";
-import { handleKeyboardVisibility } from "./keyboardVisibility.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
 
 function processComplexDynamicVariables(complexExpression, dynamicVariables) {
@@ -35,8 +34,6 @@ export function handleBotMessage(
 		},
 	);
 	message = message.replaceAll("<!--<!--", "<!--").replaceAll("-->-->", "-->");
-	// Possibilité d'activer ou de désactiver le clavier au cas par cas
-	handleKeyboardVisibility(yaml, dynamicVariables);
 	// On remplace dans le texte les variables `@nomVariable` par leur valeur
 	message = message.replaceAll(/`@([^\s]*?)`/g, function (match, variableName) {
 		if (match.includes("=")) {

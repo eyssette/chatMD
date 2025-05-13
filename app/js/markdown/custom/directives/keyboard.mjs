@@ -1,6 +1,12 @@
 import { sendButton, controlsElement } from "../../../shared/selectors.mjs";
 
-export function handleKeyboardVisibility(yaml, dynamicVariables) {
+export function processDirectiveKeyboard(message, yaml, dynamicVariables) {
+	const match = message.match(/!Keyboard\s*:\s*(true|false)/i);
+	if (match) {
+		message = message.replace(match[0], "");
+		const useKeyboard = match[1].toLowerCase() === "true";
+		dynamicVariables["KEYBOARD"] = useKeyboard ? "true" : "false";
+	}
 	if (yaml && yaml.userInput === false) {
 		// Cas où le clavier est désactivé par défaut
 		if (dynamicVariables["KEYBOARD"] == "true") {
@@ -30,4 +36,5 @@ export function handleKeyboardVisibility(yaml, dynamicVariables) {
 			document.body.classList.remove("hideControls");
 		}
 	}
+	return message;
 }
