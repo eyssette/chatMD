@@ -26,15 +26,23 @@ export function getMainContentInformations(
 		condition: "",
 	};
 
+	let searchForKeywords = true;
+
 	for (let line of mainContentLines) {
 		// Gestion des titres de réponse
 		if (detectedResponseTitle(line, yaml)) {
 			handleNewResponseTitle(line, yaml, currentData, chatbotData);
+			searchForKeywords = true;
 			continue;
+		}
+		if (!line.trim()) {
+			// Les keywords doivent être mis juste après le titre, sans ligne vide après le titre
+			// Si on a sauté de ligne, c'est qu'on est passé à la suite du message
+			searchForKeywords = false;
 		}
 
 		// Gestion des mots clés
-		if (line.startsWith("- ") && !currentData.listParsed) {
+		if (searchForKeywords && line.startsWith("- ") && !currentData.listParsed) {
 			handleKeywords(line, currentData);
 			continue;
 		}
