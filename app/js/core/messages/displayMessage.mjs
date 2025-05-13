@@ -10,6 +10,7 @@ import { convertLatexExpressions } from "../../markdown/latex.mjs";
 import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
 import { chatContainer } from "../../shared/selectors.mjs";
 import { processLightbox } from "./helpers/plugins/lighbox.mjs";
+import { textFitForMathBlocks } from "./helpers/plugins/textFitForMathBlocks.mjs";
 
 export async function displayMessage(md, options) {
 	const isUser = options && options.isUser;
@@ -51,10 +52,12 @@ export async function displayMessage(md, options) {
 			if (!isUser) {
 				processLightbox();
 			}
+			textFitForMathBlocks(messageHtmlElement);
 			resolve();
 		} else {
 			startTypeWriter(html, messageHtmlElement).then(() => {
 				processLightbox();
+				textFitForMathBlocks(messageHtmlElement);
 				resolve();
 			});
 		}

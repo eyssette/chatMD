@@ -118,10 +118,6 @@ export function startTypeWriter(content, element, accelerateFactor) {
 				) {
 					sendButton.style.opacity = "0.5";
 				}
-				// Gestion de textFit pour les éléments en Latex
-				if (yaml && yaml.plugins && yaml.plugins.includes("textFit")) {
-					window.textFit(element.querySelectorAll(".katex-display"));
-				}
 				// Quand l'effet s'arrête on supprime la détection du bouton Enter pour stopper l'effet
 				userInput.removeEventListener("keypress", keypressHandler);
 				if (
