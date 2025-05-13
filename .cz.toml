@@ -25,7 +25,9 @@ schema_pattern = '''(?x)  # mode verbose
   !?                            # optionnel breaking change "!"
   :\s                           # le ":" suivi d'un espace obligatoire
   [^\n\r]+                      # message sur la même ligne
-  (?:\n\n.*)?                   # optionnel : paragraphe de body
+  (                             # début du bloc de body optionnel
+    (?:\n\n[^\n\r]+(?:\n[^\n\r]+)*)*  # un ou plusieurs paragraphes (blocs séparés par \n\n)
+  )?                            # bloc body complet optionnel
   $
 '''
 types = [
