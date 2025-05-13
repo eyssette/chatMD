@@ -1,5 +1,22 @@
 # Changelog
 
+## 7.9.0 (2025-05-13)
+
+### Feat
+
+- **i18n**: mise en place de l'internationalisation
+
+### Fix
+
+- **messages**: amélioration de textFit pour les blocs en Latex (marche aussi sans typewriter, ne se déclenche que pour les blocs dont le contenu dépasse)
+- **chatbot**: détection des mots clés : seulement s'ils sont directement à la suite du titre, sans ligne vide après le titre
+- **chatbot**: erreur sur la validation (renvoyait toujours defaultMD !)
+- **chatbot**: si la source n'est pas un fichier Markdown, on affiche un message d'erreur (alert) et on renvoie le contenu du chatbot initial
+
+### Chore
+
+- autorisation de plusieurs paragraphes dans le body d'un commit
+
 ## 7.8.1 (2025-05-12)
 
 ### Fix
