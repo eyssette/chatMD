@@ -34,17 +34,19 @@ You can imagine **many different uses**:
 
 - Interactive tool to answer frequently asked questions (FAQ)
 - Tutorial for a digital tool
+- Decision-making or creation assistance
 - Methodological guide
 - Knowledge revision, interactive quizzes
+- Training tool, methodological aid or subject discovery
 - Conversations with historical figures
 - Choose-your-own-adventure stories
-- Escape games…
+- Escape games, investigation...
 
-\`
+`
 :::success
 The basic syntax is simple, but ChatMD can be configured for **more complex use cases**: interface customization, use of variables, random choices, integration with an LLM, RAG capabilities…
 :::
-\`
+`
 
 ## Examples
 - example
@@ -54,10 +56,12 @@ The basic syntax is simple, but ChatMD can be configured for **more complex use 
 - model
 - template
 
-Here’s a template you can use to build a basic chatbot: [template to reuse](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
+Here's a template you can use to build a basic chatbot: [template to reuse](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
+
+You can find [examples of chatbots in the documentation](https://chatmd.forge.apps.education.fr/docs/?sec=2&subsec=1).
 
 :::warning Want to go further?
-Check the [documentation](https://chatmd.forge.apps.education.fr/docs)
+See the [advanced configuration options](https://chatmd.forge.apps.education.fr/docs/?sec=5&subsec=1#)
 :::
 
 Here are a few examples of chatbots created with ChatMD:

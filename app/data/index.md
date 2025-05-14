@@ -33,13 +33,15 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 
 On peut imaginer **de nombreux usages** :
 
-- Outil interactif pour pouvoir répondre à des questions fréquentes (FAQ)
+- Réponse à des questions fréquentes (FAQ)
 - Tutoriel pour un outil informatique
+- Aide à la décision ou à la création
 - Guide méthodologique
 - Révision de connaissances, quiz interactif
+- Outil de formation, d'aide méthodologique ou de découverte d'un sujet
 - Discussion avec un personnage historique
 - Histoire dont vous êtes le héros
-- Escape games …
+- Escape game, enquête …
 
 \`
 :::success
@@ -57,14 +59,11 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 
 Voici un modèle que vous pouvez récupérer pour construire un premier chatbot élémentaire : [modèle à récupérer](https://codimd.apps.education.fr/mBGbHStJSVOSrlGfGb981A?both)
 
+Vous pouvez trouver des [exemples de chatbots dans la documentation](https://chatmd.forge.apps.education.fr/docs/?sec=2&subsec=1).
+
 :::warning Pour aller plus loin
-Consultez la [documentation](https://chatmd.forge.apps.education.fr/docs)
+Voir les [options de configuration avancées](https://chatmd.forge.apps.education.fr/docs/?sec=5&subsec=1#)
 :::
-
-Voici quelques exemples de chatbot créés avec ChatMD : 
-
-- [Méthode de la dissertation en philosophie](https://chatmd.forge.apps.education.fr/#https://eyssette.forge.apps.education.fr/chatbot/dissertation-philosophie.md)
-- [Utilisation d'un microscope](https://chatmd.forge.apps.education.fr/#https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g) : un chatbot créé à partir du travail de  Sylvain Tissier, Guillaume Berthelot et de Jérémy Navoizat [voir la source](https://codimd.apps.education.fr/xGNHIJSeTVCk6FHas-_71g?both)
 
 \`
 :::success
