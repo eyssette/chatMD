@@ -175,7 +175,9 @@ function handleClickOnChatContainer(chatbot) {
 					createMessage(chatbot, messageFromLink, { isUser: true });
 					const optionLink = link.substring(1);
 					const response = responseToSelectedChoiceOption(chatbot, optionLink);
-					createMessage(chatbot, response, { isUser: false });
+					if (response) {
+						createMessage(chatbot, response, { isUser: false });
+					}
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur();
 					// Refocaliser sur userInput
