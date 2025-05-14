@@ -37,6 +37,7 @@ h1 {
 	color: #fff;
 	text-shadow: 1px 1px 0 #1b96fc;
 	background-color: #39a1f9;
+	max-width: 400px;
 }
 .bot-message:before {
 	content: "";

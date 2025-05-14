@@ -145,6 +145,7 @@ button {
 	color: rgb(255, 255, 255);
 	background-color: rgb(0, 132, 255);
 	float: right;
+	max-width: 550px;
 }
 
 .user-message p {
