@@ -36,3 +36,15 @@ Then(
 		I.waitForText("Ce n'est pas ce qu'il faut faire !", 10);
 	},
 );
+
+Given("J'appuie sur la touche Entrée", () => {
+	I.pressKey("Enter");
+});
+
+Then("Le texte de présentation de ChatMD s'affiche d'un coup", () => {
+	I.waitForText("Qui a créé ChatMD ?", 1);
+});
+
+Given("J'appuie sur le bouton “Envoyer”", () => {
+	I.click("#send-button");
+});
