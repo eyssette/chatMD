@@ -22,7 +22,7 @@ export async function getContent(defaultMd, params) {
 	let sourceChatBot = handleURL(hash);
 
 	if (!sourceChatBot && navigator.language.includes("en-")) {
-		sourceChatBot = "_i18n/index.en.md";
+		sourceChatBot = "https://chatmd.forge.apps.education.fr/_i18n/index.en.md";
 	}
 
 	if (sourceChatBot) {
