@@ -1,5 +1,30 @@
 # Changelog
 
+## 7.10.0 (2025-05-15)
+
+### Feat
+
+- **markdown**: directive !RAG pour prendre en compte du RAG à l'intérieur d'un bloc !useLLM dans une réponse
+
+### Fix
+
+- **interactions**: pas de création d'un message si l'option sur laquelle on a cliqué ne renvoie à rien (risque d'erreur sinon)
+- **CSS**: max-width pour user-message
+- **messages**: possibliité d'utiliser !Keyboard plutôt que @keyboard
+
+### Chore
+
+- lint et tests unitaires avant de bump
+
+### Docs
+
+- lien vers la doc pour les exemples & les options avancées + ajout types d'usages
+
+### Refactor
+
+- **ai**: détachement d'une fonction pour extraire les informations pertinentes dans la base de données RAG
+- **ai**: réécriture et modularisation de la fonction pour préparer les chunks du RAG
+
 ## 7.9.0 (2025-05-13)
 
 ### Feat
