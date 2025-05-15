@@ -132,6 +132,8 @@ tasks:
       - package.json
       - package-lock.json
     cmds:
+      - task: lint
+      - task: tests:unit
       - cz bump
 
   server:start:
