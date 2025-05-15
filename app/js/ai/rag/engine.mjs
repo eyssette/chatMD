@@ -6,44 +6,10 @@ import {
 	fetchContent,
 	fetchContentFromMultipleSources,
 } from "../../core/chatbot/helpers/fetch.mjs";
-
-function prepareRAGdata(informations, separator) {
-	if (separator) {
-		if (separator == "auto") {
-			// Une fonction pour découper le texte en morceaux d'environ 600 caractères.
-			function splitIntoChunks(text, charLimit = 600) {
-				let chunks = [];
-				let startIndex = 0;
-				while (startIndex < text.length) {
-					let endIndex = startIndex + charLimit;
-					if (endIndex < text.length) {
-						let spaceIndex = text.lastIndexOf(" ", endIndex);
-						if (spaceIndex > startIndex) {
-							endIndex = spaceIndex;
-						}
-					}
-					chunks.push(text.slice(startIndex, endIndex).trim());
-					startIndex = endIndex + 1;
-				}
-				return chunks;
-			}
-			return splitIntoChunks(informations);
-		} else {
-			return yaml.useLLM.RAGseparator == "break"
-				? informations
-						.split("---")
-						.map((element) => element.replaceAll("\n", " ").trim())
-				: informations.split(yaml.useLLM.RAGseparator);
-		}
-	} else {
-		return informations.split("\n").filter((line) => line.trim() !== "");
-	}
-}
-
-export let RAGcontent = [];
-export let vectorRAGinformations = [];
+import { prepareChunksForRAG } from "./prepareChunks.mjs";
 
 function createVectorRAGinformations(informations) {
+	let vectorRAGinformations = [];
 	if (informations) {
 		const informationsLength = informations.length;
 		for (let i = 0; i < informationsLength; i++) {
@@ -56,6 +22,7 @@ function createVectorRAGinformations(informations) {
 }
 
 export async function getRAGcontent(informations) {
+	let RAGcontent;
 	if (informations) {
 		const isArray = Array.isArray(informations);
 		if (isArray || informations.includes("http")) {
@@ -71,15 +38,17 @@ export async function getRAGcontent(informations) {
 				const data = isArray
 					? await fetchContentFromMultipleSources(sourceRAG)
 					: await fetchContent(sourceRAG);
-				RAGcontent = prepareRAGdata(data, yaml.useLLM.RAGseparator);
-				const RAGvectors = createVectorRAGinformations(RAGcontent);
-				return RAGvectors;
+				RAGcontent = prepareChunksForRAG(data, {
+					separator: yaml.useLLM.RAGseparator,
+				});
+				const RAGvector = createVectorRAGinformations(RAGcontent);
+				return { content: RAGcontent, vector: RAGvector };
 			} catch (error) {
 				console.error(
 					"Erreur lors du fetch ou du traitement des données RAG :",
 					error,
 				);
-				return null;
+				return { content: [], vector: [] };
 			}
 		} else {
 			let RAGinformations;
@@ -88,9 +57,11 @@ export async function getRAGcontent(informations) {
 			} else {
 				RAGinformations = informations.trim();
 			}
-			RAGcontent = prepareRAGdata(RAGinformations, yaml.useLLM.RAGseparator);
-			const RAGvectors = createVectorRAGinformations(RAGcontent);
-			return RAGvectors;
+			RAGcontent = prepareChunksForRAG(RAGinformations, {
+				separator: yaml.useLLM.RAGseparator,
+			});
+			const RAGvector = createVectorRAGinformations(RAGcontent);
+			return { content: RAGcontent, vector: RAGvector };
 		}
 	}
 }

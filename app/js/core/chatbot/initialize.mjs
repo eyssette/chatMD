@@ -7,7 +7,7 @@ import { getRAGcontent } from "../../ai/rag/engine.mjs";
 import { getChatbotResponse } from "../interactions/getChatbotResponse.mjs";
 import { decodeString } from "../../utils/strings.mjs";
 
-export function initializeChatbot(chatbotData, yaml, params) {
+export async function initializeChatbot(chatbotData, yaml, params) {
 	let dynamicVariables = {};
 	// On place les paramètres de l'URL dans dynamicVariables
 	// Si on utilise du contenu dynamique : on pourra utiliser ces variables
@@ -51,8 +51,11 @@ export function initializeChatbot(chatbotData, yaml, params) {
 	const vectorChatBotResponses =
 		precalculateVectorChatbotResponses(chatbotResponses);
 
+	let RAG = {};
 	if (yaml.useLLM.RAGinformations) {
-		getRAGcontent(yaml.useLLM.RAGinformations);
+		const RAGinformations = await getRAGcontent(yaml.useLLM.RAGinformations);
+		RAG.content = RAGinformations.content;
+		RAG.vector = RAGinformations.vector;
 	}
 
 	let chatbot = {
@@ -71,6 +74,7 @@ export function initializeChatbot(chatbotData, yaml, params) {
 			messageIfKeywordsNotFound: "",
 		},
 		actions: params && params.actions ? params.actions.split("|") : [],
+		RAG: RAG,
 	};
 
 	controlEvents(chatbot);
