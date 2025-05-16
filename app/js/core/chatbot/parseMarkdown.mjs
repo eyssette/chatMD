@@ -9,7 +9,8 @@ import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs"
 export function parseMarkdown(md, yaml) {
 	// Fix pour l'utilisation de \\ dans le Latex
 	md = md.replaceAll("\\\\", "&#92;&#92;");
-	md = md.replaceAll("\r", "\n");
+	// Fix pour les textes avec des fins de ligne CRLF
+	md = md.replaceAll("\r\n", "\n");
 
 	// On récupère le contenu principal sans l'en-tête YAML s'il existe
 	md = removeYaml(md);
