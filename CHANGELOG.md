@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.11.0 (2025-05-17)
+
+### Feat
+
+- **messages**: possibilité d'utiliser la géolocalisation (récupération latitude, longitude, précision de la position dans les variables dynamiques)
+
 ## 7.10.1 (2025-05-17)
 
 ### Fix
