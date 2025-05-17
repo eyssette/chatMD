@@ -26,7 +26,7 @@ export async function createMessage(chatbot, message, options) {
 
 	chatbot.nextMessage.selected = undefined;
 
-	message = processVariables(chatbot, message, isUser);
+	message = await processVariables(chatbot, message, isUser);
 
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
 	const hasPromptInmessage = checkPromptsinMessage.useLLM;
