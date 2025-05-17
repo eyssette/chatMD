@@ -20,7 +20,6 @@ const sanitizeCodeAllowedOperations = [
 	")",
 	"encodeURI",
 	"Math.abs",
-	",",
 	"Math.min",
 	"Math.max",
 	"Math.round",
@@ -30,6 +29,8 @@ const sanitizeCodeAllowedOperations = [
 	".endsWith",
 	".toLowerCase",
 	".trim",
+	",",
+	".",
 ];
 
 // Sanitize le code avant d'utiliser new Function
