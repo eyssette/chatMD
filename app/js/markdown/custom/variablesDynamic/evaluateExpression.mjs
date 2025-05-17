@@ -19,6 +19,7 @@ const sanitizeCodeAllowedOperations = [
 	"(",
 	")",
 	"encodeURI",
+	"Math.abs",
 ];
 
 // Sanitize le code avant d'utiliser new Function
