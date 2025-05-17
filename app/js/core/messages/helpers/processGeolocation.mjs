@@ -17,7 +17,7 @@ function getCurrentPosition(options) {
 
 const options = {
 	enableHighAccuracy: true,
-	timeout: 1000,
+	timeout: 5000,
 	maximumAge: 0,
 };
 export async function processGeolocation(chatbot) {
