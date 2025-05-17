@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.10.1 (2025-05-17)
+
+### Fix
+
+- **markdown**: modularisation de processPromptWithRAG et résolution d'un problème en cas d'option pour le RAG avec un tableau et des guillemets
+- **chatbot**: résolution problème avec les fins de ligne CRLF
+- **i18n**: dossier i18n préfixé avec "_"
+- **i18n**: nojekyll pour les fichiers i18n en Markdown
+
+### Chore
+
+- changement de la source du chatbot initial si la langue est l'anglais
+- configuration d'ESlint avec codeceptJS
+- réorganisation dossiers et noms de fichiers pour les features
+
 ## 7.10.0 (2025-05-15)
 
 ### Feat
