@@ -93,7 +93,7 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 	// On regarde s'il y a des actions à accomplir dans le paramètre de URL "?actions"
 	const hasActions = params && params.actions;
 	// On affiche le message d'accueil, sans typewriter s'il y a des actions à accomplir, et sans menu de message
-	createMessage(chatbot, initialMessage, {
+	await createMessage(chatbot, initialMessage, {
 		isUser: false,
 		disableTypewriter: hasActions,
 		noMessageMenu: true,
@@ -108,7 +108,8 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 	if (hasActions) {
 		const actions = hasActions.split("|");
 		// Pour chaque action …
-		actions.forEach((action, index) => {
+		for (let index = 0; index < actions.length; index++) {
+			const action = actions[index];
 			// On récupère les informations  de l'action (type et données)
 			const separator = action.indexOf(":");
 			const actionType = action.slice(0, separator);
@@ -119,11 +120,11 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 			if (actionType == "e") {
 				// On affiche ce message
 				const userMessage = actionData;
-				createMessage(chatbot, userMessage, { isUser: true });
+				await createMessage(chatbot, userMessage, { isUser: true });
 				// Puis on affiche la réponse, sans typewriter sauf si on en est à la dernière action
 				const response = getChatbotResponse(chatbot, userMessage);
 				if (response) {
-					createMessage(chatbot, response, {
+					await createMessage(chatbot, response, {
 						isUser: false,
 						disableTypewriter: !isLast,
 					});
@@ -163,11 +164,11 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 						.getAttribute("href")
 						.replace("#", "");
 					// On affiche le message à afficher côté utilisateur
-					createMessage(chatbot, messageToDisplay, { isUser: true });
+					await createMessage(chatbot, messageToDisplay, { isUser: true });
 					// On récupère puis affiche la répones du chatbot
 					const response = getChatbotResponse(chatbot, messageToChatbot);
 					if (response) {
-						createMessage(chatbot, response, {
+						await createMessage(chatbot, response, {
 							isUser: false,
 							disableTypewriter: !isLast,
 						});
@@ -177,17 +178,16 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 
 			if (actionType == "llmq") {
 				const userMessage = decodeString(actionData);
-				createMessage(chatbot, userMessage, {
-					isUser: true,
-				});
+				await createMessage(chatbot, userMessage, { isUser: true });
 			}
+
 			if (actionType == "llmr") {
 				const botMessage = decodeString(actionData);
-				createMessage(chatbot, botMessage, {
+				await createMessage(chatbot, botMessage, {
 					isUser: false,
 					disableTypewriter: !isLast,
 				});
 			}
-		});
+		}
 	}
 }
