@@ -43,7 +43,7 @@ export async function createMessage(chatbot, message, options) {
 		) {
 			const actionsHistory = chatbot.actions.join(`|`);
 			const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
-			message = message + "\n\n" + messageMenu;
+			message = message ? message + "\n\n" + messageMenu : "";
 		}
 	}
 
