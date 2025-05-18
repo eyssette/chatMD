@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.11.1 (2025-05-18)
+
+### Fix
+
+- **chatbot**: await createMessage nécessaire dans la phase d'initialisation si on utilise les actions dans l'URL
+- **markdown**: fix pour l'utilisation de Math.round dans l'évaluation des variables dynamiques (utilisation du point autorisée)
+- **markdown**: ajout d'opérations autorisées pour l'évaluation des variables dynamiques
+- **messages**: timeout plus important pour la détection de la géolocalisation afin d'éviter une erreur sur des sytèmes plus lents
+- **markdown**: autorisation de Math.abs dans les expressions pour le calcul des variables dynamiques
+
+### Refactor
+
+- **chatbot**: modularisation de la fonction d'initialisation : fonction processActions pour traiter les actions dans l'URL
+
 ## 7.11.0 (2025-05-17)
 
 ### Feat
