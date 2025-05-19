@@ -43,6 +43,11 @@ On peut imaginer **de nombreux usages** :
 - Histoire dont vous êtes le héros
 - Escape game, enquête …
 
+ChatMD peut même intégrer de la géolocalisation, ce qui permet d'autres usages :
+- Jeu de piste
+- Visite scolaire augmentée 
+- Recommandations fondées sur la position de l'utilisateur
+
 \`
 :::success
 La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usages plus complexes** : personnalisation de l'interface, utilisation de variables, de choix aléatoires, intégration avec un LLM, possibilité de faire du RAG …
