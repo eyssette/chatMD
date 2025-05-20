@@ -39,14 +39,20 @@ For comprehensive guidance, explore our [starter chatbot](https://chatmd.forge.a
 
 ChatMD offers versatile applications across a wide range of educational and institutional contexts:
 
-- Interactive FAQs (Frequently Asked Questions)
-- Software tool tutorials and walkthroughs
-- Methodological guides and learning resources
-- Knowledge reviewing and interactive quizzes
-- Historical figure simulations and dialogues
-- Choose-your-own-adventure narratives
-- Escape games
-- And much more...
+- Answering frequently asked questions (FAQs)
+- Step-by-step tutorials for software tools
+- Decision-making or creative support
+- Methodological guidance
+- Knowledge review and interactive quizzes
+- Training tool, methodological assistance, or topic exploration
+- Conversation with a historical figure
+- Choose-your-own-adventure story
+- Escape games, investigations, and more...
+
+ChatMD can even integrate geolocation, enabling additional features such as:
+- Interactive treasure hunts
+- Enhanced educational field trips
+- Location-based recommendations
 
 ## 🙋‍♀️ Contributing
 

@@ -42,13 +42,20 @@ Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://c
 ## 🎯 Quels sont les usages possibles ?
 
 On peut imaginer de nombreux usages :
-- Outil interactif pour pouvoir répondre à des questions fréquentes (FAQ)
+- Réponse à des questions fréquentes (FAQ)
 - Tutoriel pour un outil informatique
+- Aide à la décision ou à la création
 - Guide méthodologique
 - Révision de connaissances, quiz interactif
+- Outil de formation, d'aide méthodologique ou de découverte d'un sujet
 - Discussion avec un personnage historique
 - Histoire dont vous êtes le héros
-- Escape games …
+- Escape game, enquête …
+
+ChatMD peut même intégrer de la géolocalisation, ce qui permet d'autres usages :
+- Jeu de piste
+- Visite scolaire augmentée 
+- Recommandations fondées sur la position de l'utilisateur
 
 ## 🙋‍♀️ Contribuer
 
