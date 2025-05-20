@@ -28,23 +28,25 @@ export async function createMessage(chatbot, message, options) {
 
 	message = await processVariables(chatbot, message, isUser);
 
+	if (!isUser) {
+		// Si c'est un message du Bot, on traite les directives et les plugins
+		message = processDirectives(chatbot, message, messageElement);
+		message = processPlugins(message);
+	}
+
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);
 	const hasPromptInmessage = checkPromptsinMessage.useLLM;
 
-	// Cas où c'est un message du bot
-	if (!isUser) {
-		message = processDirectives(chatbot, message, messageElement);
-		message = processPlugins(message);
-		// On affiche un bouton de menu pour chaque message du bot, sauf si on a l'option noMessageMenu, si on est en train de traiter une partie d'un message qui contient un mélange de prompt et de Markdown, ou si le message affiché est le message initial
-		if (
-			!noMessageMenu &&
-			!hasPromptInmessage &&
-			message != chatbot.initialMessage
-		) {
-			const actionsHistory = chatbot.actions.join(`|`);
-			const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
-			message = message ? message + "\n\n" + messageMenu : "";
-		}
+	// On affiche un bouton de menu pour chaque message du bot, sauf si on a l'option noMessageMenu, si on est en train de traiter une partie d'un message qui contient un mélange de prompt et de Markdown, ou si le message affiché est le message initial
+	if (
+		!isUser &&
+		!noMessageMenu &&
+		!hasPromptInmessage &&
+		message != chatbot.initialMessage
+	) {
+		const actionsHistory = chatbot.actions.join(`|`);
+		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
+		message = message ? message + "\n\n" + messageMenu : "";
 	}
 
 	if (hasPromptInmessage) {
