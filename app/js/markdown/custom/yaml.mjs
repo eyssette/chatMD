@@ -173,10 +173,17 @@ export function processYAML(markdownContent) {
 					: "css/themes/" + yaml.theme + ".css";
 				loadCSS(cssFile);
 			}
-			if (yaml.dynamicContent || yaml.contenuDynamique) {
-				yaml.dynamicContent = yaml.contenuDynamique
-					? yaml.contenuDynamique
-					: yaml.dynamicContent;
+			if (
+				yaml.dynamicContent ||
+				yaml.contenuDynamique ||
+				yaml.dynamicVariables ||
+				yaml.variablesDynamiques
+			) {
+				yaml.dynamicContent =
+					yaml.contenuDynamique ||
+					yaml.dynamicContent ||
+					yaml.dynamicVariables ||
+					yaml.variablesDynamiques;
 			}
 			if (
 				yaml.typewriter === false ||
