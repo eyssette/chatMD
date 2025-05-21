@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.11.2 (2025-05-21)
+
+### Fix
+
+- **chatbot**: il faut attendre que l'option soit affichée si on veut utiliser des actions clic
+- **chatbot**: résolution d'un problème avec les actions dans l'URL si on utilise obfuscate: true dans le YAML
+- **markdown**: possibilité d'utiliser variablesDynamiques ou dynamicVariables dans le yaml plutôt que contenuDynamique
+- **messages**: traitement des directives et des plugins avant le traitement des blocs prompts !useLLM
+- **messages**: si le message est vide, on n'ajoute pas le bouton de menu
+
+### Docs
+
+- ajout et reformulation d'exemples d'usages (dont ceux liés à la géolocalisation)
+
 ## 7.11.1 (2025-05-18)
 
 ### Fix
