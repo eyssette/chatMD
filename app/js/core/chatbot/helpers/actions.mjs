@@ -3,6 +3,53 @@ import { getChatbotResponse } from "../../interactions/getChatbotResponse.mjs";
 import { removeAccents } from "../../../utils/nlp.mjs";
 import { decodeString } from "../../../utils/strings.mjs";
 
+async function waitForChoiceOption(number, timeout = 1000) {
+	return new Promise((resolve, reject) => {
+		const start = Date.now();
+		const checkOptions = () => {
+			const choiceOptions = document.querySelectorAll(".messageOptions li a");
+			if (choiceOptions.length >= number) {
+				resolve(choiceOptions);
+			} else if (Date.now() - start >= timeout) {
+				reject(new Error("Timeout: options not found within time limit."));
+			} else {
+				setTimeout(checkOptions, 100);
+			}
+		};
+		checkOptions();
+	});
+}
+
+async function waitForSelectedChoiceOption(
+	actionDataNormalized,
+	timeout = 1000,
+) {
+	const start = Date.now();
+	return new Promise((resolve, reject) => {
+		const tryFindSelectedChoiceOption = () => {
+			const choiceOptions = document.querySelectorAll(".messageOptions li a");
+			let choiceArray = Array.from(choiceOptions);
+			// On met la liste dans le sens inverse pour pouvoir chercher en premier dans les dernières options affichées
+			choiceArray = choiceArray.reverse();
+			const selectedChoiceOption = choiceArray.find((option) =>
+				removeAccents(option.innerHTML.toLowerCase()).includes(
+					actionDataNormalized,
+				),
+			);
+
+			if (selectedChoiceOption) {
+				resolve(selectedChoiceOption);
+			} else if (Date.now() - start >= timeout) {
+				reject(new Error("Timeout: No matching choice option found."));
+			} else {
+				setTimeout(tryFindSelectedChoiceOption, 100);
+			}
+		};
+
+		tryFindSelectedChoiceOption();
+	});
+}
+
 export async function processActions(chatbot, yaml, hasActions) {
 	const actions = hasActions.split("|");
 	// Pour chaque action …
@@ -32,25 +79,20 @@ export async function processActions(chatbot, yaml, hasActions) {
 		// Si l'action consiste à cliquer sur un bouton de réponse
 		if (actionType == "c") {
 			// On récupère les boutons de réponse
-			const choiceOptions = document.querySelectorAll(".messageOptions li a");
-			let choiceArray = Array.from(choiceOptions);
 			const selectChoiceOptionByPosition = /^n\d+$/.test(actionData);
 			let selectedChoiceOption;
 			if (selectChoiceOptionByPosition) {
 				// Première possibilité : on identifie un bouton de réponse par son numéro parmi l'ensemble des boutons de réponse affichées
-				const choiceOptionPosition = actionData.replace("n", "");
+				const choiceOptionPosition = parseInt(actionData.replace("n", ""));
+				const choiceOptions = await waitForChoiceOption(choiceOptionPosition);
+				let choiceArray = Array.from(choiceOptions);
 				selectedChoiceOption = choiceArray[choiceOptionPosition - 1];
 			} else {
 				// Deuxième possibilité : on identifie un bouton de réponse, en cherchant le bouton de réponse, en partant des derniers, qui contient le contenu d'un texte à chercher
-				// On met la liste dans le sens inverse pour pouvoir chercher en premier dans les dernières options affichées
-				choiceArray = choiceArray.reverse();
 				// On fait la recherche sans prendre en compte les accents et les majuscules
 				const actionDataNormalized = removeAccents(actionData.toLowerCase());
-				selectedChoiceOption = choiceArray.find((option) =>
-					removeAccents(option.innerHTML.toLowerCase()).includes(
-						actionDataNormalized,
-					),
-				);
+				selectedChoiceOption =
+					await waitForSelectedChoiceOption(actionDataNormalized);
 			}
 
 			// Si on a trouvé un bouton de réponse qui correspond
@@ -68,7 +110,7 @@ export async function processActions(chatbot, yaml, hasActions) {
 				// On affiche le message à afficher côté utilisateur
 				await createMessage(chatbot, messageToDisplay, { isUser: true });
 				// On récupère puis affiche la répones du chatbot
-				const response = getChatbotResponse(chatbot, messageToChatbot);
+				const response = await getChatbotResponse(chatbot, messageToChatbot);
 				if (response) {
 					await createMessage(chatbot, response, {
 						isUser: false,
