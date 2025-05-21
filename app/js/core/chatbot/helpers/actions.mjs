@@ -3,7 +3,7 @@ import { getChatbotResponse } from "../../interactions/getChatbotResponse.mjs";
 import { removeAccents } from "../../../utils/nlp.mjs";
 import { decodeString } from "../../../utils/strings.mjs";
 
-export async function processActions(chatbot, hasActions) {
+export async function processActions(chatbot, yaml, hasActions) {
 	const actions = hasActions.split("|");
 	// Pour chaque action …
 	for (let index = 0; index < actions.length; index++) {
@@ -58,9 +58,13 @@ export async function processActions(chatbot, hasActions) {
 				// On récupère le message à afficher
 				const messageToDisplay = selectedChoiceOption.innerHTML;
 				// Et le message à envoyer au chatbot
-				const messageToChatbot = selectedChoiceOption
+				let messageToChatbot = selectedChoiceOption
 					.getAttribute("href")
 					.replace("#", "");
+				// Si on utilise l'obfuscation, il faut décoder le message
+				messageToChatbot = yaml.obfuscate
+					? atob(messageToChatbot)
+					: messageToChatbot;
 				// On affiche le message à afficher côté utilisateur
 				await createMessage(chatbot, messageToDisplay, { isUser: true });
 				// On récupère puis affiche la répones du chatbot

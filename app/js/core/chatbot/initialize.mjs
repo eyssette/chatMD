@@ -105,6 +105,6 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 
 	// S'il y a des actions à accomplir …
 	if (hasActions) {
-		processActions(chatbot, hasActions);
+		processActions(chatbot, yaml, hasActions);
 	}
 }
