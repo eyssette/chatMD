@@ -17,6 +17,7 @@ export async function processPromptWithRAG(chatbot, content) {
 
 	const topRAGinformations = extractRelevantRAGinfo(chatbot, question, {
 		RAG: RAGinformations,
+		maxResults: options && options.maxResults ? options.maxResults : undefined,
 	});
 
 	return {
