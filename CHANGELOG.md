@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.11.3 (2025-05-22)
+
+### Fix
+
+- **markdown**: intégration du paramètre "separator" à la directive !RAG
+- **ai**: possibilité de définir le séparateur à chaque appel du RAG
+- **markdown**: suppression de la directive !RAG dans le prompt après extraction des informations de cette directive
+- **markdown**: intégration du paramètre maxResults à la directive !RAG
+- **markdown**: problème résolu en cas de message avec un prompt et le prompt qui commence en premier
+
 ## 7.11.2 (2025-05-21)
 
 ### Fix
