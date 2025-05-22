@@ -48,5 +48,6 @@ export function parseRAGdirective(content) {
 	return {
 		question: RAGparameters[0][1].trim(),
 		optionsList: RAGparameters[1][1],
+		RAGline: RAGline,
 	};
 }

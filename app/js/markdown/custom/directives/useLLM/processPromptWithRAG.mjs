@@ -21,7 +21,7 @@ export async function processPromptWithRAG(chatbot, content) {
 	});
 
 	return {
-		content,
+		content: content.replace(RAGdirective.RAGline, ""),
 		RAGinformations: topRAGinformations,
 	};
 }
