@@ -21,7 +21,9 @@ function createVectorRAGinformations(informations) {
 	}
 }
 
-export async function getRAGcontent(informations) {
+export async function getRAGcontent(informations, options) {
+	const separator =
+		options && options.separator ? options.separator : yaml.useLLM.RAGseparator;
 	let RAGcontent;
 	if (informations) {
 		const isArray = Array.isArray(informations);
@@ -39,7 +41,7 @@ export async function getRAGcontent(informations) {
 					? await fetchContentFromMultipleSources(sourceRAG)
 					: await fetchContent(sourceRAG);
 				RAGcontent = prepareChunksForRAG(data, {
-					separator: yaml.useLLM.RAGseparator,
+					separator: separator,
 				});
 				const RAGvector = createVectorRAGinformations(RAGcontent);
 				return { content: RAGcontent, vector: RAGvector };
@@ -58,7 +60,7 @@ export async function getRAGcontent(informations) {
 				RAGinformations = informations.trim();
 			}
 			RAGcontent = prepareChunksForRAG(RAGinformations, {
-				separator: yaml.useLLM.RAGseparator,
+				separator: separator,
 			});
 			const RAGvector = createVectorRAGinformations(RAGcontent);
 			return { content: RAGcontent, vector: RAGvector };
