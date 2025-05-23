@@ -12,6 +12,7 @@ export async function processPromptWithRAG(chatbot, content) {
 
 	const { question, optionsList } = RAGdirective;
 	const options = parseOptions(optionsList);
+	const RAGprompt = options.prompt ? options.prompt : "";
 
 	const RAGinformations = options.url
 		? await getRAGcontent(options.url, {
@@ -27,5 +28,6 @@ export async function processPromptWithRAG(chatbot, content) {
 	return {
 		content: content.replace(RAGdirective.RAGline, ""),
 		RAGinformations: topRAGinformations,
+		RAGprompt: RAGprompt,
 	};
 }

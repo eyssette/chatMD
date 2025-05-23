@@ -7,6 +7,9 @@ import { encodeString } from "../utils/strings.mjs";
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(chatbot, userPrompt, options) {
 	let RAGinformations = options && options.RAG;
+	const RAGprompt = options.RAGprompt
+		? options.RAGprompt
+		: yaml.useLLM.RAGprompt;
 	let messageElement = options && options.messageElement;
 	let container = options && options.container;
 	const inline = options && options.inline;
@@ -21,7 +24,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			temperature: 0.7,
 		};
 		if (RAGinformations.length > 0) {
-			RAGinformations = yaml.useLLM.RAGprompt + RAGinformations;
+			RAGinformations = RAGprompt + RAGinformations;
 		}
 		const APIurl = yaml.useLLM.url;
 		let APItype;

@@ -22,14 +22,17 @@ export async function processMessageWithPrompt(
 					appendMessageToContainer(sectionElement, messageElement);
 				}
 				let RAGinformations = "";
+				let RAGprompt = "";
 				if (content.includes("!RAG: ")) {
 					const promptWithRag = await processPromptWithRAG(chatbot, content);
 					content = promptWithRag.content;
 					RAGinformations = promptWithRag.RAGinformations;
+					RAGprompt = promptWithRag.RAGprompt;
 				}
 				// Gestion du contenu qui fait appel à un LLM
 				await getAnswerFromLLM(chatbot, content, {
 					RAG: RAGinformations,
+					RAGprompt: RAGprompt,
 					messageElement: sectionElement,
 					container: messageElement,
 					inline: true,
