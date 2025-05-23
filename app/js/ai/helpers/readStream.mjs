@@ -60,6 +60,7 @@ export async function readStreamFromLLM(
 					if (!APItype) {
 						APItype = detectApiType(cleanedChunk);
 					}
+					if (!APItype) continue;
 					if (APItype === "openai" || APItype == "cohere_v2") {
 						if (cleanedChunk.indexOf("[DONE]") !== -1) {
 							LLMactive = false;
