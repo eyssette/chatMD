@@ -52,14 +52,14 @@ export async function readStreamFromLLM(
 
 			for (const chunkElement of chunkArray) {
 				try {
+					if (chunkElement.startsWith("event: ")) continue;
 					const cleanedChunk = chunkElement.trim().replace(/^data: /, "");
 
 					// Si le type d'API n'est pas encore détecté, on tente de l'inférer
 					if (!APItype) {
 						APItype = detectApiType(cleanedChunk);
 					}
-
-					if (APItype === "openai") {
+					if (APItype === "openai" || APItype == "cohere_v2") {
 						if (cleanedChunk.indexOf("[DONE]") !== -1) {
 							LLMactive = false;
 							continue;
@@ -75,15 +75,18 @@ export async function readStreamFromLLM(
 
 					if (!chunkObject) continue;
 
-					if (APItype === "cohere") {
-						const cohereAPIversion =
-							yaml &&
-							yaml.useLLM &&
-							yaml.useLLM.url &&
-							yaml.useLLM.url.match(/v\d+/)
-								? yaml.useLLM.url.match(/v\d+/)[0]
-								: "v2";
-						if (chunkObject.event_type === "text-generation" && LLMactive) {
+					if (APItype.includes("cohere")) {
+						const cohereAPIversion = APItype.match(/v\d+/)
+							? APItype.match(/v\d+/)[0]
+							: "";
+						let isTextGeneration;
+						if (cohereAPIversion == "v1") {
+							isTextGeneration = chunkObject.event_type === "text-generation";
+						}
+						if (cohereAPIversion == "v2") {
+							isTextGeneration = chunkObject.delta;
+						}
+						if (cohereAPIversion && isTextGeneration && LLMactive) {
 							const chunkMessage =
 								extractCohereText(chunkObject, cohereAPIversion) || "";
 							accumulatedChunks += chunkMessage;

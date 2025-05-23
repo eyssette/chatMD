@@ -23,10 +23,19 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 		if (RAGinformations.length > 0) {
 			RAGinformations = yaml.useLLM.RAGprompt + RAGinformations;
 		}
-		const isCohere = yaml && yaml.useLLM.url.includes("cohere");
-		const APItype = isCohere ? "cohere" : undefined;
-
+		const APIurl = yaml.useLLM.url;
+		let APItype;
+		const isCohere = yaml && APIurl.includes("cohere");
 		if (isCohere) {
+			if (APIurl.includes("v1")) {
+				APItype = "cohere_v1";
+			}
+			if (APIurl.includes("v2")) {
+				APItype = "cohere_v2";
+			}
+		}
+
+		if (APItype == "cohere_v1") {
 			bodyObject.message =
 				yaml.useLLM.preprompt +
 				userPrompt +
@@ -49,7 +58,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			];
 		}
 		try {
-			fetch(yaml.useLLM.url, {
+			fetch(APIurl, {
 				method: "POST",
 				headers: {
 					Authorization: "Bearer " + yaml.useLLM.apiKey,
