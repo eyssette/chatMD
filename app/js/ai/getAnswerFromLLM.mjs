@@ -19,7 +19,6 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			frequency_penalty: 0,
 			presence_penalty: 0,
 			temperature: 0.7,
-			top_p: 0.95,
 		};
 		if (RAGinformations.length > 0) {
 			RAGinformations = yaml.useLLM.RAGprompt + RAGinformations;
