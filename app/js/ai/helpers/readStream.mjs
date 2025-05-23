@@ -54,6 +54,7 @@ export async function readStreamFromLLM(
 				try {
 					if (chunkElement.startsWith("event: ")) continue;
 					const cleanedChunk = chunkElement.trim().replace(/^data: /, "");
+					if (!cleanedChunk.startsWith("{")) continue;
 
 					// Si le type d'API n'est pas encore détecté, on tente de l'inférer
 					if (!APItype) {
