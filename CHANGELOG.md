@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.11.4 (2025-05-23)
+
+### Fix
+
+- **ai**: si on n'a pas détecté le type d'API, on ne traite pas le chunk
+- **ai**: cleanedChunk doit commencer par “{“
+- **ai**: résolution des problèmes de connexion à l'API de cohere v2
+- **ai**: suppression du paramètre top_p
+
 ## 7.11.3 (2025-05-22)
 
 ### Fix
