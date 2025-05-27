@@ -122,10 +122,10 @@ describe("shuffleArray", () => {
 describe("randomizeArrayWithFixedElements", () => {
 	it("returns an array of the same length as the input", () => {
 		const input = [
-			["A", 0, false],
-			["B", 1, true],
-			["C", 2, false],
-			["D", 3, true],
+			{ text: "A", link: "url0", isRandom: false },
+			{ text: "B", link: "url1", isRandom: true },
+			{ text: "C", link: "url2", isRandom: false },
+			{ text: "D", link: "url3", isRandom: true },
 		];
 
 		const result = randomizeArrayWithFixedElements([...input]);
@@ -134,10 +134,10 @@ describe("randomizeArrayWithFixedElements", () => {
 
 	it("keeps fixed elements in their original positions", () => {
 		const input = [
-			["A", 0, false],
-			["B", 1, true],
-			["C", 2, false],
-			["D", 3, true],
+			{ text: "A", link: "url0", isRandom: false },
+			{ text: "B", link: "url1", isRandom: true },
+			{ text: "C", link: "url2", isRandom: false },
+			{ text: "D", link: "url3", isRandom: true },
 		];
 
 		const result = randomizeArrayWithFixedElements([...input]);
@@ -147,10 +147,10 @@ describe("randomizeArrayWithFixedElements", () => {
 
 	it("preserves the set of randomizable elements but in different order", () => {
 		const input = [
-			["X", 0, false],
-			["Y", 1, true],
-			["Z", 2, true],
-			["W", 3, false],
+			{ text: "X", link: "url0", isRandom: false },
+			{ text: "Y", link: "url1", isRandom: true },
+			{ text: "Z", link: "url2", isRandom: true },
+			{ text: "W", link: "url3", isRandom: false },
 		];
 
 		const originalRandomizables = input.filter((el) => el[2]);
@@ -162,9 +162,9 @@ describe("randomizeArrayWithFixedElements", () => {
 
 	it("handles an array with only fixed elements", () => {
 		const input = [
-			["L", 0, false],
-			["M", 1, false],
-			["N", 2, false],
+			{ text: "L", link: "url0", isRandom: false },
+			{ text: "M", link: "url1", isRandom: false },
+			{ text: "N", link: "url2", isRandom: false },
 		];
 
 		const result = randomizeArrayWithFixedElements([...input]);
@@ -173,13 +173,13 @@ describe("randomizeArrayWithFixedElements", () => {
 
 	it("produces different random arrangements across multiple calls", () => {
 		const input = [
-			["A", 0, false],
-			["B", 1, true],
-			["C", 2, true],
-			["D", 3, true],
-			["E", 4, false],
-			["F", 4, true],
-			["G", 4, true],
+			{ text: "A", link: "url0", isRandom: false },
+			{ text: "B", link: "url1", isRandom: true },
+			{ text: "C", link: "url2", isRandom: true },
+			{ text: "D", link: "url3", isRandom: true },
+			{ text: "E", link: "url4", isRandom: false },
+			{ text: "F", link: "url4", isRandom: true },
+			{ text: "G", link: "url4", isRandom: true },
 		];
 
 		const arrangements = new Set();
@@ -195,7 +195,7 @@ describe("randomizeArrayWithFixedElements", () => {
 				result[5],
 				result[6],
 			]
-				.map((el) => el[0]) // use element name for comparison
+				.map((el) => el.text) // use element name for comparison
 				.join(",");
 
 			arrangements.add(randomizedPart);
@@ -209,9 +209,9 @@ describe("randomizeArrayWithFixedElements", () => {
 describe("shouldBeRandomized", () => {
 	it("returns true if at least one element has true as the third value", () => {
 		const input = [
-			["Option A", 0, false],
-			["Option B", 1, true],
-			["Option C", 2, false],
+			{ text: "Option A", link: "url0", isRandom: false },
+			{ text: "Option B", link: "url1", isRandom: true },
+			{ text: "Option C", link: "url2", isRandom: false },
 		];
 		const result = shouldBeRandomized(input);
 		expect(result).toBeTrue();

@@ -42,7 +42,7 @@ export function randomizeArrayWithFixedElements(array) {
 
 	// On distingue les éléments fixes et les éléments à ordonner de manière aléatoire
 	array.forEach(function (element) {
-		if (!element[2]) {
+		if (!element.isRandom) {
 			fixedElements.push(element);
 		} else {
 			randomizableElements.push(element);
@@ -55,7 +55,7 @@ export function randomizeArrayWithFixedElements(array) {
 	// On reconstruit le tableau en réinsérant les éléments fixes au bon endroit
 	var finalArray = [];
 	array.forEach(function (element) {
-		if (!element[2]) {
+		if (!element.isRandom) {
 			finalArray.push(element);
 		} else {
 			finalArray.push(randomizableElements.shift());
@@ -70,7 +70,7 @@ export function shouldBeRandomized(array) {
 	if (Array.isArray(array)) {
 		const arrayLength = array.length;
 		for (let i = 0; i < arrayLength; i++) {
-			if (array[i][2] === true) {
+			if (array[i].isRandom === true) {
 				return true;
 			}
 		}
