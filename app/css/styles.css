@@ -175,7 +175,7 @@ button {
 }
 
 .bot-message > div:first-child:not(.admonition) > *,
-section.unique > *:first-child:not(.admonition) {
+section.unique > *:first-child:not(.admonition):not(pre) {
 	display: inline;
 }
 .bot-message > div:first-child:not(.admonition) > .messageOptions {
