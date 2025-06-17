@@ -1,5 +1,22 @@
 # Changelog
 
+## 7.12.0 (2025-06-18)
+
+### Feat
+
+- **markdown**: pour les variables fixes, possibilité d'utiliser un tableau de données dans le YAML plutôt que le séparateur "///"
+
+### Fix
+
+- **css**: résolution problème d'affichage d'un bloc code au début d'une section "unique"
+- **chatbot**: ajout automatique de l'extension .md au nom de fichier si le fetch a échoué la première fois
+- **utils**: randomizeArrayWithFixedElements et shouldBeRandomized suivent maintenant la nouvelle syntaxe (avec un objet plutôt qu'un tableau)
+- **markdown**: possibilité de customiser le RAGprompt dans la directive !RAG
+
+### CI
+
+- inclusion de tous les fichiers et dossiers dans le modèle de déploiement
+
 ## 7.11.4 (2025-05-23)
 
 ### Fix
