@@ -11,7 +11,9 @@ export function processFixedVariables(content, preprocess = false) {
 			const positionLastMatch = content.lastIndexOf(match);
 			if (yaml && yaml.variables && yaml.variables[variableName]) {
 				const variableValue = yaml.variables[variableName];
-				const variableValueSplit = variableValue.split("///");
+				const variableValueSplit = Array.isArray(variableValue)
+					? variableValue
+					: variableValue.split("///");
 				const variableValueChoice = getRandomElement(variableValueSplit);
 				if (preprocess && positionMatch == positionLastMatch) {
 					// Les variables fixes qui ont été traitées au tout début, avant de parser le contenu du Markdown, sont ensuite supprimés.
