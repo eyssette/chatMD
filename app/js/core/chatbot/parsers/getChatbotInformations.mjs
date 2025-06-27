@@ -6,15 +6,17 @@ import {
 	handleDynamicContent,
 	handleChoiceOptions,
 	handleRegularContent,
-} from "./helpers/processorsMainContent.mjs";
+} from "./helpers/processorsChatbotContent.mjs";
 
-export function getMainContentInformations(
-	mdWithoutYaml,
-	indexEndIntroduction,
-	yaml,
-) {
-	const mainContent = mdWithoutYaml.substring(indexEndIntroduction);
-	const mainContentLines = mainContent.split("\n");
+export function getChatbotInformations(mdWithoutYaml, introduction, yaml) {
+	const indexEndIntroduction = introduction.indexEnd;
+	const chatbotTitle = introduction.chatbotTitle;
+	const initialMessage = introduction.initialMessage;
+	const titleLine = chatbotTitle ? "## " + chatbotTitle : "## Chatbot";
+	const introductionContent = titleLine + "\n" + initialMessage + "\n";
+	const chatbotContent =
+		introductionContent + mdWithoutYaml.substring(indexEndIntroduction);
+	const chatbotContentLines = chatbotContent.split("\n");
 	const chatbotData = [];
 
 	const currentData = {
@@ -28,9 +30,12 @@ export function getMainContentInformations(
 
 	let searchForKeywords = true;
 
-	for (let line of mainContentLines) {
+	for (let line of chatbotContentLines) {
 		// Gestion des titres de réponse
-		if (detectedResponseTitle(line, yaml)) {
+		if (detectedResponseTitle(line, yaml) || (titleLine && line == titleLine)) {
+			if (titleLine && line == titleLine) {
+				line = line.replace("## ", "");
+			}
 			handleNewResponseTitle(line, yaml, currentData, chatbotData);
 			searchForKeywords = true;
 			continue;

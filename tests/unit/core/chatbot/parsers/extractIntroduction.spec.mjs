@@ -1,7 +1,4 @@
-import {
-	extractIntroduction,
-	extractInformationsFromInitialMessage,
-} from "../../../../../app/js/core/chatbot/parsers/extractIntroduction.mjs";
+import { extractIntroduction } from "../../../../../app/js/core/chatbot/parsers/extractIntroduction.mjs";
 
 describe("extractIntroduction", () => {
 	it("extracts the title, the initial message and the end of the introduction correctly", () => {
@@ -63,65 +60,5 @@ describe("extractIntroduction", () => {
 			"This is an intro.\nAnd there is no other content.",
 		);
 		expect(result.indexEnd).toBe(input.trim().length);
-	});
-});
-
-describe("extractInformationsFromInitialMessage", () => {
-	const yaml = { obfuscate: false };
-
-	it("splits intro, detects choices (with choice text, choice link and random status)", () => {
-		const input = `Welcome!\n1. [First choice](First option)\n2) [Second choice](Second option)`;
-		const { content, choiceOptions } = extractInformationsFromInitialMessage(
-			input,
-			yaml,
-		);
-
-		expect(content).toEqual(["Welcome!"]);
-		expect(choiceOptions.length).toBe(2);
-		expect(choiceOptions[0]).toEqual({
-			text: "First choice",
-			link: "First option",
-			isRandom: false,
-		});
-		expect(choiceOptions[1]).toEqual({
-			text: "Second choice",
-			link: "Second option",
-			isRandom: true,
-		});
-	});
-
-	it("handles obfuscation when enabled", () => {
-		const obfuscatedYaml = { obfuscate: true };
-		const input = `Test\n1. [text](obfuscated Link)`;
-		const { content, choiceOptions } = extractInformationsFromInitialMessage(
-			input,
-			obfuscatedYaml,
-		);
-
-		const expectedLink = btoa("obfuscated Link");
-		expect(choiceOptions[0].link).toBe(expectedLink);
-		expect(content).toEqual(["Test"]);
-	});
-
-	it("handles choiceOption with no text", () => {
-		const input = `Test\n1. [](my link)`;
-		const defaultChoiceOptionText = "suite";
-		const { content, choiceOptions } =
-			extractInformationsFromInitialMessage(input);
-
-		expect(content).toEqual(["Test"]);
-		expect(choiceOptions[0].text).toBe(defaultChoiceOptionText);
-		expect(choiceOptions[0].link).toBe("my link");
-	});
-
-	it("returns only content when no list is found", () => {
-		const input = `Line one\nLine two`;
-		const { content, choiceOptions } = extractInformationsFromInitialMessage(
-			input,
-			yaml,
-		);
-
-		expect(content).toEqual(["Line one", "Line two"]);
-		expect(choiceOptions).toEqual([]);
 	});
 });

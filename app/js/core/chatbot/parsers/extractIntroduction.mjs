@@ -1,6 +1,3 @@
-import { config } from "../../../config.mjs";
-import { detectChoiceOption } from "./helpers/detectChoiceOption.mjs";
-
 export function extractIntroduction(mdWithoutYaml) {
 	// On récupère la séparation entre la première partie des données (titre + message principal) et la suite avec les réponses possibles
 	mdWithoutYaml = mdWithoutYaml.trim();
@@ -26,35 +23,5 @@ export function extractIntroduction(mdWithoutYaml) {
 		indexEnd: indexEndIntroduction,
 		chatbotInitialMessage: initialMessageContent,
 		chatbotTitle: chatbotTitle ? chatbotTitle.replace("# ", "").trim() : "",
-	};
-}
-
-export function extractInformationsFromInitialMessage(
-	chatbotInitialMessage,
-	yaml,
-) {
-	const initialMessageContentLines = chatbotInitialMessage.split("\n");
-	let initialChoiceOptions = [];
-	let initialMessageContentArray = [];
-	for (let line of initialMessageContentLines) {
-		line = line.replace(/^>\s?/, "");
-		const choiceInformations = detectChoiceOption(line);
-		if (choiceInformations.isChoice) {
-			// Récupération des options dans le message initial, s'il y en a
-			let link = choiceInformations.url;
-			link = yaml && yaml.obfuscate ? btoa(link) : link;
-			let text = choiceInformations.text;
-			initialChoiceOptions.push({
-				text: text ? text : config.defaultChoiceOptionText,
-				link: link,
-				isRandom: choiceInformations.isRandom,
-			});
-		} else {
-			initialMessageContentArray.push(line);
-		}
-	}
-	return {
-		content: initialMessageContentArray,
-		choiceOptions: initialChoiceOptions,
 	};
 }

@@ -1,9 +1,6 @@
 import { removeYaml } from "./parsers/helpers/removeYaml.mjs";
-import {
-	extractIntroduction,
-	extractInformationsFromInitialMessage,
-} from "./parsers/extractIntroduction.mjs";
-import { getMainContentInformations } from "./parsers/extractMainContent.mjs";
+import { extractIntroduction } from "./parsers/extractIntroduction.mjs";
+import { getChatbotInformations } from "./parsers/getChatbotInformations.mjs";
 import { processFixedVariables } from "../../markdown/custom/variablesFixed.mjs";
 
 export function parseMarkdown(md, yaml) {
@@ -20,25 +17,36 @@ export function parseMarkdown(md, yaml) {
 		md = processFixedVariables(md, true);
 	}
 
-	// On récupère l'introduction du Chatbot (titre et message initial)
-	const chatbotIntroduction = extractIntroduction(md);
+	// On extrait dans le Mardown le contenu de l'introduction
+	const introductionContent = extractIntroduction(md);
+	const chatbotTitle = introductionContent.chatbotTitle;
+	const initialMessage = introductionContent.chatbotInitialMessage;
+	const indexEndIntroduction = introductionContent.indexEnd;
 
-	// On récupère les informations contenues dans le message intial (contenu et choix proposés par le chatbot)
-	const chatbotInitialMessageInformations =
-		extractInformationsFromInitialMessage(
-			chatbotIntroduction.chatbotInitialMessage,
-			yaml,
-		);
+	const introduction = {
+		indexEnd: indexEndIntroduction,
+		chatbotTitle: chatbotTitle,
+		initialMessage: initialMessage,
+	};
 
-	// On récupère les informations contenues dans le contenu principal et on crée la structure de données du chatbot
+	// On extrait les informations du chatbot dans la source en Markdown
+	let chatbotInformations = getChatbotInformations(md, introduction, yaml);
+
+	// On récupère les informations contenues dans l'introduction du chatbot
+	const initialMessageContent = chatbotInformations[0].content;
+	const initialMessageChoiceOptions = chatbotInformations[0].choiceOptions;
+
+	// On supprime les informations de l'introduction du chatbot dans la liste des réponses possibles
+	chatbotInformations.shift();
+
+	// On crée la structure de données du chatbot
 	let chatbotData = {
-		responses: getMainContentInformations(
-			md,
-			chatbotIntroduction.indexEnd,
-			yaml,
-		),
-		initialMessage: chatbotInitialMessageInformations,
-		title: chatbotIntroduction.chatbotTitle,
+		responses: chatbotInformations,
+		initialMessage: {
+			content: initialMessageContent,
+			choiceOptions: initialMessageChoiceOptions,
+		},
+		title: chatbotTitle,
 	};
 
 	return chatbotData;
