@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.12.1 (2025-06-27)
+
+### Fix
+
+- **core**: unification du parsing du Markdown dans l'introduction et le contenu principal (permet d'utiliser des blocs conditionnels dès l'introduction)
+
 ## 7.12.0 (2025-06-18)
 
 ### Feat
