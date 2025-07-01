@@ -11,7 +11,7 @@ import {
 export function getChatbotInformations(mdWithoutYaml, introduction, yaml) {
 	const indexEndIntroduction = introduction.indexEnd;
 	const chatbotTitle = introduction.chatbotTitle;
-	const initialMessage = introduction.initialMessage;
+	const initialMessage = introduction.initialMessage.replace(/^>\s?/gm, "");
 	const titleLine = chatbotTitle ? "## " + chatbotTitle : "## Chatbot";
 	const introductionContent = titleLine + "\n" + initialMessage + "\n";
 	const chatbotContent =
