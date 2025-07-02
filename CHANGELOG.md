@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.12.2 (2025-07-02)
+
+### Fix
+
+- **core**: écriture possible des choiceOptions avec des liens de type ancre
+- **core**: fix du parsing du markdown dans le message initial pour accepter l'ancienne syntaxe
+
 ## 7.12.1 (2025-06-27)
 
 ### Fix
