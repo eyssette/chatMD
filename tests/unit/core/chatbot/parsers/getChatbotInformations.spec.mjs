@@ -322,4 +322,27 @@ Another line of text.`;
 			keywords: [],
 		});
 	});
+
+	it("handles choiceOption with anchor links", () => {
+		const md = "## Test\nContenu\n1. [contenu du lien](#Lien-de-type-ancre)";
+		const result = getChatbotInformations(
+			md,
+			{ chatbotTitle: "", initialMessage: "", indexEnd: 0 },
+			yaml,
+		);
+
+		expect(result[1]).toEqual({
+			title: "Test",
+			content: ["Contenu"],
+			choiceOptions: [
+				{
+					text: "contenu du lien",
+					link: "Lien de type ancre",
+					isRandom: false,
+					condition: "",
+				},
+			],
+			keywords: [],
+		});
+	});
 });

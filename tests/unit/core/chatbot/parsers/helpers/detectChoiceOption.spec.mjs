@@ -143,4 +143,9 @@ describe("detectChoiceOption", () => {
 		expect(result4.isChoice).toBeFalse();
 		expect(result4.isRandom).toBeFalse();
 	});
+
+	it("detects an ordered list with an anchor internal link, as a choice options", () => {
+		const result1 = detectChoiceOption("1. [text](#link)");
+		expect(result1.isChoice).toBeTrue();
+	});
 });

@@ -58,6 +58,10 @@ export function handleChoiceOptions(choiceInformations, yaml, currentData) {
 		currentData.choiceOptions = [];
 	}
 	let link = choiceInformations.url;
+	// Compatibilité avec les liens de type ancre
+	if (link.startsWith("#")) {
+		link = link.slice(1).replaceAll("-", " ");
+	}
 	link = yaml.obfuscate ? btoa(link) : link;
 	let text = choiceInformations.text;
 	currentData.choiceOptions.push({
