@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.12.3 (2025-09-17)
+
+### Fix
+
+- **widget**: amélioration de l'apparence du widget
+- **lib**: suppression attribut disabled pour les listes de tâches
+
+### Test
+
+- ajout d'un serveur local de test pour le widget
+
 ## 7.12.2 (2025-07-02)
 
 ### Fix
