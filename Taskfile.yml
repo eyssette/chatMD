@@ -59,10 +59,11 @@ tasks:
   minify-widget:
     sources:
       - widget/widget.js
+      - widget/widget.min.js
     generates:
       - widget/widget.min.js
     cmds:
-      - npx rollup widget/widget.js --file widget.min.js --format iife  --compact  -p @rollup/plugin-terser
+      - npx rollup widget/widget.js --file widget/widget.min.js --format iife  --compact  -p @rollup/plugin-terser
 
   push:
     vars:
