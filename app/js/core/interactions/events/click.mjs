@@ -187,7 +187,10 @@ function handleClickOnChatContainer(chatbot) {
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
 				chatbot.nextMessage.errorsCounter = 0;
-				scrollWindow({ scrollMode: "instant" });
+				// On scrolle vers le bas de la page pour voir la nouvelle réponse, avec un petit délai pour être sûr que le message a été ajouté au DOM
+				setTimeout(() => {
+					scrollWindow({ scrollMode: "instant" });
+				}, 10);
 			}
 		}
 	});
