@@ -32,13 +32,26 @@ export function convertLatexExpressions(string, noBackticks) {
 				.replaceAll("&#92;&#92;", "\\\\");
 			// On convertit la formule mathématique en HTML avec Katex
 			if (window.katex) {
-				const stringWithLatex = window.katex.renderToString(
-					mathInExpressionLatex,
-					{
-						displayMode: inlineMaths,
-					},
-				);
-				string = string.replace(expressionLatex, stringWithLatex);
+				try {
+					const stringWithLatex = window.katex.renderToString(
+						mathInExpressionLatex,
+						{
+							displayMode: inlineMaths,
+						},
+					);
+					string = string.replace(expressionLatex, stringWithLatex);
+				} catch (error) {
+					if (error instanceof window.katex.ParseError) {
+						const rendered =
+							`Error in LaTeX '${mathInExpressionLatex}': ${error.message}`
+								.replace(/&/g, "&")
+								.replace(/</g, "<")
+								.replace(/>/g, ">");
+						string = string.replace(expressionLatex, rendered);
+					} else {
+						throw error;
+					}
+				}
 			}
 		}
 	}
