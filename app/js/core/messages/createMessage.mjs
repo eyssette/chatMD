@@ -31,7 +31,7 @@ export async function createMessage(chatbot, message, options) {
 	if (!isUser) {
 		// Si c'est un message du Bot, on traite les directives et les plugins
 		message = processDirectives(chatbot, message, messageElement);
-		message = processPlugins(message);
+		message = await processPlugins(message);
 	}
 
 	const checkPromptsinMessage = extractMarkdownAndPrompts(message);

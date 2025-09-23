@@ -79,6 +79,7 @@ config.allowedPlugins = {
 		css: "<style>.katex-display{max-width:80%} .katex-display .textFitted{white-space:nowrap}</style>",
 	},
 	lightbox: { js: "js/plugins/lightbox.js" },
+	readcsv: { js: "js/plugins/papaparse.min.js" },
 };
 
 config.pluginDependencies = {
