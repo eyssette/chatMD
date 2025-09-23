@@ -1,6 +1,6 @@
 {
   "name": "chatmd",
-  "version": "7.12.3",
+  "version": "7.13.0",
   "description": "Un outil libre et gratuit pour créer un chatbot à partir d'un simple fichier en Markdown",
   "main": "script.min.js",
   "devDependencies": {

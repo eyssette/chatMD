@@ -1,5 +1,18 @@
 # Changelog
 
+## 7.13.0 (2025-09-24)
+
+### Feat
+
+- **core**: plugin readcsv pour lire un fichier CSV, filtrer les données en fonction d'une condition, et les afficher avec un template
+
+### Fix
+
+- **core**: gestion des erreurs dans le plugin readcsv
+- **markdown**: gestion des erreurs Katex
+- **core**: léger délai avant le scroll en bas de page après affichage de la réponse du chatbot
+- **widget**: correction erreur Taskfile pour la minification du widget
+
 ## 7.12.3 (2025-09-17)
 
 ### Fix
