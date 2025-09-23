@@ -14,8 +14,8 @@ async function parseCsv(url) {
 			complete: (results) => {
 				return resolve(results);
 			},
-			error: (error) => {
-				return reject(error);
+			error: () => {
+				return reject(null);
 			},
 		});
 	});
@@ -91,34 +91,36 @@ export async function processCsv(message) {
 
 		// Parse le CSV à partir de l'URL
 		const csvObject = await parseCsv(url);
-		let data = csvObject.data;
+		if (csvObject) {
+			let data = csvObject.data;
 
-		const linesCodeBlock = codeBlockContent.split("\n");
+			const linesCodeBlock = codeBlockContent.split("\n");
 
-		let condition = null;
-		// Filtrer les lignes pour récupérer la condition si elle existe
-		const templateLines = linesCodeBlock.filter((line) => {
-			if (line.trim().startsWith("condition:")) {
-				// Récupère la condition (tout après "condition:")
-				condition = line.replace(/^condition:\s*/, "");
-				return false; // exclut la ligne condition du template
+			let condition = null;
+			// Filtrer les lignes pour récupérer la condition si elle existe
+			const templateLines = linesCodeBlock.filter((line) => {
+				if (line.trim().startsWith("condition:")) {
+					// Récupère la condition (tout après "condition:")
+					condition = line.replace(/^condition:\s*/, "");
+					return false; // exclut la ligne condition du template
+				}
+				return true; // conserve toutes les autres lignes
+			});
+
+			const template = templateLines.join("\n").trim();
+
+			// Si une condition est présente, filtre les données du CSV
+			if (condition) {
+				data = filterTable(data, condition);
+				data.shift(); // supprime la ligne d'en-têtes après le filtrage
 			}
-			return true; // conserve toutes les autres lignes
-		});
 
-		const template = templateLines.join("\n").trim();
+			// Remplit le template avec les valeurs des lignes filtrées
+			const result = fillTemplateFromValuesFromArray(template, data);
 
-		// Si une condition est présente, filtre les données du CSV
-		if (condition) {
-			data = filterTable(data, condition);
-			data.shift(); // supprime la ligne d'en-têtes après le filtrage
+			// Remplace le bloc original dans le message par le résultat formaté
+			message = message.replace(fullMatch, result);
 		}
-
-		// Remplit le template avec les valeurs des lignes filtrées
-		const result = fillTemplateFromValuesFromArray(template, data);
-
-		// Remplace le bloc original dans le message par le résultat formaté
-		message = message.replace(fullMatch, result);
 	}
 
 	return message;

@@ -9,11 +9,28 @@ export async function processPlugins(message) {
 	}
 	if (yaml && yaml.plugins && yaml.plugins.includes("readcsv")) {
 		message = await new Promise((resolve) => {
+			// Délai autorisé de traitement du csv (en millisecondes)
+			const TIMEOUT_MS = 5000;
+			const start = Date.now();
+			// On vérifie que la librairie pour lire les CSV est bien chargée
 			const interval = setInterval(async () => {
-				if (window.Papa) {
+				// Si le processus prend trop de temps, on arrête et on renvoie le message initial, non modifié
+				if (Date.now() - start > TIMEOUT_MS) {
 					clearInterval(interval);
-					const result = await processCsv(message);
-					resolve(result);
+					resolve(message);
+				}
+				// Si la librairie pour lire les CSV est bien chargée, on procède au traitement des données, sinon on renvoie le message initial non modifiée
+				if (window.Papa) {
+					try {
+						clearInterval(interval);
+						const result = await processCsv(message);
+						resolve(result);
+					} catch (error) {
+						if (error) {
+							console.log(error);
+						}
+						resolve(message);
+					}
 				}
 			}, 500);
 		});
