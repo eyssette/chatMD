@@ -33,9 +33,13 @@ const sanitizeCodeAllowedOperations = [
 	".",
 ];
 
-// Sanitize le code avant d'utiliser new Function
+// Nettoie une formule de test avant exécution dynamique (new Function).
+// Le but est de supprimer toute tentative d’injection de code non autorisé.
 function sanitizeCode(code) {
-	// On supprime d'abord dans l'expression les variables dynamiques
+	// On va d'abord enlever dans la formule tout ce qui est autorisé
+	// Pour pouvoir repérer à la fin ce qu'il faut supprimer
+
+	// On supprime d'abord dans l'expression les variables dynamiques, qui sont autorisées
 	let codeWithoutAllowedOperations = code.replace(
 		/tryConvertStringToNumber\(.*?\]\)/g,
 		"",
@@ -52,18 +56,23 @@ function sanitizeCode(code) {
 		/[0-9]*/g,
 		"",
 	);
-	// On supprime les chaînes de caractères entre guillemets
+	// On supprime les chaînes de caractères entre guillemets, qui sont autorisées
 	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
 		/".*?"/g,
 		"///",
 	);
-	// Ne reste plus qu'une suite de caractères non autorisées qu'on va supprimer dans le code
-	const forbiddenExpressions = codeWithoutAllowedOperations.split("///");
-	forbiddenExpressions.forEach((forbiddenExpression) => {
-		if (!forbiddenExpression.includes("undefined")) {
-			code = code.replaceAll(forbiddenExpression, "");
-		}
-	});
+
+	// On peut alors repérer les fragments interdits
+	const forbiddenExpressions = codeWithoutAllowedOperations
+		.split("///")
+		.map((exp) => exp.trim()) // On ne doit pas retirer les espaces
+		.filter((exp) => exp && exp !== "undefined"); // On ne doit pas retirer la formule "undefined"
+
+	// On retire ces fragments interdits du code initial
+	for (const forbidden of forbiddenExpressions) {
+		code = code.replaceAll(forbidden, "");
+	}
+
 	return code;
 }
 
