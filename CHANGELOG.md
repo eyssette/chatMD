@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.13.2 (2025-09-24)
+
+### Fix
+
+- **core**: traitement de la propriété "include" dans le YAML aussi pour le fichier index.md par défaut
+
 ## 7.13.1 (2025-09-24)
 
 ### Fix
