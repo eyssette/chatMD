@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.13.1 (2025-09-24)
+
+### Fix
+
+- **markdown**: résolution d'un bug dans le nettoyage des formules à évaluer dynamiquement (on ne pouvait pas faire un test avec une variable texte contenant des espaces, car les espaces étaient supprimées)
+
 ## 7.13.0 (2025-09-24)
 
 ### Feat
