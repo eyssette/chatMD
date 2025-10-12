@@ -7,6 +7,8 @@ import { processVariables } from "./helpers/processVariables.mjs";
 import { processDirectives } from "./helpers/processDirectives.mjs";
 import { processPlugins } from "./helpers/processPlugins.mjs";
 import { encodeString } from "../../utils/strings.mjs";
+import { yaml } from "../../markdown/custom/yaml.mjs";
+import { sendChatbotData } from "./helpers/plugins/scorm.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -87,6 +89,10 @@ export async function createMessage(chatbot, message, options) {
 			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
 			processSelectElements(chatbot, originalMessage, messageElement);
 		}
+	}
+	if (yaml && yaml.scorm) {
+		// Envoi des données SCORM (score et historique des actions)
+		sendChatbotData(chatbot);
 	}
 }
 
