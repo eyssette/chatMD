@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.0 (2025-10-13)
+
+### Feat
+
+- **core**: intégration de SCORM dans ChatMD pour communiquer l'historique des actions et de manière optionnelle un score et/ou un statut de réussite.
+
 ## 7.13.2 (2025-09-24)
 
 ### Fix
