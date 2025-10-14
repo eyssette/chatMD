@@ -50,6 +50,11 @@ export function startTypeWriter(content, element, accelerateFactor) {
 		// On fait apparaître d'un coup les iframes
 		content = content.replaceAll(regex.iframe, "`$1`");
 
+		// Fix pour les URL avec des paramètres : il faut remplacer le caractère "&" dans le texte du lien, par "&amp;"
+		content = content.replace(/>(http.*?)<\/a>/gi, (match, url) =>
+			url.includes("&") ? ">" + url.replaceAll("&", "&amp;") + "</a>" : match,
+		);
+
 		// On peut accéler l'effet machine à écrire en regroupant les caractères : au lieu de les afficher un par, on les affiche N par N (N = le facteur d'accélération)
 		if (accelerateFactor) {
 			content = splitHtmlIntoChunks(content, accelerateFactor);
