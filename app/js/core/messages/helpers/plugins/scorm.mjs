@@ -11,6 +11,9 @@ export function sendChatbotData(chatbot) {
 	const scormSuccess = dynamicVariables["scormSuccess"];
 	const success = typeof scormSuccess === "boolean" ? scormSuccess : undefined;
 
+	// Enregistrement d'un éventuel commentaire
+	const comment = dynamicVariables["scormComment"] || "";
+
 	// Enregistrement de l'historique des interactions avec le chatbot
 	const actionsHistory = Array.isArray(actions) ? actions.join("|") : "";
 
@@ -20,6 +23,7 @@ export function sendChatbotData(chatbot) {
 		score,
 		scoreMax,
 		success,
+		comment,
 		actionsHistory,
 	};
 	window.parent.postMessage(message, "*");
