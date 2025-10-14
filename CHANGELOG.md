@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1 (2025-10-14)
+
+### Fix
+
+- **core**: possibilité d'ajouter un commentaire dans l'intégration SCORM
+
 ## 8.0.0 (2025-10-13)
 
 ### Feat
