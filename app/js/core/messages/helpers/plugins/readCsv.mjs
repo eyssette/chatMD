@@ -64,7 +64,7 @@ function fillTemplateFromValuesFromArray(template, sourceArray) {
 			// Convertit l'index de placeholder $n en index de tableau
 			const i = parseInt(index, 10) - 1;
 			// Remplace le placeholder par la valeur correspondante de la colonne ou par une chaîne vide s'il n'y a pas de valeur
-			return row[i] !== undefined ? row[i] : "";
+			return row[i] !== undefined && row[i] !== null ? row[i] : "";
 		});
 
 	// Applique la transformation à chaque ligne du tableau
