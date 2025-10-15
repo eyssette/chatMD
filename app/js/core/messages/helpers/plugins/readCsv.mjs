@@ -1,25 +1,7 @@
 // Plugin pour lire un fichier CSV, filtrer les données en fonction d'une condition, et les afficher avec un template
 
 import { evaluateExpression } from "../../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
-
-// Lit un fichier CSV en ligne avec Papaparse et renvoie le tableau des données
-async function parseCsv(url) {
-	return new Promise((resolve, reject) => {
-		window.Papa.parse(url, {
-			download: true,
-			skipEmptyLines: true,
-			transform: (value) => {
-				return value.trim();
-			},
-			complete: (results) => {
-				return resolve(results);
-			},
-			error: () => {
-				return reject(null);
-			},
-		});
-	});
-}
+import { parseCsv } from "../../../../utils/csv.mjs";
 
 // Transforme une expression de filtre contenant des placeholders $1, $2 …
 // et des conditions de type "==" ou "<" …
