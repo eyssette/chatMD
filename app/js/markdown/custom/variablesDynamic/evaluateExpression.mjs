@@ -28,6 +28,7 @@ const sanitizeCodeAllowedOperations = [
 	".startsWith",
 	".endsWith",
 	".toLowerCase",
+	".toUpperCase",
 	".trim",
 	",",
 	".",
