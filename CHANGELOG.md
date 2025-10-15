@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.0.2 (2025-10-15)
+
+### Fix
+
+- **core**: meilleure gestion du parsing du CSV et prise en compte possible du JSON
+- **core**: on n'affiche pas les valeurs "null" avec readCsv
+- **markdown**: ajout de .toUpperCase aux opérations autorisées dans le calcul des variables dynamiques complexes
+- **core**: correction d'un bug d'affichage des URLs avec des paramètres dans l'effet typewriter (conversion de "&" en "&amp;")
+
 ## 8.0.1 (2025-10-14)
 
 ### Fix
