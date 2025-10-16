@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0 (2025-10-16)
+
+### Feat
+
+- **markdown**: traitement séquentiel des variables dynamiques et gestion des blocs conditionnels imbriqués
+
 ## 8.0.2 (2025-10-15)
 
 ### Fix
