@@ -1,4 +1,3 @@
-import { yaml } from "./yaml.mjs";
 import { handleBotMessage } from "./variablesDynamic/handleBotMessage.mjs";
 import { handleUserMessage } from "./variablesDynamic/handleUserMessage.mjs";
 
@@ -14,7 +13,6 @@ export function processDynamicVariables(
 		// Cas où le message vient du bot
 		const [processedMessage, processedGetLastMessage] = handleBotMessage(
 			message,
-			yaml,
 			dynamicVariables,
 			getLastMessage,
 		);
