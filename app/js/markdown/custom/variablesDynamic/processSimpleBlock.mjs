@@ -65,7 +65,7 @@ export function processSimpleBlock(message, dynamicVariables) {
 					return dynamicVariables[ref] !== undefined &&
 						dynamicVariables[ref] !== null
 						? dynamicVariables[ref]
-						: "`@" + ref + "`"; // on laisse la référence à la variable si elle n'est définie
+						: "`@" + ref + "`"; // on laisse la référence à la variable si elle n'est pas définie
 				});
 
 				dynamicVariables[varName] = resolved;
@@ -76,11 +76,7 @@ export function processSimpleBlock(message, dynamicVariables) {
 		// [2] EMPLOI d'une variable : on doit remplacer `@name` par sa valeur
 		if (match[3] !== undefined) {
 			const varName = match[3];
-			const value =
-				dynamicVariables[varName] !== undefined &&
-				dynamicVariables[varName] !== null
-					? dynamicVariables[varName]
-					: "`@" + varName + "`";
+			const value = dynamicVariables[varName] ? dynamicVariables[varName] : "";
 			output += value;
 			continue;
 		}
