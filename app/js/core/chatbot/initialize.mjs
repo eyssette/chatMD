@@ -80,7 +80,7 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 
 	// On récupère le contenu du message initial
 	const initialMessageContent = initialMessage.content
-		.join("\n")
+		.join("\n\n")
 		.replace('<section class="unique">', '<section class="unique" markdown>');
 	const initialMessageChoiceOptions = initialMessage.choiceOptions;
 
