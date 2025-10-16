@@ -32,6 +32,8 @@ const sanitizeCodeAllowedOperations = [
 	".trim",
 	",",
 	".",
+	"[",
+	"]",
 ];
 
 // Nettoie une formule de test avant exécution dynamique (new Function).
@@ -67,13 +69,15 @@ function sanitizeCode(code) {
 	const forbiddenExpressions = codeWithoutAllowedOperations
 		.split("///")
 		.map((exp) => exp.trim()) // On ne doit pas retirer les espaces
+		.map(
+			(exp) => exp !== "tryConvertStringToNumber" && exp !== "dynamicVariables",
+		) // On ne doit pas retirer les comparaisons avec d'autre variables dynamiques
 		.filter((exp) => exp && exp !== "undefined"); // On ne doit pas retirer la formule "undefined"
 
 	// On retire ces fragments interdits du code initial
 	for (const forbidden of forbiddenExpressions) {
 		code = code.replaceAll(forbidden, "");
 	}
-
 	return code;
 }
 

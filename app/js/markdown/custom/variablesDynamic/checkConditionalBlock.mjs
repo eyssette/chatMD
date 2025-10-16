@@ -17,7 +17,11 @@ export function checkConditionalBlock(condition, dynamicVariables) {
 			.replaceAll(
 				/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|&|\||$)/g,
 				function (match, comparisonSignLeft, value, comparisonSignRight) {
-					return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
+					const isComparisonWithDynamicVariables =
+						value.includes("dynamicVariables");
+					return isComparisonWithDynamicVariables
+						? `${comparisonSignLeft}${value} ${comparisonSignRight}`
+						: `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
 				},
 			)
 			.replaceAll('""', '"')
