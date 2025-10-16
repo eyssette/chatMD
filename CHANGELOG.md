@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1 (2025-10-16)
+
+### Fix
+
+- **markdown**: si une variable n'est pas définie, on n'affiche rien
+
 ## 8.1.0 (2025-10-16)
 
 ### Feat
