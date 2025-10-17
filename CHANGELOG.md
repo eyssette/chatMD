@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.1.2 (2025-10-17)
+
+### Fix
+
+- **core**: bug corrigé pour l'affichage des actions de clic sur des boutons avec calcul de variables
+- **markdown**: calcul corrigé pour les expressions autorisées avec evaluateExpression (pour le calcul des variables dynamiques)
+- **core**: dans le message initial, il faut conserver les sauts de ligne
+- **markdown**: possibilité d'utiliser une comparaison entre variables dynamiques
+
 ## 8.1.1 (2025-10-16)
 
 ### Fix
