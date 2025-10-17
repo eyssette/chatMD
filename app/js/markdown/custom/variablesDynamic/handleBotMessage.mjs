@@ -21,13 +21,21 @@ export function handleBotMessage(message, dynamicVariables, getLastMessage) {
 	message = output;
 
 	// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
+
+	// On masque l'assignation de la variable dans le bouton
 	message = message.replaceAll(
 		/ (@[^\s]*?=.*?)</g,
 		'<span class="hidden">$1</span><',
 	);
+
+	// On masque aussi, dans le message qui s'est affiché suite au clic sur le bouton, l'assignation de la variable qui a été transmise à ce message
 	message = message.replaceAll(
-		/>(@[^\s]*?=)/g,
-		'><span class="hidden">$1</span>',
+		/class="(.*)?">(@[^\s]*?=)/g,
+		(match, beforeVariable, variable) => {
+			return beforeVariable.includes("hidden")
+				? `class="${beforeVariable}">${variable}`
+				: `class="${beforeVariable}"><span class="hidden">${variable}</span>`;
+		},
 	);
 
 	// On nettoie le message en supprimant les lignes vides en trop

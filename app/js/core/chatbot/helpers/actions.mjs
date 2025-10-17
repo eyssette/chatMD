@@ -98,7 +98,13 @@ export async function processActions(chatbot, yaml, hasActions) {
 			// Si on a trouvé un bouton de réponse qui correspond
 			if (selectedChoiceOption) {
 				// On récupère le message à afficher
-				const messageToDisplay = selectedChoiceOption.innerHTML;
+				// Le message peut contenir une assignation de valeur à une variable
+				// On récupère le code de cette assignation pour qu'il soit traité
+				// lors de la création du message
+				const messageToDisplay = selectedChoiceOption.innerHTML.replace(
+					/<span class="hidden">(.*?)<\/span>/,
+					" $1",
+				);
 				// Et le message à envoyer au chatbot
 				let messageToChatbot = selectedChoiceOption
 					.getAttribute("href")
