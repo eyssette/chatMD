@@ -30,24 +30,44 @@ export function handleKeywords(line, currentData) {
 	currentData.keywords.push(line.replace("- ", "").trim());
 }
 
-// Gestion des blocs conditionnels si on a du contenu dynamique
+// Gestion des blocs conditionnels, éventuellement imbriqués
 export function handleDynamicContent(line, currentData, yaml) {
-	if (yaml && yaml.dynamicContent && regexDynamicContentIfBlock.test(line)) {
-		currentData.condition =
+	if (!yaml || !yaml.dynamicContent) return false;
+
+	// On initialise la pile si elle n'existe pas
+	if (!currentData.conditionStack) {
+		currentData.conditionStack = [];
+	}
+
+	// Bloc d'ouverture `if`
+	if (regexDynamicContentIfBlock.test(line)) {
+		const condition =
 			(line.match(regexDynamicContentIfBlock) &&
 				line.match(regexDynamicContentIfBlock)[1]) ||
 			"";
 
+		currentData.conditionStack.push(condition);
+
+		// Combine toutes les conditions avec &&
+		currentData.condition = currentData.conditionStack.join(" && ");
 		currentData.content.push(line + "\n");
 		currentData.listParsed = true;
 		return true;
 	}
-	if (yaml && yaml.dynamicContent && line.includes("`endif`")) {
-		currentData.condition = "";
+
+	// Bloc de fermeture `endif`
+	if (line.includes("`endif`")) {
+		// Retire la condition du niveau d'imbrication actuel
+		if (currentData.conditionStack.length > 0) {
+			currentData.conditionStack.pop();
+		}
+
+		currentData.condition = currentData.conditionStack.join(" && ") || "";
 		currentData.content.push(line + "\n");
 		currentData.listParsed = true;
 		return true;
 	}
+
 	return false;
 }
 
