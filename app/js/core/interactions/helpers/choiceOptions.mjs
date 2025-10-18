@@ -3,7 +3,6 @@ import {
 	shouldBeRandomized,
 	randomizeArrayWithFixedElements,
 } from "../../../utils/arrays.mjs";
-import { evaluateExpression } from "../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
 import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
 
 export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
@@ -36,40 +35,6 @@ export function processMessageWithChoiceOptions(
 	choiceOptions,
 ) {
 	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
-	let dynamicVariables = chatbot.dynamicVariables;
-	if (yaml && yaml.dynamicContent) {
-		if (choiceOptions) {
-			choiceOptions = choiceOptions.filter((option) => {
-				let condition = option.condition;
-				if (!condition) {
-					return true;
-				} else {
-					// Remplace les variables personnalisées dans la condition
-					condition = condition.replace(
-						/@([^\s()&|!=<>]+)/g,
-						function (match, varName) {
-							return (
-								'tryConvertStringToNumber(dynamicVariables["' +
-								varName.trim() +
-								'"])'
-							);
-						},
-					);
-					// Gestion des valeurs si elles ne sont pas mises entre guillemets + gestion du cas undefined
-					condition = condition
-						.replaceAll(
-							/(==|!=|<=|>=|<|>) ?(.*?) ?(\)|&|\||$)/g,
-							function (match, comparisonSignLeft, value, comparisonSignRight) {
-								return `${comparisonSignLeft}"${value}" ${comparisonSignRight}`;
-							},
-						)
-						.replaceAll('""', '"')
-						.replace('"undefined"', "undefined");
-					return evaluateExpression(condition, dynamicVariables);
-				}
-			});
-		}
-	}
 
 	// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
 	[response, choiceOptions] = processDirectiveSelect(response, choiceOptions);
@@ -85,15 +50,17 @@ export function processMessageWithChoiceOptions(
 		const choiceOptionsLength = choiceOptions.length;
 		for (let i = 0; i < choiceOptionsLength; i++) {
 			const choiceOption = choiceOptions[i];
-			const choiceOptionText = choiceOption.text;
-			const choiceOptionLink = choiceOption.link;
+			const hasConditions =
+				yaml && yaml.dynamicContent && choiceOption.condition;
 			messageOptions =
 				messageOptions +
+				(hasConditions ? "\n`if " + choiceOption.condition + "`" : "") +
 				'<li><a href="#' +
-				choiceOptionLink +
+				choiceOption.link +
 				'">' +
-				choiceOptionText +
-				"</a></li>\n";
+				choiceOption.text +
+				"</a></li>\n" +
+				(hasConditions ? "\n`endif`" : "");
 		}
 		messageOptions = messageOptions + "</ul>";
 		response = response + messageOptions;
