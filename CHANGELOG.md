@@ -1,5 +1,16 @@
 # Changelog
 
+## 8.2.0 (2025-10-18)
+
+### Feat
+
+- **core**: utilisation possible d'une balise "style scoped" pour personnaliser l'affichage d'un message
+
+### Fix
+
+- **core**: évaluation des variables dynamiques dans les conditions pour les boutons de réponse en fin de message (après calcul de la valeur finale de chaque variable)
+- **core**: gestion des blocs conditionnels imbriqués pour les boutons d'options en fin de message
+
 ## 8.1.2 (2025-10-17)
 
 ### Fix
