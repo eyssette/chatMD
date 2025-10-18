@@ -9,6 +9,7 @@ import { processPlugins } from "./helpers/processPlugins.mjs";
 import { encodeString } from "../../utils/strings.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { sendChatbotData } from "./helpers/plugins/scorm.mjs";
+import { scopeStyles } from "../../utils/css.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -25,6 +26,8 @@ export async function createMessage(chatbot, message, options) {
 	const noMessageMenu = options && options.noMessageMenu;
 	let messageElement =
 		(options && options.messageElement) || createMessageElement(isUser);
+	const prefixWithIdMessage = "#" + messageElement.id;
+	message = scopeStyles(message, prefixWithIdMessage);
 
 	chatbot.nextMessage.selected = undefined;
 

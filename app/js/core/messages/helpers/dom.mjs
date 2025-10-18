@@ -12,8 +12,12 @@ export function appendMessageToContainer(htmlMessage, customContainer) {
 	}
 }
 
+let idMessage = 0;
+
 export function createMessageElement(isUser) {
 	const el = document.createElement("div");
 	el.classList.add("message", isUser ? "user-message" : "bot-message");
+	el.id = "message-" + idMessage;
+	idMessage++;
 	return el;
 }
