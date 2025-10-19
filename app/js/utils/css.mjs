@@ -1,23 +1,40 @@
 export function scopeStyles(htmlString, prefix) {
-	// Trouve toutes les balises <style scoped>...</style>
 	return htmlString.replace(
 		/<style\s+[^>]*scoped[^>]*>([\s\S]*?)<\/style>/gi,
 		(match, css) => {
-			// Préfixe chaque sélecteur CSS avec le préfix choisi
-			const scopedCSS = css.replace(/(^|})([^@}]+)/g, (full, brace, rules) => {
-				const scopedRules = rules
-					.split(",")
-					.map((sel) => sel.trim())
-					.filter(Boolean)
-					.map((sel) => {
-						// On évite de doubler le préfixe
-						if (sel.startsWith(`${prefix}`)) return sel;
-						return `${prefix} ${sel}`;
-					})
-					.join(", ");
-				return `${brace} ${scopedRules}`;
-			});
-			// On désactive l'effet typewriter pour la balise style
+			// Nettoie le CSS et supprime les commentaires
+			let cleanCSS = css.replace(/\/\*[\s\S]*?\*\//g, "");
+
+			// Extrait chaque bloc de règle CSS : sélecteur(s) { propriétés }
+			const ruleRegex = /([^{}]+)\{([^{}]*)\}/g;
+
+			const scopedCSS = cleanCSS.replace(
+				ruleRegex,
+				(fullMatch, selectors, properties) => {
+					// Traite chaque sélecteur séparé par des virgules
+					const scopedSelectors = selectors
+						.split(",")
+						.map((sel) => sel.trim())
+						.filter(Boolean)
+						.map((sel) => {
+							// Évite de doubler le préfixe
+							if (sel.startsWith(prefix)) return sel;
+
+							// Gère les @-rules (media queries, keyframes, etc.)
+							if (sel.startsWith("@")) return sel;
+
+							// Ajoute le préfixe
+							// Si on a une règle sur le message lui-même, il ne faut pas considérer le sélecteur comme enfant du message, mais comme portant sur le message lui-même
+							const sep = sel === ".message" ? "" : " ";
+							return `${prefix}${sep}${sel}`;
+						})
+						.join(", ");
+
+					// Reconstruit la règle complète
+					return `${scopedSelectors} { ${properties} }`;
+				},
+			);
+			// On désactive l'effet typewriter pour la balise style avec \`
 			return `\\\`<style>${scopedCSS}</style>\\\``;
 		},
 	);
