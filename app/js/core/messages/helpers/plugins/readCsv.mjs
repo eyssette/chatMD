@@ -36,6 +36,62 @@ function filterTable(table, expr) {
 	return [headers, ...filteredRows];
 }
 
+// Fonction pour convertir les valeurs d'un tableau de données dans leur bon format (nombre, date ou chaîne de caractères), afin de permettre un tri de ces données
+function convertValue(val, type) {
+	if (type === "num") {
+		return typeof val === "string"
+			? parseFloat(val.replace(",", ".")) || 0
+			: val;
+	}
+	if (type === "date") return new Date(val);
+	return String(val);
+}
+
+// Tri un tableau de données en fonction d'une formule de tri
+// Syntaxe : $<colonne> [asc|desc] [num|alph|date]
+// Exemple : "$1 asc num, $3 desc alph"
+function sortTable(data, sortFormula) {
+	const rules = sortFormula
+		.split(",")
+		.map((crit) => {
+			const parts = crit.trim().split(/\s+/);
+			const orderPart = parts.find((p) => /^(asc|desc)$/i.test(p));
+			const typePart = parts.find((p) => /^(num|alph|date)$/i.test(p));
+			return {
+				colIndex: parseInt(parts[0].slice(1)) - 1,
+				order: orderPart ? orderPart.toLowerCase() : "asc",
+				type: typePart ? typePart.toLowerCase() : "alph",
+			};
+		})
+		.filter((rule) => !isNaN(rule.colIndex));
+
+	return [...data].sort((a, b) => {
+		for (const { colIndex, order, type } of rules) {
+			// On convertit les données dans le bon format (nombre, date, chaîne de caractères) pour pouvoir faire le tri
+			const valA = convertValue(a[colIndex], type);
+			const valB = convertValue(b[colIndex], type);
+
+			let comparison;
+			if (type === "alph") {
+				// Si c'est un tri alphabétique, on le fait par défaut en français, sans prendre en compte la casse, et en prenant en compte les nombres
+				comparison = valA.localeCompare(valB, "fr", {
+					sensitivity: "base",
+					numeric: true,
+				});
+			} else {
+				if (valA < valB) comparison = -1;
+				else if (valA > valB) comparison = 1;
+				else comparison = 0;
+			}
+			// Si on doit trier en sens inverse
+			if (comparison !== 0) {
+				return order === "asc" ? comparison : -comparison;
+			}
+		}
+		return 0;
+	});
+}
+
 // Remplace les marqueurs de type $1, $2, … dans un template texte par les valeurs
 // correspondantes provenant d'un tableau de lignes.
 // Chaque placeholder $n est remplacé par la valeur de la colonne correspondante
@@ -79,12 +135,19 @@ export async function processCsv(message) {
 			const linesCodeBlock = codeBlockContent.split("\n");
 
 			let condition = null;
+			let sortFormula = null;
 			// Filtrer les lignes pour récupérer la condition si elle existe
 			const templateLines = linesCodeBlock.filter((line) => {
-				if (line.trim().startsWith("condition:")) {
-					// Récupère la condition (tout après "condition:")
-					condition = line.replace(/^condition:\s*/, "");
-					return false; // exclut la ligne condition du template
+				const trimmedLine = line.trim();
+				if (trimmedLine.startsWith("condition:")) {
+					// Récupère la condition (après "condition: ")
+					condition = trimmedLine.replace(/^condition:\s*/, "");
+					return false; // exclut la ligne "condition: "" du template
+				}
+				if (trimmedLine.startsWith("sort:")) {
+					// Récupère le critère de tri (après "sort: ")
+					sortFormula = trimmedLine.replace(/^sort:\s*/, "");
+					return false; // exclut la ligne "sort: " du template
 				}
 				return true; // conserve toutes les autres lignes
 			});
@@ -95,6 +158,11 @@ export async function processCsv(message) {
 			if (condition) {
 				data = filterTable(data, condition);
 				data.shift(); // supprime la ligne d'en-têtes après le filtrage
+			}
+
+			// S'il y a un tri particulier des résultats à respecter, on applique ce tri aux données filtrées
+			if (sortFormula) {
+				data = sortTable(data, sortFormula);
 			}
 
 			// Remplit le template avec les valeurs des lignes filtrées
