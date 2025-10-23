@@ -241,17 +241,21 @@ export function processYAML(markdownContent) {
 					);
 				} else {
 					if (yaml.useLLM.encryptedAPIkey) {
-						yaml.useLLM.encryptionMethod = yaml.useLLM.encryptionMethod
-							? yaml.useLLM.encryptionMethod
-							: "XOR";
-						const apiKeyPassword = prompt(
-							"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez le mot de passe qui vous a été communiqué, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
-						);
-						yaml.useLLM.apiKey = decodeApiKey(
-							yaml.useLLM.encryptedAPIkey,
-							apiKeyPassword,
-							yaml.useLLM.encryptionMethod,
-						);
+						// Si on met "true" comme valeur à yaml.useLLM.encryptedAPIkey, cela signifie qu'on utilise un serveur d'API qui cache par défaut la clé
+						if (yaml.useLLM.encryptedAPIkey !== true) {
+							// Sinon, cela signifie qu'on a chiffré la clé avec un mot de passe et qu'on demande donc le mot de passe à l'utilisateur
+							yaml.useLLM.encryptionMethod = yaml.useLLM.encryptionMethod
+								? yaml.useLLM.encryptionMethod
+								: "XOR";
+							const apiKeyPassword = prompt(
+								"Ce chatbot peut se connecter à une IA pour enrichir les réponses proposées. Entrez le mot de passe qui vous a été communiqué, puis cliquez sur “OK” pour pouvoir bénéficier de cette fonctionnalité. Sinon, cliquez sur “Annuler”.",
+							);
+							yaml.useLLM.apiKey = decodeApiKey(
+								yaml.useLLM.encryptedAPIkey,
+								apiKeyPassword,
+								yaml.useLLM.encryptionMethod,
+							);
+						}
 					} else {
 						yaml.useLLM.apiKey =
 							// eslint-disable-next-line no-undef
