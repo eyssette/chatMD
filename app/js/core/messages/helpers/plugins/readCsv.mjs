@@ -131,6 +131,7 @@ export async function processCsv(message) {
 		const csvObject = await parseCsv(url);
 		if (csvObject) {
 			let data = csvObject.data;
+			data.shift(); // supprime la ligne d'en-têtes
 
 			const linesCodeBlock = codeBlockContent.split("\n");
 
@@ -157,7 +158,6 @@ export async function processCsv(message) {
 			// Si une condition est présente, filtre les données du CSV
 			if (condition) {
 				data = filterTable(data, condition);
-				data.shift(); // supprime la ligne d'en-têtes après le filtrage
 			}
 
 			// S'il y a un tri particulier des résultats à respecter, on applique ce tri aux données filtrées
