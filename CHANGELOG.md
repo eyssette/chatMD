@@ -11,7 +11,7 @@
 
 - **markdown**: correction de la regex pour rechercher les assignations et les emplois de variables dans processSimpleBlock
 - **core**: plugin readCsv - suppression de la première ligne (titres colonnes) dans les données même s'il n'y a pas de formule de filtre
-- **utils**: gestion des styles pour chaque message avec <style scoped> - prise en compte de toutes les règles, dont celles qui impliquent des propriétés avec des parenthèses et des virgules
+- **utils**: gestion des styles pour chaque message avec `<style scoped>` - prise en compte de toutes les règles, dont celles qui impliquent des propriétés avec des parenthèses et des virgules
 
 ## 8.2.0 (2025-10-18)
 
