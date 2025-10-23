@@ -17,7 +17,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 		// Configuration de l'accès au LLM
 		let bodyObject = {
 			model: yaml.useLLM.model,
-			stream: true,
+			stream: yaml.useLLM.stream === false ? false : true,
 			max_tokens: yaml.useLLM.maxTokens,
 			frequency_penalty: 0,
 			presence_penalty: 0,

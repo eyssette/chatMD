@@ -8,6 +8,67 @@ import { parseChunkSafely } from "./parseChunks.mjs";
 
 let LLMactive = false;
 
+// Pour simuler le streaming d'un texte complet si la réponse du LLM est envoyée d'un seul coup et non pas streamée.
+async function simulateStreaming(fullText, chatMessage, delay = 15) {
+	const words = fullText.split(/(\s+)/);
+	let accumulatedText = "";
+
+	for (const word of words) {
+		accumulatedText += word;
+		chatMessage.innerHTML = markdownToHTML(accumulatedText);
+
+		// Conversion LaTeX si activée
+		if (yaml && yaml.maths === true) {
+			try {
+				chatMessage.innerHTML = convertLatexExpressions(
+					chatMessage.innerHTML,
+					true,
+				);
+			} catch (latexError) {
+				console.warn("Erreur lors de la conversion LaTeX :", latexError);
+			}
+		}
+
+		// Scroll automatique en bas
+		window.scrollTo(0, document.body.scrollHeight);
+
+		// Délai entre chaque mot pour simuler le streaming
+		await new Promise((resolve) => setTimeout(resolve, delay));
+	}
+	return true;
+}
+
+// Pour extraire le texte complet d'une réponse d'un LLM non-streamée
+function extractFullResponseText(responseData, APItype) {
+	if (APItype === "cohere_v1") {
+		return responseData.text || "";
+	} else if (APItype === "ollama") {
+		return responseData.message && responseData.message.content
+			? responseData.message.content
+			: "";
+	} else if (
+		APItype === "openai" ||
+		APItype === "cohere_v2" ||
+		typeof APItype === "undefined"
+	) {
+		if (responseData.choices) {
+			return responseData.choices[0] &&
+				responseData.choices[0].message &&
+				responseData.choices[0].message.content
+				? responseData.choices[0].message.content
+				: "";
+		}
+		if (responseData.message) {
+			return responseData.message.content &&
+				responseData.message.content[0] &&
+				responseData.message.content[0].text
+				? responseData.message.content[0].text
+				: "";
+		}
+	}
+	return "";
+}
+
 // Pour pouvoir lire le stream diffusé par l'API utilisée pour se connecter à une IA
 export async function readStreamFromLLM(
 	streamableObject,
@@ -45,6 +106,56 @@ export async function readStreamFromLLM(
 
 		if (value) {
 			const chunkString = new TextDecoder().decode(value);
+
+			const isStreamMode =
+				yaml.useLLM && yaml.useLLM.stream === false ? false : true;
+			const shouldSimulateStream =
+				yaml.useLLM && yaml.useLLM.simulateStream === true;
+
+			if (!isStreamMode) {
+				// MOde non streamé
+				// Extraction du texte complet
+				const fullResponse = JSON.parse(chunkString);
+				const fullText = extractFullResponseText(fullResponse, APItype);
+
+				if (!fullText) {
+					console.error("Impossible d'extraire le texte de la réponse");
+					return false;
+				}
+				// Simulation du streaming si activée
+				if (shouldSimulateStream) {
+					await simulateStreaming(fullText, chatMessage);
+				} else {
+					// Affichage direct du texte complet
+					chatMessage.innerHTML = markdownToHTML(fullText);
+
+					if (yaml && yaml.maths === true) {
+						try {
+							chatMessage.innerHTML = convertLatexExpressions(
+								chatMessage.innerHTML,
+								true,
+							);
+						} catch (latexError) {
+							console.warn("Erreur lors de la conversion LaTeX :", latexError);
+						}
+					}
+
+					window.scrollTo(0, document.body.scrollHeight);
+				}
+
+				// Ajout des points de suspension si nécessaire
+				const chatMessageLastChild = chatMessage.lastChild;
+				if (
+					chatMessageLastChild &&
+					!hasSentenceEndMark(chatMessageLastChild.innerHTML)
+				) {
+					chatMessageLastChild.innerHTML =
+						chatMessageLastChild.innerHTML + " …";
+				}
+				LLMactive = false;
+				return true;
+			}
+
 			const chunkArray = chunkString
 				.trim()
 				.split("\n")
