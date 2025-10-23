@@ -21,7 +21,7 @@ function transformExpression(expr) {
 // qui peut utiliser des placeholders $1, $2, ...
 // correspondant aux colonnes de la ligne.
 function filterTable(table, expr) {
-	const [headers, ...rows] = table;
+	const [...rows] = table;
 
 	// Transforme l'expression avec $1, $2... en version sécurisée
 	const safeExpr = transformExpression(expr);
@@ -33,7 +33,7 @@ function filterTable(table, expr) {
 
 	// On filtre le tableau avec cette fonction de test
 	const filteredRows = rows.filter(rowMatchesCondition);
-	return [headers, ...filteredRows];
+	return [...filteredRows];
 }
 
 // Fonction pour convertir les valeurs d'un tableau de données dans leur bon format (nombre, date ou chaîne de caractères), afin de permettre un tri de ces données
