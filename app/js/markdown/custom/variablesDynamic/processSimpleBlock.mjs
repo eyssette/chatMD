@@ -18,9 +18,9 @@ export function processSimpleBlock(message, dynamicVariables) {
 	let index = 0;
 
 	// On recherche toutes les assignations et les emplois de variables
-	// Assignations : `@([^\s=]+)\s*=\s*([^`]+?)`
-	// Emplois : `@([^\s=]+)`
-	const tokenRegex = /`@([^\s=]+)\s*=\s*([^`]+?)`|`@([^\s=]+)`/gs;
+	// Assignations : `@([^\s=`]+?)\s*=\s*([^`]+?)`
+	// Emplois : `@([^\s=]+?)`
+	const tokenRegex = /`@([^\s=`]+?)\s*=\s*([^`]+?)`|`@([^\s=]+?)`/gs;
 
 	let match;
 
