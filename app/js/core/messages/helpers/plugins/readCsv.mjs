@@ -107,7 +107,7 @@ function fillTemplateFromValuesFromArray(template, sourceArray) {
 
 	// Applique la transformation à chaque ligne du tableau
 	const result = sourceArray.map((row) => replaceFn(row));
-	return result.join("\n").trim();
+	return result.join("\n").trim().replaceAll("\\n", "\n");
 }
 
 // Traite un message contenant des blocs CSV au format markdown, commençant par : ```readcsv URL, optionnellement suivi d'une condition, et d'un template de texte
