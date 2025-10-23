@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.3.1 (2025-10-23)
+
+### Fix
+
+- **core**: filterTable dans le plugin readCsv  (utilisation sans titres de colonnes)
+- **core**: gestion des retours à la ligne dans les données externes avec le plugin readCsv
+- **markdown**: utilisation de useLLM.encryptedAPIkey: true pour indiquer qu'on utilise un serveur d'API qui cache par défaut la clé pour le LLM
+
 ## 8.3.0 (2025-10-23)
 
 ### Feat
