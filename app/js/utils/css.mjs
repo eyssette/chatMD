@@ -35,7 +35,7 @@ export function scopeStyles(htmlString, prefix) {
 				},
 			);
 			// On désactive l'effet typewriter pour la balise style avec \`
-			return `\\\`<style>${scopedCSS}</style>\\\``;
+			return `\\\`\n<style>${scopedCSS}</style>\n\\\``;
 		},
 	);
 }
