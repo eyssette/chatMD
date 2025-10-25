@@ -180,6 +180,8 @@ export function markdownToHTML(text) {
 	text = text.replaceAll("\n|", "|");
 	// gestion des dimensions des images avec la syntaxe CodiMD
 	text = fixImageDimensionsCodiMD(text);
+	// Fix pour supprimer l'indentation avant les balises HTML afin d'éviter la transformation automatique en bloc code
+	text = text.replace(/^[ \t]+(?=<[a-z])/gm, "");
 	const html = converter.makeHtml(text).replaceAll("&amp;#96", "`&#96`");
 	return html;
 }
