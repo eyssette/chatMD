@@ -1,5 +1,16 @@
 # Changelog
 
+## 8.3.2 (2025-10-26)
+
+### Fix
+
+- **markdown**: suppression automatique de l'indentation avant les balises HTML dans la source markdown afin d'éviter la transformation automatique en bloc code
+- **utils**: fix pour la désactivation de l'effet typewriter dans scopeStyles
+
+### Chore
+
+- config Docker minimale
+
 ## 8.3.1 (2025-10-23)
 
 ### Fix
