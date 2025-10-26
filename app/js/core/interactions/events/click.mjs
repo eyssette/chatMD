@@ -92,7 +92,7 @@ function handleClickOnChatContainer(chatbot) {
 				const llmQuestion = getElementFromEnd(actionsHistoryArray, 2);
 				actionsLatest = llmQuestion + "|" + actionsLatest;
 			}
-			const baseURL = window.location.origin;
+			const baseURL = window.location.origin + window.location.pathname;
 			let hash = window.location.hash;
 			let baseQuery = getParamsFromURL();
 			// On garde dans le hash seulement l'URL de la source et on supprime les paramètres (qu'on vient de récupérer dans baseQuery)
