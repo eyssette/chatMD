@@ -15,7 +15,7 @@ export function getChatbotInformations(mdWithoutYaml, introduction, yaml) {
 	const titleLine = chatbotTitle ? "## " + chatbotTitle : "## Chatbot";
 	const introductionContent = titleLine + "\n" + initialMessage + "\n";
 	const chatbotContent =
-		introductionContent + mdWithoutYaml.substring(indexEndIntroduction);
+		introductionContent + mdWithoutYaml.trim().substring(indexEndIntroduction);
 	const chatbotContentLines = chatbotContent.split("\n");
 	const chatbotData = [];
 
