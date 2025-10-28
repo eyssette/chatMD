@@ -134,7 +134,7 @@ C'est un logiciel libre sous licence MIT. Les sources sont disponibles sur [la F
 
 
 \`
-:::info Remerciements
+:::success Remerciements
 ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
 
 ChatMD a également pu bénéficier du soutien de l'[Incubateur de l'Éducation Nationale](https://incubateur.education.gouv.fr/) et plus particulièrement de l'aide de Thomas Sanson. Merci beaucoup pour l'accompagnement proposé qui a permis de structurer le développement de cette application de manière plus professionnelle !
