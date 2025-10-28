@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { scrollWindow, hideFooter } from "../../../app//js/utils/ui.mjs";
+import { scrollWindow } from "../../../app//js/utils/ui.mjs";
 
 beforeEach(() => {
 	const dom = new JSDOM(`<!DOCTYPE html><body>
@@ -74,42 +74,5 @@ describe("scrollToBottomOfPage", () => {
 			top: 1350,
 			behavior: "auto",
 		});
-	});
-});
-
-describe("hideFooter", () => {
-	let controls, footer;
-
-	beforeEach(() => {
-		footer = document.body.querySelector("#footer");
-		controls = document.body.querySelector("#controls");
-	});
-
-	it("should hide the footer element", () => {
-		hideFooter(footer, controls);
-		expect(footer.style.display).toBe("none");
-	});
-	it("should hide the footer element if isUserInputVisible is false", () => {
-		const isUserInputVisible = false;
-		hideFooter(footer, controls, isUserInputVisible);
-		expect(footer.style.display).toBe("none");
-	});
-
-	it("should set the height of #controls to 70px", () => {
-		hideFooter(footer, controls);
-		expect(controls.style.height).toBe("70px");
-	});
-
-	it("should inject a responsive style with height 70px when userInput is false", () => {
-		const isUserInputVisible = false;
-		hideFooter(footer, controls, isUserInputVisible);
-		expect(controls.style.height).toBe("70px");
-	});
-
-	it("should inject a responsive style with height 110px when userInput is true", () => {
-		const isUserInputVisible = true;
-		hideFooter(footer, controls, true);
-		const styleTag = document.getElementById("styleControlsIfNoFooter");
-		expect(styleTag.textContent).toContain("110px");
 	});
 });
