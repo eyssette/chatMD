@@ -1,4 +1,4 @@
-image: node:18-alpine
+image: node:22-alpine
 
 # Mettre en cache les dépendances pour accélérer les builds
 cache:
