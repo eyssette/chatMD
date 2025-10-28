@@ -21,8 +21,40 @@
 	--color-text: black;
 	--color-bg: #fff;
 	--color-light: grey;
+	--color-lighter: rgb(0 0 0 / 20%);
 	--color-ultra-light: rgb(255 255 255 / 25%);
 	--color-link: darkblue;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--body-bg: #171919;
+		--h1-bg: #171919;
+		--main-bg: linear-gradient(
+			90deg,
+			#1e2021,
+			#202223,
+			#222425,
+			#242627,
+			#272929
+		);
+		--main-border-color: transparent;
+		--controls-bg: #171919;
+		--color-text: #e0ddd7;
+		--color-bg: #171919;
+		--color-light: #888;
+		--color-lighter: rgb(255 255 255 / 20%);
+		--color-ultra-light: rgb(0 0 0 / 10%);
+		--color-link: #6eb4ff;
+	}
+	.messageOptions a {
+		--color-light: #444 !important;
+	}
+	.admonition {
+		--info-color-title: white !important;
+		--success-color-title: white !important;
+		--warning-color-title: white !important;
+	}
 }
 
 body {
@@ -103,7 +135,7 @@ main {
 
 #input-container {
 	width: 95%;
-	border: 1px solid rgba(0, 0, 0, 0.2);
+	border: 1px solid var(--color-lighter);
 	background: var(--color-bg);
 	min-height: 2em;
 	max-height: 3em;
