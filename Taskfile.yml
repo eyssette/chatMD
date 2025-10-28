@@ -127,6 +127,10 @@ tasks:
     cmds:
       - node tests/e2e/.config/generateStepsDefinitionsFromFeatures.js
 
+  tests:widget:
+    cmds:
+      - node tests/test_widget.mjs
+
   bump:
     generates:
       - VERSION

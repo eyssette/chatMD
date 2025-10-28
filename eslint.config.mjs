@@ -14,7 +14,7 @@ export default [
 	},
 	pluginJs.configs.recommended,
 	{
-		files: ["/app/**/*.js", "/app/**/*.mjs", "tests/**/*.js"],
+		files: ["/app/**/*.js", "/app/**/*.mjs", "tests/**/*.*js"],
 		rules: {
 			...codeceptjsPlugin.configs.recommended.rules,
 			semi: ["error", "always"],
