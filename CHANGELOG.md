@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.3.4 (2025-10-28)
+
+### Fix
+
+- **css**: améliorations pour les admonitions (icône et titre)
+- **core**: ajout d'une classe "typewriter-active" à body quand l'effet typewriter est en cours d'exécution
+- **css**: utilisations de variables CSS + optimisations
+- **markdown**: trim du titre des admonitions (pour éviter l'affichage de l'icône avant le titre si le titre contient seulement des espaces)
+- **css**: cursor:text pour user-input
+
+### Chore
+
+- utilisation de clean-css plutôt que cssnano pour l'optimisation des styles CSS
+- update node et npm
+- configuration d'une tâche pour tester le widget
+
 ## 8.3.3 (2025-10-28)
 
 ### Fix
