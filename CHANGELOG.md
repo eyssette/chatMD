@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.3.3 (2025-10-28)
+
+### Fix
+
+- **css**: refactorisation des CSS - réorganisation, simplification et améliorations visuelles
+- **core**: URL corrigée pour l'historique des actions
+- **core**: pour éviter le bug de répétition du dernier caractère en cas de chatbot avec yaml mais sans titre de niveau 2
+
+### Test
+
+- suppression du test pour hideFooter (fonction devenue inutile)
+
 ## 8.3.2 (2025-10-26)
 
 ### Fix
