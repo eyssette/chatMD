@@ -118,6 +118,7 @@ main {
 	line-height: 1em;
 	text-align: left;
 	padding: 5px;
+	cursor: text;
 }
 
 [contenteditable="true"]:empty:before {
