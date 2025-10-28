@@ -44,6 +44,7 @@ function formatContentStopTypeWriter(content) {
 
 // Pour stopper l'effet machine à écrire (en appuyant sur “Enter”)
 export function stopTypeWriter(content, typedElement, observer) {
+	document.body.classList.remove("typewriter-active");
 	typedElement.stop();
 	typedElement.reset();
 	content = formatContentStopTypeWriter(content);

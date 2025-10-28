@@ -35,6 +35,7 @@ let typed;
 
 // Effet machine à écrire
 export function startTypeWriter(content, element, accelerateFactor) {
+	document.body.classList.add("typewriter-active");
 	return new Promise((resolve) => {
 		function keypressHandler(event) {
 			if (event.key === "Enter") {
@@ -116,6 +117,7 @@ export function startTypeWriter(content, element, accelerateFactor) {
 				setTimeout(() => manageScrollDetection(true, observer), 1000);
 			},
 			onComplete: () => {
+				document.body.classList.remove("typewriter-active");
 				// Si on a désactivé le clavier, on remet l'opacité du bouton à 0.5 pour pouvoir voir en grisé le bouton "Afficher tout"
 				if (
 					yaml.userInput == false &&
