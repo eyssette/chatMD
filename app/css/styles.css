@@ -55,6 +55,12 @@
 		--success-color-title: white !important;
 		--warning-color-title: white !important;
 	}
+	input,
+	button {
+		background-color: #3b3b3b;
+		color: white;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+	}
 }
 
 body {
