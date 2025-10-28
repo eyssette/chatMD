@@ -1,6 +1,5 @@
 ---
 gestionGrosMots: true
-style: .admonition.success,.admonition.warning{margin:2em auto}
 ---
 
 # ChatMD

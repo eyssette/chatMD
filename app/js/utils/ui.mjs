@@ -29,29 +29,6 @@ export function scrollWindow(option) {
 	}
 }
 
-// Pour redimensionner le footer sur des petits écrans
-function resizeFooterForSmallScreenToSpecificHeight(CSSheight) {
-	const style = document.createElement("style");
-	style.id = "styleControlsIfNoFooter";
-	style.textContent = `
-		@media screen and (max-width: 500px) {
-			#controls {
-				height: ${CSSheight}!important;
-			}
-		}
-	`;
-	document.head.appendChild(style);
-}
-
-// Pour cacher le footer
-export function hideFooter(footerElement, controlsElement, isUserInputVisible) {
-	footerElement.style.display = "none";
-	controlsElement.style.height = "70px";
-
-	const smallScreenFooterHeight = isUserInputVisible ? "110px" : "50px";
-	resizeFooterForSmallScreenToSpecificHeight(smallScreenFooterHeight);
-}
-
 // Pour définir le contenu du footer
 export function setContentOfFooter(footerElement, html) {
 	footerElement.innerHTML = html;

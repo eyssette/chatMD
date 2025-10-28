@@ -1,6 +1,5 @@
 ---
 gestionGrosMots: true
-style: .admonition.success,.admonition.warning{margin:2em auto}
 ---
 
 <!--Fichier généré automatiquement à partir des fichiers présents dans le dossier data/.

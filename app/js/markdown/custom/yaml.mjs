@@ -2,13 +2,9 @@ import { config } from "../../config.mjs";
 import { load as loadYAML } from "../../lib/js-yaml.js";
 import { loadScript, loadCSS } from "../../utils/urls.mjs";
 import { deepMerge } from "../../utils/objects.mjs";
-import { hideFooter, setContentOfFooter } from "../../utils/ui.mjs";
+import { setContentOfFooter } from "../../utils/ui.mjs";
 import { decodeApiKey } from "../../ai/helpers/keyDecoder.mjs";
-import {
-	sendButton,
-	footerElement,
-	controlsElement,
-} from "../../shared/selectors.mjs";
+import { sendButton, footerElement } from "../../shared/selectors.mjs";
 
 export let yaml = {
 	plugins: config.yaml.plugins,
@@ -162,8 +158,7 @@ export function processYAML(markdownContent) {
 				}
 			}
 			if (yaml.footer === false) {
-				const isUserInputVisible = yaml.userInput;
-				hideFooter(footerElement, controlsElement, isUserInputVisible);
+				document.body.classList.add("hideFooter");
 			} else if (typeof yaml.footer == "string") {
 				setContentOfFooter(footerElement, yaml.footer);
 			}
