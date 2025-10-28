@@ -3,7 +3,7 @@ import { string } from "rollup-plugin-string";
 import fs from "fs";
 import path from "path";
 import postcss from "rollup-plugin-postcss";
-import cssnano from "cssnano";
+import clean from "postcss-clean";
 
 const ECMA_VERSION = 2018;
 const appFolder = "app/";
@@ -92,6 +92,7 @@ const onwarn = (warning) => {
 
 // En mode DEBUG, on ne change pas le nom des variables, afin de pouvoir les vérifier
 const optionsTerser =
+	// eslint-disable-next-line no-undef
 	process.env.DEBUG == "true"
 		? { mangle: false, ecma: ECMA_VERSION }
 		: { ecma: ECMA_VERSION };
@@ -115,8 +116,12 @@ export default {
 			extract: "css/styles.min.css",
 			minimize: true,
 			plugins: [
-				cssnano({
-					preset: "default",
+				clean({
+					level: {
+						2: {
+							all: true,
+						},
+					},
 				}),
 			],
 		}),
