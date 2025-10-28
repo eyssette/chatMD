@@ -40,7 +40,7 @@ function processAdmonition(text, level) {
 					admonitionInfos[2] || typeAdmonition == "spoiler" ? true : false;
 				// Récupération du titre (optionnel)
 				const titleAdmonition = admonitionInfos[3]
-					? admonitionInfos[3]
+					? admonitionInfos[3].trim()
 					: isCollapsible
 						? "Détails"
 						: "";
