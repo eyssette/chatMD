@@ -3,7 +3,10 @@
 */
 
 :root {
-	--main-background: linear-gradient(
+	--font: Inter, Avenir, Helvetica, Arial, sans-serif;
+	--body-bg: #fff;
+	--h1-bg: #fff;
+	--main-bg: linear-gradient(
 		to right,
 		#eff2f7,
 		#e7edf7,
@@ -11,6 +14,15 @@
 		#d8e4f7,
 		#d0e0f7
 	);
+	--main-border-color: #fff;
+	--main-border-radius: 15px;
+	--controls-bg: #fff;
+	--color-primary: rgb(0, 123, 255);
+	--color-text: black;
+	--color-bg: #fff;
+	--color-light: grey;
+	--color-ultra-light: rgb(255 255 255 / 25%);
+	--color-link: darkblue;
 }
 
 body {
@@ -20,8 +32,9 @@ body {
 	align-items: center;
 	font-size: 18px;
 	line-height: 1.25em;
-	background: #fff;
-	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+	background: var(--body-bg);
+	font-family: var(--font);
+	color: var(--color-text);
 }
 
 @media screen and (min-width: 500px) {
@@ -44,6 +57,7 @@ h1 {
 	padding: 1em 0;
 	text-align: center;
 	font-size: 1.9em;
+	background: var(--h1-bg);
 }
 
 /* CONTENEURS PRINCIPAUX : main et chat */
@@ -51,7 +65,8 @@ h1 {
 main {
 	min-height: 80vh;
 	margin: 0 auto;
-	background: var(--main-background);
+	background: var(--main-bg);
+	border: 1px solid var(--main-border-color);
 }
 
 #chat {
@@ -63,7 +78,7 @@ main {
 
 @media screen and (min-width: 500px) {
 	main {
-		border-radius: 15px;
+		border-radius: var(--main-border-radius);
 	}
 	#chat {
 		padding: 2em;
@@ -83,13 +98,13 @@ main {
 	justify-content: flex-start;
 	align-items: baseline;
 	gap: 0.5em;
-	background: #fff;
+	background: var(--controls-bg);
 }
 
 #input-container {
 	width: 95%;
 	border: 1px solid rgba(0, 0, 0, 0.2);
-	background: #fff;
+	background: var(--color-bg);
 	min-height: 2em;
 	max-height: 3em;
 	overflow-y: auto;
@@ -102,7 +117,7 @@ main {
 		gap: 1em;
 		padding-left: 0px;
 		margin-left: -1px;
-		border: 1px solid white;
+		border: 1px solid var(--main-border-color);
 		padding-top: 20px;
 	}
 	#input-container {
@@ -122,7 +137,7 @@ main {
 }
 
 [contenteditable="true"]:empty:before {
-	color: grey;
+	color: var(--color-light);
 	content: attr(placeholder);
 	font-style: italic;
 	font-size: 0.9em;
@@ -165,11 +180,10 @@ footer {
 
 footer a,
 footer a:visited {
-	color: black !important;
-	text-decoration: underline #999;
+	color: var(--color-text) !important;
 }
 footer a:hover {
-	text-decoration: underline black;
+	border-bottom-color: var(--color-text);
 }
 
 @media screen and (max-width: 500px) {
@@ -193,9 +207,9 @@ footer a:hover {
 a,
 a:visited {
 	word-wrap: break-word;
-	color: darkblue;
+	color: var(--color-link);
 	text-decoration: none;
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid var(--color-light);
 	padding-bottom: 0.05em;
 }
 
@@ -206,11 +220,18 @@ pre {
 	padding: 20px;
 	padding-right: 6em;
 	border-radius: 5px;
-	background: #fff;
-	box-shadow: 1px 1px 1px 1px #aaa;
+	background: var(--color-bg);
+	box-shadow: 1px 1px 1px 1px var(--color-light);
 	word-break: break-all;
 	white-space: pre-wrap;
 	line-height: 1em;
+}
+
+@media screen and (max-width: 500px) {
+	ul,
+	ol {
+		padding-left: 1.5em;
+	}
 }
 
 @media screen and (min-width: 500px) {
@@ -259,15 +280,15 @@ iframe {
 
 .user-message {
 	padding: 0.5em 1em;
-	width: fit-content;
+	width: fit-content !important;
 	max-width: 550px;
 	align-self: flex-end;
 	border-radius: 10px;
-	background-color: rgb(0, 132, 255);
+	background-color: var(--color-primary);
 	box-shadow:
 		rgba(0, 0, 0, 0.12) 0px 0.3px 0.9px,
 		rgba(0, 0, 0, 0.16) 0px 1.6px 3.6px;
-	color: rgb(255, 255, 255);
+	color: #fff;
 }
 
 .user-message * {
@@ -304,20 +325,20 @@ iframe {
 
 .messageOptions a {
 	text-decoration: none;
-	background-color: #ffffff3d;
+	background-color: var(--color-ultra-light);
 	padding: 5px 10px;
 	display: inline-block;
-	color: black;
+	color: var(--color-text);
 	border-radius: 12px;
 	font-size: 0.95em;
 	margin-left: -20px;
-	border: 1px solid #666;
+	border: 1px solid var(--color-light);
 }
 
 .messageOptions a:hover {
-	background-color: rgb(0, 132, 255);
-	border-color: rgb(0, 132, 255);
-	color: white !important;
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+	color: #fff !important;
 }
 
 /* Bouton et fenêtre modale pour accéder au menu de chaque message */
@@ -333,7 +354,7 @@ iframe {
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.8);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -341,7 +362,7 @@ iframe {
 }
 
 #systemModal .modal-content {
-	background: #fff;
+	background: var(--color-bg);
 	padding: 20px;
 	border-radius: 8px;
 	position: relative;
@@ -371,35 +392,44 @@ button.copyCode {
 	cursor: pointer;
 	border: none;
 	border-radius: 3px;
-	background-color: rgb(0, 123, 255);
-	color: white;
+	background-color: var(--color-primary);
+	color: #fff;
 }
 
 /* Admonitions */
 
 .admonition {
+	--info-icon: "📝";
+	--info-color-border: #0063cb;
+	--info-color-bg: rgb(1 125 255 / 7%);
+	--info-color-title: #0063cb;
+	--success-icon: "💡";
+	--success-color-border: #18753c;
+	--success-color-bg: rgb(0 200 83 / 5%);
+	--success-color-title: #115525;
+	--warning-icon: "⚠️";
+	--warning-color-border: #d93025;
+	--warning-color-bg: rgb(255 0 0 / 6%);
+	--warning-color-title: #992222;
 	margin: 1.5em 0em;
 	padding: 0.75em 1em;
-	border: 1px solid black;
+	border: 1px solid var(--color-light);
 	border-left-width: 3px;
 	border-radius: 0.25em;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-	background-color: #fff;
-	font-size: 0.95em;
+	background-color: var(--color-ultra-light);
+	font-size: 0.9em;
 }
 
 @media screen and (min-width: 500px) {
 	.admonition {
 		margin-left: 1em;
+		font-size: 0.95em;
 	}
 }
 
 .admonitionTitle {
 	font-weight: bold;
-}
-
-.admonitionTitle:empty {
-	display: none;
 }
 
 .admonitionTitle:before {
@@ -408,57 +438,61 @@ button.copyCode {
 	font-size: 1.15em;
 }
 
+.admonitionTitle:empty {
+	display: none;
+}
+
 .info .admonitionTitle:before,
 .note .admonitionTitle:before,
 .spoiler .admonitionTitle:before {
-	content: "ℹ️";
+	content: var(--info-icon);
 }
 .warning .admonitionTitle:before,
 .danger .admonitionTitle:before,
 .bug .admonitionTitle:before {
-	content: "⚠️";
+	content: var(--warning-icon);
 }
 
 .tip .admonitionTitle:before,
 .success .admonitionTitle:before {
-	content: "💡";
+	content: var(--success-icon);
 }
 
 .admonition.info,
 .admonition.note,
 .admonition.spoiler {
-	border-color: #0063cb;
-	background: rgb(1 125 255 / 7%);
+	border-color: var(--info-color-border);
+	background: var(--info-color-bg);
 }
 
 .admonition.info .admonitionTitle,
 .admonition.note .admonitionTitle,
 .admonition.spoiler .admonitionTitle {
-	color: #0063cb;
+	color: var(--info-color-title);
 }
 
 .admonition.success,
 .admonition.tip {
-	border-color: #18753c;
-	background: rgb(0 200 83 / 5%);
+	border-color: var(--success-color-border);
+	background: var(--success-color-bg);
 }
 
 .admonition.success .admonitionTitle,
 .admonition.tip .admonitionTitle {
-	color: #115525;
+	color: var(--success-color-title);
 }
 
 .admonition.bug,
 .admonition.danger,
 .admonition.warning {
-	border-color: #d93025;
-	background: rgb(255 0 0 / 6%);
+	border-color: var(--warning-color-border);
+	background: var(--warning-color-bg);
 }
 
 .admonition.bug .admonitionTitle,
 .admonition.danger .admonitionTitle,
 .admonition.warning .admonitionTitle {
-	color: #992222;
+	color: var(--warning-color-title);
 }
 
 /* 
@@ -530,6 +564,7 @@ button.copyCode {
 
 /* Quand l'avatar est juste avant un élément spécial */
 
+.message > section:first-child > *:first-child,
 .message > .admonition:first-child,
 .message > table:first-child,
 .message > pre:first-child {
@@ -541,4 +576,8 @@ button.copyCode {
 	margin-left: -70px !important;
 	position: absolute !important;
 	margin-top: -20px !important;
+}
+.message > section:first-child:before {
+	position: absolute !important;
+	margin-top: -15px !important;
 }
