@@ -402,14 +402,14 @@ button.copyCode {
 	--info-icon: "📝";
 	--info-color-border: #0063cb;
 	--info-color-bg: rgb(1 125 255 / 7%);
-	--info-color-title: #0063cb;
-	--success-icon: "💡";
+	--info-color-title: #004996;
+	--success-icon: "🌱";
 	--success-color-border: #18753c;
 	--success-color-bg: rgb(0 200 83 / 5%);
 	--success-color-title: #115525;
-	--warning-icon: "⚠️";
+	--warning-icon: "❗";
 	--warning-color-border: #d93025;
-	--warning-color-bg: rgb(255 0 0 / 6%);
+	--warning-color-bg: rgb(255 0 0 / 5%);
 	--warning-color-title: #992222;
 	margin: 1.5em 0em;
 	padding: 0.75em 1em;
@@ -430,11 +430,12 @@ button.copyCode {
 
 .admonitionTitle {
 	font-weight: bold;
+	letter-spacing: 0.02em;
 }
 
 .admonitionTitle:before {
 	font-weight: 300;
-	margin-right: 0.5em;
+	margin-right: 0.75em;
 	font-size: 1.15em;
 }
 
