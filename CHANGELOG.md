@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.3.5 (2025-10-29)
+
+### Fix
+
+- **css**: amélioration du thème bubbles
+- **markdown**: gestion de l'avatar dans le YAML après la gestion du thème  - permet d'avoir un avatar par défaut spécifique à un thème, que l'on peut quand même changer avec la propriété "avatar" dans le YAML
+- **css**: amélioration du thème sombre (pour les éléments de type input)
+- **css**: ajout d'un thème sombre
+
 ## 8.3.4 (2025-10-28)
 
 ### Fix
