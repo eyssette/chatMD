@@ -9,7 +9,7 @@ version_files = [
 	"VERSION",
 	"package.json:version"
 ]
-pre_bump_hooks = "npx task build"
+pre_bump_hooks = "sudo task build"
 use_shortcuts = true
 [tool.commitizen.customize]
 message_template = "{{change_type}}{% if scope %}({{scope}}){% endif %}{% if breaking %}!{% endif %}: {{message}}"
