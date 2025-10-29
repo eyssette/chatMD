@@ -1,8 +1,21 @@
-main {
-	background: white;
+:root {
+	--main-bg: transparent;
 }
+.message {
+	--color-light: #e5e5ea;
+}
+
+@media (prefers-color-scheme: dark) {
+	.message {
+		--color-light: #222;
+	}
+}
+
 h1 {
 	margin-bottom: 0.25em;
+}
+.user-message * {
+	display: inline-block;
 }
 .user-message:after,
 .user-message:before {
@@ -17,7 +30,6 @@ h1 {
 }
 .message {
 	min-height: 40px;
-	margin-top: 1em;
 	border-radius: 20px;
 	-moz-border-radius: 20px;
 	-webkit-border-radius: 20px;
@@ -30,15 +42,12 @@ h1 {
 	-webkit-border-radius: 20px;
 }
 .bot-message {
-	background: #e5e5ea;
-	text-shadow: 1px 1px 0 #f3f3f4;
+	background: var(--color-light);
 }
-.user-message {
-	color: #fff;
-	text-shadow: 1px 1px 0 #1b96fc;
-	background-color: #39a1f9;
-	max-width: 400px;
+.messageOptions {
+	--color-light: #333;
 }
+
 .bot-message:before {
 	content: "";
 	position: absolute;
@@ -47,7 +56,7 @@ h1 {
 	left: -20px;
 	height: 40px;
 	width: 40px;
-	background: #e5e5ea;
+	background: var(--color-light);
 	border-bottom-right-radius: 30px;
 }
 .bot-message:after {
@@ -58,7 +67,7 @@ h1 {
 	left: -20px;
 	width: 20px;
 	height: 40px;
-	background: #fff;
+	background: var(--color-bg);
 	border-bottom-right-radius: 30px;
 }
 .user-message:before {
@@ -67,32 +76,24 @@ h1 {
 	height: 40px;
 	width: 40px;
 	background: fixed;
-	background-color: #39a1f9;
+	background-color: var(--color-primary);
 }
 .user-message:after {
 	z-index: 1;
 	right: -21px;
 	width: 21px;
 	height: 41px;
-	background: #fff;
+	background: var(--color-bg);
 }
 .bot-message > :first-child:before {
-	position: relative;
-	z-index: 1;
+	background-image: url("../themes/emoji_information_desk.svg");
+	content: "";
+	margin-right: 15px;
 }
-#controls {
-	z-index: 3;
-}
-footer {
-	z-index: 4;
-}
-.bot-message * {
-	z-index: 1;
-	position: relative;
-}
+
 @media screen and (max-width: 500px) {
 	#chat,
 	.message {
-		padding: 10px !important;
+		max-width: 90%;
 	}
 }
