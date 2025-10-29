@@ -137,18 +137,6 @@ export function processYAML(markdownContent) {
 				const faviconElement = document.getElementById("favicon");
 				faviconElement.href = yaml.favicon;
 			}
-			if (yaml.avatar) {
-				const isAvatarCircle = yaml.avatarCircle || yaml.avatarCercle;
-				const avatarCircleCSS = isAvatarCircle ? "border-radius:50%;" : "";
-				const avatarCSS = `
-					.bot-message > :first-child:before {
-						background-image: url("${yaml.avatar}");
-						${avatarCircleCSS}
-					};`;
-				const avatarStyleElement = document.createElement("style");
-				avatarStyleElement.textContent = avatarCSS;
-				document.head.appendChild(avatarStyleElement);
-			}
 			if (yaml.defaultMessage || yaml.messageParDéfaut) {
 				config.defaultMessage = yaml.messageParDéfaut
 					? Object.values(yaml.messageParDéfaut)
@@ -167,6 +155,18 @@ export function processYAML(markdownContent) {
 					? "css/themes/" + yaml.theme
 					: "css/themes/" + yaml.theme + ".css";
 				loadCSS(cssFile);
+			}
+			if (yaml.avatar) {
+				const isAvatarCircle = yaml.avatarCircle || yaml.avatarCercle;
+				const avatarCircleCSS = isAvatarCircle ? "border-radius:50%;" : "";
+				const avatarCSS = `
+					.bot-message > :first-child:before {
+						background-image: url("${yaml.avatar}");
+						${avatarCircleCSS}
+					};`;
+				const avatarStyleElement = document.createElement("style");
+				avatarStyleElement.textContent = avatarCSS;
+				document.head.appendChild(avatarStyleElement);
 			}
 			if (
 				yaml.dynamicContent ||
