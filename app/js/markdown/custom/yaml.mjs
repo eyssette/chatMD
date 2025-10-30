@@ -5,6 +5,7 @@ import { deepMerge } from "../../utils/objects.mjs";
 import { setContentOfFooter } from "../../utils/ui.mjs";
 import { decodeApiKey } from "../../ai/helpers/keyDecoder.mjs";
 import { sendButton, footerElement } from "../../shared/selectors.mjs";
+import { checkDarkModePreference } from "../../utils/css.mjs";
 
 export let yaml = {
 	plugins: config.yaml.plugins,
@@ -146,12 +147,7 @@ export function processYAML(markdownContent) {
 				setContentOfFooter(footerElement, yaml.footer);
 			}
 			if (yaml.darkmode !== false) {
-				if (
-					window.matchMedia &&
-					window.matchMedia("(prefers-color-scheme: dark)").matches
-				) {
-					document.documentElement.classList.add("darkmode");
-				}
+				checkDarkModePreference();
 			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith(".css")
@@ -271,6 +267,8 @@ export function processYAML(markdownContent) {
 		} catch (e) {
 			console.log("erreur processYAML : " + e);
 		}
+	} else {
+		checkDarkModePreference();
 	}
 	return yaml;
 }

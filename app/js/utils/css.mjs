@@ -1,3 +1,12 @@
+export function checkDarkModePreference() {
+	if (
+		window.matchMedia &&
+		window.matchMedia("(prefers-color-scheme: dark)").matches
+	) {
+		document.documentElement.classList.add("darkmode");
+	}
+}
+
 export function scopeStyles(htmlString, prefix) {
 	return htmlString.replace(
 		/<style\s+[^>]*scoped[^>]*>([\s\S]*?)<\/style>/gi,
