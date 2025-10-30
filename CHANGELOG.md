@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.3.6 (2025-10-31)
+
+### Fix
+
+- **markdown**: gestion du thème sombre - aussi si la source ne contient pas de YAML
+- **core**: possibilité de désactiver la vérification de la correspondance avec les keywords quand on utilise la directive !Next
+- **markdown**: enregistrement du dernier message de l'utilisateur dans la variable dynamique @INPUT
+- **markdown**: regex plus fine pour la détection des variables
+- **css**: meilleure gestion du darkmode (avec une classe) et possibilité d'utiliser "darkmode: false" dans le yaml pour forcer le lightmode
+
+### Chore
+
+- nom de variable plus clair pour la gestion de  la directive !Next et de l'objet chatbot.nextMessage
+- résolution du bug sur le package-lock.json
+- config commitizen pour que package-lock.json soit bien préesnt dans le bump
+
 ## 8.3.5 (2025-10-29)
 
 ### Fix
