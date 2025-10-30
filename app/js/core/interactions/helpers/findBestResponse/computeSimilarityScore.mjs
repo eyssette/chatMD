@@ -32,11 +32,11 @@ export function computeSimilarityScore(chatbot, userInput) {
 			) {
 				continue;
 			}
-			// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
+			// Si on a la directive !Next on va directement vers cette réponse, sauf si la réponse contient des déclencheurs (qui vont servir de mots clés pour vérifier la correspondance) et qu'on ne souhaite pas les ignorer
 			if (
 				chatbot.nextMessage.needsProcessing &&
 				titleResponse == chatbot.nextMessage.goto &&
-				keywordsResponse.length == 0
+				(keywordsResponse.length == 0 || chatbot.nextMessage.ignoreKeywords)
 			) {
 				userInput = removeAccents(chatbot.nextMessage.goto.toLowerCase());
 			}
@@ -45,6 +45,8 @@ export function computeSimilarityScore(chatbot, userInput) {
 			// On met tout en minuscule
 			const keywords =
 				chatbot.nextMessage.needsProcessing &&
+				keywordsResponse.length > 0 &&
+				chatbot.nextMessage.ignoreKeywords !== true
 					? keywordsResponse.map((keyword) => keyword.toLowerCase())
 					: keywordsResponse
 							.concat(titleResponse)

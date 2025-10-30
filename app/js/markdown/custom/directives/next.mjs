@@ -6,10 +6,10 @@ export function processDirectiveNext(chatbot, message) {
 		/!Next ?:(.*)/g,
 		function (match, nextDirectiveContent) {
 			const nextDirectiveContentSplit = nextDirectiveContent.split("/");
-			let messageIfError;
+			let nextDirectiveOptions;
 			if (nextDirectiveContentSplit.length > 0) {
 				nextDirectiveContent = nextDirectiveContentSplit[0];
-				messageIfError = nextDirectiveContentSplit[1];
+				nextDirectiveOptions = nextDirectiveContentSplit[1];
 			} else {
 				nextDirectiveContent = nextDirectiveContentSplit[0];
 			}
@@ -19,7 +19,13 @@ export function processDirectiveNext(chatbot, message) {
 			chatbot.nextMessage.goto = nextDirectiveContent
 				.replace("!loop", "")
 				.trim();
+			chatbot.nextMessage.ignoreKeywords =
+				nextDirectiveOptions && nextDirectiveOptions.includes("ignoreKeywords")
+					? true
+					: false;
 			chatbot.nextMessage.needsProcessing = true;
+			chatbot.nextMessage.messageIfKeywordsNotFound = nextDirectiveOptions
+				? nextDirectiveOptions.trim()
 				: "Ce n'était pas la bonne réponse, merci de réessayer !";
 			chatbot.nextMessage.messageIfKeywordsNotFound =
 				chatbot.nextMessage.messageIfKeywordsNotFound + "\n\n";
