@@ -91,11 +91,6 @@ export function processYAML(markdownContent) {
 					yaml.responsesTitles = Object.values(yaml.responsesTitles);
 				}
 			}
-			if (yaml.style) {
-				const styleElement = document.createElement("style");
-				styleElement.innerHTML = yaml.style;
-				document.body.appendChild(styleElement);
-			}
 			if (
 				yaml.userInput === false ||
 				yaml.clavier === false ||
@@ -150,6 +145,14 @@ export function processYAML(markdownContent) {
 			} else if (typeof yaml.footer == "string") {
 				setContentOfFooter(footerElement, yaml.footer);
 			}
+			if (yaml.darkmode !== false) {
+				if (
+					window.matchMedia &&
+					window.matchMedia("(prefers-color-scheme: dark)").matches
+				) {
+					document.documentElement.classList.add("darkmode");
+				}
+			}
 			if (yaml.theme) {
 				const cssFile = yaml.theme.endsWith(".css")
 					? "css/themes/" + yaml.theme
@@ -167,6 +170,11 @@ export function processYAML(markdownContent) {
 				const avatarStyleElement = document.createElement("style");
 				avatarStyleElement.textContent = avatarCSS;
 				document.head.appendChild(avatarStyleElement);
+			}
+			if (yaml.style) {
+				const styleElement = document.createElement("style");
+				styleElement.innerHTML = yaml.style;
+				document.body.appendChild(styleElement);
 			}
 			if (
 				yaml.dynamicContent ||

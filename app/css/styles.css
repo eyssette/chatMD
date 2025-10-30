@@ -1,6 +1,8 @@
 /* 
-	BASE ET LAYOUT
+	BASE
 */
+
+/* VARIABLES CSS */
 
 :root {
 	--font: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -26,42 +28,65 @@
 	--color-link: darkblue;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--body-bg: #171919;
-		--h1-bg: #171919;
-		--main-bg: linear-gradient(
-			90deg,
-			#1e2021,
-			#202223,
-			#222425,
-			#242627,
-			#272929
-		);
-		--main-border-color: transparent;
-		--controls-bg: #171919;
-		--color-text: #e0ddd7;
-		--color-bg: #171919;
-		--color-light: #888;
-		--color-lighter: rgb(255 255 255 / 20%);
-		--color-ultra-light: rgb(0 0 0 / 10%);
-		--color-link: #6eb4ff;
-	}
-	.messageOptions a {
-		--color-light: #444 !important;
-	}
-	.admonition {
-		--info-color-title: white !important;
-		--success-color-title: white !important;
-		--warning-color-title: white !important;
-	}
-	input,
-	button {
-		background-color: #3b3b3b;
-		color: white;
-		border: 1px solid rgba(255, 255, 255, 0.3);
-	}
+/* DARKMODE */
+
+:root.darkmode {
+	--body-bg: #171919;
+	--h1-bg: #171919;
+	--main-bg: linear-gradient(
+		90deg,
+		#1e2021,
+		#202223,
+		#222425,
+		#242627,
+		#272929
+	);
+	--main-border-color: transparent;
+	--controls-bg: #171919;
+	--color-text: #e0ddd7;
+	--color-bg: #171919;
+	--color-light: #888;
+	--color-lighter: rgb(255 255 255 / 20%);
+	--color-ultra-light: rgb(0 0 0 / 10%);
+	--color-link: #6eb4ff;
 }
+.darkmode .messageOptions a {
+	--color-light: #444 !important;
+}
+.darkmode .admonition {
+	--info-color-title: white !important;
+	--success-color-title: white !important;
+	--warning-color-title: white !important;
+}
+.darkmode input,
+.darkmode button,
+.darkmode select {
+	color: white;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.darkmode input,
+.darkmode button {
+	background-color: #3b3b3b;
+}
+
+.darkmode select {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.darkmode select:focus-visible {
+	border-color: rgba(47, 50, 51, 0.3);
+}
+
+.darkmode option {
+	background: rgb(23, 25, 25);
+}
+
+/* 
+	LAYOUT
+ */
+
+/* LAYOUT PRICIPAL */
 
 body {
 	margin: 0;
@@ -240,7 +265,7 @@ footer a:hover {
 	}
 }
 
-/* Éléments de base HTML */
+/* ÉLÉMENTS DE BASE HTML */
 
 a,
 a:visited {

@@ -1,14 +1,13 @@
-:root {
+:root,
+.darkmode:root {
 	--main-bg: transparent;
 }
 .message {
 	--color-light: #e5e5ea;
 }
 
-@media (prefers-color-scheme: dark) {
-	.message {
-		--color-light: #222;
-	}
+.darkmode .message {
+	--color-light: #222;
 }
 
 h1 {
