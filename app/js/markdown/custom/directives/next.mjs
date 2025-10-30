@@ -19,9 +19,7 @@ export function processDirectiveNext(chatbot, message) {
 			chatbot.nextMessage.goto = nextDirectiveContent
 				.replace("!loop", "")
 				.trim();
-			chatbot.nextMessage.onlyIfKeywords = true;
-			chatbot.nextMessage.messageIfKeywordsNotFound = messageIfError
-				? messageIfError.trim()
+			chatbot.nextMessage.needsProcessing = true;
 				: "Ce n'était pas la bonne réponse, merci de réessayer !";
 			chatbot.nextMessage.messageIfKeywordsNotFound =
 				chatbot.nextMessage.messageIfKeywordsNotFound + "\n\n";

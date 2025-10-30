@@ -14,17 +14,17 @@ export function processFinalResponse(
 ) {
 	let chatbotResponses = chatbot.responses;
 	// Soit il y a un bestMatch, soit on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
-	if (bestMatch || chatbot.nextMessage.onlyIfKeywords) {
+	if (bestMatch || chatbot.nextMessage.needsProcessing) {
 		if (
 			bestMatch &&
-			chatbot.nextMessage.onlyIfKeywords &&
+			chatbot.nextMessage.needsProcessing &&
 			bestMatchScore > BESTMATCH_THRESHOLD
 		) {
 			// Réinitialiser si on a trouvé la bonne réponse après une directive !Next
 			chatbot.nextMessage.lastMessageFromBot = "";
 			chatbot.nextMessage.goto = "";
 			chatbot.nextMessage.errorsCounter = 0;
-			chatbot.nextMessage.onlyIfKeywords = false;
+			chatbot.nextMessage.needsProcessing = false;
 		}
 		// On envoie le meilleur choix s'il en existe un
 		let selectedResponseWithoutChoiceOptions = bestMatch
@@ -35,10 +35,11 @@ export function processFinalResponse(
 		let selectedResponseChoiceOptions = bestMatch
 			? chatbotResponses[indexBestMatch].choiceOptions
 			: [];
-		// Cas où on veut aller directement à un prochain message mais seulement si la réponse inclut les keywords correspondant (sinon on remet le message initial)
+		// Cas où on veut aller directement à un prochain message avec la directive !Next
+		// S'il y avait des keywords dans le message à afficher, on vérifie si la réponse de l'utilisateur inclut les keywords correspondant (sinon on remet le message initial)
 		let selectedResponseWithChoiceOptions;
 		if (
-			chatbot.nextMessage.onlyIfKeywords &&
+			chatbot.nextMessage.needsProcessing &&
 			bestMatchScore < BESTMATCH_THRESHOLD
 		) {
 			// En cas de mauvaise réponse

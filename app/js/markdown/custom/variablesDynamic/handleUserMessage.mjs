@@ -50,7 +50,7 @@ export function handleUserMessage(
 			chatbot.nextMessage.goto = "";
 		}
 	} else {
-		chatbot.nextMessage.goto = chatbot.nextMessage.onlyIfKeywords
+		chatbot.nextMessage.goto = chatbot.nextMessage.needsProcessing
 			? chatbot.nextMessage.goto
 			: "";
 	}

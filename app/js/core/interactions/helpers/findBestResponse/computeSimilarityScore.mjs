@@ -25,7 +25,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 			const keywordsResponse = chatbotResponses[i].keywords;
 			// Si on a la directive !Next ou !SelectNext, on teste seulement la similarité avec la réponse vers laquelle on doit aller et on saute toutes les autres réponses
 			if (
-				(chatbot.nextMessage.onlyIfKeywords &&
+				(chatbot.nextMessage.needsProcessing &&
 					titleResponse != chatbot.nextMessage.goto) ||
 				(chatbot.nextMessage.selected &&
 					titleResponse != chatbot.nextMessage.selected)
@@ -34,7 +34,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 			}
 			// Si on a la directive !Next, alors si la réponse à tester ne contient pas de conditions, on va directement vers cette réponse
 			if (
-				chatbot.nextMessage.onlyIfKeywords &&
+				chatbot.nextMessage.needsProcessing &&
 				titleResponse == chatbot.nextMessage.goto &&
 				keywordsResponse.length == 0
 			) {
@@ -44,7 +44,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 			// Sinon on inclut le titre
 			// On met tout en minuscule
 			const keywords =
-				chatbot.nextMessage.onlyIfKeywords && keywordsResponse.length > 0
+				chatbot.nextMessage.needsProcessing &&
 					? keywordsResponse.map((keyword) => keyword.toLowerCase())
 					: keywordsResponse
 							.concat(titleResponse)
@@ -68,7 +68,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 				if (userInput.includes(keyword) && !isNegativeKeyword) {
 					// Test de l'identité stricte
 					let strictIdentityMatch = false;
-					if (chatbot.nextMessage.onlyIfKeywords) {
+					if (chatbot.nextMessage.needsProcessing) {
 						// Si on utilise la directive !Next, on vérifie que le keyword n'est pas entouré de lettres ou de chiffres dans le message de l'utilisateur
 						const regexStrictIdentityMatch = new RegExp(`\\b${keyword}\\b`);
 						if (regexStrictIdentityMatch.test(userInput)) {
@@ -101,7 +101,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 						: levenshteinDistance > 1
 							? distanceScore + levenshteinDistance
 							: distanceScore;
-					if (!isNegativeKeyword && !chatbot.nextMessage.onlyIfKeywords) {
+					if (!isNegativeKeyword && !chatbot.nextMessage.needsProcessing) {
 						// Si on n'a pas de keyword négatif on prend en compte la plus longue chaîne commune de caractères (sauf si on doit passer au message seulement s'il y a présence du keyword [cas d'un quiz] : dans ce cas, on doit être plus strict et tester seulement la proximité avec la distance de Levenshtein pour simplement autoriser quelques fautes d'orthographe)
 						distanceScore =
 							distanceScore +
@@ -119,7 +119,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 			}
 			if (
 				(matchScore == 0 || yaml.searchInContent) &&
-				!chatbot.nextMessage.onlyIfKeywords
+				!chatbot.nextMessage.needsProcessing
 			) {
 				// En cas de simple similarité : on monte quand même le score. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 				if (distanceScore > bestDistanceScore) {
@@ -130,7 +130,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 			// Si on a la directive !Next : titre réponse, alors on augmente de manière importante le matchScore si on a un matchScore > 0.5 et que la réponse correspond au titre de la réponse voulue dans la directive
 			if (
 				matchScore > 0.5 &&
-				chatbot.nextMessage.onlyIfKeywords &&
+				chatbot.nextMessage.needsProcessing &&
 				titleResponse == chatbot.nextMessage.goto
 			) {
 				matchScore = matchScore + MATCH_SCORE_IDENTITY;

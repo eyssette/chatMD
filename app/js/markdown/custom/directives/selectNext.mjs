@@ -7,7 +7,7 @@ export function processDirectiveSelectNext(chatbot, message) {
 			const v1Split = v1.split("/");
 			chatbot.nextMessage.lastMessageFromBot = "";
 			chatbot.nextMessage.goto = "";
-			chatbot.nextMessage.onlyIfKeywords = false;
+			chatbot.nextMessage.needsProcessing = false;
 			chatbot.nextMessage.selected = getRandomElement(v1Split).trim();
 			return "";
 		} else {

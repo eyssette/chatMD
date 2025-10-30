@@ -148,10 +148,10 @@ function handleClickOnChatContainer(chatbot) {
 					const actionMessage = choiceOptions[indexTarget - 1].textContent;
 					chatbot.actions.push("e:" + actionMessage);
 				}
-				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.onlyIfKeywords
+				// Si on clique sur un lien après une directive !Next, on réinitalise les variables lastMessageFromBot, nextMessage.goto et nextMessage.needsProcessing
 				chatbot.nextMessage.lastMessageFromBot = "";
 				chatbot.nextMessage.goto = "";
-				chatbot.nextMessage.onlyIfKeywords = false;
+				chatbot.nextMessage.needsProcessing = false;
 				let messageFromLink = yaml.maths ? target.innerHTML : target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yaml.obfuscate
