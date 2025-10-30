@@ -5,7 +5,7 @@ export function checkConditionalBlock(condition, dynamicVariables) {
 	try {
 		// Remplace les variables personnalisées dans la condition
 		condition = condition.replace(
-			/@([^\s()&|!=<>]+)/g,
+			/@([\p{L}0-9_]+)/gu,
 			function (match, varName) {
 				return (
 					'tryConvertStringToNumber(dynamicVariables["' + varName.trim() + '"])'
