@@ -35,9 +35,13 @@ export function handleUserMessage(
 		},
 	);
 
+	// On enregistre le dernier message de l'utilisateur dans la variable dynamique INPUT.
+	dynamicVariables["INPUT"] = message;
+
 	if (getLastMessage) {
-		// Si dans le précédent message, on avait demandé à récupérer l'input : on récupère cette input et on le met dans la variable correspondante
-		// Puis on renvoie vers le message correspondant
+		// Compatibilité avec l'ancienne syntaxe `@variable = @INPUT : redirection` pour récupérer l'input de l'utilisateur et l'assigner à une variable
+		// Si dans le précédent message, on avait demandé à récupérer l'input : on récupère cet input et on le met dans la variable correspondante
+		// puis on renvoie vers le message correspondant
 		if (getLastMessage && getLastMessage.length > 0) {
 			dynamicVariables[getLastMessage[0]] = message;
 			chatbot.nextMessage.goto = getLastMessage[1];
