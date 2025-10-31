@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.3.7 (2025-10-31)
+
+### Fix
+
+- **core**: gestion des éléments "input" dans un message pour faire des assignations de valeur à une variable dynamique
+- **css**: meilleur affichage du footer sur petit écran
+- **markdown**: gestion du Latex bloc multilignes
+- **core**: fix pour les assignations de valeurs à une variable dans un bouton
+
 ## 8.3.6 (2025-10-31)
 
 ### Fix
