@@ -2,7 +2,14 @@ import { yaml } from "./custom/yaml.mjs";
 
 export function convertLatexExpressions(string, noBackticks) {
 	string = string
-		.replace(/\$\$(.*?)\$\$/g, "&#92;[$1&#92;]")
+		.replace(/\$\$(.*?)\$\$/gs, function (_, latexContent) {
+			latexContent = latexContent
+				.replace(/<\/?p>/g, "")
+				.replace(/<\/?pre>/g, "")
+				.replace(/<\/?code>/g, "")
+				.replace(/\n/g, " ");
+			return "&#92;[" + latexContent + "&#92;]";
+		})
 		.replace(/\$(.*?)\$/g, "&#92;($1&#92;)");
 	let expressionsLatex = string.match(
 		new RegExp(/&#92;\[.*?&#92;\]|&#92;\(.*?&#92;\)/g),
