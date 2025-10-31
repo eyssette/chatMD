@@ -89,8 +89,10 @@ export async function createMessage(chatbot, message, options) {
 					createMessage(chatbot, response, { isUser: false });
 				}
 			});
-			// Gestion des éléments HTML <select> si on veut les utiliser pour gérer des variables dynamiques
-			processSelectElements(chatbot, originalMessage, messageElement);
+			// Gestion des éléments HTML de type formulaire (<select>, <input>) si on veut les utiliser pour gérer des variables dynamiques
+			if (yaml && yaml.dynamicContent) {
+				processFormInputs(chatbot, originalMessage, messageElement);
+			}
 		}
 	}
 	if (yaml && yaml.scorm) {
@@ -99,11 +101,10 @@ export async function createMessage(chatbot, message, options) {
 	}
 }
 
-// Pour traiter l'événement 'change' d'un élément <select>, afin de mettre à jour le message concerné en traitant les variables dynamiques contenues dans le message
-function processSelectElements(chatbot, originalMessage, htmlElement) {
-	// Sélectionne tous les éléments <select> de la page
+// Pour traiter les éléments HTML de type formulaire (<select>, <input>), afin de mettre à jour le message concerné en traitant les variables dynamiques contenues dans le message
+function processFormInputs(chatbot, originalMessage, htmlElement) {
+	// Gestion des éléments <select>
 	const allSelectElements = htmlElement.querySelectorAll("select");
-	// Parcours chaque <select> et ajoute un écouteur d'événement 'change'
 	allSelectElements.forEach((selectElement) => {
 		const selectedValue = selectElement.getAttribute("data-selected");
 		if (selectedValue) {
@@ -117,6 +118,14 @@ function processSelectElements(chatbot, originalMessage, htmlElement) {
 		selectElement.addEventListener("change", (event) => {
 			handleChange(event, chatbot, originalMessage, htmlElement);
 		});
+	});
+
+	// Gestion des éléments <input>
+	htmlElement.addEventListener("keydown", (event) => {
+		if (event.key === "Enter" && event.target.matches("input")) {
+			event.preventDefault();
+			handleChange(event, chatbot, originalMessage, htmlElement);
+		}
 	});
 }
 

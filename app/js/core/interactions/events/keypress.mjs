@@ -28,10 +28,12 @@ export function setKeypressListener() {
 					const urlNewChatbot = event.target.value.trim();
 					goToNewChatbot(urlNewChatbot);
 				} else {
-					// Sinon, on fait comme si on faisait un clic sur le bouton Envoyer, ce qui permet d'envoyer sa réponse (s'il y a du contenu), ou de faire tout apparaître d'un coup, et de désactiver l'effet typewriter, s'il n'y a pas de contenu.
-					userInput.focus();
-					sendButton.click();
-					scrollWindow({ scrollMode: "instant" });
+					if (event.target.id == "user-input") {
+						// Sinon, on fait comme si on faisait un clic sur le bouton Envoyer, ce qui permet d'envoyer sa réponse (s'il y a du contenu), ou de faire tout apparaître d'un coup, et de désactiver l'effet typewriter, s'il n'y a pas de contenu.
+						userInput.focus();
+						sendButton.click();
+						scrollWindow({ scrollMode: "instant" });
+					}
 				}
 			} else {
 				// Si on a utilisé Clic+Enter ou Alt+Enter, alors on insère un retour à la ligne dans la zone de texte et on cache si nécessaire le footer
