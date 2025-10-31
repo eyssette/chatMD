@@ -21,11 +21,12 @@ export async function displayMessage(md, options) {
 	const disableTypewriter = options && options.disableTypewriter;
 	const checkTypeWriter = checkTypewriterPreferences(md);
 	md = checkTypeWriter.md;
-	const isMessageWithSelectElement = md.includes("<select ");
+	const isMessageWithFormElement =
+		md.includes("<select ") || md.includes(`<input type="text"`);
 	const noTypewriter =
 		disableTypewriter ||
 		checkTypeWriter.useTypewriter === false ||
-		isMessageWithSelectElement;
+		isMessageWithFormElement;
 	let html = markdownToHTML(md);
 	if (yaml && yaml.bots && !isUser) {
 		html = processMultipleBots(html);
