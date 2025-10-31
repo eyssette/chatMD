@@ -27,6 +27,13 @@ export function handleBotMessage(message, dynamicVariables, getLastMessage) {
 		/ (@[^\s]*?=.*?)</g,
 		'<span class="hidden">$1</span><',
 	);
+	// Cas où il n'y a qu'une simple assignation sans autre texte
+	// Exemple : 1. [@choix=Choix 1](cible)
+	// On affiche dans le bouton "Choix 1", et on garde dans un élément HTML caché l'assignation de valeur qui sera à traiter.
+	message = message.replaceAll(
+		/>(@[^\s]*?)=(.*?)</g,
+		'><span class="hidden">$1=$2</span>$2<',
+	);
 
 	// On masque aussi, dans le message qui s'est affiché suite au clic sur le bouton, l'assignation de la variable qui a été transmise à ce message
 	message = message.replaceAll(

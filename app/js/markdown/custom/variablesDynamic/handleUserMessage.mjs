@@ -9,8 +9,8 @@ export function handleUserMessage(
 	// Cas où le message vient de l'utilisateur
 	// Traitement du cas où on a dans le message une assignation de variable (qui vient du fait qu'on a cliqué sur une option qui intégrait cette demande d'assignation de variable)
 	message = message.replaceAll(
-		/@([^\s]*?)=(.*)/g,
-		function (match, variableName, variableValue, offset) {
+		/<span class="hidden">@([^\s]*?)=(.*?)<\/span>/g,
+		function (match, variableName, variableValue) {
 			if (match.includes("calc(")) {
 				try {
 					// Calcule l'expression complexe
@@ -30,8 +30,7 @@ export function handleUserMessage(
 			} else {
 				dynamicVariables[variableName] = variableValue;
 			}
-			// S'il n'y avait pas de texte en plus de la valeur de la variable, on garde la valeur de la variable dans le bouton, sinon on l'enlève
-			return offset == 0 ? variableValue : "";
+			return "";
 		},
 	);
 
