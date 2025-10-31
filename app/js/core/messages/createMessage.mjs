@@ -120,9 +120,9 @@ function processFormInputs(chatbot, originalMessage, htmlElement) {
 		});
 	});
 
-	// Gestion des éléments <input>
+	// Gestion des éléments <input> de type "text"
 	htmlElement.addEventListener("keydown", (event) => {
-		if (event.key === "Enter" && event.target.matches("input")) {
+		if (event.key === "Enter" && event.target.matches("input[type='text']")) {
 			event.preventDefault();
 			handleChange(event, chatbot, originalMessage, htmlElement);
 		}
