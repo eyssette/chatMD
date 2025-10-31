@@ -253,6 +253,8 @@ footer a:hover {
 	footer {
 		right: 20px;
 		text-align: right;
+		max-width: 265px;
+		line-height: 1.15em;
 	}
 }
 
