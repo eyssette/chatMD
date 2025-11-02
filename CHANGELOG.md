@@ -1,5 +1,18 @@
 # Changelog
 
+## 8.3.8 (2025-11-02)
+
+### Fix
+
+- **core**: gestion de l'obfuscation améliorée (dans l'historique des actions + pour les caractères non ASCII)
+- **core**: détection de la touche "Enter" - meilleure distinction des cas où cela doit conduire ou non à cliquer sur le bouton "Envoyer"
+- **core**: gestion des éléments de formulaire : pas d'effet machine à écrire dans le message qui en contient - ajout de la détection des éléments input de type "text"
+- **core**: gestion des éléments de formulaire : sélection plus précise des inputs de type "text"
+
+### Chore
+
+- config et rapports megalinter - pas dans le dépôt
+
 ## 8.3.7 (2025-10-31)
 
 ### Fix
