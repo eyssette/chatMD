@@ -1,7 +1,7 @@
 import { createMessage } from "../../messages/createMessage.mjs";
 import { getChatbotResponse } from "../../interactions/getChatbotResponse.mjs";
 import { removeAccents } from "../../../utils/nlp.mjs";
-import { decodeString } from "../../../utils/strings.mjs";
+import { decodeString, deobfuscateString } from "../../../utils/strings.mjs";
 
 async function waitForChoiceOption(number, timeout = 1000) {
 	return new Promise((resolve, reject) => {
@@ -64,7 +64,8 @@ export async function processActions(chatbot, yaml, hasActions) {
 		// Si l'action consiste à entrer un message dans la zone de texte
 		if (actionType == "e") {
 			// On affiche ce message
-			const userMessage = actionData;
+			const userMessage =
+				yaml && yaml.obfuscate ? deobfuscateString(actionData) : actionData;
 			await createMessage(chatbot, userMessage, { isUser: true });
 			// Puis on affiche la réponse, sans typewriter sauf si on en est à la dernière action
 			const response = getChatbotResponse(chatbot, userMessage);
@@ -111,7 +112,7 @@ export async function processActions(chatbot, yaml, hasActions) {
 					.replace("#", "");
 				// Si on utilise l'obfuscation, il faut décoder le message
 				messageToChatbot = yaml.obfuscate
-					? atob(messageToChatbot)
+					? deobfuscateString(messageToChatbot)
 					: messageToChatbot;
 				// On affiche le message à afficher côté utilisateur
 				await createMessage(chatbot, messageToDisplay, { isUser: true });

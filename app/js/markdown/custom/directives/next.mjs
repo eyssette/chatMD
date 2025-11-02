@@ -1,4 +1,5 @@
 import { yaml } from "../yaml.mjs";
+import { obfuscateString } from "../../../utils/strings.mjs";
 
 // Gestion de la directive !Next: Titre réponse / message si mauvaise réponse
 export function processDirectiveNext(chatbot, message) {
@@ -39,7 +40,7 @@ export function processDirectiveNext(chatbot, message) {
 			} else {
 				const skipMessage = `<ul class="messageOptions"><li><a href="#${
 					yaml.obfuscate
-						? btoa(chatbot.nextMessage.goto)
+						? obfuscateString(chatbot.nextMessage.goto)
 						: chatbot.nextMessage.goto
 				}">Passer à la suite !</a></li></ul>`;
 				return skipMessage;

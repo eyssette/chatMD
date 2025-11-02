@@ -1,4 +1,5 @@
 import { config } from "../../../../config.mjs";
+import { obfuscateString } from "../../../../utils/strings.mjs";
 import {
 	detectedResponseTitle,
 	isStructureTitle,
@@ -82,7 +83,7 @@ export function handleChoiceOptions(choiceInformations, yaml, currentData) {
 	if (link.startsWith("#")) {
 		link = link.slice(1).replaceAll("-", " ");
 	}
-	link = yaml.obfuscate ? btoa(link) : link;
+	link = yaml.obfuscate ? obfuscateString(link) : link;
 	let text = choiceInformations.text;
 	currentData.choiceOptions.push({
 		text: text ? text : config.defaultChoiceOptionText,

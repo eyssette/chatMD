@@ -97,3 +97,23 @@ export function encodeString(str) {
 export function decodeString(str) {
 	return decodeURIComponent(window.atob(str));
 }
+
+// Obfuscation Unicode-safe
+export function obfuscateString(str) {
+	const bytes = new TextEncoder().encode(str); // UTF-8 encoding
+	let binary = "";
+	for (const b of bytes) {
+		binary += String.fromCharCode(b);
+	}
+	return btoa(binary);
+}
+
+// Désobfuscation Unicode-safe
+export function deobfuscateString(str) {
+	const binary = atob(str);
+	const bytes = new Uint8Array(binary.length);
+	for (let i = 0; i < binary.length; i++) {
+		bytes[i] = binary.charCodeAt(i);
+	}
+	return new TextDecoder().decode(bytes); // UTF-8 decoding
+}

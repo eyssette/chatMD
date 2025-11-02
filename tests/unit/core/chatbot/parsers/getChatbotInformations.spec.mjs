@@ -1,4 +1,8 @@
 import { getChatbotInformations } from "../../../../../app/js/core/chatbot/parsers/getChatbotInformations.mjs";
+import {
+	deobfuscateString,
+	obfuscateString,
+} from "../../../../../app/js/utils/strings.mjs";
 
 describe("getChatbotInformations", () => {
 	let yaml = {
@@ -96,12 +100,12 @@ Some content B`;
 		} = result[1].choiceOptions[1];
 
 		expect(text1).toBe("First Option");
-		expect(atob(link1)).toBe("link 1");
+		expect(deobfuscateString(link1)).toBe("link 1");
 		expect(random1).toBeTrue();
 		expect(condition1).toBe("@loggedIn==true && @user==admin");
 
 		expect(text2).toBe("Second Option");
-		expect(atob(link2)).toBe("link 2");
+		expect(deobfuscateString(link2)).toBe("link 2");
 		expect(random2).toBeFalse();
 		expect(condition2).toBe("");
 	});
@@ -282,7 +286,7 @@ Another line of text.`;
 			obfuscatedYaml,
 		);
 
-		const expectedLink = btoa("obfuscated Link");
+		const expectedLink = obfuscateString("obfuscated Link");
 
 		expect(result[0]).toEqual({
 			title: defaultChatbotTitle,

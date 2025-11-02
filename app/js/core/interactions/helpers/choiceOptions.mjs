@@ -4,6 +4,7 @@ import {
 	randomizeArrayWithFixedElements,
 } from "../../../utils/arrays.mjs";
 import { processDirectiveSelect } from "../../../markdown/custom/directives/select.mjs";
+import { obfuscateString } from "../../../utils/strings.mjs";
 
 export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
 	// Gestion de la réponse à envoyer si on sélectionne une des options proposées
@@ -15,7 +16,7 @@ export function responseToSelectedChoiceOption(chatbot, choiceOptionLink) {
 	const chatbotResponsesLength = chatbotResponses.length;
 	for (let i = 0; i < chatbotResponsesLength; i++) {
 		let title = chatbotResponses[i].title;
-		title = yaml.obfuscate ? btoa(title) : title;
+		title = yaml.obfuscate ? obfuscateString(title) : title;
 		if (choiceOptionLink == title) {
 			let response = chatbotResponses[i].content;
 			const choiceOptions = chatbotResponses[i].choiceOptions;

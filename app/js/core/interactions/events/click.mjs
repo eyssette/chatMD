@@ -1,7 +1,7 @@
 import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { goToNewChatbot } from "../../../utils/urls.mjs";
 import { scrollWindow } from "../../../utils/ui.mjs";
-import { sanitizeHtml } from "../../../utils/strings.mjs";
+import { deobfuscateString, sanitizeHtml } from "../../../utils/strings.mjs";
 import { createMessage } from "../../messages/createMessage.mjs";
 import {
 	chatContainer,
@@ -159,7 +159,7 @@ function handleClickOnChatContainer(chatbot) {
 						: target.innerText;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yaml.obfuscate
-					? atob(link.replace("#", ""))
+					? deobfuscateString(link.replace("#", ""))
 					: link;
 				if (
 					yaml.useLLM.url &&
