@@ -1,0 +1,166 @@
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: normal;
+	font-weight: 300;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Light.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Light.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: italic;
+	font-weight: 300;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Light_Italic.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Light_Italic.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: normal;
+	font-weight: 400;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Regular.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Regular.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: italic;
+	font-weight: 400;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Regular_Italic.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Regular_Italic.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: normal;
+	font-weight: 500;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Medium.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Medium.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: italic;
+	font-weight: 500;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Medium_Italic.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Medium_Italic.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: normal;
+	font-weight: 700;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Bold.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Bold.woff")
+			format("woff");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: Marianne;
+	font-style: italic;
+	font-weight: 700;
+	src:
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Bold_Italic.woff2")
+			format("woff2"),
+		url("https://drane-lyon.forge.apps.education.fr/fonts/Marianne-Bold_Italic.woff")
+			format("woff");
+}
+
+/* VARIABLES CSS */
+
+:root {
+	--font: Marianne, Inter, Avenir, Helvetica, Arial, sans-serif;
+	--body-bg: #f6f6f6;
+	--h1-bg: #f6f6f6;
+	--main-bg: #fff;
+	--main-border-color: #dddddd;
+	--main-border-radius: 0;
+	--controls-bg: #eeeeee;
+	--color-primary: #000091;
+	--color-text: black;
+	--color-bg: #fff;
+	--color-light: #666666;
+	--color-lighter: rgb(0 0 0 / 20%);
+	--color-ultra-light: rgb(255 255 255 / 25%);
+	--color-link: darkblue;
+}
+
+:root.darkmode {
+	--color-primary: #8585f6;
+}
+
+main {
+	min-height: 90vh;
+}
+
+.bot-message > :first-child:before {
+	background-image: url(data:image/jpeg;base64,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);
+	border-radius: 50%;
+}
+
+.messageOptions a {
+	padding: 0.5em 1em;
+	border-radius: 0.25em;
+	color: var(--color-primary);
+	border-color: var(--color-primary);
+}
+
+.darkmode .messageOptions a {
+	background-color: #8585f6;
+	color: #000091;
+}
+.darkmode .messageOptions a:hover {
+	background-color: #b1b1f9;
+	color: #000091 !important;
+}
+
+.user-message {
+	padding: 0.75em 1em;
+	border-radius: 0.25em;
+}
+.darkmode .user-message {
+	color: #000091;
+}
+
+#user-input {
+	font-size: 0.9em;
+}
+
+button {
+	background: var(--color-primary);
+	color: white;
+	padding: 0.25em 0.75em;
+	border: none;
+	border-radius: 0.25em;
+}
+#send-button {
+	padding: 0.5em 0.75em;
+}
