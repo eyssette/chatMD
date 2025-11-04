@@ -172,6 +172,9 @@ main {
 	max-height: 3em;
 	overflow-y: auto;
 }
+#input-container:focus-within {
+	border-color: var(--color-light);
+}
 
 @media screen and (min-width: 500px) {
 	#controls {
