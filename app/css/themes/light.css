@@ -1,0 +1,45 @@
+@import "https://fonts.forge.apps.education.fr/poppins/style.css";
+
+:root {
+	--font: Poppins;
+	--body-bg: #f6f6f6;
+	--h1-bg: #f6f6f6;
+	--main-bg: #fff;
+	--main-border-color: white;
+	--main-border-radius: 25px;
+	--controls-bg: #fff;
+}
+main {
+	min-height: 90vh;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+}
+#controls {
+	border-color: transparent;
+}
+#input-container {
+	border-radius: 15px;
+}
+#user-input {
+	font-size: 0.9em;
+	padding: 10px;
+}
+button {
+	background: var(--color-primary);
+	color: white;
+	padding: 0.25em 0.75em;
+	border: none;
+	border-radius: 10px;
+}
+#send-button {
+	padding: 0.5em 0.75em;
+}
+.darkmode button:hover {
+	background-color: var(--color-primary);
+}
+footer {
+	color: var(--color-light);
+}
+:root:not(.darkmode) footer a,
+:root:not(.darkmode) footer a:visited {
+	color: var(--color-primary) !important;
+}
