@@ -30,7 +30,12 @@ export function scopeStyles(htmlString, prefix) {
 							if (sel.startsWith(prefix)) return sel;
 
 							// Gère les @-rules (media queries, keyframes, etc.)
-							if (sel.startsWith("@")) return sel;
+							if (
+								sel.startsWith("@") ||
+								sel.startsWith("from") ||
+								sel.startsWith("to")
+							)
+								return sel;
 
 							// Ajoute le préfixe
 							// Si on a une règle sur le message lui-même, il ne faut pas considérer le sélecteur comme enfant du message, mais comme portant sur le message lui-même
