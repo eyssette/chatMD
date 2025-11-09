@@ -26,6 +26,7 @@
 	--color-lighter: rgb(0 0 0 / 20%);
 	--color-ultra-light: rgb(255 255 255 / 25%);
 	--color-link: darkblue;
+	--avatar-size: 40px;
 }
 
 /* DARKMODE */
@@ -373,9 +374,9 @@ iframe {
 	content: "";
 	margin-right: 15px;
 	background-image: url("../favicon.svg");
-	background-size: 40px;
-	width: 40px;
-	height: 40px;
+	background-size: var(--avatar-size);
+	width: var(--avatar-size);
+	height: var(--avatar-size);
 	display: inline-block;
 	vertical-align: bottom;
 }
@@ -638,12 +639,12 @@ button.copyCode {
 .message > .admonition:first-child,
 .message > table:first-child,
 .message > pre:first-child {
-	margin-left: 60px !important;
+	margin-left: calc(var(--avatar-size) + 20px) !important;
 }
 .message > .admonition:first-child:before,
 .message > table:first-child:before,
 .message > pre:first-child:before {
-	margin-left: -70px !important;
+	margin-left: calc(-1 * (var(--avatar-size) + 30px)) !important;
 	position: absolute !important;
 	margin-top: -20px !important;
 }
