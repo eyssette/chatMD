@@ -33,7 +33,8 @@ export function scopeStyles(htmlString, prefix) {
 							if (
 								sel.startsWith("@") ||
 								sel.startsWith("from") ||
-								sel.startsWith("to")
+								sel.startsWith("to") ||
+								sel.endsWith("%")
 							)
 								return sel;
 
