@@ -67,7 +67,7 @@ export function computeSimilarityScore(chatbot, userInput) {
 				const isNegativeKeyword = keyword.startsWith("! ");
 				keyword = keyword.replace(/^!\s/, "");
 				keyword = removeAccents(keyword);
-				if (userInput.includes(keyword) && !isNegativeKeyword) {
+				if (userInput.includes(keyword)) {
 					// Test de l'identité stricte
 					let strictIdentityMatch = false;
 					if (chatbot.nextMessage.needsProcessing) {
@@ -80,14 +80,16 @@ export function computeSimilarityScore(chatbot, userInput) {
 						strictIdentityMatch = true;
 					}
 					if (strictIdentityMatch) {
-						// En cas d'identité stricte, on monte le score d'une valeur plus importante que 1 (définie par MATCH_SCORE_IDENTITY)
-						matchScore = matchScore + MATCH_SCORE_IDENTITY;
+						// En cas d'identité stricte, on monte le score d'une valeur définie par MATCH_SCORE_IDENTITY, ou alors on le diminue si on avait un keyword négatif
+						matchScore = isNegativeKeyword
+							? matchScore - MATCH_SCORE_IDENTITY * 2
+							: matchScore + MATCH_SCORE_IDENTITY;
 						// On privilégie les correspondances sur les keywords plus longs
 						matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
 					}
 				} else if (
 					(userInput.length > 5) &
-					(keyword.length > 4 || isNegativeKeyword)
+					(keyword.length > 4 && !isNegativeKeyword)
 				) {
 					// Sinon : test de la similarité (seulement si le message de l'utilisateur n'est pas très court)
 					// On calcule la distance de Levenshtein entre le keyword et la question de l'utilisateur (en parcourant les n-grammes du message de l'utilisateur et en prenant en compte la longueur du n-gramme ; avec n = nombre de mots du keyword)
@@ -97,14 +99,12 @@ export function computeSimilarityScore(chatbot, userInput) {
 						LEVENSHTEIN_THRESHOLD,
 						WORD_LENGTH_FACTOR,
 					);
-					// Si le keyword est négatif on diminue le score, sinon on l'augmente
-					distanceScore = isNegativeKeyword
-						? distanceScore - levenshteinDistance
-						: levenshteinDistance > 1
+					distanceScore =
+						levenshteinDistance > 1
 							? distanceScore + levenshteinDistance
 							: distanceScore;
-					if (!isNegativeKeyword && !chatbot.nextMessage.needsProcessing) {
-						// Si on n'a pas de keyword négatif on prend en compte la plus longue chaîne commune de caractères (sauf si on doit passer au message seulement s'il y a présence du keyword [cas d'un quiz] : dans ce cas, on doit être plus strict et tester seulement la proximité avec la distance de Levenshtein pour simplement autoriser quelques fautes d'orthographe)
+					if (!chatbot.nextMessage.needsProcessing) {
+						// On prend en compte la plus longue chaîne commune de caractères (sauf si on doit passer au message seulement s'il y a présence du keyword [cas d'un quiz] : dans ce cas, on doit être plus strict et tester seulement la proximité avec la distance de Levenshtein pour simplement autoriser quelques fautes d'orthographe)
 						distanceScore =
 							distanceScore +
 							longestCommonSubstringWeightedLength(
