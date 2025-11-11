@@ -1,65 +1,68 @@
 // Style CSS personnalisé pour le widget
 const widgetStyle = `
 #chatmdWidget {
-	width: 80px;
-	height: 80px;
+	--widget-size: 75px;
+	--widget-size-mobile: 50px;
+	width: var(--widget-size);
+	height: var(--widget-size);
 	cursor: pointer;
 	position: fixed;
-	border-radius:50%;
-	bottom:40px;
-	right:40px;
-	font-family:sans-serif;
-	z-index:10000;
+	border-radius: 50%;
+	bottom: 40px;
+	right: 40px;
+	font-family: sans-serif;
+	z-index: 10000;
 }
 
 #chatmdWidget div:nth-of-type(1) {
-	position:absolute;
+	position: absolute;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	background-color: #f4f4f4;
 	padding: 10px;
-	border-radius:50%;
-	z-index:1;
+	border-radius: 50%;
+	z-index: 1;
 	width: inherit;
 	height: inherit;
-	border:1px solid #b0b0b0;
+	border: 1px solid #b0b0b0;
 }
 
 #chatmdWidget img {
-	width:80%;
+	width: 80%;
 }
 
 #chatmdWidget div:nth-of-type(2) {
 	position: fixed;
-	right:30px;
-	bottom:130px;
+	right: 30px;
+	bottom: calc(50px + var(--widget-size));
 	display: none;
 	width: 400px;
-	height: min(600px,70vh);
+	height: min(600px, 70vh);
 	border-radius: 10px;
 	border: 1px solid lightgrey;
-   padding: 0.25em;
+	padding: 0.25em;
 }
 #chatmdWidget div:nth-of-type(2) iframe {
 	padding: 0px;
-	height:inherit;
+	height: inherit;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and ((orientation: portrait) and (max-width: 800px)),
+	screen and ((orientation: landscape) and (max-height: 800px)) {
 	#chatmdWidget {
 		bottom: 30px;
 		right: 30px;
-		width: 60px;
-		height: 60px;
+		width: var(--widget-size-mobile);
+		height: var(--widget-size-mobile);
 	}
 	#chatmdWidget div:nth-of-type(1) {
-		width: 60px;
-		height: 60px;
+		width: var(--widget-size-mobile);
+		height: var(--widget-size-mobile);
 	}
 	#chatmdWidget img {
-		width:90%;
+		width: 90%;
 	}
 	#chatmdWidget div:nth-of-type(2) {
 		right: 0px;
@@ -72,7 +75,7 @@ const widgetStyle = `
 	#chatmdWidget div:nth-of-type(2) iframe {
 		width: 100%;
 		height: 100%;
-		padding:0px;
+		padding: 0px;
 	}
 }
 `;
