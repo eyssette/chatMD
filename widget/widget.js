@@ -64,6 +64,9 @@ const widgetStyle = `
 	#chatmdWidget img {
 		width: 90%;
 	}
+}
+@media screen and ((orientation: portrait) and (max-width: 500px)),
+	screen and ((orientation: landscape) and (max-height: 500px)) {
 	#chatmdWidget div:nth-of-type(2) {
 		right: 0px;
 		padding: 0px;
@@ -78,6 +81,7 @@ const widgetStyle = `
 		padding: 0px;
 	}
 }
+
 `;
 
 const styleElement = document.createElement("style");
