@@ -1,5 +1,26 @@
 # Changelog
 
+## 8.4.0 (2025-11-12)
+
+### Feat
+
+- **css**: nouveau thème - "light"
+- **css**: nouveau thème - DSFR
+
+### Fix
+
+- **ccs**: amélioration widget - affichage sur tablette (position de l'iframe du chatbot par rapport au widget)
+- **css**: élément html - overflow-x: hidden pour éviter une barre horizontale de défilement inutile pour le widget
+- **css**: amélioration affichage widget sur écrans de taille moyenne
+- **css**: amélioration taille widget + variables CSS  pour pouvoir la modifier
+- **css**: variable CSS pour la taille de l'avatar
+- **utils**: gestion dans les @keyframes pour les balises `<style scoped>` des indications de pourcentages pour une animation
+- **utils**: gestion des @keyframes si on utilise la personnalisation du style d'un message avec `<style scoped>`
+- **core**: algorithme de calcul de similarité améliorée pour les déclencheurs négatifs - prise en compte seulement en cas d'identité stricte
+- **css**: utilisation @import pour la police Marianne
+- **css**: style CSS pour le focus-within sur le champ input principal
+- **css**: léger effet de transition sur les boutons quand changement de couleur de fond lorsque la souris passe dessus
+
 ## 8.3.8 (2025-11-02)
 
 ### Fix
