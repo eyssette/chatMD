@@ -89,6 +89,10 @@
 
 /* LAYOUT PRICIPAL */
 
+html {
+	overflow-x: hidden;
+}
+
 body {
 	margin: 0;
 	display: flex;
