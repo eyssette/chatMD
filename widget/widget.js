@@ -46,7 +46,7 @@ const widgetStyle = `
 }
 #chatmdWidget div:nth-of-type(2) iframe {
 	padding: 0px;
-	height: inherit;
+	height: 100%;
 }
 
 @media screen and ((orientation: portrait) and (max-width: 800px)),
@@ -65,6 +65,13 @@ const widgetStyle = `
 		width: 90%;
 	}
 	#chatmdWidget div:nth-of-type(2) {
+		right: 20px;
+		bottom: calc(20px + var(--widget-size));
+	}
+}
+@media screen and ((orientation: portrait) and (max-width: 500px)),
+	screen and ((orientation: landscape) and (max-height: 500px)) {
+	#chatmdWidget div:nth-of-type(2) {
 		right: 0px;
 		padding: 0px;
 		width: 100%;
@@ -74,10 +81,10 @@ const widgetStyle = `
 	}
 	#chatmdWidget div:nth-of-type(2) iframe {
 		width: 100%;
-		height: 100%;
 		padding: 0px;
 	}
 }
+
 `;
 
 const styleElement = document.createElement("style");
