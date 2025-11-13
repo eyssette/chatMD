@@ -48,6 +48,36 @@ ${choiceOptionsHTML}`;
 		expect(output).toContain(`${choiceOptionsHTML}`);
 	});
 
+	it("ignores parts that contain only multi-line HTML comments", () => {
+		const variants = ["Real message 1", "Real message 2"];
+		const input = `
+<!--
+  This is a multi-line comment
+  that should be ignored
+-->
+---
+${variants[0]}
+---
+<!-- Another comment -->
+<!-- Another comment -->
+
+<!-- Another comment -->
+---
+${variants[1]}
+
+${choiceOptionsHTML}
+`;
+
+		const output = processRandomMessage(input).trim();
+		const bareOutputWithoutChoiceOptions = output
+			.replace(choiceOptionsHTML, "")
+			.trim();
+
+		// Vérifie que la sortie ne contient pas de commentaire
+		expect(bareOutputWithoutChoiceOptions.startsWith("<!--")).toBeFalse();
+		expect(bareOutputWithoutChoiceOptions.endsWith("-->")).toBeFalse();
+	});
+
 	it("ignores empty or whitespace-only parts between separators or before choiceOptions", () => {
 		const variants = [`Real message 1`, `Real message 2`];
 		const input = `

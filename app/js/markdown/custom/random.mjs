@@ -3,10 +3,10 @@ import { getRandomElement } from "../../utils/arrays.mjs";
 // Gestion du cas où il y a plusieurs messages possibles de réponse, séparés par "---"
 export function processRandomMessage(message) {
 	const SEPARATOR = "\n---\n";
-	// Découpe en variantes et ignore les parties vides (espaces / retours à la ligne)
+	// Découpe en variantes et ignore les parties vides (espaces / retours à la ligne) ou seulement avec des commentaires
 	const messageVariants = message
 		.split(SEPARATOR)
-		.map((part) => part.trim())
+		.map((part) => part.replace(/<!--[\s\S]*?-->/g, "").trim())
 		.filter((part) => part.length > 0);
 
 	if (messageVariants.length > 1) {
@@ -17,7 +17,7 @@ export function processRandomMessage(message) {
 			// On découpe la partie 'baseMessage' en variantes et on ignore les parties vides
 			const baseMessageVariants = baseMessage
 				.split("---")
-				.map((part) => part.trim())
+				.map((part) => part.replace(/<!--[\s\S]*?-->/g, "").trim())
 				.filter((part) => part.length > 0);
 			if (baseMessageVariants.length > 0) {
 				message = getRandomElement(baseMessageVariants) + choiceOptionsHtml;
