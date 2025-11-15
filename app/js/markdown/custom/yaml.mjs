@@ -150,9 +150,11 @@ export function processYAML(markdownContent) {
 				checkDarkModePreference();
 			}
 			if (yaml.theme) {
-				const cssFile = yaml.theme.endsWith(".css")
-					? "css/themes/" + yaml.theme
-					: "css/themes/" + yaml.theme + ".css";
+				// compatiblité avec l'ancien nom pour le thème sms
+				const themeName = yaml.theme == "bubbles" ? "sms" : yaml.theme;
+				const cssFile = themeName.endsWith(".css")
+					? "css/themes/" + themeName
+					: "css/themes/" + themeName + ".css";
 				loadCSS(cssFile);
 			}
 			if (yaml.avatar) {
