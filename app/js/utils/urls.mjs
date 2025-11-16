@@ -146,7 +146,7 @@ export function getParamsFromURL(
 // Pour ouvrir un nouveau chatbot
 export function goToNewChatbot(
 	urlNewChatbot,
-	URLbaseChatbot = window.location.origin,
+	URLbaseChatbot = window.location.origin + window.location.pathname,
 ) {
 	if (urlNewChatbot && urlNewChatbot.indexOf(".") > -1) {
 		URLbaseChatbot =

@@ -397,7 +397,8 @@ describe("goToNewChatbot", () => {
 	it("opens a new tab with the correct chatbot URL when given a valid chatbot path and no origin", () => {
 		goToNewChatbot("my.bot.fr");
 		const expectedUrl = `/#my.bot.fr`;
-		expect(openSpy).toHaveBeenCalledWith(expectedUrl, "_blank");
+		const baseURL = window.location.origin + window.location.pathname;
+		expect(openSpy).toHaveBeenCalledWith(baseURL + expectedUrl, "_blank");
 		expect(alertSpy).not.toHaveBeenCalled();
 	});
 
