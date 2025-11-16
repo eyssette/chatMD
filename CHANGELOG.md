@@ -1,5 +1,19 @@
 # Changelog
 
+## 8.4.1 (2025-11-16)
+
+### Fix
+
+- **core**: si l'effet typewriter a été désactivé, on scrolle au début du message et non en bas de page
+- **utils**: prise en compte du path du site d'origine pour goToNewChatbot
+- **css**: thème "bubbles" renommé en "sms"
+- **markdown**: pas de prise en compte des parties dans un message avec de l'aléatoire qui ne contiennent que des commentaires HTML
+- **markdown**: pas de prise en compte des parties vides dans processRandomMessage
+
+### Chore
+
+- **tests**: ajout d'un test pour processRandomMessage
+
 ## 8.4.0 (2025-11-12)
 
 ### Feat
