@@ -193,7 +193,18 @@ function handleClickOnChatContainer(chatbot) {
 				chatbot.nextMessage.errorsCounter = 0;
 				// On scrolle vers le bas de la page pour voir la nouvelle réponse, avec un petit délai pour être sûr que le message a été ajouté au DOM
 				setTimeout(() => {
-					scrollWindow({ scrollMode: "instant" });
+					if (yaml && yaml.typeWriter == false) {
+						// Si l'effet typewriter a été désactivé, on scrolle au début du dernier message de l'utilisateur
+						const userMessages = document.querySelectorAll(".user-message");
+						if (userMessages.length > 0) {
+							userMessages[userMessages.length - 1].scrollIntoView({
+								behavior: "smooth",
+							});
+						}
+					} else {
+						// Sinon on scrolle au bas de la page
+						scrollWindow({ scrollMode: "instant" });
+					}
 				}, 10);
 			}
 		}
