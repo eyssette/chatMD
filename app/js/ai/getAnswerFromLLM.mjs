@@ -6,6 +6,8 @@ import { encodeString } from "../utils/strings.mjs";
 
 let llmHistory = [];
 
+// Définition du nombre maximum de tokens à conserver dans l'historique des échanges
+// Par défaut, on conserve jusqu'à 2000 tokens mis si on a défini un nombre maximum de tokens pour l'historique dans le YAML, on l'utilise
 const maxTokensInHistory = yaml.useLLM.maxTokensInHistory || 2000;
 
 // Pour tronquer l'historique des échanges à un nombre maximum de tokens
@@ -16,10 +18,8 @@ function truncateHistoryToMaxTokens(history) {
 	for (let i = history.length - 1; i >= 0; i--) {
 		const message = history[i];
 		// On compte le nombre de tokens (approximativement en comptant les mots)
-		// Un token est en moyenne égal à 0.75 mots
-		// Donc 1 mot est en moyenne égal à 1.33 tokens
 		const messageWords = message.content.split(" ").length;
-		const messageTokens = Math.ceil(messageWords * 1.33);
+		const messageTokens = Math.ceil(messageWords * 1.5);
 		// Si on n'a pas dépassé la limite, on ajoute le message à l'historique tronqué
 		if (totalTokens + messageTokens <= maxTokensInHistory) {
 			// On ajoute le message au début de la liste pour conserver l'ordre chronologique
