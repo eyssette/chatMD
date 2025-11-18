@@ -23,6 +23,13 @@ export async function processMessageWithPrompt(
 				}
 				let RAGinformations = "";
 				let RAGprompt = "";
+				// Gestion de l'historique des échanges avec le LLM
+				let shouldUseConversationHistory = false;
+				if (content.includes("!useHistory")) {
+					shouldUseConversationHistory = true;
+					content = content.replace("!useHistory", "");
+				}
+				// Gestion du RAG
 				if (content.includes("!RAG: ")) {
 					const promptWithRag = await processPromptWithRAG(chatbot, content);
 					content = promptWithRag.content;
@@ -36,6 +43,7 @@ export async function processMessageWithPrompt(
 					messageElement: sectionElement,
 					container: messageElement,
 					inline: true,
+					useConversationHistory: shouldUseConversationHistory,
 				});
 			} else if (type === "markdown") {
 				// Gestion du contenu en Markdown

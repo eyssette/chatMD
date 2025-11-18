@@ -8,9 +8,15 @@ export function processQuestionToLLM(chatbot, inputText, options) {
 	const shouldUseLLM =
 		options && options.useLLM == true ? true : inputText.includes("!useLLM");
 	if (!shouldUseLLM) return null;
-	const questionToLLM = inputText
+	let questionToLLM = inputText
 		.replace("!useLLM", "")
 		.replace('<span class="hidden">/span>', "");
+	// Gestion de l'historique des échanges avec le LLM
+	let shouldUseConversationHistory = false;
+	if (questionToLLM.includes("!useHistory")) {
+		shouldUseConversationHistory = true;
+		questionToLLM = questionToLLM.replace("!useHistory", "");
+	}
 	const RAGbestMatchesInformation =
 		yaml && yaml.useLLM.RAGinformations
 			? extractRelevantRAGinfo(chatbot, questionToLLM)
@@ -19,6 +25,9 @@ export function processQuestionToLLM(chatbot, inputText, options) {
 		options && options.RAG
 			? options.RAG + "\n" + RAGbestMatchesInformation
 			: RAGbestMatchesInformation;
-	getAnswerFromLLM(chatbot, questionToLLM, { RAG: RAGinformations });
+	getAnswerFromLLM(chatbot, questionToLLM, {
+		RAG: RAGinformations,
+		useConversationHistory: shouldUseConversationHistory,
+	});
 	return true;
 }
