@@ -166,6 +166,8 @@ function handleClickOnChatContainer(chatbot) {
 					yaml.useLLM.model &&
 					linkDeobfuscated.includes("!useLLM")
 				) {
+					// On autorise l'utilisation par l'utilisateur de la commande LLM car elle se trouve dans un bouton déjà autorisé par le créateur du chatbot
+					chatbot.allowLLMCommands = true;
 					messageFromLink = linkDeobfuscated
 						.replace("#", "")
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')

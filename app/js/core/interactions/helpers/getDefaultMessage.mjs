@@ -20,11 +20,20 @@ export function getDefaultMessage(chatbot, inputText) {
 	}
 	randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
 	let defaultMessage = config.defaultMessage[randomDefaultMessageIndex];
-	if (yaml && yaml.useLLM.url && yaml.useLLM.model && !yaml.useLLM.always) {
+
+	// Si une réponse n'a pas été trouvée, on propose un bouton qui permet, en cliquant dessus, d'avoir une réponse générée par une IA si la configuration le permet
+	if (
+		yaml &&
+		yaml.useLLM.url &&
+		yaml.useLLM.model &&
+		!yaml.useLLM.always &&
+		!yaml.useLLM.userCanCallLLM === false
+	) {
+		chatbot.allowLLMCommands = true;
 		const optionDefaultMessage = [
 			{
 				text: "Voir une réponse générée par une IA",
-				link: "!useLLM " + inputText.replaceAll('"', "“"),
+				link: "!useLLM " + inputText.replaceAll('"', "“").trim(),
 			},
 		];
 		defaultMessage = processMessageWithChoiceOptions(
