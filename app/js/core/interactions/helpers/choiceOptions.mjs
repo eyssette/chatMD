@@ -35,8 +35,6 @@ export function processMessageWithChoiceOptions(
 	response,
 	choiceOptions,
 ) {
-	// Si on a du contenu dynamique et qu'on utilise <!-- if @VARIABLE==VALEUR … --> on filtre d'abord les options si elles dépendent d'une variable
-
 	// S'il y a la directive !Select: x on sélectionne aléatoirement seulement x options dans l'ensemble des options disponibles
 	[response, choiceOptions] = processDirectiveSelect(response, choiceOptions);
 
@@ -51,8 +49,10 @@ export function processMessageWithChoiceOptions(
 		const choiceOptionsLength = choiceOptions.length;
 		for (let i = 0; i < choiceOptionsLength; i++) {
 			const choiceOption = choiceOptions[i];
+			// Gestion des conditions d'affichage des options si le YAML dynamicContent est activé
 			const hasConditions =
 				yaml && yaml.dynamicContent && choiceOption.condition;
+			// On ajoute dans le message la syntaxe pour la condition d'affichage si elle existe
 			messageOptions =
 				messageOptions +
 				(hasConditions ? "\n`if " + choiceOption.condition + "`" : "") +

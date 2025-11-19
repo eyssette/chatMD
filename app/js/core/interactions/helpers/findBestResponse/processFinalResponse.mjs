@@ -58,7 +58,7 @@ export function processFinalResponse(
 				selectedResponseChoiceOptions,
 			);
 		}
-		// Si on a dans le yaml useLLM avec le paramètre `always: true` OU BIEN si on utilise la directive !useLLM dans l'input, on utilise un LLM pour répondre à la question
+		// Si on a dans le yaml useLLM avec le paramètre `always: true`, on utilise un LLM pour répondre à la question en prenant en compte les réponses possibles comme contexte
 		if (yaml.useLLM.always) {
 			const answerFromLLM = processQuestionToLLM(chatbot, userInput, {
 				useLLM: true,
@@ -69,13 +69,14 @@ export function processFinalResponse(
 			return selectedResponseWithChoiceOptions;
 		}
 	} else {
+		// Si on n'a pas de bestMatch, on utilise un LLM pour répondre à la question si le yaml le permet
 		if (yaml.useLLM.always) {
 			const answerFromLLM = processQuestionToLLM(chatbot, userInput, {
 				useLLM: true,
 			});
 			if (answerFromLLM) return null;
 		} else {
-			// En cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
+			// Sinon, en cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
 			// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
 			return getDefaultMessage(chatbot, userInput);
 		}
