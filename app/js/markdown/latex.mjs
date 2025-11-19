@@ -35,8 +35,10 @@ export function convertLatexExpressions(string, noBackticks) {
 				.replaceAll("\\left{", "\\left\\{")
 				.replaceAll("\\right}", "\\right\\}")
 				.replaceAll(" ", "\\ ")
-				// Fix pour l'utilisation de \\ dans le Latex
-				.replaceAll("&#92;&#92;", "\\\\");
+				.replaceAll("&#92;&#92;", "\\\\")
+				.replaceAll("<br>", "")
+				.replaceAll("equation_}", "equation}");
+
 			// On convertit la formule mathématique en HTML avec Katex
 			if (window.katex) {
 				try {
