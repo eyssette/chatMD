@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.5.0 (2025-11-19)
+
+### Feat
+
+- **core**: gestion du paramètre userCanCallLLM dans les paramètres LLM du YAML pour interdire la directive !useLLM dans l'input utilisateur et la création automatique d'un bouton de réponse avec IA en cas de réponse non trouvée
+- **ai**: gestion possible de l'historique de la conversation avec un LLM (à activer avec !useHistory)
+
+### Fix
+
+- **ai**: calcul du maximum de tokens dans l'historique un peu amélioré
+
+### Chore
+
+- commentaires du code actualisés et plus clairs
+- ajout de gitlab aux repo git pour la task de push
+
 ## 8.4.1 (2025-11-16)
 
 ### Fix
