@@ -102,7 +102,6 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			];
 		}
 		try {
-			console.log(bodyObject);
 			fetch(APIurl, {
 				method: "POST",
 				headers: {
