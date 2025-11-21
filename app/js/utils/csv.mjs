@@ -30,12 +30,11 @@ function isJsonData(data) {
 }
 
 // Traite les données avec PapaParse
-function parseWithPapa(data) {
+function parseWithPapa(data, options = {}) {
 	return new Promise((resolve, reject) => {
 		window.Papa.parse(data, {
 			skipEmptyLines: true,
-			dynamicTyping: true,
-			transform: (value) => value.trim(),
+			...options,
 			complete: (results) => resolve(results),
 			error: (error) => reject(error),
 		});
@@ -51,11 +50,11 @@ function parseJsonData(data) {
 }
 
 // Pour parser les données si elles sont en CSV
-function parseCsvData(data) {
-	return parseWithPapa(data);
+function parseCsvData(data, options) {
+	return parseWithPapa(data, options);
 }
 
-export async function parseCsv(url) {
+export async function parseCsv(url, options = {}) {
 	// On attend que papaparse soit disponible
 	await waitForPapaParse();
 	try {
@@ -73,7 +72,12 @@ export async function parseCsv(url) {
 		}
 
 		// Si c'est du CSV/TSV
-		return await parseCsvData(data);
+		if (url.endsWith(".tsv")) {
+			// Pour les TSV, on utilise la tabulation comme délimiteur, sauf si spécifié autrement dans les options
+			options.delimiter = options.delimiter ? options.delimiter : "\t";
+		}
+
+		return await parseCsvData(data, options);
 	} catch (error) {
 		console.error("Erreur lors du parsing:", error);
 		throw error;
