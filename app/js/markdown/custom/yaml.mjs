@@ -80,6 +80,21 @@ export function processYAML(markdownContent) {
 					}
 				}
 			}
+			if (yaml.preload) {
+				for (const resource of yaml.preload) {
+					// On précharge chaque ressource
+					fetch(resource)
+						.then(() => {
+							// Ressource préchargée
+						})
+						.catch((e) => {
+							console.e(
+								`Erreur lors du préchargement de la ressource ${resource} :`,
+								e,
+							);
+						});
+				}
+			}
 			if (yaml.titresRéponses || yaml.responsesTitles) {
 				yaml.responsesTitles = yaml.titresRéponses
 					? yaml.titresRéponses
