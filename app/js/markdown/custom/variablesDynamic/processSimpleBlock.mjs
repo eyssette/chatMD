@@ -1,5 +1,6 @@
 import { getRandomElement } from "../../../utils/arrays.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
+import { getLastElement } from "../../../utils/dom.mjs";
 
 function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
@@ -85,10 +86,11 @@ export function processSimpleBlock(message, dynamicVariables) {
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
-					const chatContentElement = document.querySelector("#chat");
-					// On applique d'abord le sélecteur CSS au contenu déjà affiché dans le chat
-					const selectorAppliedToPreviousDisplayedContent =
-						chatContentElement.querySelector(cssSelector);
+					// On cherche d'abord dans ce qui est déjà affiché le dernier élément correspondant au sélecteur
+					const selectorAppliedToPreviousDisplayedContent = getLastElement(
+						cssSelector,
+						document,
+					);
 					const value = selectorAppliedToPreviousDisplayedContent
 						? selectorAppliedToPreviousDisplayedContent.textContent.trim()
 						: "";
@@ -100,8 +102,10 @@ export function processSimpleBlock(message, dynamicVariables) {
 					// Sinon, on utilise un élément HTML temporaire pour afficher le message pas encore affiché, et on applique le sélecteur à cet élément,
 					const tempElement = document.createElement("div");
 					tempElement.innerHTML = output;
-					const selectorAppliedToTempElement =
-						tempElement.querySelector(cssSelector);
+					const selectorAppliedToTempElement = getLastElement(
+						cssSelector,
+						tempElement,
+					);
 					if (selectorAppliedToTempElement) {
 						let foundText = selectorAppliedToTempElement.textContent.trim();
 						if (foundText !== "") {

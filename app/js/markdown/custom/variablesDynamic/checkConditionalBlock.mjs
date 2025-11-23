@@ -1,3 +1,4 @@
+import { getLastElement } from "../../../utils/dom.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
 
 // Si on utilise un bloc conditionnel cette fonction permet de vérifier la condition associée à ce bloc
@@ -9,7 +10,7 @@ export function checkConditionalBlock(condition, dynamicVariables) {
 		condition = condition.replace(
 			/@SELECTOR\["([^"]+)"\]/g,
 			function (match, cssSelector) {
-				const element = document.querySelector(cssSelector);
+				const element = getLastElement(cssSelector, document);
 				const value = element ? element.textContent.trim() : "";
 				return 'tryConvertStringToNumber("' + value.replace(/"/g, '\\"') + '")';
 			},

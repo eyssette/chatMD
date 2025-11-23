@@ -3,6 +3,7 @@ import { displayMessage } from "../../../../core/messages/displayMessage.mjs";
 import { processPromptWithRAG } from "./processPromptWithRAG.mjs";
 import { appendMessageToContainer } from "../../../../core/messages/helpers/dom.mjs";
 import { endsWithUnclosedHtmlTag } from "../../../../utils/strings.mjs";
+import { getLastElement } from "../../../../utils/dom.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
@@ -22,7 +23,7 @@ export async function processMessageWithPrompt(
 		content = content.replace(
 			/`@SELECTOR\["([^"]+)"\]`/g,
 			function (match, cssSelector) {
-				const element = document.querySelector(cssSelector);
+				const element = getLastElement(cssSelector, document);
 				const value = element ? element.textContent.trim() : "";
 				return value;
 			},
