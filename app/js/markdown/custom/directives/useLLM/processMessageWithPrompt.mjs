@@ -17,6 +17,17 @@ export async function processMessageWithPrompt(
 		let content = section.content;
 		const sectionElement = document.createElement("div");
 
+		// Gestion des variables dynamiques de type SELECTOR["cssSelector"] qui n'ont pas encore été remplacées par leur valeur (notamment : si le sélecteur ciblait un bloc spécial : readcsv, !useLLM)
+		// On remplace toutes les occurrences de ce type de variable par le contenu textuel de l'élément correspondant dans le document
+		content = content.replace(
+			/`@SELECTOR\["([^"]+)"\]`/g,
+			function (match, cssSelector) {
+				const element = document.querySelector(cssSelector);
+				const value = element ? element.textContent.trim() : "";
+				return value;
+			},
+		);
+
 		try {
 			if (type === "prompt") {
 				// Gestion du contenu qui fait appel à un LLM
@@ -48,17 +59,6 @@ export async function processMessageWithPrompt(
 				const container = hasUnclosedHtmlTagAtEnd
 					? messageElement.lastChild.lastChild
 					: messageElement;
-
-				// Gestion des variables dynamiques de type SELECTOR["cssSelector"]
-				// On remplace toutes les occurrences de ce type de variable par le contenu textuel de l'élément correspondant dans le document
-				content = content.replace(
-					/`@SELECTOR\["([^"]+)"\]`/g,
-					function (match, cssSelector) {
-						const element = document.querySelector(cssSelector);
-						const value = element ? element.textContent.trim() : "";
-						return value;
-					},
-				);
 
 				await getAnswerFromLLM(chatbot, content, {
 					RAG: RAGinformations,

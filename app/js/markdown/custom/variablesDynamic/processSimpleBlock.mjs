@@ -79,9 +79,60 @@ export function processSimpleBlock(message, dynamicVariables) {
 		// [2] EMPLOI d'une variable : on doit remplacer `@name` par sa valeur
 		if (match[3] !== undefined) {
 			const varName = match[3];
-			const value = dynamicVariables[varName] ? dynamicVariables[varName] : "";
-			output += value;
-			continue;
+
+			if (varName.startsWith("SELECTOR")) {
+				// Cas des variables SELECTOR de type `@SELECTOR["cssSelector"]`
+				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
+				if (selectorMatch) {
+					const cssSelector = selectorMatch[1];
+					const chatContentElement = document.querySelector("#chat");
+					// On applique d'abord le sélecteur CSS au contenu déjà affiché dans le chat
+					const selectorAppliedToPreviousDisplayedContent =
+						chatContentElement.querySelector(cssSelector);
+					const value = selectorAppliedToPreviousDisplayedContent
+						? selectorAppliedToPreviousDisplayedContent.textContent.trim()
+						: "";
+					// Si on a trouvé une valeur, on l'utilise directement
+					if (value !== "") {
+						output += value;
+						continue;
+					}
+					// Sinon, on utilise un élément HTML temporaire pour afficher le message pas encore affiché, et on applique le sélecteur à cet élément,
+					const tempElement = document.createElement("div");
+					tempElement.innerHTML = output;
+					const selectorAppliedToTempElement =
+						tempElement.querySelector(cssSelector);
+					if (selectorAppliedToTempElement) {
+						let foundText = selectorAppliedToTempElement.textContent.trim();
+						if (foundText !== "") {
+							// Si le texte trouvé est un bloc spécial (readcsv ou !useLLM), on laisse la variable telle quelle pour qu'elle soit traitée plus tard
+							const isSpecialBlock =
+								foundText.includes("readcsv") || foundText.includes("!useLLM");
+							if (isSpecialBlock) {
+								foundText = `\`@${varName}\``;
+							}
+						}
+						output += foundText;
+						continue;
+					} else {
+						// Si on n'a rien trouvé, on laisse la référence à la variable
+						// Elle sera alors interprétée plus tard au moment de l'affichage
+						output += `\`@${varName}\``;
+						continue;
+					}
+				} else {
+					// Si le format de la variable SELECTOR est incorrect, on remplace par une chaîne vide
+					output += "";
+					continue;
+				}
+			} else {
+				// Cas des variables simples `@variableName`
+				const value = dynamicVariables[varName]
+					? dynamicVariables[varName]
+					: "";
+				output += value;
+				continue;
+			}
 		}
 	}
 

@@ -637,6 +637,10 @@ button.copyCode {
 	font-size: 0;
 }
 
+.bot-message .hidden {
+	display: none;
+}
+
 /* Quand l'avatar est juste avant un élément spécial */
 
 .message > section:first-child > *:first-child,
