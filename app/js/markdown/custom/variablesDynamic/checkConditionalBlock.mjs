@@ -4,6 +4,18 @@ import { evaluateExpression } from "./evaluateExpression.mjs";
 export function checkConditionalBlock(condition, dynamicVariables) {
 	try {
 		// Remplace les variables personnalisées dans la condition
+
+		// On traite d'abord le cas des variables @SELECTOR["cssSelector"]
+		condition = condition.replace(
+			/@SELECTOR\["([^"]+)"\]/g,
+			function (match, cssSelector) {
+				const element = document.querySelector(cssSelector);
+				const value = element ? element.textContent.trim() : "";
+				return 'tryConvertStringToNumber("' + value.replace(/"/g, '\\"') + '")';
+			},
+		);
+
+		// Puis on traite le cas des variables simples @variableName
 		condition = condition.replace(
 			/@([\p{L}0-9_]+)/gu,
 			function (match, varName) {
