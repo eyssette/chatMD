@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.6.1 (2025-11-23)
+
+### Fix
+
+- **markdown**: gestion de @SELECTOR : évaluation différée nécessaire dans certains cas (au moment de l'affichage du message), afin d'attendre que le message précédent contienne l'information demandée (en cas d'utilisation d'un bloc !useLLM ou readcsv)
+- **plugin**: amélioration de readcsv - précision possible d'un maximum de résultats à afficher (avec maxResults)
+- **markdown**: avec @SELECTOR, récupération du dernier élément qui correspond au sélecteur, plutôt que du premier
+
 ## 8.6.0 (2025-11-23)
 
 ### Feat
