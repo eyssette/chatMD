@@ -86,37 +86,33 @@ export function processSimpleBlock(message, dynamicVariables) {
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
-					// On cherche d'abord dans ce qui est déjà affiché le dernier élément correspondant au sélecteur
-					const selectorAppliedToPreviousDisplayedContent = getLastElement(
+					// On crée un élément temporaire qui contient le contenu en cours de construction
+					const tempElement = document.createElement("div");
+					tempElement.innerHTML = output;
+					// On le rend complètement invisible et hors du flux
+					tempElement.style.cssText =
+						"position: absolute; visibility: hidden; pointer-events: none;";
+					// On ajoute temporairement cet élément au document
+					document.body.appendChild(tempElement);
+					// Maintenant on cherche le dernier élément qui correspond au sélecteur CSS dans tout le document en incluant l'élément temporaire
+					const selectorAppliedToDocument = getLastElement(
 						cssSelector,
 						document,
 					);
-					const value = selectorAppliedToPreviousDisplayedContent
-						? selectorAppliedToPreviousDisplayedContent.textContent.trim()
+					let value = selectorAppliedToDocument
+						? selectorAppliedToDocument.textContent.trim()
 						: "";
-					// Si on a trouvé une valeur, on l'utilise directement
+					// On retire l'élément temporaire du document
+					document.body.removeChild(tempElement);
 					if (value !== "") {
-						output += value;
-						continue;
-					}
-					// Sinon, on utilise un élément HTML temporaire pour afficher le message pas encore affiché, et on applique le sélecteur à cet élément,
-					const tempElement = document.createElement("div");
-					tempElement.innerHTML = output;
-					const selectorAppliedToTempElement = getLastElement(
-						cssSelector,
-						tempElement,
-					);
-					if (selectorAppliedToTempElement) {
-						let foundText = selectorAppliedToTempElement.textContent.trim();
-						if (foundText !== "") {
-							// Si le texte trouvé est un bloc spécial (readcsv ou !useLLM), on laisse la variable telle quelle pour qu'elle soit traitée plus tard
-							const isSpecialBlock =
-								foundText.includes("readcsv") || foundText.includes("!useLLM");
-							if (isSpecialBlock) {
-								foundText = `\`@${varName}\``;
-							}
+						// Si on a trouvé une valeur, on teste si c'est un bloc spécial
+						const isSpecialBlock =
+							value.includes("readcsv") || value.includes("!useLLM");
+						if (isSpecialBlock) {
+							// Si c'est un bloc spécial, on laisse la référence à la variable pour une évaluation différée
+							value = `\`@${varName}\``;
 						}
-						output += foundText;
+						output += value;
 						continue;
 					} else {
 						// Si on n'a rien trouvé, on laisse la référence à la variable

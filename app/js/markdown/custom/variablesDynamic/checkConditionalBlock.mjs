@@ -15,40 +15,35 @@ export function checkConditionalBlock(
 		condition = condition.replace(
 			/@SELECTOR\["([^"]+)"\]/g,
 			function (match, cssSelector) {
-				const element = getLastElement(cssSelector, document);
-				if (element)
-					return (
-						'"' +
-						element.textContent
-							.trim()
-							.replaceAll('"', '\\"')
-							.replace(/\n/g, " ") +
-						'"'
-					);
-				// Sinon, on utilise un élément HTML temporaire pour afficher le message pas encore affiché, et on applique le sélecteur à cet élément,
+				// On crée un élément temporaire qui contient le contenu en cours de construction
 				const tempElement = document.createElement("div");
 				tempElement.innerHTML = cumulativeOutput;
-				const selectorAppliedToTempElement = getLastElement(
-					cssSelector,
-					tempElement,
-				);
-				let foundText = "";
-				if (selectorAppliedToTempElement) {
-					foundText = selectorAppliedToTempElement.textContent.trim();
-					if (foundText !== "") {
-						// Si le texte trouvé est un bloc spécial (readcsv ou !useLLM), on indique qu'il faut une évaluation différée de la condition avec le sélecteur
-						const isSpecialBlock =
-							foundText.includes("readcsv") || foundText.includes("!useLLM");
-						if (isSpecialBlock) {
-							return `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
-						}
+				// On le rend complètement invisible et hors du flux
+				tempElement.style.cssText =
+					"position: absolute; visibility: hidden; pointer-events: none;";
+				// On ajoute temporairement cet élément au document
+				document.body.appendChild(tempElement);
+				// Maintenant on cherche le dernier élément qui correspond au sélecteur CSS dans tout le document en incluant l'élément temporaire
+				const selectorAppliedToDocument = getLastElement(cssSelector, document);
+				let value = selectorAppliedToDocument
+					? selectorAppliedToDocument.textContent.trim()
+					: "";
+				// On retire l'élément temporaire du document
+				document.body.removeChild(tempElement);
+				// Si on a trouvé une valeur, on l'utilise directement
+				if (value !== "") {
+					// Si on a trouvé une valeur, on teste si c'est un bloc spécial
+					const isSpecialBlock =
+						value.includes("readcsv") || value.includes("!useLLM");
+					if (isSpecialBlock) {
+						// Si c'est un bloc spécial, on indique qu'il faut une évaluation différée de la condition avec le sélecteur
+						return `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
 					}
+					return '"' + value.replaceAll('"', '\\"').replace(/\n/g, " ") + '"';
+				} else {
+					// Si on n'a pas trouvé de valeur, on indique qu'il faut une évaluation différée de la condition avec le sélecteur
+					return `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
 				}
-				// Si l'élément temporaire contenait bien du texte et n'était pas un bloc spécial, on retourne ce texte
-				// Sinon, on indique qu'il faut une évaluation différée de la condition avec le sélecteur
-				return foundText
-					? '"' + foundText.replaceAll('"', '\\"').replace(/\n/g, " ") + '"'
-					: `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
 			},
 		);
 		// Gestion du cas où la condition nécessite une évaluation différée
