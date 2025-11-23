@@ -66,7 +66,9 @@ export async function createMessage(chatbot, message, options) {
 		// On récupère le contenu de la question posée au LLM et la réponse pour la mettre dans l'historique des actions
 		chatbot.actions.pop();
 		const llmAnswer = messageElement.innerHTML;
-		const llmQuestion = messageElement.previousElementSibling.textContent;
+		const llmQuestion = messageElement.previousElementSibling
+			? messageElement.previousElementSibling.textContent
+			: "";
 		const llmQuestionEncoded = "llmq:" + encodeString(llmQuestion);
 		const llmAnswerEncoded = "llmr:" + encodeString(llmAnswer);
 		chatbot.actions.push(llmQuestionEncoded);
