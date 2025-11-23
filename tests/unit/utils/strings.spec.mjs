@@ -331,3 +331,22 @@ describe("decodeString", () => {
 		expect(() => decodeString(invalidInput)).toThrow();
 	});
 });
+
+describe("obfuscateString", () => {
+	it("obfuscates a string correctly", () => {
+		const input = "This is a test string with unicode: éàçñøß€";
+		const result = obfuscateString(input);
+		expect(result).toBe(
+			"VGhpcyBpcyBhIHRlc3Qgc3RyaW5nIHdpdGggdW5pY29kZTogw6nDoMOnw7HDuMOf4oKs",
+		);
+	});
+});
+
+describe("deobfuscateString", () => {
+	it("deobfuscates an obfuscated string correctly", () => {
+		const input =
+			"VGhpcyBpcyBhIHRlc3Qgc3RyaW5nIHdpdGggdW5pY29kZTogw6nDoMOnw7HDuMOf4oKs";
+		const result = deobfuscateString(input);
+		expect(result).toEqual("This is a test string with unicode: éàçñøß€");
+	});
+});
