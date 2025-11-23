@@ -117,3 +117,24 @@ export function deobfuscateString(str) {
 	}
 	return new TextDecoder().decode(bytes); // UTF-8 decoding
 }
+
+// Vérifie si une chaîne de caractère se termine par une balise HTML non fermée
+export function endsWithUnclosedHtmlTag(str) {
+	const lastOpenBracket = str.lastIndexOf("<");
+	const lastCloseBracket = str.lastIndexOf(">");
+
+	if (lastOpenBracket === -1 || lastCloseBracket <= lastOpenBracket) {
+		return false;
+	}
+
+	const contentInsideLastBrackets = str
+		.slice(lastOpenBracket + 1, lastCloseBracket)
+		.trim();
+
+	return (
+		!contentInsideLastBrackets.endsWith("/") &&
+		!contentInsideLastBrackets.startsWith("/") &&
+		contentInsideLastBrackets !== "br" &&
+		contentInsideLastBrackets !== "hr"
+	);
+}

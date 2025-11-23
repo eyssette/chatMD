@@ -2,6 +2,7 @@ import { getAnswerFromLLM } from "../../../../ai/getAnswerFromLLM.mjs";
 import { displayMessage } from "../../../../core/messages/displayMessage.mjs";
 import { processPromptWithRAG } from "./processPromptWithRAG.mjs";
 import { appendMessageToContainer } from "../../../../core/messages/helpers/dom.mjs";
+import { endsWithUnclosedHtmlTag } from "../../../../utils/strings.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
@@ -18,6 +19,7 @@ export async function processMessageWithPrompt(
 
 		try {
 			if (type === "prompt") {
+				// Gestion du contenu qui fait appel à un LLM
 				if (i === 0) {
 					appendMessageToContainer(sectionElement, messageElement);
 				}
@@ -36,12 +38,21 @@ export async function processMessageWithPrompt(
 					RAGinformations = promptWithRag.RAGinformations;
 					RAGprompt = promptWithRag.RAGprompt;
 				}
-				// Gestion du contenu qui fait appel à un LLM
+
+				// On vérifie si l'élément précédent dans la séquence se finit par un élément html ouvert qui n'a pas été encore fermé
+				const previousSection = sequence[i - 1];
+				const previousContent = previousSection ? previousSection.content : "";
+				const hasUnclosedHtmlTagAtEnd =
+					endsWithUnclosedHtmlTag(previousContent);
+				// Si l'élément précédent se termine par une balise HTML ouverte non fermée, on ajoute le contenu dans cette balise
+				const container = hasUnclosedHtmlTagAtEnd
+					? messageElement.lastChild.lastChild
+					: messageElement;
 				await getAnswerFromLLM(chatbot, content, {
 					RAG: RAGinformations,
 					RAGprompt: RAGprompt,
 					messageElement: sectionElement,
-					container: messageElement,
+					container: container,
 					inline: true,
 					useConversationHistory: shouldUseConversationHistory,
 				});

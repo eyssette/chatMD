@@ -7,6 +7,9 @@ import {
 	splitHtmlIntoChunks,
 	encodeString,
 	decodeString,
+	obfuscateString,
+	deobfuscateString,
+	endsWithUnclosedHtmlTag,
 } from "../../../app/js/utils/strings.mjs";
 
 describe("sanitizeHtml", () => {
@@ -348,5 +351,51 @@ describe("deobfuscateString", () => {
 			"VGhpcyBpcyBhIHRlc3Qgc3RyaW5nIHdpdGggdW5pY29kZTogw6nDoMOnw7HDuMOf4oKs";
 		const result = deobfuscateString(input);
 		expect(result).toEqual("This is a test string with unicode: éàçñøß€");
+	});
+});
+
+describe("endsWithUnclosedHtmlTag", () => {
+	it("returns true for a string ending with an unclosed HTML tag", () => {
+		const input = "This is a <div>test";
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(true);
+	});
+
+	it("returns false for a string ending with a closed HTML tag", () => {
+		const input = "This is a <div>test</div>";
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(false);
+	});
+
+	it("returns true for a string ending with an unclosed HTML tag with attributes", () => {
+		const input = 'This is a <div style="display:none">test';
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(true);
+	});
+
+	it("returns false for a string ending with a closed HTML tag with attributes", () => {
+		const input = 'This is a <div style="display:none">test</div>';
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(false);
+	});
+
+	it("returns false for a string with no HTML tags", () => {
+		const input = "This is a test string.";
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(false);
+	});
+
+	it("returns false for self-closing tags", () => {
+		const input = ["This is a test <br>", "This is a test <hr>"];
+		input.forEach((str) => {
+			const result = endsWithUnclosedHtmlTag(str);
+			expect(result).toBe(false);
+		});
+	});
+
+	it("returns false for closing tags", () => {
+		const input = "This is a test </div>";
+		const result = endsWithUnclosedHtmlTag(input);
+		expect(result).toBe(false);
 	});
 });
