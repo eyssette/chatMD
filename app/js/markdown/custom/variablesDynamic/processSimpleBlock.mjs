@@ -131,9 +131,10 @@ export function processSimpleBlock(message, dynamicVariables) {
 				}
 			} else {
 				// Cas des variables simples `@variableName`
-				const value = dynamicVariables[varName]
-					? dynamicVariables[varName]
-					: "";
+				const value =
+					dynamicVariables[varName] !== undefined
+						? dynamicVariables[varName]
+						: "";
 				output += value;
 				continue;
 			}
