@@ -1,5 +1,26 @@
 # Changelog
 
+## 8.6.0 (2025-11-23)
+
+### Feat
+
+- **markdown**: gestion de la variable dynamique @SELECTOR dans les blocs simples
+- **markdown**: gestion de la variable dynamique @SELECTOR dans les blocs conditionnels
+- **markdown**: gestion de la variable dynamique @SELECTOR dans les prompts (blocs !useLLM)
+
+### Fix
+
+- **markdown**: ajout possible du contenu produit par un LLM  dans un élément HTML
+- **core**: historique des actions - fix d'un bug en cas d'utilisation d'un LLM dans le message initial (sans question préalable de l'utilisateur)
+- **markdown**: amélioration des performances pour readCsv et le RAG en utilisant yaml.preload en cas de fichiers plus lourds
+- **utils**: amélioration du parsing des fichiers avec readCsv
+- **core**: si KaTeX est déjà chargé, on résout immédiatement la promesse d'attente du chargement de la librairie
+- **markdown**: fix pour la conversion du Latex, notamment quand le Latex est produit par de l'IA (il y avait des balises "br" et des équations mal comprises)
+
+### Test
+
+- test de l'obfuscation et de la désobfuscation d'une chaîne de caractère avec des caractères Unicode
+
 ## 8.5.0 (2025-11-19)
 
 ### Feat
