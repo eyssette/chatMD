@@ -137,6 +137,7 @@ export async function processCsv(message) {
 
 			let condition = null;
 			let sortFormula = null;
+			let maxResults = null;
 			// Filtrer les lignes pour récupérer la condition si elle existe
 			const templateLines = linesCodeBlock.filter((line) => {
 				const trimmedLine = line.trim();
@@ -149,6 +150,11 @@ export async function processCsv(message) {
 					// Récupère le critère de tri (après "sort: ")
 					sortFormula = trimmedLine.replace(/^sort:\s*/, "");
 					return false; // exclut la ligne "sort: " du template
+				}
+				if (trimmedLine.startsWith("maxResults:")) {
+					// Récupère le nombre maximum de résultats à afficher (après "maxResults: ")
+					maxResults = parseInt(trimmedLine.replace(/^maxResults:\s*/, ""), 10);
+					return false; // exclut la ligne "max: " du template
 				}
 				return true; // conserve toutes les autres lignes
 			});
@@ -163,6 +169,11 @@ export async function processCsv(message) {
 			// S'il y a un tri particulier des résultats à respecter, on applique ce tri aux données filtrées
 			if (sortFormula) {
 				data = sortTable(data, sortFormula);
+			}
+
+			// Si un nombre maximum de lignes est spécifié, on limite les données à ce nombre
+			if (maxResults && !isNaN(maxResults)) {
+				data = data.slice(0, maxResults);
 			}
 
 			// Remplit le template avec les valeurs des lignes filtrées
