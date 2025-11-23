@@ -80,10 +80,12 @@ export async function createMessage(chatbot, message, options) {
 		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
 		// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
-		message = processConditionalBlocksAtDisplayTime(
-			message,
-			chatbot.dynamicVariables,
-		);
+		if (!isUser) {
+			message = processConditionalBlocksAtDisplayTime(
+				message,
+				chatbot.dynamicVariables,
+			);
+		}
 		if (message.trim() !== "") {
 			displayMessage(message, {
 				isUser: isUser,
