@@ -54,7 +54,14 @@ function sanitizeCode(code) {
 		/tryConvertStringToNumber\(.*?\]\)/g,
 		"",
 	);
-	// On supprime ensuite les opérations autorisées
+
+	// On supprime les chaînes de caractères entre guillemets, qui sont autorisées
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/".*?"/g,
+		"///",
+	);
+
+	// On supprime les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(
 			allowedOperation,
@@ -65,11 +72,6 @@ function sanitizeCode(code) {
 	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
 		/[0-9]*/g,
 		"",
-	);
-	// On supprime les chaînes de caractères entre guillemets, qui sont autorisées
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/".*?"/g,
-		"///",
 	);
 
 	// On peut alors repérer les fragments interdits
