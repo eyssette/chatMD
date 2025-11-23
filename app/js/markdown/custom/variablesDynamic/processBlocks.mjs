@@ -2,24 +2,43 @@ import { processSimpleBlock } from "./processSimpleBlock.mjs";
 import { checkConditionalBlock } from "./checkConditionalBlock.mjs";
 
 // Fonction récursive qui traite un bloc de contenu, qui peut contenir des sous-blocs, éventuellement conditionnels
-export function processBlocks(block, dynamicVariables) {
+export function processBlocks(block, dynamicVariables, cumulativeOutput) {
 	let output = "";
 
 	// On vérifie si le bloc contient des sous-blocs
 	const hasSubBlocks = Array.isArray(block.content);
 	if (hasSubBlocks) {
+		let conditionCheck = null;
+		// Si le bloc contient une condition, on la vérifie
+		if (block.condition) {
+			conditionCheck = checkConditionalBlock(
+				block,
+				dynamicVariables,
+				cumulativeOutput,
+			);
+		}
 		// On détermine si le bloc doit être traité :
 		// - soit il n'y a pas de condition
 		// - soit la condition est présente et validée par checkConditionalBlock
 		const shouldProcessBlock =
-			!block.condition ||
-			(block.condition &&
-				checkConditionalBlock(block.condition, dynamicVariables));
+			!block.condition || (block.condition && conditionCheck.result);
 		if (shouldProcessBlock) {
 			const subBlocks = block.content;
 			subBlocks.forEach((subBlock) => {
 				// Parcourt chaque sous-bloc et traite récursivement
-				output += processBlocks(subBlock, dynamicVariables);
+
+				// Cas où la condition nécessite une évaluation différée
+				// Dans ce cas on réintègre le bloc conditionnel dans le message pour un traitement ultérieur
+				if (conditionCheck.differEvaluation == true) {
+					output += `
+\`if ${conditionCheck.result}\`
+${processBlocks(subBlock, dynamicVariables)}
+\`endif\`
+					`;
+				} else {
+					// Traitement normal du sous-bloc
+					output += processBlocks(subBlock, dynamicVariables);
+				}
 			});
 		}
 	} else {

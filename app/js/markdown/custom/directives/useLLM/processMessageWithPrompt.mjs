@@ -4,6 +4,7 @@ import { processPromptWithRAG } from "./processPromptWithRAG.mjs";
 import { appendMessageToContainer } from "../../../../core/messages/helpers/dom.mjs";
 import { endsWithUnclosedHtmlTag } from "../../../../utils/strings.mjs";
 import { getLastElement } from "../../../../utils/dom.mjs";
+import { processConditionalBlocksAtDisplayTime } from "../../../../core/messages/helpers/processConditionalBlocksAtDisplayTime.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
@@ -70,6 +71,11 @@ export async function processMessageWithPrompt(
 					useConversationHistory: shouldUseConversationHistory,
 				});
 			} else if (type === "markdown") {
+				// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
+				content = processConditionalBlocksAtDisplayTime(
+					content,
+					chatbot.dynamicVariables,
+				);
 				// Gestion du contenu en Markdown
 				await displayMessage(content, {
 					isUser: isUser,

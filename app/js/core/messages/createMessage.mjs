@@ -10,6 +10,7 @@ import { encodeString } from "../../utils/strings.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { sendChatbotData } from "./helpers/plugins/scorm.mjs";
 import { scopeStyles } from "../../utils/css.mjs";
+import { processConditionalBlocksAtDisplayTime } from "./helpers/processConditionalBlocksAtDisplayTime.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -78,6 +79,11 @@ export async function createMessage(chatbot, message, options) {
 		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
 		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
+		// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
+		message = processConditionalBlocksAtDisplayTime(
+			message,
+			chatbot.dynamicVariables,
+		);
 		if (message.trim() !== "") {
 			displayMessage(message, {
 				isUser: isUser,

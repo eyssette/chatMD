@@ -2,21 +2,66 @@ import { getLastElement } from "../../../utils/dom.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
 
 // Si on utilise un bloc conditionnel cette fonction permet de vérifier la condition associée à ce bloc
-export function checkConditionalBlock(condition, dynamicVariables) {
+export function checkConditionalBlock(
+	block,
+	dynamicVariables,
+	cumulativeOutput,
+) {
+	let condition = block.condition;
 	try {
 		// Remplace les variables personnalisées dans la condition
 
-		// On traite d'abord le cas des variables @SELECTOR["cssSelector"]
+		// (1) On traite d'abord le cas des variables @SELECTOR["cssSelector"]
 		condition = condition.replace(
 			/@SELECTOR\["([^"]+)"\]/g,
 			function (match, cssSelector) {
 				const element = getLastElement(cssSelector, document);
-				const value = element ? element.textContent.trim() : "";
-				return 'tryConvertStringToNumber("' + value.replace(/"/g, '\\"') + '")';
+				if (element)
+					return (
+						'"' +
+						element.textContent
+							.trim()
+							.replaceAll('"', '\\"')
+							.replace(/\n/g, " ") +
+						'"'
+					);
+				// Sinon, on utilise un élément HTML temporaire pour afficher le message pas encore affiché, et on applique le sélecteur à cet élément,
+				const tempElement = document.createElement("div");
+				tempElement.innerHTML = cumulativeOutput;
+				const selectorAppliedToTempElement = getLastElement(
+					cssSelector,
+					tempElement,
+				);
+				let foundText = "";
+				if (selectorAppliedToTempElement) {
+					foundText = selectorAppliedToTempElement.textContent.trim();
+					if (foundText !== "") {
+						// Si le texte trouvé est un bloc spécial (readcsv ou !useLLM), on indique qu'il faut une évaluation différée de la condition avec le sélecteur
+						const isSpecialBlock =
+							foundText.includes("readcsv") || foundText.includes("!useLLM");
+						if (isSpecialBlock) {
+							return `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
+						}
+					}
+				}
+				// Si l'élément temporaire contenait bien du texte et n'était pas un bloc spécial, on retourne ce texte
+				// Sinon, on indique qu'il faut une évaluation différée de la condition avec le sélecteur
+				return foundText
+					? '"' + foundText.replaceAll('"', '\\"').replace(/\n/g, " ") + '"'
+					: `!DIFFER_EVALUATION:SELECTOR["${cssSelector}"]`;
 			},
 		);
+		// Gestion du cas où la condition nécessite une évaluation différée
+		if (condition.includes("!DIFFER_EVALUATION")) {
+			return {
+				result: condition.replace("!DIFFER_EVALUATION:", "@"),
+				differEvaluation: true,
+			};
+		}
 
-		// Puis on traite le cas des variables simples @variableName
+		// S'il n'y a pas d'évaluation différée, on continue le traitement
+
+		// (2) On traite le cas des variables simples @variableName
 		condition = condition.replace(
 			/@([\p{L}0-9_]+)/gu,
 			function (match, varName) {
@@ -40,10 +85,12 @@ export function checkConditionalBlock(condition, dynamicVariables) {
 			.replaceAll('""', '"')
 			.replace('"undefined"', "undefined");
 		// Évalue l'expression de manière sécurisée
-		const result = evaluateExpression(condition, dynamicVariables);
-		return result;
+		return {
+			result: evaluateExpression(condition, dynamicVariables),
+			differEvaluation: false,
+		};
 	} catch (e) {
 		console.error("Error evaluating condition:", condition, e);
-		return false;
+		return { result: false, differEvaluation: false };
 	}
 }

@@ -16,7 +16,7 @@ export function handleBotMessage(message, dynamicVariables, getLastMessage) {
 	let output = "";
 	structureMessage.forEach((block) => {
 		// On fait le traitement des variables dynamiques de manière séquentielle dans chaque bloc de contenu
-		output += processBlocks(block, dynamicVariables);
+		output += processBlocks(block, dynamicVariables, output);
 	});
 	message = output;
 
