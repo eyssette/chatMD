@@ -1,5 +1,14 @@
 # Changelog
 
+## 8.6.2 (2025-11-23)
+
+### Fix
+
+- **core**: traitement des blocs conditionnels au moment de l'affichage - seulement pour les messages du bot
+- **markdown**: emploi des variables dynamiques simples : correction d'un bug si la valeur était "0".
+- **markdown**: dans l'évaluation des opérations autorisées, on traite les chaînes de caractères entre guillemets avant les autres opérations
+- **markdown**: ajout de l'opérateur % dans les opérations autorisées (pour calculer un reste)
+
 ## 8.6.1 (2025-11-23)
 
 ### Fix
