@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.6.3 (2025-11-24)
+
+### Fix
+
+- **ai**: amélioration de !useLLM avec la possibilité d'utiliser l'option !noStream pour ne pas streamer la réponse du LLM, mais l'afficher d'un coup
+- **markdown**: avec @SELECTOR, il faut toujours chercher l'élément le plus récent (en incluant toujours un élément temporaire qui contient le contenu pas encore affiché)
+
 ## 8.6.2 (2025-11-23)
 
 ### Fix
