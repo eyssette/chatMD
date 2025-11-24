@@ -48,11 +48,18 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 	let messageElement = options && options.messageElement;
 	let container = options && options.container;
 	const inline = options && options.inline;
+	let shouldStreamLLMresponse = true;
+	if (
+		yaml.useLLM.stream === false ||
+		(options && options.shouldStreamLLMresponse === false)
+	) {
+		shouldStreamLLMresponse = false;
+	}
 	return new Promise((resolve) => {
 		// Configuration de l'accès au LLM
 		let bodyObject = {
 			model: yaml.useLLM.model,
-			stream: yaml.useLLM.stream === false ? false : true,
+			stream: shouldStreamLLMresponse,
 			max_tokens: yaml.useLLM.maxTokens,
 			frequency_penalty: 0,
 			presence_penalty: 0,
@@ -122,39 +129,40 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 							messageElement.classList.add("bot-message");
 						}
 						container.appendChild(messageElement);
-						readStreamFromLLM(response.body, messageElement, APItype).then(
-							() => {
-								const llmAnswer = messageElement.innerHTML;
-								llmHistory.push({ role: "user", content: userMessage });
-								llmHistory.push({ role: "assistant", content: llmAnswer });
-								if (!inline) {
-									// On récupère le contenu de la question posée au LLM
-									let actionsLatest = chatbot.actions.pop();
-									if (actionsLatest.startsWith("c:n")) {
-										actionsLatest = chatbot.actions.pop();
-									}
-									actionsLatest = encodeString(
-										actionsLatest.replace(/^e:/, ""),
-									);
-									const actionsHistory = chatbot.actions.join(`|`);
-									const actionLlmQuestion = `llmq:${actionsLatest}`;
-									// On récupère le contenu de la réponse générée par le LLM
-									const actionLlmAnswer = `llmr:${encodeString(llmAnswer)}`;
-									// On met cette question et cette réponse dans l'historique des actions
-									chatbot.actions.push(actionLlmQuestion);
-									chatbot.actions.push(actionLlmAnswer);
-									// Et dans le bouton de menu du message
-									const actionsPrefix = actionsHistory
-										? `${actionsHistory}|`
-										: "";
-									const messageMenu = `<div class="messageMenu" data-actions-history="${actionsPrefix}${actionLlmQuestion}|${llmAnswer}">☰</div>`;
-									const messageMenuElement = document.createElement("div");
-									messageMenuElement.innerHTML = messageMenu;
-									messageElement.appendChild(messageMenuElement);
+						readStreamFromLLM(
+							response.body,
+							messageElement,
+							APItype,
+							options,
+						).then(() => {
+							const llmAnswer = messageElement.innerHTML;
+							llmHistory.push({ role: "user", content: userMessage });
+							llmHistory.push({ role: "assistant", content: llmAnswer });
+							if (!inline) {
+								// On récupère le contenu de la question posée au LLM
+								let actionsLatest = chatbot.actions.pop();
+								if (actionsLatest.startsWith("c:n")) {
+									actionsLatest = chatbot.actions.pop();
 								}
-								resolve();
-							},
-						);
+								actionsLatest = encodeString(actionsLatest.replace(/^e:/, ""));
+								const actionsHistory = chatbot.actions.join(`|`);
+								const actionLlmQuestion = `llmq:${actionsLatest}`;
+								// On récupère le contenu de la réponse générée par le LLM
+								const actionLlmAnswer = `llmr:${encodeString(llmAnswer)}`;
+								// On met cette question et cette réponse dans l'historique des actions
+								chatbot.actions.push(actionLlmQuestion);
+								chatbot.actions.push(actionLlmAnswer);
+								// Et dans le bouton de menu du message
+								const actionsPrefix = actionsHistory
+									? `${actionsHistory}|`
+									: "";
+								const messageMenu = `<div class="messageMenu" data-actions-history="${actionsPrefix}${actionLlmQuestion}|${llmAnswer}">☰</div>`;
+								const messageMenuElement = document.createElement("div");
+								messageMenuElement.innerHTML = messageMenu;
+								messageElement.appendChild(messageMenuElement);
+							}
+							resolve();
+						});
 					} else {
 						errorMessage({ container, inline });
 						resolve();

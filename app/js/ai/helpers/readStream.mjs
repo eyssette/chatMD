@@ -74,6 +74,7 @@ export async function readStreamFromLLM(
 	streamableObject,
 	chatMessage,
 	APItype,
+	options,
 ) {
 	let incompleteChunkBuffer = "";
 	const LLM_MAX_PROCESSING_TIME = yaml.useLLM.maxProcessingTime;
@@ -107,8 +108,13 @@ export async function readStreamFromLLM(
 		if (value) {
 			const chunkString = new TextDecoder().decode(value);
 
-			const isStreamMode =
-				yaml.useLLM && yaml.useLLM.stream === false ? false : true;
+			let isStreamMode = true;
+			if (
+				(yaml.useLLM && yaml.useLLM.stream === false) ||
+				(options && options.shouldStreamLLMresponse === false)
+			) {
+				isStreamMode = false;
+			}
 			const shouldSimulateStream =
 				yaml.useLLM && yaml.useLLM.simulateStream === true;
 

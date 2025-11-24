@@ -40,6 +40,7 @@ export async function processMessageWithPrompt(
 				let RAGprompt = "";
 				// Gestion de l'historique des échanges avec le LLM
 				let shouldUseConversationHistory = false;
+				let shouldStreamLLMresponse = true;
 				if (content.includes("!useHistory")) {
 					shouldUseConversationHistory = true;
 					content = content.replace("!useHistory", "");
@@ -50,6 +51,10 @@ export async function processMessageWithPrompt(
 					content = promptWithRag.content;
 					RAGinformations = promptWithRag.RAGinformations;
 					RAGprompt = promptWithRag.RAGprompt;
+				}
+				if (content.includes("!noStream")) {
+					shouldStreamLLMresponse = false;
+					content = content.replace("!noStream", "");
 				}
 
 				// On vérifie si l'élément précédent dans la séquence se finit par un élément html ouvert qui n'a pas été encore fermé
@@ -69,6 +74,7 @@ export async function processMessageWithPrompt(
 					container: container,
 					inline: true,
 					useConversationHistory: shouldUseConversationHistory,
+					shouldStreamLLMresponse: shouldStreamLLMresponse,
 				});
 			} else if (type === "markdown") {
 				// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
