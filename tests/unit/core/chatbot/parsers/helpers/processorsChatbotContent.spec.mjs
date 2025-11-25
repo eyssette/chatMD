@@ -3,6 +3,7 @@ import {
 	handleKeywords,
 	handleDynamicContent,
 	handleChoiceOptions,
+	handleRegularContent,
 } from "../../../../../../app/js/core/chatbot/parsers/helpers/processorsChatbotContent.mjs";
 import { config } from "../../../../../../app/js/config.mjs";
 
@@ -170,7 +171,7 @@ describe("handleKeywords", () => {
 	});
 });
 
-fdescribe("handleDynamicContent", () => {
+describe("handleDynamicContent", () => {
 	it("returns false if dynamicContent is not enabled in yaml", () => {
 		const line = "`if @userIsLoggedIn==true`";
 		const currentData = {};
@@ -309,5 +310,50 @@ describe("handleChoiceOptions", () => {
 		handleChoiceOptions(choiceInformations, yaml, currentData);
 
 		expect(currentData.choiceOptions[0].link).toBe("section 1 link");
+	});
+});
+
+describe("handleRegularContent", () => {
+	it("adds regular content line to currentData.content", () => {
+		const line = "This is a regular content line.";
+		const yaml = { responsesTitles: ["## "] };
+		const currentData = { content: [] };
+
+		handleRegularContent(line, yaml, currentData);
+
+		expect(currentData.content).toEqual([line]);
+		expect(currentData.listParsed).toBe(true);
+	});
+
+	it("converts internal links to anchor tags", () => {
+		const line = "Click [here](#section-1) for more info.";
+		const yaml = { responsesTitles: ["## "] };
+		const currentData = { content: [] };
+
+		handleRegularContent(line, yaml, currentData);
+
+		expect(currentData.content).toEqual([
+			'Click <a href="#section-1">here</a> for more info.',
+		]);
+		expect(currentData.listParsed).toBe(true);
+	});
+
+	it("does not add structure titles to content", () => {
+		const line = "# This is a structure title";
+		const yaml = { responsesTitles: ["## "] };
+		const currentData = { content: [] };
+
+		handleRegularContent(line, yaml, currentData);
+
+		expect(currentData.content).toEqual([]);
+	});
+	it("does not add custom structure titles to content", () => {
+		const line = "## This is a structure title";
+		const yaml = { responsesTitles: ["### "] };
+		const currentData = { content: [] };
+
+		handleRegularContent(line, yaml, currentData);
+
+		expect(currentData.content).toEqual([]);
 	});
 });
