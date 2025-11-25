@@ -186,6 +186,10 @@ describe("hasSentenceEndMark", () => {
 		expect(hasSentenceEndMark("To be continued…")).toBe(true);
 	});
 
+	it("returns true when the string ends with the end of a HTML tag mark >", () => {
+		expect(hasSentenceEndMark("<code>Test</code>")).toBe(true);
+	});
+
 	it("returns false when the string ends with a semicolon", () => {
 		expect(hasSentenceEndMark("Wait here;")).toBe(false);
 	});
