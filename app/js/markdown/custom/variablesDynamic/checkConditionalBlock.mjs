@@ -1,5 +1,5 @@
-import { getLastElement } from "../../../utils/dom.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
+import { evaluateSelector } from "./helpers/evaluateSelector.mjs";
 
 // Si on utilise un bloc conditionnel cette fonction permet de vérifier la condition associée à ce bloc
 export function checkConditionalBlock(
@@ -15,21 +15,7 @@ export function checkConditionalBlock(
 		condition = condition.replace(
 			/@SELECTOR\["([^"]+)"\]/g,
 			function (match, cssSelector) {
-				// On crée un élément temporaire qui contient le contenu en cours de construction
-				const tempElement = document.createElement("div");
-				tempElement.innerHTML = cumulativeOutput;
-				// On le rend complètement invisible et hors du flux
-				tempElement.style.cssText =
-					"position: absolute; visibility: hidden; pointer-events: none;";
-				// On ajoute temporairement cet élément au document
-				document.body.appendChild(tempElement);
-				// Maintenant on cherche le dernier élément qui correspond au sélecteur CSS dans tout le document en incluant l'élément temporaire
-				const selectorAppliedToDocument = getLastElement(cssSelector, document);
-				let value = selectorAppliedToDocument
-					? selectorAppliedToDocument.textContent.trim()
-					: "";
-				// On retire l'élément temporaire du document
-				document.body.removeChild(tempElement);
+				const value = evaluateSelector(cssSelector, cumulativeOutput);
 				// Si on a trouvé une valeur, on l'utilise directement
 				if (value !== "") {
 					// Si on a trouvé une valeur, on teste si c'est un bloc spécial

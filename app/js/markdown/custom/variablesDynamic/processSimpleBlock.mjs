@@ -1,6 +1,6 @@
 import { getRandomElement } from "../../../utils/arrays.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
-import { getLastElement } from "../../../utils/dom.mjs";
+import { evaluateSelector } from "./helpers/evaluateSelector.mjs";
 
 function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
@@ -86,24 +86,7 @@ export function processSimpleBlock(message, dynamicVariables) {
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
-					// On crée un élément temporaire qui contient le contenu en cours de construction
-					const tempElement = document.createElement("div");
-					tempElement.innerHTML = output;
-					// On le rend complètement invisible et hors du flux
-					tempElement.style.cssText =
-						"position: absolute; visibility: hidden; pointer-events: none;";
-					// On ajoute temporairement cet élément au document
-					document.body.appendChild(tempElement);
-					// Maintenant on cherche le dernier élément qui correspond au sélecteur CSS dans tout le document en incluant l'élément temporaire
-					const selectorAppliedToDocument = getLastElement(
-						cssSelector,
-						document,
-					);
-					let value = selectorAppliedToDocument
-						? selectorAppliedToDocument.textContent.trim()
-						: "";
-					// On retire l'élément temporaire du document
-					document.body.removeChild(tempElement);
+					let value = evaluateSelector(cssSelector, output);
 					if (value !== "") {
 						// Si on a trouvé une valeur, on teste si c'est un bloc spécial
 						const isSpecialBlock =
