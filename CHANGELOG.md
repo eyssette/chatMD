@@ -1,5 +1,26 @@
 # Changelog
 
+## 8.6.4 (2025-11-25)
+
+### Fix
+
+- **markdown**: gestion des variables complexes dont la valeur est définie par une variable @SELECTOR
+
+### Chore
+
+- ajout d'un commentaire pour expliquer ce que fait la fonction evaluateSelector()
+- refactorisation - fonction à part pour l'évaluation d'un sélecteur @SELECTOR["cssSelector"]
+- ajout de commentaires pour expliquer les fonctions
+
+### Test
+
+- **core**: ajout de tests pour handleRegularContent()
+- **core**: ajout de tests pour handleChoiceOptions()
+- **core**: ajout des tests pour handleDynamicContent()
+- **core**: ajout de tests pour handleKeywords()
+- **core**: ajout de tests pour handleNewResponseTitle()
+- **utils**: ajout de tests pour scopeStyles
+
 ## 8.6.3 (2025-11-24)
 
 ### Fix
