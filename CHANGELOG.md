@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.6.5 (2025-11-25)
+
+### Fix
+
+- **markdown**: vérification du type des variables dynamiques avant de vérifier si c'est une variable définie par @SELECTOR
+- **markdown**: vérification de la présence de variables dynamiques avant de traiter les blocs conditionnels (qui dépendent de ces variables)
+- **utils**: si un texte produit par IA finit par la marque de fin d'une balise ">", on considère que cela peut être la fin du texte produit
+
 ## 8.6.4 (2025-11-25)
 
 ### Fix
