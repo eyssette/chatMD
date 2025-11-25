@@ -80,7 +80,7 @@ export async function createMessage(chatbot, message, options) {
 		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
 		// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
-		if (!isUser) {
+		if (!isUser && yaml && yaml.dynamicVariables) {
 			message = processConditionalBlocksAtDisplayTime(
 				message,
 				chatbot.dynamicVariables,
