@@ -2,7 +2,9 @@ import {
 	handleNewResponseTitle,
 	handleKeywords,
 	handleDynamicContent,
+	handleChoiceOptions,
 } from "../../../../../../app/js/core/chatbot/parsers/helpers/processorsChatbotContent.mjs";
+import { config } from "../../../../../../app/js/config.mjs";
 
 describe("handleNewResponseTitle", () => {
 	it("pushes currentData to chatbotData and reset currentData fields", () => {
@@ -239,5 +241,73 @@ fdescribe("handleDynamicContent", () => {
 		expect(currentData.conditionStack).toEqual([]);
 		expect(currentData.condition).toBe("");
 		expect(currentData.listParsed).toBe(true);
+	});
+});
+
+describe("handleChoiceOptions", () => {
+	it("adds choice option to currentData.choiceOptions", () => {
+		const choiceInformations = {
+			text: "Go to section 1",
+			url: "section-1",
+			isRandom: false,
+		};
+		const yaml = { obfuscate: false };
+		const currentData = { choiceOptions: [] };
+
+		handleChoiceOptions(choiceInformations, yaml, currentData);
+
+		expect(currentData.choiceOptions).toEqual([
+			{
+				text: "Go to section 1",
+				link: "section-1",
+				isRandom: false,
+				condition: undefined,
+			},
+		]);
+	});
+
+	it("obfuscates link when yaml.obfuscate is true", () => {
+		const choiceInformations = {
+			text: "Go to section 1",
+			url: "section-1",
+			isRandom: false,
+		};
+		const yaml = { obfuscate: true };
+		const currentData = { choiceOptions: [] };
+
+		handleChoiceOptions(choiceInformations, yaml, currentData);
+		const obfuscatedLink = currentData.choiceOptions[0].link;
+
+		expect(obfuscatedLink).toBe("c2VjdGlvbi0x");
+	});
+
+	it("uses default text when choiceInformations.text is empty", () => {
+		const choiceInformations = {
+			text: "",
+			url: "section-1",
+			isRandom: false,
+		};
+		const yaml = { obfuscate: false };
+		const currentData = { choiceOptions: [] };
+
+		handleChoiceOptions(choiceInformations, yaml, currentData);
+
+		expect(currentData.choiceOptions[0].text).toBe(
+			config.defaultChoiceOptionText,
+		);
+	});
+
+	it("handles anchor links correctly", () => {
+		const choiceInformations = {
+			text: "Go to section 1",
+			url: "#section-1-link",
+			isRandom: false,
+		};
+		const yaml = { obfuscate: false };
+		const currentData = { choiceOptions: [] };
+
+		handleChoiceOptions(choiceInformations, yaml, currentData);
+
+		expect(currentData.choiceOptions[0].link).toBe("section 1 link");
 	});
 });
