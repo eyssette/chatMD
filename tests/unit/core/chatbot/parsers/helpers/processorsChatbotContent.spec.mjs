@@ -1,4 +1,7 @@
-import { handleNewResponseTitle } from "../../../../../../app/js/core/chatbot/parsers/helpers/processorsChatbotContent.mjs";
+import {
+	handleNewResponseTitle,
+	handleKeywords,
+} from "../../../../../../app/js/core/chatbot/parsers/helpers/processorsChatbotContent.mjs";
 
 describe("handleNewResponseTitle", () => {
 	it("pushes currentData to chatbotData and reset currentData fields", () => {
@@ -137,5 +140,29 @@ describe("handleNewResponseTitle", () => {
 		expect(currentData.choiceOptions).toBeNull();
 		expect(currentData.content).toEqual([]);
 		expect(currentData.listParsed).toBe(false);
+	});
+});
+
+describe("handleKeywords", () => {
+	it("adds keywords to currentData.keywords", () => {
+		const line = "- keyword2";
+		const currentData = {
+			keywords: ["keyword1"],
+		};
+
+		handleKeywords(line, currentData);
+
+		expect(currentData.keywords).toEqual(["keyword1", "keyword2"]);
+	});
+
+	it("trims whitespace from keywords", () => {
+		const line = "- keyword2 ";
+		const currentData = {
+			keywords: ["keyword1"],
+		};
+
+		handleKeywords(line, currentData);
+
+		expect(currentData.keywords).toEqual(["keyword1", "keyword2"]);
 	});
 });
