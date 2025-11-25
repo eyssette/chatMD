@@ -4,6 +4,7 @@ export function detectedResponseTitle(line, yaml) {
 	return yaml ? startsWithAnyOf(line, yaml.responsesTitles) : "";
 }
 
+// Retourne les titres de structure (titres avant le niveau des titres de réponses)
 export function getStructureTitles(yaml) {
 	const responseTitlesLevels =
 		yaml && Array.isArray(yaml.responsesTitles) && yaml.responsesTitles
@@ -24,6 +25,7 @@ export function getStructureTitles(yaml) {
 	return structureTitles;
 }
 
+// Vérifie si une ligne est un titre de structure
 export function isStructureTitle(line, yaml) {
 	const structuredTitles = getStructureTitles(yaml);
 	if (!Array.isArray(structuredTitles) || structuredTitles.length == 0)
