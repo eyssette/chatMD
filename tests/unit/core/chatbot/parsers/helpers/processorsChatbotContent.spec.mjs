@@ -1,6 +1,7 @@
 import {
 	handleNewResponseTitle,
 	handleKeywords,
+	handleDynamicContent,
 } from "../../../../../../app/js/core/chatbot/parsers/helpers/processorsChatbotContent.mjs";
 
 describe("handleNewResponseTitle", () => {
@@ -164,5 +165,79 @@ describe("handleKeywords", () => {
 		handleKeywords(line, currentData);
 
 		expect(currentData.keywords).toEqual(["keyword1", "keyword2"]);
+	});
+});
+
+fdescribe("handleDynamicContent", () => {
+	it("returns false if dynamicContent is not enabled in yaml", () => {
+		const line = "`if @userIsLoggedIn==true`";
+		const currentData = {};
+		const yaml = { dynamicContent: false };
+
+		const result = handleDynamicContent(line, currentData, yaml);
+
+		expect(result).toBe(false);
+	});
+
+	it("handles opening if block", () => {
+		const line = "`if @userIsLoggedIn==true`";
+		const currentData = { content: [] };
+		const yaml = { dynamicContent: true };
+
+		const result = handleDynamicContent(line, currentData, yaml);
+
+		expect(result).toBe(true);
+		expect(currentData.conditionStack).toEqual(["@userIsLoggedIn==true"]);
+		expect(currentData.condition).toBe("@userIsLoggedIn==true");
+		expect(currentData.content).toEqual([line + "\n"]);
+		expect(currentData.listParsed).toBe(true);
+	});
+
+	it("handles closing endif block", () => {
+		const line = "`endif`";
+		const currentData = {
+			conditionStack: ["@userIsLoggedIn==true"],
+			content: [],
+		};
+		const yaml = { dynamicContent: true };
+
+		const result = handleDynamicContent(line, currentData, yaml);
+
+		expect(result).toBe(true);
+		expect(currentData.conditionStack).toEqual([]);
+		expect(currentData.condition).toBe("");
+		expect(currentData.content).toEqual([line + "\n"]);
+		expect(currentData.listParsed).toBe(true);
+	});
+
+	it("handles nested if blocks", () => {
+		const lineIf1 = "`if @userIsLoggedIn==true`";
+		const lineIf2 = "`if @userIsAdmin==true`";
+		const lineEndif = "`endif`";
+		const currentData = { content: [] };
+		const yaml = { dynamicContent: true };
+
+		handleDynamicContent(lineIf1, currentData, yaml);
+		expect(currentData.conditionStack).toEqual(["@userIsLoggedIn==true"]);
+		expect(currentData.condition).toBe("@userIsLoggedIn==true");
+
+		handleDynamicContent(lineIf2, currentData, yaml);
+		expect(currentData.conditionStack).toEqual([
+			"@userIsLoggedIn==true",
+			"@userIsAdmin==true",
+		]);
+		expect(currentData.condition).toBe(
+			"@userIsLoggedIn==true && @userIsAdmin==true",
+		);
+
+		handleDynamicContent(lineEndif, currentData, yaml);
+		expect(currentData.conditionStack).toEqual(["@userIsLoggedIn==true"]);
+		expect(currentData.condition).toBe("@userIsLoggedIn==true");
+		expect(currentData.listParsed).toBe(true);
+
+		handleDynamicContent(lineEndif, currentData, yaml);
+		expect(currentData.conditionStack).toEqual([]);
+		expect(currentData.condition).toBe("");
+		expect(currentData.listParsed).toBe(true);
 	});
 });
