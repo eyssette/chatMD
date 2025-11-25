@@ -1,5 +1,6 @@
 import { getLastElement } from "../../../../utils/dom.mjs";
 
+// Évalue un sélecteur CSS sur un contenu HTML donné et retourne le texte de l'élément trouvé
 export function evaluateSelector(cssSelector, htmlContent) {
 	// On crée un élément temporaire qui contient le contenu HTML fourni
 	const tempElement = document.createElement("div");
