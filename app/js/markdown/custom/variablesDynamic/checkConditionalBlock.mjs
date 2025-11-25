@@ -11,6 +11,41 @@ export function checkConditionalBlock(
 	try {
 		// Remplace les variables personnalisées dans la condition
 
+		// On parcourt d'abord toutes les variables dynamiques pour résoudre celles qui utilisent des sélecteurs
+		if (dynamicVariables) {
+			for (const varName in dynamicVariables) {
+				const isVariableWithSelector =
+					dynamicVariables[varName] &&
+					dynamicVariables[varName].includes("SELECTOR[");
+				if (isVariableWithSelector) {
+					const selectorMatch = dynamicVariables[varName].match(
+						/SELECTOR\["([^"]+)"\]/,
+					);
+					if (selectorMatch) {
+						const cssSelector = selectorMatch[1];
+						let value = evaluateSelector(cssSelector, cumulativeOutput);
+						if (value !== "") {
+							// Si on a trouvé une valeur, on teste si c'est un bloc spécial
+							const isSpecialBlock =
+								value.includes("readcsv") || value.includes("!useLLM");
+							if (!isSpecialBlock) {
+								dynamicVariables[varName] = value;
+							} else {
+								return {
+									result: condition,
+									differEvaluation: true,
+								};
+							}
+						}
+					} else {
+						return {
+							result: condition,
+							differEvaluation: true,
+						};
+					}
+				}
+			}
+		}
 		// (1) On traite d'abord le cas des variables @SELECTOR["cssSelector"]
 		condition = condition.replace(
 			/@SELECTOR\["([^"]+)"\]/g,

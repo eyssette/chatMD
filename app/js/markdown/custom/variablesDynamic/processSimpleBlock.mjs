@@ -4,6 +4,14 @@ import { evaluateSelector } from "./helpers/evaluateSelector.mjs";
 
 function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
+
+	// Cas particulier : si on trouve une variable de type @SELECTOR["cssSelector"], on assigne à dynamicVariables[varName] la chaîne complète pour une évaluation différée
+	const selectorMatch = complexExpression.match(/@SELECTOR\["([^"]+)"\]/);
+	if (selectorMatch) {
+		return complexExpression;
+	}
+
+	// Sinon, on remplace les variables par leurs valeurs
 	let calc = complexExpression.replace(
 		/@([\p{L}0-9_]+)/gu,
 		function (match, varName) {
@@ -81,8 +89,42 @@ export function processSimpleBlock(message, dynamicVariables) {
 		if (match[3] !== undefined) {
 			const varName = match[3];
 
+			// Cas des variables dont la valeur est définie par un @SELECTOR
+			const isVariableWithSelector =
+				dynamicVariables &&
+				dynamicVariables[varName] &&
+				dynamicVariables[varName].includes("SELECTOR[");
+			if (isVariableWithSelector) {
+				const selectorMatch = dynamicVariables[varName].match(
+					/SELECTOR\["([^"]+)"\]/,
+				);
+				if (selectorMatch) {
+					const cssSelector = selectorMatch[1];
+					let value = evaluateSelector(cssSelector, output);
+					if (value !== "") {
+						// Si on a trouvé une valeur, on teste si c'est un bloc spécial
+						const isSpecialBlock =
+							value.includes("readcsv") || value.includes("!useLLM");
+						if (!isSpecialBlock) {
+							dynamicVariables[varName] = value;
+							output += value;
+							continue;
+						} else {
+							output += `\`@${varName}\``;
+							continue;
+						}
+					} else {
+						output += `\`@${varName}\``;
+						continue;
+					}
+				} else {
+					output += `\`@${varName}\``;
+					continue;
+				}
+			}
+
+			// Cas des variables SELECTOR de type `@SELECTOR["cssSelector"]`
 			if (varName.startsWith("SELECTOR")) {
-				// Cas des variables SELECTOR de type `@SELECTOR["cssSelector"]`
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
