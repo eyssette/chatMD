@@ -16,6 +16,7 @@ export function checkConditionalBlock(
 			for (const varName in dynamicVariables) {
 				const isVariableWithSelector =
 					dynamicVariables[varName] &&
+					typeof dynamicVariables[varName] == "string" &&
 					dynamicVariables[varName].includes("SELECTOR[");
 				if (isVariableWithSelector) {
 					const selectorMatch = dynamicVariables[varName].match(

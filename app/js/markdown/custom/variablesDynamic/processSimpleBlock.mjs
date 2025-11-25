@@ -93,6 +93,7 @@ export function processSimpleBlock(message, dynamicVariables) {
 			const isVariableWithSelector =
 				dynamicVariables &&
 				dynamicVariables[varName] &&
+				typeof dynamicVariables[varName] == "string" &&
 				dynamicVariables[varName].includes("SELECTOR[");
 			if (isVariableWithSelector) {
 				const selectorMatch = dynamicVariables[varName].match(
