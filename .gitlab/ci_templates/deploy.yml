@@ -26,9 +26,6 @@ pages:
     - wget https://forge.apps.education.fr/$APP_NAME/$APP_NAME.forge.apps.education.fr/-/archive/main/$APP_NAME.forge.apps.education.fr-main.tar.bz2
     - tar -xjf $APP_NAME.forge.apps.education.fr-main.tar.bz2 --strip-components=1 -C public
 
-    # Suppression du dossier data dans $APP_FOLDER/public
-    - rm -r public/$APP_FOLDER/data
-
     # Copie de tous les fichiers du dépôt dans public/$APP_FOLDER (pour la partie build) et dans public/ (pour tous les autres fichiers, notamment les images et autres ressources intégrées dans le chatbot …)
     # Attention : ces fichiers écrasent les fichiers présents dans le dépôt de ChatMD
     - cp -r .public/* public/$APP_FOLDER
