@@ -2,9 +2,6 @@
 gestionGrosMots: true
 ---
 
-<!--Fichier généré automatiquement à partir des fichiers présents dans le dossier data/.
-Attention : les modifications faites manuellement dans ce fichier seront écrasées à la prochaine compilation de ChatMD -->
-
 # ChatMD
 
 Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
