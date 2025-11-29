@@ -1,9 +1,9 @@
-import { yaml } from "./yaml.mjs";
 import { getRandomElement } from "../../utils/arrays.mjs";
 
 // Gestion des variables fixes : soit avant de parser le markdown, soit après
-export function processFixedVariables(content, preprocess = false) {
+export function processFixedVariables(content, yaml, options) {
 	// Les variables fixes qui commencent par _ sont traitées avant de parser le contenu du Markdown
+	const preprocess = options && options.preprocess;
 	const regex = preprocess ? /@{(_\S+)}/g : /@{(\S+)}/g;
 	return content.replaceAll(
 		regex,

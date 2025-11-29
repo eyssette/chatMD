@@ -14,7 +14,7 @@ export function parseMarkdown(md, yaml) {
 
 	// On traite les variables fixes s'il y en a
 	if (yaml && yaml.variables) {
-		md = processFixedVariables(md, true);
+		md = processFixedVariables(md, yaml, { preprocess: true });
 	}
 
 	// On extrait dans le Mardown le contenu de l'introduction

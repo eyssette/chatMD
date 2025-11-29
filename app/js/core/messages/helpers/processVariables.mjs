@@ -8,7 +8,7 @@ export async function processVariables(chatbot, message, isUser) {
 	let dynamicVariables = chatbot.dynamicVariables;
 	// Gestion des variables fixes prédéfinies
 	if (yaml && yaml.variables) {
-		message = processFixedVariables(message);
+		message = processFixedVariables(message, yaml);
 	}
 	if (!isUser) {
 		message = processRandomMessage(message);
