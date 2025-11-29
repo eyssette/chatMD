@@ -1,5 +1,5 @@
 import { config } from "../../config.mjs";
-import { load as loadYAML } from "../../lib/js-yaml.js";
+import { load as loadYAML } from "../../lib/js-yaml.mjs";
 import { loadScript, loadCSS } from "../../utils/urls.mjs";
 import { deepMerge } from "../../utils/objects.mjs";
 import { setContentOfFooter } from "../../utils/ui.mjs";
