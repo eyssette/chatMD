@@ -1,8 +1,10 @@
+import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import codeceptjsPlugin from "eslint-plugin-codeceptjs";
 
-export default [
+export default defineConfig([
+	globalIgnores(["app/js/lib/**"]),
 	{
 		languageOptions: {
 			globals: {
@@ -34,4 +36,4 @@ export default [
 			"keyword-spacing": ["error"],
 		},
 	},
-];
+]);
