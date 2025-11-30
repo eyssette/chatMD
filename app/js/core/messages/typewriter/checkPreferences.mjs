@@ -6,6 +6,7 @@ export function checkTypewriterPreferences(md) {
 	md = directiveTypewriter.md;
 
 	const noTypewriter =
+		!window.matchMedia ||
 		window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
 		(yaml.typeWriter === false && directiveTypewriter.useTypewriter !== true) ||
 		(yaml.typeWriter === true && directiveTypewriter.useTypewriter === false);
