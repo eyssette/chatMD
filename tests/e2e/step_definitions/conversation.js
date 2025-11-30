@@ -2,11 +2,6 @@ const { I } = inject();
 
 import { config } from "../../../app/js/config.mjs";
 
-Given("Je suis sur le site de ChatMD", async () => {
-	I.amOnPage("");
-	I.see("ChatMD");
-});
-
 When("Je demande quelle licence ChatMD utilise", () => {
 	I.askTheChatbot("quelle est la licence de ChatMD ?");
 });
@@ -15,14 +10,6 @@ Then("Le chatbot répond que ChatMD est sous licence MIT", () => {
 	I.pressKey("Enter");
 	I.waitForText("licence MIT", 10);
 });
-
-Given(
-	"J'utilise le chatbot pour la méthodologie d'une dissertation de philosophie",
-	() => {
-		I.amOnPage("#dissertation-philo");
-		I.see("La dissertation en philosophie");
-	},
-);
 
 When(
 	"Je demande si je peux utiliser une structure thèse-antithèse-synthèse",
@@ -38,16 +25,8 @@ Then(
 	},
 );
 
-Given("J'appuie sur la touche Entrée", () => {
-	I.pressKey("Enter");
-});
-
 Then("Le texte de présentation de ChatMD s'affiche d'un coup", () => {
 	I.waitForText("Qui a créé ChatMD ?", 1);
-});
-
-Given("J'appuie sur le bouton “Envoyer”", () => {
-	I.click("#send-button");
 });
 
 When("Je pose une question qui n'est pas dans la base de connaissances", () => {
