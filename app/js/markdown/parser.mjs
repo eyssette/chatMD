@@ -1,4 +1,4 @@
-import Showdown from "../lib/showdown.js";
+import Showdown from "../lib/showdown.mjs";
 
 // Extensions pour Showdown
 
