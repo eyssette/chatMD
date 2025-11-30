@@ -19,5 +19,14 @@
             "property.declaration": {"underline": false}, 
         }
     },
-	 "eslint.validate": [".mjs", "javascript", "html", "markdown", "json"],
+	"eslint.validate": [
+		".mjs",
+		"javascript",
+		"html",
+		"markdown",
+		"json"
+	],
+	"[feature]": {
+		"editor.defaultFormatter": "alexkrechik.cucumberautocomplete"
+	},
 }
