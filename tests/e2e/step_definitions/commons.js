@@ -5,6 +5,21 @@ Given("Je lance ChatMD {string}", async (hash) => {
 	I.loadAchatbot(src);
 });
 
+When("Je demande {string}", async (question) => {
+	I.askTheChatbot(question);
+});
+
+Given("Je clique sur le bouton {string}", async (buttonText) => {
+	I.pressKey("Enter");
+	I.waitForText(buttonText, 10);
+	I.click(locate(".messageOptions li a").withText(buttonText));
+});
+
+Then("Le chatbot répond {string}", async (answer) => {
+	I.pressKey("Enter");
+	I.waitForText(answer, 10);
+});
+
 Given("J'appuie sur la touche Entrée", () => {
 	I.pressKey("Enter");
 });

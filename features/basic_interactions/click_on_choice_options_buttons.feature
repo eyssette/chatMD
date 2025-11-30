@@ -6,11 +6,13 @@ Feature: Cliquer sur les boutons des options de choix
 	@chatbot-base
 	Scenario: Cliquer sur un bouton d'option de choix
 		Given Je lance ChatMD ""
-		When Je clique sur un bouton d'option de choix après le message initial
-		Then Le chatbot répond en fonction de l'option choisie
+		When Je clique sur le bouton "Quels sont les usages possibles ?"
+		Then Le chatbot répond "On peut imaginer de nombreux usages"
 
 	@chatbot-base @chatbot-philosophyDissertation
 	Scenario: Cliquer sur une suite d'options de choix
 		Given Je lance ChatMD "#dissertation-philo"
-		When Je clique sur une suite d'options de choix
-		Then Le chatbot répond en fonction de la suite d'options choisies
+		And Je clique sur le bouton "Comment on organise son temps ?"
+		And Je clique sur le bouton "Comment on rédige ?"
+		When Je clique sur le bouton "Comment on rédige la conclusion ?"
+		Then Le chatbot répond "Dans la conclusion, le but est simplement de retracer le cheminement parcouru."
