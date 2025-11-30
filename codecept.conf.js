@@ -5,7 +5,7 @@ exports.config = {
 			browser: "chromium",
 			url: "http://localhost:8888",
 			bypassCSP: true,
-			show: true,
+			show: false,
 			locale: "fr-FR",
 		},
 	},

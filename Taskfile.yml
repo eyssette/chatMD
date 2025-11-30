@@ -5,6 +5,7 @@ version: '3'
 vars:
   APP_FOLDER: "app"
   TEST_FOLDER: "tests"
+  FEATURES_FOLDER: "features"
   PORT_LOCAL_SERVER: 8888
 
 tasks:
@@ -23,6 +24,7 @@ tasks:
       - "{{.APP_FOLDER}}/css/**/*.css"
       - "{{.APP_FOLDER}}/js/**/*.mjs"
       - "{{.APP_FOLDER}}/js/**/*.js"
+      - "{{.APP_FOLDER}}/index.html"
       - "{{.APP_FOLDER}}/DEBUG" # On vérifie si ce fichier a changé (parce qu'on a lancé une nouvelle version pour le DEBUG), afin de pouvoir relancer le build pour la version PROD
       - rollup.config.mjs
     generates:
@@ -105,6 +107,17 @@ tasks:
   tests:e2e:
     aliases:
       - tests:codeceptjs
+    sources:
+      - "{{.APP_FOLDER}}/data/**/*.md"
+      - "{{.APP_FOLDER}}/index.md"
+      - "{{.APP_FOLDER}}/css/**/*.css"
+      - "{{.APP_FOLDER}}/js/**/*.mjs"
+      - "{{.APP_FOLDER}}/js/**/*.js"
+      - "{{.APP_FOLDER}}/index.html"
+      - "{{.TEST_FOLDER}}/e2e/**/*.js"
+      - "{{.TEST_FOLDER}}/e2e/.config/generateStepsDefinitionsFromFeatures.js"
+      - "{{.TEST_FOLDER}}/e2e/step_definitions/**/*.js"
+      - "{{.FEATURES_FOLDER}}/**/*.feature"
     cmds:
       - task: server:start
       - defer: {task: server:stop}
@@ -138,7 +151,7 @@ tasks:
       - package-lock.json
     cmds:
       - task: lint
-      - task: tests:unit
+      - task: tests
       - cz bump
 
   server:start:
@@ -151,9 +164,13 @@ tasks:
       - kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null || true
 
   ecma:
+    sources:
+      - "{{.APP_FOLDER}}/js/**/*.mjs"
     cmds:
-      - npx es-check es2018 "app/**/*.mjs" --module
+      - npx es-check es2018 "{{.APP_FOLDER}}/js/**/*.mjs" --module
 
   lint:
+    sources:
+      - "{{.APP_FOLDER}}/js/**/*.mjs"
     cmds:
       - npx eslint "app/**/*.mjs"
