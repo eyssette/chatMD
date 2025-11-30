@@ -15,6 +15,7 @@ Feature: Poser des questions au chatbot en langage naturel
     When Je demande si je peux utiliser une structure thèse-antithèse-synthèse
     Then Le chatbot explique que la structure thèse-antithèse-synthèse n'est pas appropriée pour une dissertation de philosophie
 
+  @chatbot-base
   Scenario: Question sur un sujet non couvert par le chatbot
     Given Je suis sur le site de ChatMD
     When Je pose une question qui n'est pas dans la base de connaissances
