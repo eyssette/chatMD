@@ -74,7 +74,7 @@ tasks:
       - test ! -f app/DEBUG
     cmds:
       - task: lint
-      - task: tests:unit
+      - task: tests
       - for: { var: GIT_REPO_NAMES }
         cmd:  git push {{.ITEM}} && git push {{.ITEM}} --tags
 
