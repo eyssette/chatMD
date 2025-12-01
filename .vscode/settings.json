@@ -27,6 +27,7 @@
 		"json"
 	],
 	"[feature]": {
-		"editor.defaultFormatter": "alexkrechik.cucumberautocomplete"
+		"editor.defaultFormatter": "alexkrechik.cucumberautocomplete",
+		"editor.formatOnSave": true
 	},
 }
