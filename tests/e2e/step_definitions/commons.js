@@ -20,8 +20,8 @@ Then("Le chatbot répond {string}", async (answer) => {
 	I.waitForText(answer, 10);
 });
 
-Given("J'appuie sur la touche Entrée", () => {
-	I.pressKey("Enter");
+Given("J'appuie sur la touche {string}", (string) => {
+	I.pressKey(string);
 });
 
 Given("J'appuie sur le bouton “Envoyer”", () => {

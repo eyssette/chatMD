@@ -6,5 +6,5 @@ Feature: Contrôler l'effet de machine à écrire
 	@chatbot-base
 	Scenario: Appuyer sur la touche Entrée
 		Given Je lance ChatMD ""
-		And J'appuie sur la touche Entrée
+		And J'appuie sur la touche "Enter"
 		Then Le texte de présentation de ChatMD s'affiche d'un coup
