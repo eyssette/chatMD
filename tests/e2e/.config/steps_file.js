@@ -1,8 +1,5 @@
 // in this file you can append custom step methods to 'I' object
 
-// on import la fonction decodeString depuis app/js/utils/strings.mjs
-const { encodeString } = require("../../../app/js/utils/strings.mjs");
-
 module.exports = function () {
 	return actor({
 		// Define custom steps here, use 'this' to access default methods of I.
@@ -12,13 +9,21 @@ module.exports = function () {
 			this.fillField("#user-input", txt);
 			this.click("#send-button");
 		},
-		loadAchatbot: async function (src) {
+		loadAchatbot: async function (src, isRaw = false) {
+			if (isRaw) {
+				const encodedSrc = Buffer.from(encodeURIComponent(src)).toString(
+					"base64",
+				);
+				this.amOnPage(`#${encodedSrc}?raw=1`);
+				return;
+			}
+
 			if (src === "#") {
 				this.amOnPage("");
 				return;
 			}
 
-			// Si la source commence par # suivi immédiatmeent d'un caractère qui n'est pas un espace
+			// Si la source commence par # suivi immédiatement d'un caractère qui n'est pas un espace
 			if (/^#\S/.test(src)) {
 				this.amOnPage(src);
 				return;
@@ -30,9 +35,7 @@ module.exports = function () {
 				return;
 			}
 
-			// Dernière possibilité : la source est un texte brut, on l'encode en base64 et on le passe en paramètre src)
-			const decodedSrc = encodeString(src);
-			this.amOnPage(decodedSrc);
+			this.amOnPage("");
 		},
 	});
 };

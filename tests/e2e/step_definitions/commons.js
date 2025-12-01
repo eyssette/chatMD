@@ -1,8 +1,9 @@
 const { I } = inject();
 
-Given("Je lance ChatMD {string}", async (hash) => {
-	const src = hash ? hash.trim() : "#";
-	I.loadAchatbot(src);
+Given("Je lance ChatMD {string}", async (link, rawsource) => {
+	const src = rawsource ? rawsource.content.trim() : link ? link.trim() : "#";
+	const isRaw = rawsource && rawsource.content ? true : false;
+	I.loadAchatbot(src, isRaw);
 });
 
 When("Je demande {string}", async (question) => {
