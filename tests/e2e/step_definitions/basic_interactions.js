@@ -63,3 +63,8 @@ Then("Le dernier message contient {string}", (messageText) => {
 	I.pressKey("Enter");
 	I.see(messageText, ".message:last-child");
 });
+
+Then("Le dernier message ne contient pas {string}", (messageText) => {
+	I.pressKey("Enter");
+	I.dontSee(messageText, ".message:last-child");
+});
