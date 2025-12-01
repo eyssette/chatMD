@@ -23,4 +23,38 @@ Then(
 		}
 	},
 );
-Given;
+
+When("Je clique sur le bouton de menu du dernier message", () => {
+	I.pressKey("Enter");
+	I.click(".message:last-child .messageMenu");
+});
+
+Then(
+	"Je vois une fenêtre modale avec un lien vers l'historique de la conversation {string}",
+	(historyUrl) => {
+		I.waitForElement("#systemModal", 5);
+		I.seeElement(locate('#systemModal a[href*="' + historyUrl + '"]'));
+	},
+);
+
+Then(
+	"Je vois une fenêtre modale avec un lien vers le titre du dernier message {string}",
+	(titleUrl) => {
+		I.waitForElement("#systemModal", 5);
+		I.seeElement(locate('#systemModal a[href*="' + titleUrl + '"]'));
+	},
+);
+
+When("Je clique en dehors de la fenêtre modale", () => {
+	I.waitForElement("#systemModal", 5);
+	I.click("#systemModal", "", { position: { x: 0, y: 0 } });
+});
+
+Then("La fenêtre modale n'est plus visible", () => {
+	I.dontSeeElement("#systemModal");
+});
+
+Then("Je clique sur le bouton de fermeture de la fenêtre modale", () => {
+	I.waitForElement("#systemModal", 5);
+	I.click("#systemModal .close-button");
+});
