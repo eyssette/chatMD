@@ -58,3 +58,8 @@ Then("Je clique sur le bouton de fermeture de la fenêtre modale", () => {
 	I.waitForElement("#systemModal", 5);
 	I.click("#systemModal .close-button");
 });
+
+Then("Le dernier message contient {string}", (messageText) => {
+	I.pressKey("Enter");
+	I.see(messageText, ".message:last-child");
+});
