@@ -18,7 +18,8 @@ Given("Je clique sur le bouton {string}", async (buttonText) => {
 
 Then("Le chatbot répond {string}", async (answer) => {
 	I.pressKey("Enter");
-	I.waitForText(answer, 10);
+	// On cherche answer dans le dernier message du bot .message:last-child .bot-message
+	I.waitForText(answer, 10, ".bot-message:last-child");
 });
 
 Given("J'appuie sur la touche {string}", (string) => {
@@ -27,4 +28,11 @@ Given("J'appuie sur la touche {string}", (string) => {
 
 Given("J'appuie sur le bouton “Envoyer”", () => {
 	I.click("#send-button");
+});
+
+Then("{string} n'existe pas", (selector) => {
+	if (selector == "Le message initial") {
+		selector = ".bot-message > *:not(ul)";
+	}
+	I.dontSeeElement(selector);
 });
