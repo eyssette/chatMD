@@ -9,7 +9,7 @@ module.exports = function () {
 			this.fillField("#user-input", txt);
 			this.click("#send-button");
 		},
-		loadAchatbot: async function (src, isRaw = false) {
+		launchChatmd: async function (src, isRaw = false) {
 			if (isRaw) {
 				const encodedSrc = Buffer.from(encodeURIComponent(src)).toString(
 					"base64",
