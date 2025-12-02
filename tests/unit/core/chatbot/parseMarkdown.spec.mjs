@@ -23,7 +23,7 @@ describe("parseMarkdown", () => {
         </div>
     </main>
     <footer id="footer">
-        ChatMD – Outil libre & gratuit créé par <a href="http://eyssette.forge.apps.education.fr/">Cédric Eyssette</a>
+        ChatMD – Outil libre & gratuit créé par <a href="https://eyssette.forge.apps.education.fr/">Cédric Eyssette</a>
     </footer>
     <script src="script.min.js"></script>
 </body>`);

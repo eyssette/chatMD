@@ -73,7 +73,7 @@ Voir les [options de configuration avancées](https://chatmd.forge.apps.educatio
 :::success
 N'hésitez pas à partager vos exemples de chatbot sur le [salon Tchap dédié à ChatMD](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) ou par [mail](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) !
 
-Vous pouvez aussi me contacter sur les [réseaux sociaux](http://eyssette.forge.apps.education.fr/)
+Vous pouvez aussi me contacter sur les [réseaux sociaux](https://eyssette.forge.apps.education.fr/)
 :::
 \`
 
@@ -98,7 +98,7 @@ Vous pouvez aussi me contacter sur les [réseaux sociaux](http://eyssette.forge.
 **Besoin d'aide ?**
 - rejoignez le [salon Tchap](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) dédié à ChatMD
 - écrivez un [ticket](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=help) et précisez votre besoin.
-- contactez le responsable de ce projet par [mail](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) ou sur les [réseaux sociaux](http://eyssette.forge.apps.education.fr/)
+- contactez le responsable de ce projet par [mail](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) ou sur les [réseaux sociaux](https://eyssette.forge.apps.education.fr/)
 
 :::success Ne pas hésiter !
 - [signalez un bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) si vous avez constaté un problème !

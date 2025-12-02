@@ -64,7 +64,7 @@ describe("handleURL", () => {
 			],
 			secureMode: false,
 			authorizedChatbots: ["https://chatbot.com"],
-			corsProxy: "http://corsproxy.io/?url=",
+			corsProxy: "https://corsproxy.io/?url=",
 		});
 	});
 
@@ -203,7 +203,7 @@ describe("handleURL", () => {
 		const options = { useCorsProxy: true };
 		const result = handleURL(url, options);
 		expect(result).toBe(
-			"http://corsproxy.io/?url=https://example.com/file.txt",
+			"https://corsproxy.io/?url=https://example.com/file.txt",
 		);
 	});
 

@@ -73,7 +73,7 @@ Here are a few examples of chatbots created with ChatMD:
 :::success
 Feel free to share your chatbot examples on the [Tchap chatroom dedicated to ChatMD](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) or via [email](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr)!
 
-You can also reach out to me on [social media](http://eyssette.forge.apps.education.fr/)
+You can also reach out to me on [social media](https://eyssette.forge.apps.education.fr/)
 :::
 \`
 
@@ -95,7 +95,7 @@ You can also reach out to me on [social media](http://eyssette.forge.apps.educat
 **Need help?**
 - Join the [Tchap chatroom](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) dedicated to ChatMD  
 - Submit a [ticket](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=help) and describe your need  
-- Contact the project owner by [email](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) or on [social media](http://eyssette.forge.apps.education.fr/)
+- Contact the project owner by [email](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) or on [social media](https://eyssette.forge.apps.education.fr/)
 
 :::success Don’t hesitate!
 - [Report a bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) if you found an issue!
