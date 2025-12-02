@@ -20,7 +20,7 @@ Feature: Au démarrage, afficher un message initial
 			"""
 		Then "Le message initial" n'existe pas
 
-	Scenario: Afficher les boutons de choix du message initial et renvoyer la bonne réponse
+	Scenario Outline: Afficher les boutons de choix du message initial et renvoyer la bonne réponse
 		Given Je lance ChatMD "raw.md"
 			"""
 			# Choisissez une option
@@ -34,7 +34,10 @@ Feature: Au démarrage, afficher un message initial
 			## option B
 			C'est l'option B
 			"""
-		When Je clique sur le bouton "Option A"
-		Then Le chatbot répond "C'est l'option A"
-		When Je clique sur le bouton "Option B"
-		Then Le chatbot répond "C'est l'option B"
+		When Je clique sur le bouton "<option>"
+		Then Le chatbot répond "<réponse>"
+
+		Examples:
+			| option   | réponse          |
+			| Option A | C'est l'option A |
+			| Option B | C'est l'option B |
