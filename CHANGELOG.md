@@ -1,5 +1,47 @@
 # Changelog
 
+## 8.6.6 (2025-12-02)
+
+### Fix
+
+- **core**: meilleure gestion du scroll en fin de message, notamment en cas de désactivation de l'effet "machine à écrire"
+
+### Chore
+
+- fonction renommée - launchChatmd plutôt que loadAchatbot
+- plus de génération de "index.md" au moment du build
+- configuration d'une tâche pour faire un test e2e spécifique (avec le tag @CURRENT)
+- suppression d'anciens tests e2e pas finalisés
+- inclusion de tous les tests comme condition avant de push
+- meilleure configuration pour les tests - show:false pour les tests e2e + indication des sources pour les tasks de test pour éviter de les refaire inutilement s'il n'y a pas de modification
+- pas de typewriter quand window. matchMedia n'existe pas (pour les tests)
+- extension .mjs pour les librairies showdown et typed
+- on n'utilise pas eslint pour les librairies externes dans le répertoire apps/js/lib/
+- processFixedVariables() : intégration du paramètre yaml et option "preprocess" dans un objet "options"
+- extension .mjs pour la librairie js-yaml
+- amélioration de la fonction removeYAML() - plus logique + prise en compte de plusieurs cas possibles
+- correction du modèle de déploiement (plus de dossier "data" à supprimer)
+- suppression du dossier "data" - pas besoin par défaut d'avoir ce dossier, utile seulement si on veut créer un seul fichier index.md à partir d'une concaténation des fichiers dans le dossier data
+
+### Test
+
+- **e2e**: définition plus précise de la fonctionnalité "le chatbot répond {string}" - il faut vérifier la présence du texte dans le dernier message du chatbot
+- **e2e**: afficher un message initial au démarrage du chatbot
+- **e2e**: définir le titre de son chatbot en Markdown
+- **e2e**: clic sur un bouton pour revenir au message initial
+- **e2e**: fix pour pouvoir charger un chatbot qu'on définit dans le test lui-même, avec une docstring
+- **e2e**: lancement d'un chatbot avec des actions dans l'URL
+- **e2e**: clics sur le bouton de menu sous un message
+- **e2e**: refactorisation appui sur une touche
+- **e2e**: refactorisation des tests - utilisation de variables pour plusieurs fonctions (je demande "question" / le chatbot répond "réponse" / je clique sur le bouton "nomDuBouton")
+- **e2e**: dossier et fichiers renommés pour mieux correspondre à la fonctionnalité des interactions de base
+- **e2e**: refactorisation des tests avec mise en commun de certaines fonctions + utilisation d'une variable pour indiquer la source du chatbot qu'on utilise pour le test
+- **e2e**: clics sur les boutons en fin de message
+- **e2e**: question sur un sujet non couvert par le chatbot
+- **core**: tests pour initializeChatbot()
+- **core**: tests pour parseMarkdown()
+- **core**: tests pour removeYAML()
+
 ## 8.6.5 (2025-11-25)
 
 ### Fix
