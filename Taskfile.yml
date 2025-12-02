@@ -28,7 +28,6 @@ tasks:
       - "{{.APP_FOLDER}}/DEBUG" # On vérifie si ce fichier a changé (parce qu'on a lancé une nouvelle version pour le DEBUG), afin de pouvoir relancer le build pour la version PROD
       - rollup.config.mjs
     generates:
-      - "{{.APP_FOLDER}}/index.md"
       - "{{.APP_FOLDER}}/css/styles.min.css"
       - "{{.APP_FOLDER}}/script.min.js"
       - "{{.APP_FOLDER}}/script.min.js.map"
