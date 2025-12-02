@@ -1,6 +1,5 @@
 import { sendButton, userInput } from "../../../shared/selectors.mjs";
 import { goToNewChatbot } from "../../../utils/urls.mjs";
-import { scrollWindow } from "../../../utils/ui.mjs";
 import { adjustFooterToInputHeight } from "./helpers/adjustFooterToInputHeight.mjs";
 import { insertLineBreak } from "./helpers/insertLineBreak.mjs";
 import { getNumberOfLines } from "./helpers/getNumberOfLines.mjs";
@@ -35,7 +34,6 @@ export function setKeypressListener() {
 						// Sinon, on fait comme si on faisait un clic sur le bouton Envoyer, ce qui permet d'envoyer sa réponse (s'il y a du contenu), ou de faire tout apparaître d'un coup, et de désactiver l'effet typewriter, s'il n'y a pas de contenu.
 						userInput.focus();
 						sendButton.click();
-						scrollWindow({ scrollMode: "instant" });
 					}
 				}
 			} else {

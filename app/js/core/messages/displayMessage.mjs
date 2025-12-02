@@ -11,12 +11,13 @@ import { processMultipleBots } from "../../markdown/custom/directives/bot.mjs";
 import { chatContainer } from "../../shared/selectors.mjs";
 import { processLightbox } from "./helpers/plugins/lighbox.mjs";
 import { textFitForMathBlocks } from "./helpers/plugins/textFitForMathBlocks.mjs";
+import { scrollWindow, scrollToLastUserMessage } from "../../utils/ui.mjs";
 
 export async function displayMessage(md, options) {
 	const isUser = options && options.isUser;
 	const messageHtmlElement = options && options.htmlElement;
-	const appendTarget =
-		options && options.appendTo ? options.appendTo : chatContainer;
+	const useCustomTarget = options && options.appendTo;
+	const appendTarget = useCustomTarget ? options.appendTo : chatContainer;
 	const changeExistingMessage = options && options.changeExistingMessage;
 	const disableTypewriter = options && options.disableTypewriter;
 	const checkTypeWriter = checkTypewriterPreferences(md);
@@ -54,6 +55,18 @@ export async function displayMessage(md, options) {
 				processLightbox();
 			}
 			textFitForMathBlocks(messageHtmlElement);
+			if (!isUser) {
+				// On scrolle vers le bas de la page pour voir la nouvelle réponse, avec un petit délai pour être sûr que le message a été ajouté au DOM
+				setTimeout(() => {
+					if (noTypewriter && !useCustomTarget) {
+						// Si l'effet typewriter a été désactivé et que ce n'est pas un message qui s'affiche à l'intérieur d'un message plus long (composé de prompts), on scrolle au début du dernier message de l'utilisateur
+						scrollToLastUserMessage();
+					} else {
+						// Sinon on scrolle au bas de la page
+						scrollWindow({ scrollMode: "instant" });
+					}
+				}, 10);
+			}
 			resolve();
 		} else {
 			startTypeWriter(html, messageHtmlElement).then(() => {

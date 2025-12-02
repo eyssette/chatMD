@@ -33,3 +33,12 @@ export function scrollWindow(option) {
 export function setContentOfFooter(footerElement, html) {
 	footerElement.innerHTML = html;
 }
+
+export function scrollToLastUserMessage() {
+	const userMessages = document.querySelectorAll(".user-message");
+	if (userMessages.length > 0) {
+		userMessages[userMessages.length - 1].scrollIntoView({
+			behavior: "smooth",
+		});
+	}
+}

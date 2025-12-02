@@ -1,6 +1,5 @@
 import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { goToNewChatbot } from "../../../utils/urls.mjs";
-import { scrollWindow } from "../../../utils/ui.mjs";
 import { deobfuscateString, sanitizeHtml } from "../../../utils/strings.mjs";
 import { createMessage } from "../../messages/createMessage.mjs";
 import {
@@ -30,7 +29,6 @@ function handleClickOnSendButton(chatbot) {
 				if (response) {
 					createMessage(chatbot, response, { isUser: false });
 				}
-				scrollWindow({ scrollMode: "instant" });
 			}, 100);
 			userInput.innerText = "";
 		} else {
@@ -193,21 +191,6 @@ function handleClickOnChatContainer(chatbot) {
 				}
 				// Si on clique sur un lien après une directive !Next, on réinitalise le compteur d'erreurs
 				chatbot.nextMessage.errorsCounter = 0;
-				// On scrolle vers le bas de la page pour voir la nouvelle réponse, avec un petit délai pour être sûr que le message a été ajouté au DOM
-				setTimeout(() => {
-					if (yaml && yaml.typeWriter == false) {
-						// Si l'effet typewriter a été désactivé, on scrolle au début du dernier message de l'utilisateur
-						const userMessages = document.querySelectorAll(".user-message");
-						if (userMessages.length > 0) {
-							userMessages[userMessages.length - 1].scrollIntoView({
-								behavior: "smooth",
-							});
-						}
-					} else {
-						// Sinon on scrolle au bas de la page
-						scrollWindow({ scrollMode: "instant" });
-					}
-				}, 10);
 			}
 		}
 	});
