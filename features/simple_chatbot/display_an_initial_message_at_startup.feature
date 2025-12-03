@@ -1,4 +1,4 @@
-Feature: Au démarrage, afficher un message initial
+Feature: Afficher un message initial au démarrage
 	On peut afficher un message initial au démarrage du chatbot.
 
 	Scenario: Afficher un message initial au démarrage
