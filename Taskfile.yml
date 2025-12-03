@@ -7,6 +7,7 @@ vars:
   TEST_FOLDER: "tests"
   FEATURES_FOLDER: "features"
   PORT_LOCAL_SERVER: 8888
+  CURRENT_E2E_TEST: "@CURRENT"
 
 tasks:
   build:
@@ -118,6 +119,16 @@ tasks:
       - "{{.TEST_FOLDER}}/e2e/step_definitions/**/*.js"
       - "{{.FEATURES_FOLDER}}/**/*.feature"
     cmds:
+      # On vérifie avant qu'il n'y ait pas le terme "@CURRENT" dans les fichiers tests e2e
+      - cmd: |
+          bash -c '
+            set -e
+            if grep -R --line-number --exclude-dir=node_modules "{{.CURRENT_E2E_TEST}}" tests/e2e features; then
+              echo "❌ {{.CURRENT_E2E_TEST}} trouvé dans les tests e2e — supprimez-le avant de lancer les tests."
+              exit 1
+            fi
+          '
+        silent: true
       - task: server:start
       - defer: {task: server:stop}
       - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)'
@@ -126,7 +137,7 @@ tasks:
     cmds:
       - task: server:start
       - defer: {task: server:stop}
-      - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)(?=.*@CURRENT)'
+      - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)(?=.*{{.CURRENT_E2E_TEST}})'
 
   tests:unit:
     aliases:
