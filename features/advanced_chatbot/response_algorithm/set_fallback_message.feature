@@ -27,9 +27,10 @@ Feature: Personnaliser le message par défaut en cas de réponse non trouvée
 			Chatbot sans réponses définies.
 			## Message Fallback
 			Ceci est un message de fallback.
+			1. [test](test)
 			"""
 		When Je demande "Quelle est ta couleur préférée ?"
-		Then Le chatbot répond "Ceci est un message de fallback."
+		Then Le chatbot répond exactement '<p>Ceci est un message de fallback.</p> <ul class="messageOptions"><li><a href="#test">test</a></li></ul>'
 
 	Scenario: Poser une question hors sujet renvoie un message par défaut standard, si on a défini un message de fallback dans le YAML mais que la réponse n'existe pas
 		Given Je lance ChatMD "raw.md"
