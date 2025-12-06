@@ -16,9 +16,34 @@ Given("Je clique sur le bouton {string}", async (buttonText) => {
 	I.click(locate(".messageOptions li a").withText(buttonText));
 });
 
-Then("Le chatbot répond {string}", async (answer) => {
+Then("Le chatbot répond {string}", async (answer, listPossibleAnswers) => {
 	I.pressKey("Enter");
-	// On cherche answer dans le dernier message du bot .message:last-child .bot-message
+	// On attend que le bot ait répondu
+	const lastBotMessage = await locate(".bot-message").last();
+	I.waitForElement(lastBotMessage, 10);
+	// S'il y a une liste de réponses possibles, on vérifie que la réponse du bot en fait partie
+	if (listPossibleAnswers && Array.isArray(listPossibleAnswers.rows)) {
+		// On crée un tableau avec les réponses possibles
+		const listPossibleAnswersArray = listPossibleAnswers.rows.map(
+			(row) => row.cells[0].value,
+		);
+		// On récupère le contenu du dernier message du bot
+		const lastBotMessageContent = await I.grabTextFrom(lastBotMessage);
+		// On vérifie si le message du bot correspond à une des réponses possibles
+		const found = listPossibleAnswersArray.some((possibleAnswer) =>
+			lastBotMessageContent.includes(possibleAnswer),
+		);
+		// Si aucune réponse possible ne correspond, on lance une erreur
+		if (!found) {
+			throw new Error(
+				"Le chatbot n'a pas répondu avec un des messages attendus.\n" +
+					`Réponse obtenue : ${lastBotMessage}\n` +
+					`Réponses possibles : ${JSON.stringify(listPossibleAnswers, null, 2)}`,
+			);
+		}
+		return;
+	}
+	// S'il n'y a pas de liste de réponses possibles, on vérifie que la réponse du bot correspond à la réponse unique attendue
 	I.waitForText(answer, 10, ".bot-message:last-child");
 });
 
