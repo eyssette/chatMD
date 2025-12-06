@@ -47,6 +47,22 @@ Then("Le chatbot répond {string}", async (answer, listPossibleAnswers) => {
 	I.waitForText(answer, 10, ".bot-message:last-child");
 });
 
+Then("Le chatbot répond exactement {string}", async (answer) => {
+	I.pressKey("Enter");
+	// On attend que le bot ait répondu
+	const lastBotMessage = await locate(".bot-message").last();
+	I.waitForElement(lastBotMessage, 10);
+	// On vérifie que la réponse HTML du bot correspond exactement à la réponse unique attendue
+	const lastBotMessageContent = await I.grabHTMLFrom(lastBotMessage);
+	if (lastBotMessageContent.trim() !== answer.trim()) {
+		throw new Error(
+			"Le chatbot n'a pas répondu avec le message attendu.\n" +
+				`Réponse obtenue : ${lastBotMessageContent}\n` +
+				`Réponse attendue : ${answer}`,
+		);
+	}
+});
+
 Given("J'appuie sur la touche {string}", (string) => {
 	I.pressKey(string);
 });
