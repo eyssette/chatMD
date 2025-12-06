@@ -1,12 +1,24 @@
 import { config } from "../../../config.mjs";
 import { yaml } from "../../../markdown/custom/yaml.mjs";
-import { processMessageWithChoiceOptions } from "./choiceOptions.mjs";
+import {
+	responseToSelectedChoiceOption,
+	processMessageWithChoiceOptions,
+} from "./choiceOptions.mjs";
 
 let randomDefaultMessageInitialized = false;
 let randomDefaultMessageIndex = 0;
 let randomDefaultMessageIndexLastChoice = [];
 
 export function getDefaultMessage(chatbot, inputText) {
+	let defaultResponse;
+	// On vérifie d'abord s'il y a un fallback dans le YAML
+	// C'est une option qui permet de rediriger vers une réponse spécifique si aucune autre n'a été trouvée
+	if (yaml.fallback) {
+		defaultResponse = responseToSelectedChoiceOption(chatbot, yaml.fallback);
+	}
+	if (defaultResponse) return defaultResponse;
+
+	// S'il n'y a pas de fallback dans le YAML, on choisit un message par défaut
 	// On initialise l'index aléatoire pour que le choix soit aléatoire dès la première fois
 	if (!randomDefaultMessageInitialized) {
 		randomDefaultMessageIndex = Math.floor(
@@ -27,9 +39,9 @@ export function getDefaultMessage(chatbot, inputText) {
 		randomDefaultMessageIndexLastChoice.shift();
 	}
 	randomDefaultMessageIndexLastChoice.push(randomDefaultMessageIndex);
-	let defaultMessage = config.defaultMessage[randomDefaultMessageIndex];
+	defaultResponse = config.defaultMessage[randomDefaultMessageIndex];
 
-	// Si une réponse n'a pas été trouvée, on propose un bouton qui permet, en cliquant dessus, d'avoir une réponse générée par une IA si la configuration le permet
+	// Si une réponse n'a pas été trouvée dans la base de réponses en Markdown du chatbot, et qu'on a activé l'option LLM dans le YAML, alors on propose un bouton qui permet, en cliquant dessus, d'avoir une réponse générée par une IA si la configuration le permet
 	if (
 		yaml &&
 		yaml.useLLM.url &&
@@ -44,11 +56,11 @@ export function getDefaultMessage(chatbot, inputText) {
 				link: "!useLLM " + inputText.replaceAll('"', "“").trim(),
 			},
 		];
-		defaultMessage = processMessageWithChoiceOptions(
+		defaultResponse = processMessageWithChoiceOptions(
 			chatbot,
-			defaultMessage,
+			defaultResponse,
 			optionDefaultMessage,
 		);
 	}
-	return defaultMessage;
+	return defaultResponse;
 }
