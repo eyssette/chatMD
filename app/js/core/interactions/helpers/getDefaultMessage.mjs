@@ -2,12 +2,20 @@ import { config } from "../../../config.mjs";
 import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { processMessageWithChoiceOptions } from "./choiceOptions.mjs";
 
-let randomDefaultMessageIndex = Math.floor(
-	Math.random() * config.defaultMessage.length,
-);
+let randomDefaultMessageInitialized = false;
+let randomDefaultMessageIndex = 0;
 let randomDefaultMessageIndexLastChoice = [];
 
 export function getDefaultMessage(chatbot, inputText) {
+	// On initialise l'index aléatoire pour que le choix soit aléatoire dès la première fois
+	if (!randomDefaultMessageInitialized) {
+		randomDefaultMessageIndex = Math.floor(
+			Math.random() * config.defaultMessage.length,
+		);
+		randomDefaultMessageInitialized = true;
+	}
+	// Sinon on choisit un message par défaut aléatoire parmi la liste définie dans la configuration
+	// On évite de répéter plusieurs fois de suite le même message par défaut
 	while (
 		randomDefaultMessageIndexLastChoice.includes(randomDefaultMessageIndex)
 	) {
