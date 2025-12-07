@@ -240,6 +240,28 @@ export function processYAML(markdownContent) {
 					Promise.all([loadCSS(botCSS)]);
 				}
 			}
+			// Gestion des synonymes
+			if (yaml.synonyms || yaml.synonymes) {
+				yaml.synonyms = yaml.synonymes ? yaml.synonymes : yaml.synonyms;
+				// Si on a un seul élément dans le YAML et que c'est une chaîne de caractères, on considère que c'est une URL dont il faut récupérer le contenu
+				if (yaml.synonyms && typeof yaml.synonyms === "string") {
+					const synonymsUrl = yaml.synonyms;
+					fetch(synonymsUrl)
+						.then((response) => response.text())
+						.then((data) => {
+							yaml.synonyms = data
+								.split("\n")
+								.filter((line) => line.trim() !== "");
+						})
+						.catch((error) => {
+							console.error(
+								`Erreur lors du chargement des synonymes depuis l'URL ${synonymsUrl} : `,
+								error,
+							);
+						});
+				}
+			}
+			// Gestion de la connexion à une IA externe pour enrichir les réponses
 			if (yaml.useLLM.url || (yaml.utiliserLLM && yaml.utiliserLLM.url)) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
 				yaml.useLLM.RAGinformations = yaml.useLLM.informations
