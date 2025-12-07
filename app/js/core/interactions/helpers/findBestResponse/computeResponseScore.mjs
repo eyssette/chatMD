@@ -9,14 +9,7 @@ const LEVENSHTEIN_THRESHOLD = 3; // Seuil de similarité (tolérance des fautes 
 const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
 const WORD_LENGTH_FACTOR = 0.1; // Prise en compte de la taille des keywords (plus les keywords sont grands, plus ils doivent avoir un poids important)
 
-export function computeResponseScore({
-	chatbot,
-	userInput,
-	response,
-	responseIndex,
-}) {
-	const next = chatbot.nextMessage;
-	let bestDistanceScore = 0;
+function buildKeywordsList(next, response) {
 	// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords (sauf s'il n'y a pas de keyword)
 	// Sinon on inclut le titre
 	// On met tout en minuscule
@@ -28,6 +21,22 @@ export function computeResponseScore({
 			: response.keywords
 					.concat(response.title)
 					.map((keyword) => keyword.toLowerCase());
+	return keywords;
+}
+
+function calculateCosineSimilarityScore(
+	chatbot,
+	userInput,
+	responseIndex,
+	next,
+) {
+	const vectorResponses = chatbot.vectorChatBotResponses;
+	const cosSim = cosineSimilarity(userInput, vectorResponses[responseIndex], {
+		boostIfKeywordsInTitle: next && next.goto,
+	});
+	return cosSim ? cosSim + 0.5 : 0;
+}
+
 export function computeResponseScore({
 	chatbot,
 	userInput,
@@ -35,14 +44,22 @@ export function computeResponseScore({
 	responseIndex,
 	yaml,
 }) {
+	const next = chatbot.nextMessage;
+	let bestDistanceScore = 0;
+	// Si on a la directive !Next, alors on ne teste pas la correspondance avec le titre, mais seulement avec les keywords (sauf s'il n'y a pas de keyword)
+	// Sinon on inclut le titre
+	// On met tout en minuscule
+	const keywords = buildKeywordsList(next, response);
 	let matchScore = 0;
 	let distanceScore = 0;
+	// Si le YAML indique de faire une recherche dans le contenu avec la similarité vectorielle, on prend comme base de score le cosine similarity entre le message de l'utilisateur et le contenu vectoriel de la réponse
 	if (yaml && yaml.searchInContent) {
-		const vectorResponses = chatbot.vectorChatBotResponses;
-		const cosSim = cosineSimilarity(userInput, vectorResponses[responseIndex], {
-			boostIfKeywordsInTitle: next && next.goto,
-		});
-		matchScore = matchScore + cosSim + 0.5;
+		matchScore = calculateCosineSimilarityScore(
+			chatbot,
+			userInput,
+			responseIndex,
+			next,
+		);
 	}
 	for (let keyword of keywords) {
 		// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
@@ -101,7 +118,10 @@ export function computeResponseScore({
 	if (distanceScore < 0) {
 		matchScore = 0;
 	}
-	if ((matchScore == 0 || yaml.searchInContent) && !next.needsProcessing) {
+	if (
+		(matchScore == 0 || (yaml && yaml.searchInContent)) &&
+		!next.needsProcessing
+	) {
 		// En cas de simple similarité : on monte quand même le score. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 		if (distanceScore > bestDistanceScore) {
 			matchScore = matchScore + distanceScore;
