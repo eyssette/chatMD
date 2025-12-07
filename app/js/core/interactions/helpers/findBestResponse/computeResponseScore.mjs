@@ -13,9 +13,24 @@ function buildKeywordsList(next, response) {
 		response.keywords.length > 0 &&
 		next.ignoreKeywords !== true;
 
+	// Si on utilise seulement les keywords, on retourne seulement les keywords
+	if (useOnlyKeywords) {
+		return response.keywords.map((k) => k.toLowerCase());
+	}
+
+	// Sinon on ajoute le titre de la réponse à la liste des keywords
+	// Ainsi que tous les mots du titre de plus de 4 caractères
+	const titleKeywords = response.title
+		.replace(/,|\.|:|\?|!|\(|\)|\[|\||\/\]/g, "")
+		.replaceAll("/", " ")
+		.replaceAll("-", " ")
+		.replaceAll("'", " ")
+		.replaceAll("’", " ")
+		.split(" ")
+		.filter((word) => word.length > 4);
 	const baseList = useOnlyKeywords
 		? response.keywords
-		: [...response.keywords, response.title];
+		: [...response.keywords, response.title, ...titleKeywords];
 
 	return baseList.map((k) => k.toLowerCase());
 }

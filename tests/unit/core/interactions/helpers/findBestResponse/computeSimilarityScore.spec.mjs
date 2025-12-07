@@ -138,7 +138,7 @@ describe("computeSimilarityScore", () => {
 
 		const result = computeSimilarityScore(chatbot, "horaires");
 
-		expect(result.bestMatchScore).toBe(30.8);
+		expect(result.bestMatchScore).toBe(61.6);
 	});
 
 	it("penalizes responses with negative keywords present in user input", () => {
@@ -437,7 +437,7 @@ describe("computeSimilarityScore", () => {
 		expect(result1.bestMatchScore).toBeCloseTo(31.5, 1);
 
 		const result2 = computeSimilarityScore(chatbot, "autre message", yaml);
-		expect(result2.bestMatchScore).toBeCloseTo(31.7, 1);
+		expect(result2.bestMatchScore).toBeCloseTo(62.2, 1);
 	});
 
 	it("takes into account both keywords and content similarity when specified in YAML", () => {
