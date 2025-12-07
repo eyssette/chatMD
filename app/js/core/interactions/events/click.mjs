@@ -25,7 +25,7 @@ function handleClickOnSendButton(chatbot) {
 			chatbot.actions.push("e:" + userInputText);
 			createMessage(chatbot, userInputText, { isUser: true });
 			setTimeout(() => {
-				const response = getChatbotResponse(chatbot, userInputText);
+				const response = getChatbotResponse(chatbot, userInputText, yaml);
 				if (response) {
 					createMessage(chatbot, response, { isUser: false });
 				}
@@ -171,7 +171,7 @@ function handleClickOnChatContainer(chatbot) {
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
 						.trim();
 					createMessage(chatbot, messageFromLink, { isUser: true });
-					const response = getChatbotResponse(chatbot, messageFromLink);
+					const response = getChatbotResponse(chatbot, messageFromLink, yaml);
 					if (response) {
 						createMessage(chatbot, response, { isUser: false });
 					}

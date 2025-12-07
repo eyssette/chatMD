@@ -1,4 +1,3 @@
-import { yaml } from "../../../../markdown/custom/yaml.mjs";
 import {
 	hasLevenshteinDistanceLessThan,
 	cosineSimilarity,
@@ -29,6 +28,13 @@ export function computeResponseScore({
 			: response.keywords
 					.concat(response.title)
 					.map((keyword) => keyword.toLowerCase());
+export function computeResponseScore({
+	chatbot,
+	userInput,
+	response,
+	responseIndex,
+	yaml,
+}) {
 	let matchScore = 0;
 	let distanceScore = 0;
 	if (yaml && yaml.searchInContent) {

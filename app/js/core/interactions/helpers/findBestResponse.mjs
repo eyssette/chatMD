@@ -3,7 +3,7 @@ import { matchOptionFromLastResponse } from "./findBestResponse/matchOptionFromL
 import { computeSimilarityScore } from "./findBestResponse/computeSimilarityScore.mjs";
 import { processFinalResponse } from "./findBestResponse/processFinalResponse.mjs";
 
-export function findBestResponse(chatbot, inputText) {
+export function findBestResponse(chatbot, inputText, yaml) {
 	let userInput = normalizeText(inputText);
 
 	// On va d'abord comparer le message de l'utilisateur aux derniers choix d'options s'il y en a, et retourner la réponse du chatbot correspondante si c'est le cas
@@ -14,6 +14,7 @@ export function findBestResponse(chatbot, inputText) {
 	const { bestMatch, bestMatchScore, indexBestMatch } = computeSimilarityScore(
 		chatbot,
 		userInput,
+		yaml,
 	);
 	return processFinalResponse(
 		chatbot,

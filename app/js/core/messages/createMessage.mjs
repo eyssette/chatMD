@@ -14,7 +14,7 @@ import { processConditionalBlocksAtDisplayTime } from "./helpers/processConditio
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
-		return getChatbotResponse(chatbot, chatbot.nextMessage.selected);
+		return getChatbotResponse(chatbot, chatbot.nextMessage.selected, yaml);
 	}
 }
 

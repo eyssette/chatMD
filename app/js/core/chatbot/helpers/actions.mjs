@@ -68,7 +68,7 @@ export async function processActions(chatbot, yaml, hasActions) {
 				yaml && yaml.obfuscate ? deobfuscateString(actionData) : actionData;
 			await createMessage(chatbot, userMessage, { isUser: true });
 			// Puis on affiche la réponse, sans typewriter sauf si on en est à la dernière action
-			const response = getChatbotResponse(chatbot, userMessage);
+			const response = getChatbotResponse(chatbot, userMessage, yaml);
 			if (response) {
 				await createMessage(chatbot, response, {
 					isUser: false,
@@ -117,7 +117,11 @@ export async function processActions(chatbot, yaml, hasActions) {
 				// On affiche le message à afficher côté utilisateur
 				await createMessage(chatbot, messageToDisplay, { isUser: true });
 				// On récupère puis affiche la répones du chatbot
-				const response = await getChatbotResponse(chatbot, messageToChatbot);
+				const response = await getChatbotResponse(
+					chatbot,
+					messageToChatbot,
+					yaml,
+				);
 				if (response) {
 					await createMessage(chatbot, response, {
 						isUser: false,

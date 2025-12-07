@@ -1,7 +1,7 @@
 import { normalizeText } from "../../../../utils/nlp.mjs";
 import { computeResponseScore } from "./computeResponseScore.mjs";
 
-export function computeSimilarityScore(chatbot, userInputRaw) {
+export function computeSimilarityScore(chatbot, userInputRaw, yaml) {
 	let userInput = normalizeText(userInputRaw);
 
 	let bestMatch = null;
@@ -44,6 +44,7 @@ export function computeSimilarityScore(chatbot, userInputRaw) {
 			userInput,
 			response,
 			responseIndex: i,
+			yaml,
 		});
 
 		if (matchScore > bestMatchScore) {
