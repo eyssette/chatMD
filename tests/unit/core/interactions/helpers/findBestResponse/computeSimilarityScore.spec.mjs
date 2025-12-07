@@ -1,4 +1,5 @@
 import { JSDOM } from "jsdom";
+import { precalculateVectorChatbotResponses } from "../../../../../../app/js/core/chatbot/helpers/precalculateVectors.mjs";
 
 let computeSimilarityScore;
 
@@ -408,5 +409,92 @@ describe("computeSimilarityScore", () => {
 		expect(result3).toBeGreaterThanOrEqual(result2);
 		expect(result4).toBeGreaterThanOrEqual(result3);
 		expect(result5.bestMatchScore).toBeCloseTo(0.47, 2);
+	});
+
+	it("takes into account the content of the responses when specified in YAML", () => {
+		const yaml = { searchInContent: true };
+		chatbot.responses = [
+			{
+				title: "Info",
+				keywords: [],
+				content: "Voici quelques informations importantes.",
+			},
+			{
+				title: "Autre",
+				keywords: [],
+				content: "Ceci est un autre message sans rapport.",
+			},
+		];
+		chatbot.vectorChatBotResponses = precalculateVectorChatbotResponses(
+			chatbot.responses,
+			yaml,
+		);
+		const result1 = computeSimilarityScore(
+			chatbot,
+			"importantes informations",
+			yaml,
+		);
+		expect(result1.bestMatchScore).toBeCloseTo(31.5, 1);
+
+		const result2 = computeSimilarityScore(chatbot, "autre message", yaml);
+		expect(result2.bestMatchScore).toBeCloseTo(31.7, 1);
+	});
+
+	it("takes into account both keywords and content similarity when specified in YAML", () => {
+		const yamlWithSearchContent = { searchInContent: true };
+		const yamlWithoutSearchContent = { searchInContent: false };
+		chatbot.responses = [
+			{
+				title: "Info",
+				keywords: ["important"],
+				content: "Voici quelques informations importantes.",
+			},
+			{
+				title: "Autre",
+				keywords: ["argument", "philosophique"],
+				content: "Ceci est une argumentation d'un philosophe",
+			},
+		];
+		chatbot.vectorChatBotResponses = precalculateVectorChatbotResponses(
+			chatbot.responses,
+			yamlWithSearchContent,
+		);
+
+		const result1WithSearchContent = computeSimilarityScore(
+			chatbot,
+			"importantes informations",
+			yamlWithSearchContent,
+		);
+		expect(result1WithSearchContent.bestMatchScore).toBeCloseTo(62.4, 1);
+
+		const result2WithSearchContent = computeSimilarityScore(
+			chatbot,
+			"Donne moi un argument philosophique",
+			yamlWithSearchContent,
+		);
+		expect(result2WithSearchContent.bestMatchScore).toBeCloseTo(62.7, 1);
+
+		chatbot.vectorChatBotResponses = [];
+
+		const result1WithoutSearchContent = computeSimilarityScore(
+			chatbot,
+			"importantes informations",
+			yamlWithoutSearchContent,
+		);
+		expect(result1WithoutSearchContent.bestMatchScore).toBeCloseTo(61.3, 1);
+
+		const result2WithoutSearchContent = computeSimilarityScore(
+			chatbot,
+			"Donne moi un argument philosophique",
+			yamlWithoutSearchContent,
+		);
+		expect(result2WithoutSearchContent.bestMatchScore).toBeCloseTo(62.1, 1);
+
+		expect(result1WithSearchContent.bestMatchScore).toBeGreaterThan(
+			result1WithoutSearchContent.bestMatchScore,
+		);
+		expect(result2WithSearchContent.bestMatchScore).toBeGreaterThan(
+			result2WithoutSearchContent.bestMatchScore,
+		);
 	});
 });
