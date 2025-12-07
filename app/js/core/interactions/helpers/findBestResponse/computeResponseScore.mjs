@@ -3,6 +3,7 @@ import { computeKeywordScore } from "./computeKeywordScore.mjs";
 
 const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
 
+// Construction de la liste des keywords à tester
 function buildKeywordsList(next, response) {
 	// Si on a la directive !Next, on inclut seulement les keywords dans la liste des termes à tester (sauf s'il n'y a pas de keyword)
 	// Sinon on inclut le titre
@@ -19,6 +20,7 @@ function buildKeywordsList(next, response) {
 	return baseList.map((k) => k.toLowerCase());
 }
 
+// Calcul du score de similarité entre le message de l'utilisateur et le contenu de la réponse
 function calculateCosineSimilarityScore(
 	chatbot,
 	userInput,
@@ -32,6 +34,7 @@ function calculateCosineSimilarityScore(
 	return cosSim ? cosSim + 0.5 : 0;
 }
 
+// Ajustement du score final en fonction des scores de distance, de match, et des directives !Next
 function adjustScore(
 	response,
 	matchScore,
@@ -40,15 +43,17 @@ function adjustScore(
 	next,
 	yaml,
 ) {
-	// si on a un score de distance négatif, c'est qu'il y avait des keywords négatifs : donc le matchscore doit être égal à 0
+	// Si on a un score de distance négatif, c'est qu'il y avait des keywords négatifs : donc le matchscore doit être égal à 0
 	if (distanceScore < 0) {
 		matchScore = 0;
 	}
+
+	// Si on n'a pas eu de matchScore (identité stricte) mais qu'on a un score de distance (similarité) : on l'ajoute au matchScore
+	// Sauf si utilise la directive !Next : dans ce cas, on doit absolument avoir un matchScore > 0 (identité stricte) pour passer à la réponse suivante
 	if (
 		(matchScore == 0 || (yaml && yaml.searchInContent)) &&
 		!next.needsProcessing
 	) {
-		// En cas de simple similarité : on monte quand même le score. Mais si on est dans le mode où on va directement à une réponse en testant la présence de keywords, la correspondance doit être stricte, on ne fait pas de calcul de similarité
 		if (distanceScore > bestDistanceScore) {
 			matchScore = matchScore + distanceScore;
 			bestDistanceScore = distanceScore;
@@ -61,6 +66,7 @@ function adjustScore(
 	return { matchScore, bestDistanceScore };
 }
 
+// Calcul du score total d'une réponse en fonction du message de l'utilisateur et des keywords de la réponse
 export function computeResponseScore({
 	chatbot,
 	userInput,
@@ -104,6 +110,7 @@ export function computeResponseScore({
 		yaml,
 	);
 
+	// On retourne le score final
 	matchScore = adjustedScore.matchScore;
 	bestDistanceScore = adjustedScore.bestDistanceScore;
 
