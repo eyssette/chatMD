@@ -27,18 +27,26 @@ export function computeSimilarityScore(chatbot, userInputRaw, yaml) {
 		//    - "synonyme B1, synonyme B2, synonyme B3"
 		// Ou sous la forme d'une URL pointant vers un fichier texte contenant les synonymes avec ce même format (une liste de synonymes par ligne, chaque synonyme étant séparé par une virgule)
 		const synonymsList = yaml.synonyms;
-		for (let synonyms of synonymsList) {
-			const synonymsArray = synonyms.split(",").map((s) => normalizeText(s));
-			// On vérifie si l'un des synonymes est présent dans le message de l'utilisateur
-			for (let synonym of synonymsArray) {
-				if (userInput.includes(synonym)) {
-					// On ajoute tous les autres synonymes au message de l'utilisateur
-					for (let otherSynonym of synonymsArray) {
-						if (otherSynonym !== synonym && !userInput.includes(otherSynonym)) {
-							userInput = userInput + " " + otherSynonym;
-						}
-					}
-					break; // On sort de la boucle une fois qu'on a trouvé un synonyme
+
+		// On découpe le message en mots en supprimant les signes de ponctuation
+		const userWords = userInput
+			.replace(/,|\.|:|\?|!|\(|\)|\[|\||\/\]/g, "")
+			.replaceAll("/", " ")
+			.split(" ");
+
+		// On parcourt chaque mot du message de l'utilisateur
+		for (const userWord of userWords) {
+			// Pour chaque mot, on parcourt la liste des synonymes pour voir si on trouve une correspondance, et dès qu'on en trouve une on ajoute tous les synonymes au message de l'utilisateur, et on passe au mot suivant
+			for (const synonyms of synonymsList) {
+				const synonymsArray = synonyms
+					.split(",")
+					.map((syn) => normalizeText(syn));
+				if (synonymsArray.includes(userWord)) {
+					// On a trouvé une correspondance, on ajoute tous les synonymes au message de l'utilisateur
+					userInput +=
+						" " + synonymsArray.filter((syn) => syn !== userWord).join(" ");
+					// On passe au mot suivant si on a trouvé une correspondance
+					break;
 				}
 			}
 		}
