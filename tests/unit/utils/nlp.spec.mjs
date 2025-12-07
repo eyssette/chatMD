@@ -1,6 +1,7 @@
 import {
 	longestCommonSubstringWeightedLength,
 	removeAccents,
+	normalizeText,
 	levenshteinDistance,
 	hasLevenshteinDistanceLessThan,
 	dotProduct,
@@ -205,6 +206,25 @@ describe("removeAccents", function () {
 		expect(result).toBe(
 			"Portez ce vieux whisky au juge blond qui fume sur son ile interieure, a cote de l'alcove ovoide, ou les buches se consument dans l'atre, ce qui lui permet de penser a la cænogenese de l'etre dont il est question dans la cause ambigue entendue a Moy, dans un capharnaum qui, pense-t-il, diminue ca et la la qualite de son œuvre.",
 		);
+	});
+
+	describe("normalizeText", function () {
+		it("removes accents and converts to lowercase by default", function () {
+			const result = normalizeText("Éléphant à l'école");
+			expect(result).toBe("elephant a l'ecole");
+		});
+		it("preserves case when keepCase option is true", function () {
+			const result = normalizeText("Éléphant à l'école", { keepCase: true });
+			expect(result).toBe("Elephant a l'ecole");
+		});
+		it("handles empty strings", function () {
+			const result = normalizeText("");
+			expect(result).toBe("");
+		});
+		it("leaves non-accented strings unchanged except for case", function () {
+			const result = normalizeText("Hello World");
+			expect(result).toBe("hello world");
+		});
 	});
 
 	it("handles mixed strings with both accented and unaccented uppercase characters", function () {

@@ -154,6 +154,14 @@ export function removeAccents(str) {
 	);
 }
 
+export function normalizeText(str, options) {
+	// Fonction pour normaliser une chaîne de caractères : tout en minuscules, sans accents, sans ponctuation
+	const keepCase = options && options.keepCase;
+	let normalized = keepCase ? str.trim() : str.toLowerCase().trim();
+	normalized = removeAccents(normalized);
+	return normalized;
+}
+
 // Calcule le produit scalaire de deux vecteurs
 export function dotProduct(vec1, vec2) {
 	const commonWords = new Set([...Object.keys(vec1), ...Object.keys(vec2)]);
