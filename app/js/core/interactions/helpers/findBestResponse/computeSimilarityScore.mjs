@@ -2,7 +2,8 @@ import { normalizeText } from "../../../../utils/nlp.mjs";
 import { computeResponseScore } from "./computeResponseScore.mjs";
 
 export function computeSimilarityScore(chatbot, userInputRaw, yaml) {
-	let userInput = normalizeText(userInputRaw);
+	const normalizedUserInput = normalizeText(userInputRaw);
+	let userInput = normalizedUserInput;
 
 	let bestMatch = null;
 	let bestMatchScore = 0;
@@ -47,6 +48,23 @@ export function computeSimilarityScore(chatbot, userInputRaw, yaml) {
 						" " + synonymsArray.filter((syn) => syn !== userWord).join(" ");
 					// On passe au mot suivant si on a trouvé une correspondance
 					break;
+				} else {
+					// si la liste de synonymes contient des mots composés
+					const multiWordSynonyms = synonymsArray.filter(
+						(syn) => syn.trim().split(" ").length > 1,
+					);
+					for (const multiWordSynonym of multiWordSynonyms) {
+						if (normalizedUserInput.includes(multiWordSynonym)) {
+							// On a trouvé une correspondance, on ajoute tous les synonymes au message de l'utilisateur
+							userInput +=
+								" " +
+								synonymsArray
+									.filter((syn) => syn !== multiWordSynonym)
+									.join(" ");
+							// On passe au mot suivant si on a trouvé une correspondance
+							break;
+						}
+					}
 				}
 			}
 		}
