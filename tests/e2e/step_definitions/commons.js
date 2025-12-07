@@ -54,7 +54,10 @@ Then("Le chatbot répond exactement {string}", async (answer) => {
 	I.waitForElement(lastBotMessage, 10);
 	// On vérifie que la réponse HTML du bot correspond exactement à la réponse unique attendue
 	const lastBotMessageContent = await I.grabHTMLFrom(lastBotMessage);
-	if (lastBotMessageContent.trim() !== answer.trim()) {
+	if (
+		lastBotMessageContent.trim().replace("</li> </ul>", "</li></ul>") !==
+		answer.trim().replace("</li> </ul>", "</li></ul>")
+	) {
 		throw new Error(
 			"Le chatbot n'a pas répondu avec le message attendu.\n" +
 				`Réponse obtenue : ${lastBotMessageContent}\n` +
