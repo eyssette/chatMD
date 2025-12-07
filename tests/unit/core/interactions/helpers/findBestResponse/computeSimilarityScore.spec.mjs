@@ -201,7 +201,7 @@ describe("computeSimilarityScore", () => {
 		expect(result.indexBestMatch).toBe(1);
 	});
 
-	it("takes keywords into account for !Next if ignoreKeywords is set to false", () => {
+	it("takes keywords into account with !Next directive if ignoreKeywords is set to false", () => {
 		chatbot.responses = [
 			{
 				title: "Cible",
@@ -221,6 +221,47 @@ describe("computeSimilarityScore", () => {
 		);
 		expect(resultWithKeyword.indexBestMatch).toBe(0);
 		expect(resultWithoutKeyword.indexBestMatch).not.toBe(0);
+	});
+
+	it("does not take case into account with !Next directive if ignoreKeywords is false", () => {
+		chatbot.responses = [
+			{
+				title: "Cible",
+				keywords: ["Spécifique"],
+				content: "Réponse avec keyword",
+			},
+		];
+		chatbot.nextMessage.needsProcessing = true;
+		chatbot.nextMessage.goto = "Cible";
+		chatbot.nextMessage.ignoreKeywords = false;
+
+		const resultWithExactCase = computeSimilarityScore(chatbot, "Spécifique");
+		const resultWithDifferentCase = computeSimilarityScore(
+			chatbot,
+			"spécifique",
+		);
+
+		expect(resultWithExactCase.indexBestMatch).toBe(0);
+		expect(resultWithDifferentCase.indexBestMatch).toBe(0);
+	});
+
+	it("does not take into account accents with !Next directive if ignoreKeywords is false", () => {
+		chatbot.responses = [
+			{
+				title: "Cible",
+				keywords: ["café"],
+				content: "Réponse avec keyword",
+			},
+		];
+		chatbot.nextMessage.needsProcessing = true;
+		chatbot.nextMessage.goto = "Cible";
+		chatbot.nextMessage.ignoreKeywords = false;
+
+		const resultWithAccent = computeSimilarityScore(chatbot, "café");
+		const resultWithoutAccent = computeSimilarityScore(chatbot, "cafe");
+
+		expect(resultWithAccent.indexBestMatch).toBe(0);
+		expect(resultWithoutAccent.indexBestMatch).toBe(0);
 	});
 
 	it("gives a higher score for exact match and a lower score for partial match in !Next mode", () => {
