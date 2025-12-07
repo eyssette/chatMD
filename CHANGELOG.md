@@ -1,5 +1,31 @@
 # Changelog
 
+## 8.7.1 (2025-12-07)
+
+### Fix
+
+- **core**: le calcul de similarité entre une question de l'utilisateur et les réponses possibles peut maintenant inclure des synonymes, définis dans le YAML afin d'affiner la recherche de la meilleure réponse
+
+### Chore
+
+- **core**: yaml mis en argument dans les fonctions pour chercher la bonne réponse, pour faciliter les tests
+- utilisation de normalizeText()
+- fonction normalizeText() pour supprimer les accents et mettre en minuscule (sauf si on indique le contraire dans les options)
+
+### Refactor
+
+- **core**: refactorisation de computeResponseScore() - fonction de calcul du score pour un keyword mise à part
+- **core**: refactorisation de computeResponseScore()
+- **core**: fonction precalculateVectorChatbotResponses() mise à part
+- **core**: refactorisation de computeSimilarityScore()
+
+### Test
+
+- **e2e**: ajout de tests pour computeSimilarityScore() - cas où on cherche des keywords dans les réponses elles-mêmes
+- **core**: ajout de tests pour computeSimilarityScore() avec directive !Next - gestion des accents et de la case
+- **core**: ajout d'un test pour computeSimilarityScore()
+- **core**: tests pour computeSimilarityScore()
+
 ## 8.7.0 (2025-12-07)
 
 ### Feat
