@@ -343,4 +343,29 @@ describe("computeSimilarityScore", () => {
 		expect(result.indexBestMatch).toBe(1);
 		expect(result.bestMatch).toBe("Réponse forte");
 	});
+
+	it("calculates correctly when user input is close to keywords", () => {
+		chatbot.responses = [
+			{
+				title: "Test",
+				keywords: ["test", "testing", "tester"],
+				content: "Réponse test",
+			},
+		];
+
+		const result1 = computeSimilarityScore(chatbot, "testons");
+		const result2 = computeSimilarityScore(chatbot, "test");
+		const result3 = computeSimilarityScore(chatbot, "tester");
+		const result4 = computeSimilarityScore(chatbot, "testing");
+		const result5 = computeSimilarityScore(chatbot, "castings");
+
+		expect(result1.bestMatchScore).toBe(60.8);
+		expect(result2.bestMatchScore).toBe(60.8);
+		expect(result3.bestMatchScore).toBe(91.4);
+		expect(result4.bestMatchScore).toBe(91.5);
+		expect(result2).toBeGreaterThanOrEqual(result1);
+		expect(result3).toBeGreaterThanOrEqual(result2);
+		expect(result4).toBeGreaterThanOrEqual(result3);
+		expect(result5.bestMatchScore).toBeCloseTo(0.47, 2);
+	});
 });
