@@ -1,5 +1,32 @@
 # Changelog
 
+## 8.7.0 (2025-12-07)
+
+### Feat
+
+- **core**: possibilité de rediriger vers une réponse de fallback dans le YAML, plutôt qu'une simple liste de messages simples par défaut
+
+### Fix
+
+- **core**: initialisation de l'index aléatoire pour les messages par défaut faite au bon endroit
+
+### Chore
+
+- avant de lancer les tests e2e, on vérifie qu'il n'y a plus le tag @CURRENT (qui permet de ne lancer qu'un seul test)
+- refactorisation d'un test avec Examples
+- URLs passées en https
+
+### Test
+
+- **e2e**: test de fallback avec bouton de choix d'options en fin de message
+- **e2e**: possibilité de tester si la réponse du chatbot correspond exactement à un contenu HTML précis
+- **e2e**:  personnaliser le message par défaut en cas de réponse non trouvée
+- **e2e**: possibilité de tester que le chatbot répond parmi une liste possible de réponses
+- **e2e**: utiliser le contenu du message pour chercher des mots clés qui serviront de déclencheurs
+- **e2e**: utiliser le titre d'une réponse comme déclencheur
+- **e2e**: utiliser des mots-clés négatifs pour éviter une réponse
+- **e2e**: utiliser des mots clés pour déclencher une réponse
+
 ## 8.6.6 (2025-12-02)
 
 ### Fix
