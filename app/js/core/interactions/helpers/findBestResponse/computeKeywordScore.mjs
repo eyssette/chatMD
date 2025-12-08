@@ -34,7 +34,9 @@ export function computeKeywordScore(userInput, keyword, next, options = {}) {
 				? matchScore - MATCH_SCORE_IDENTITY * 2
 				: matchScore + MATCH_SCORE_IDENTITY;
 			// On privilégie les correspondances sur les keywords plus longs
-			matchScore = matchScore + keyword.length * WORD_LENGTH_FACTOR;
+			matchScore = isNegativeKeyword
+				? matchScore - keyword.length * WORD_LENGTH_FACTOR
+				: matchScore + keyword.length * WORD_LENGTH_FACTOR;
 		}
 	} else if (
 		(userInput.length > 5) &
