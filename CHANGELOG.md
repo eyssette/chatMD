@@ -1,5 +1,19 @@
 # Changelog
 
+## 8.7.2 (2025-12-20)
+
+### Fix
+
+- **markdown**: gestion de l'aléatoire dans un message - il fallait un retour à la ligne entre le choix du message aléatoire et les boutons d'options à la fin
+- **core**: correction du calcul de similarité sur un keyword en cas de keyword négatif (prise en compte de la longueur du keyword)
+- **core**: gestion des synonymes avec des mots composés
+- **core**: intégration des mots du titre de plus de 4 caractères dans les keywords
+- **core**: gestion des synonymes beaucoup plus rapide
+
+### Test
+
+- **e2e**: normalisation de la réponse attendue quand on utilise "Le chatbot répond exactement ..."
+
 ## 8.7.1 (2025-12-07)
 
 ### Fix
