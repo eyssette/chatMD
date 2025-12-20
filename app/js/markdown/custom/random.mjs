@@ -20,7 +20,8 @@ export function processRandomMessage(message) {
 				.map((part) => part.replace(/<!--[\s\S]*?-->/g, "").trim())
 				.filter((part) => part.length > 0);
 			if (baseMessageVariants.length > 0) {
-				message = getRandomElement(baseMessageVariants) + choiceOptionsHtml;
+				message =
+					getRandomElement(baseMessageVariants) + "\n" + choiceOptionsHtml;
 			}
 		} else {
 			message = getRandomElement(messageVariants);
