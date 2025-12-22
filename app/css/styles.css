@@ -570,6 +570,10 @@ button.copyCode {
 	color: var(--warning-color-title);
 }
 
+.admonitionContent img {
+	max-width: 95% !important;
+}
+
 /* 
 ÉTATS DE L'APPLICATION
 */
