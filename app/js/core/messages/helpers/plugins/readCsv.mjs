@@ -93,13 +93,16 @@ function sortTable(data, sortFormula) {
 	});
 }
 
-// Remplace les marqueurs de type $1, $2, … dans un template texte par les valeurs
-// correspondantes provenant d'un tableau de lignes.
-// Chaque placeholder $n est remplacé par la valeur de la colonne correspondante
+// Remplace les marqueurs de type $1, $2, … dans un template texte par les valeurs correspondantes provenant d'un tableau de lignes.
+// Chaque placeholder $n est remplacé par la valeur de la colonne correspondante.
+// On peut aussi utiliser $i pour insérer le numéro de ligne
 function fillTemplateFromValuesFromArray(template, sourceArray) {
 	// Fonction interne pour remplacer les placeholders dans une ligne
-	const replaceFn = (row) =>
-		template.replace(/\$(\d+)/g, (_, index) => {
+	const replaceFn = (row, rowIndex) =>
+		template.replace(/\$(\d+|i)/g, (_, index) => {
+			if (index === "i") {
+				return String(rowIndex + 1);
+			}
 			// Convertit l'index de placeholder $n en index de tableau
 			const i = parseInt(index, 10) - 1;
 			// Remplace le placeholder par la valeur correspondante de la colonne ou par une chaîne vide s'il n'y a pas de valeur
@@ -107,7 +110,7 @@ function fillTemplateFromValuesFromArray(template, sourceArray) {
 		});
 
 	// Applique la transformation à chaque ligne du tableau
-	const result = sourceArray.map((row) => replaceFn(row));
+	const result = sourceArray.map((row, rowIndex) => replaceFn(row, rowIndex));
 	return result.join("\n").trim().replaceAll("\\n", "\n");
 }
 
