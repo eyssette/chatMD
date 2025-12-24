@@ -80,6 +80,6 @@ export async function parseCsv(url, options = {}) {
 		return await parseCsvData(data, options);
 	} catch (error) {
 		console.error("Erreur lors du parsing:", error);
-		throw error;
+		return null;
 	}
 }

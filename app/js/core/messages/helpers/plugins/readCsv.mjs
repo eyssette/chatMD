@@ -189,11 +189,21 @@ export async function processCsv(message) {
 				data = data.slice(0, maxResults);
 			}
 
+			// S'il n'y a pas de données, on remplace le bloc par une chaîne vide
+			if (data.length === 0) {
+				message = message.replace(fullMatch, "");
+				continue;
+			}
+
 			// Remplit le template avec les valeurs des lignes filtrées
 			const result = fillTemplateFromValuesFromArray(template, data);
 
 			// Remplace le bloc original dans le message par le résultat formaté
 			message = message.replace(fullMatch, result);
+		} else {
+			// Si le parsing du fichier a échoué, on remplace le bloc par un message d'erreur
+			const errorMessage = `\n⚠️ Erreur d'accès aux données\n`;
+			message = message.replace(fullMatch, errorMessage);
 		}
 	}
 
