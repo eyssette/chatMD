@@ -7,6 +7,7 @@ export async function processPlugins(message) {
 	if (yaml && yaml.plugins && yaml.plugins.includes("kroki")) {
 		message = processKroki(message);
 	}
+	// Gestion du plugin readcsv pour intégrer des données CSV dans les messages
 	if (yaml && yaml.plugins && yaml.plugins.includes("readcsv")) {
 		message = await new Promise((resolve) => {
 			// Délai autorisé de traitement du csv (en millisecondes)
