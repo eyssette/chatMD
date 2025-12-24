@@ -117,11 +117,9 @@ function fillTemplateFromValuesFromArray(template, sourceArray) {
 // Traite un message contenant des blocs CSV au format markdown, commençant par : ```readcsv URL, optionnellement suivi d'une condition, et d'un template de texte
 // Pour chaque bloc trouvé :
 // 1. Télécharge et parse le CSV depuis l'URL spécifiée.
-// 2. Cherche une ligne commençant par "condition:" pour filtrer les données.
-// 3. Supprime la ligne "condition:" du template si elle existe.
-// 4. Applique la condition (si présente) pour filtrer les lignes du CSV.
-// 5. Remplit le template avec les valeurs des lignes restantes.
-// 6. Remplace le bloc original dans le message par le résultat formaté.
+// 2. Récupère les instructions spéciales (condition pour filtrer les données, tri, maxResults, random) et les applique aux données
+// 3. Remplit le template avec les valeurs des lignes
+// 4. Remplace le bloc original dans le message par le résultat formaté.
 export async function processCsv(message) {
 	// Regex pour détecter tous les blocs ```readcsv URL ... ```
 	const regex = /```readcsv (.*)\n((.|\n)*?)```/gm;
