@@ -2,6 +2,7 @@
 
 import { evaluateExpression } from "../../../../markdown/custom/variablesDynamic/evaluateExpression.mjs";
 import { parseCsv } from "../../../../utils/csv.mjs";
+import { shuffleArray } from "../../../../utils/arrays.mjs";
 
 // Transforme une expression de filtre contenant des placeholders $1, $2 …
 // et des conditions de type "==" ou "<" …
@@ -138,7 +139,8 @@ export async function processCsv(message) {
 			let condition = null;
 			let sortFormula = null;
 			let maxResults = null;
-			// Filtrer les lignes pour récupérer la condition si elle existe
+			let isRandom = false;
+			// Filtrer les lignes pour récupérer les instructions spéciales
 			const templateLines = linesCodeBlock.filter((line) => {
 				const trimmedLine = line.trim();
 				if (trimmedLine.startsWith("condition:")) {
@@ -156,6 +158,11 @@ export async function processCsv(message) {
 					maxResults = parseInt(trimmedLine.replace(/^maxResults:\s*/, ""), 10);
 					return false; // exclut la ligne "max: " du template
 				}
+				if (trimmedLine.startsWith("random: true")) {
+					// Récupère l'option random (après "random: ")
+					isRandom = true;
+					return false; // exclut la ligne "random: true" du template
+				}
 				return true; // conserve toutes les autres lignes
 			});
 
@@ -169,6 +176,11 @@ export async function processCsv(message) {
 			// S'il y a un tri particulier des résultats à respecter, on applique ce tri aux données filtrées
 			if (sortFormula) {
 				data = sortTable(data, sortFormula);
+			}
+
+			// Si l'option random est activée, on réordonne les données de manière aléatoire
+			if (isRandom) {
+				data = shuffleArray(data);
 			}
 
 			// Si un nombre maximum de lignes est spécifié, on limite les données à ce nombre
