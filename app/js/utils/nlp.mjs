@@ -295,3 +295,119 @@ export function cosineSimilarity(str, vector, options) {
 		return dot / (mag1 * mag2);
 	}
 }
+
+export function mainTopic(str, specificExpressionsToRemove = []) {
+	// Extrait le sujet principal d'une chaîne de caractères qui représente une courte phrase
+	if (!str || typeof str !== "string") return "";
+	// On supprime les caractères spéciaux
+	str = str.replace(/[.,!?'’;:]/g, " ");
+	// On supprime les expressions spécifiques
+	const baseExpressionsToRemove = [
+		"-moi",
+		"-tu",
+		"en savoir plus",
+		"à propos de",
+	];
+	specificExpressionsToRemove = specificExpressionsToRemove.concat(
+		baseExpressionsToRemove,
+	);
+	for (const expr of specificExpressionsToRemove) {
+		const regex = new RegExp(`\\b${expr}\\b`, "gi");
+		str = str.replace(regex, " ");
+	}
+	// CAS 1 : s'il y a un seul mot, c'est le sujet principal
+	const words = str.trim().split(/\s+/);
+	if (words.length === 1) {
+		return words[0];
+	}
+	// CAS 2 : s'il y a plusieurs mots, on enlève les stop-words et on retourne le mot le plus long restant
+	const stopWords = new Set([
+		"le",
+		"la",
+		"les",
+		"l",
+		"un",
+		"une",
+		"des",
+		"de",
+		"du",
+		"d",
+		"ce",
+		"cette",
+		"cet",
+		"ces",
+		"c",
+		"je",
+		"j",
+		"il",
+		"et",
+		"à",
+		"au",
+		"aux",
+		"pour",
+		"dans",
+		"en",
+		"pour",
+		"avec",
+		"sur",
+		"sous",
+		"par",
+		"dans",
+		"que",
+		"qui",
+		"quelques",
+		"qu",
+		"est",
+		"suis",
+		"sont",
+		"ne",
+		"n",
+		"pas",
+		"me",
+		"m",
+		"surtout",
+		"principalement",
+		"beaucoup",
+		"bien",
+		"vraiment",
+		"avant",
+		"tout",
+		"plus",
+		"moins",
+		"très",
+		"aussi",
+		"infos",
+		"information",
+		"informations",
+		"thème",
+		"sujet",
+		"thématique",
+		"trouve",
+		"trouver",
+		"donne",
+		"donner",
+		"intéresse",
+		"intéressé",
+		"intéressée",
+		"intéressent",
+		"cherche",
+		"aime",
+		"aimerais",
+		"veux",
+		"voudrais",
+		"besoin",
+		"ai",
+		"souhaite",
+		"souhaiterais",
+		"pourrais",
+		"peux",
+	]);
+	const filteredWords = words.filter(
+		(word) => !stopWords.has(word.toLowerCase()),
+	);
+	if (filteredWords.length === 0) {
+		return "";
+	}
+	const mainTopic = filteredWords.join(" ");
+	return mainTopic;
+}

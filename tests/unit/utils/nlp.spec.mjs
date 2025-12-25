@@ -9,6 +9,7 @@ import {
 	tokenize,
 	createVector,
 	cosineSimilarity,
+	mainTopic,
 } from "../../../app/js/utils/nlp.mjs";
 
 describe("longestCommonSubstringWeightedLength", function () {
@@ -489,5 +490,116 @@ describe("cosineSimilarity", function () {
 		);
 		expect(result).toBeGreaterThan(-1);
 		expect(result).toBeLessThan(1);
+	});
+});
+
+describe("mainTopic", function () {
+	it("returns an empty string for empty input", function () {
+		const result = mainTopic("");
+		expect(result).toBe("");
+	});
+
+	it("returns the single word when input is a single word", function () {
+		const result = mainTopic("vélo");
+		expect(result).toBe("vélo");
+	});
+
+	it("returns the noun without the article when input is a noun with article", function () {
+		const result1 = mainTopic("le vélo");
+		expect(result1).toBe("vélo");
+
+		const result2 = mainTopic("la philosophie");
+		expect(result2).toBe("philosophie");
+
+		const result3 = mainTopic("les chats");
+		expect(result3).toBe("chats");
+	});
+
+	it("returns the noun when input is a noun with an adverb and article", function () {
+		const result1 = mainTopic("surtout le vélo");
+		expect(result1).toBe("vélo");
+
+		const result2 = mainTopic("principalement la philosophie");
+		expect(result2).toBe("philosophie");
+	});
+
+	it("returns the noun when input is in a short answer format", function () {
+		const result1 = mainTopic("C'est le vélo");
+		expect(result1).toBe("vélo");
+
+		const result2 = mainTopic("Ce sont les chats");
+		expect(result2).toBe("chats");
+	});
+
+	it("extracts the main topic from a short sentence expressing interest or a desire for information", function () {
+		const result1 = mainTopic(
+			"Je veux des informations sur le vélo électrique",
+		);
+		expect(result1).toBe("vélo électrique");
+
+		const result2 = mainTopic("Je m'intéresse beaucoup à la photographie");
+		expect(result2).toBe("photographie");
+
+		const result3 = mainTopic("J'aimerais bien en savoir plus sur les voyages");
+		expect(result3).toBe("voyages");
+
+		const result4 = mainTopic("Je suis intéressé par l'astronomie");
+		expect(result4).toBe("astronomie");
+
+		const result5 = mainTopic("Je cherche des infos sur la cuisine italienne");
+		expect(result5).toBe("cuisine italienne");
+
+		const result6 = mainTopic("Ce qui m'intéresse, c'est la musique classique");
+		expect(result6).toBe("musique classique");
+
+		const result7 = mainTopic(
+			"J'aimerais des infos sur le développement durable",
+		);
+		expect(result7).toBe("développement durable");
+
+		const result8 = mainTopic(
+			"le vélo électrique, c'est ce qui m'intéresse le plus",
+		);
+		expect(result8).toBe("vélo électrique");
+	});
+
+	it("extracts the main topic without stop words", function () {
+		const result1 = mainTopic("j'aime bien les films d'action");
+		expect(result1).toBe("films action");
+
+		const result2 = mainTopic(
+			"Je m'intéresse aux résultats de la recherche scientifique",
+		);
+		expect(result2).toBe("résultats recherche scientifique");
+	});
+
+	it("extract the main topic without specific expressions", function () {
+		const result1 = mainTopic("trouve-moi un jeu de données sur le climat", [
+			"jeu de données",
+		]);
+		expect(result1).toBe("climat");
+
+		const result2 = mainTopic(
+			"je cherche des jeux de données sur la ville de Paris",
+			["jeu de données", "jeux de données", "ville de"],
+		);
+		expect(result2).toBe("Paris");
+	});
+
+	it("extracts main topic when input is a question", function () {
+		const result1 = mainTopic("Peux-tu me donner des infos sur l'Égypte ?");
+		expect(result1).toBe("Égypte");
+
+		const result2 = mainTopic(
+			"Pourrais-tu me trouver des informations sur la physique quantique ?",
+		);
+		expect(result2).toBe("physique quantique");
+	});
+
+	it("extracts main topic in a complex sentence", function () {
+		const result = mainTopic(
+			"J'aimerais bien en savoir plus sur les impacts du changement climatique sur la biodiversité marine.",
+		);
+		expect(result).toBe("impacts changement climatique biodiversité marine");
 	});
 });

@@ -1,5 +1,6 @@
 import { config } from "../../../config.mjs";
 import { tryConvertStringToNumber } from "../../../utils/strings.mjs";
+import { mainTopic } from "../../../utils/nlp.mjs";
 
 // Opérations autorisées pour le calcul des expressions complexes
 const sanitizeCodeAllowedOperations = [
@@ -41,6 +42,7 @@ const sanitizeCodeAllowedOperations = [
 	"false",
 	"tryConvertStringToNumber",
 	"dynamicVariables",
+	"mainTopic",
 ];
 
 // Nettoie une formule de test avant exécution dynamique (new Function).
@@ -93,7 +95,8 @@ export function evaluateExpression(expression, dynamicVariables) {
 	const result = new Function(
 		"dynamicVariables",
 		"tryConvertStringToNumber",
+		"mainTopic",
 		"return " + expression,
-	)(dynamicVariables, tryConvertStringToNumber);
+	)(dynamicVariables, tryConvertStringToNumber, mainTopic);
 	return result;
 }
