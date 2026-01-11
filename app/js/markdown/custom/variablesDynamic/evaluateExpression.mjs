@@ -27,6 +27,7 @@ const sanitizeCodeAllowedOperations = [
 	"Math.min",
 	"Math.max",
 	"Math.round",
+	"Math",
 	".length",
 	".includes",
 	".startsWith",
@@ -51,69 +52,118 @@ const sanitizeCodeAllowedOperations = [
 	"mainTopic",
 ];
 
-// Nettoie une formule de test avant exécution dynamique (new Function).
-// Le but est de supprimer toute tentative d’injection de code non autorisé.
+// Regex pour identifier les parties autorisées dans le code
+const REGEX_DYNAMIC_VARS = /tryConvertStringToNumber\(.*?\]\)/g;
+const REGEX_STRINGS = /".*?"/g;
+const REGEX_OBJECT_PROPS = /\.[a-zA-Z0-9_]+/g;
+const REGEX_DECIMALS = /[0-9]+\.[0-9]+/g;
+const REGEX_NUMBERS = /[0-9]*/g;
+
+// Expressions importantes à bloquer
+const importantExpressionsToBlock = [
+	"eval",
+	"new Function",
+	"require",
+	"process.",
+	"global.",
+	"window.",
+	"alert",
+	"fetch",
+	"XMLHttpRequest",
+	"setTimeout",
+	"setInterval",
+];
+
+// Cache pour les expressions déjà sanitizées (évite de re-sanitizer la même expression)
+const sanitizeCache = new Map();
+const MAX_CACHE_SIZE = 100;
+
 function sanitizeCode(code) {
-	// On va d'abord enlever dans la formule tout ce qui est autorisé
-	// Pour pouvoir repérer à la fin ce qu'il faut supprimer
+	// Vérifier le cache
+	if (sanitizeCache.has(code)) {
+		return sanitizeCache.get(code);
+	}
 
-	// On supprime d'abord dans l'expression les variables dynamiques, qui sont autorisées
-	let codeWithoutAllowedOperations = code.replace(
-		/tryConvertStringToNumber\(.*?\]\)/g,
-		"",
-	);
+	// S'il y a un des termes interdits, on bloque directement
+	for (let i = 0; i < importantExpressionsToBlock.length; i++) {
+		if (code.includes(importantExpressionsToBlock[i])) {
+			throw new Error(
+				"Expression contains disallowed operation: " +
+					importantExpressionsToBlock[i],
+			);
+		}
+	}
 
-	// On supprime les chaînes de caractères entre guillemets, qui sont autorisées
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/".*?"/g,
-		"///",
-	);
+	// On retire les expressions autorisées de l'expression initiale : les variables dynamiques, les chaînes de caractères, les propriétés d'objets, les nombres (décimaux et entiers)
 
-	// On supprime les expressions avec un point qui sont autorisées : nombres à virgule, accès aux propriétés des objets
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/\.[a-zA-Z0-9_]+/g,
-		"///",
-	);
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/[0-9]+\.[0-9]+/g,
-		"///",
-	);
+	let codeWithoutAllowedOperations = code
+		.replace(REGEX_DYNAMIC_VARS, "")
+		.replace(REGEX_STRINGS, "///")
+		.replace(REGEX_OBJECT_PROPS, "///")
+		.replace(REGEX_DECIMALS, "///")
+		.replace(REGEX_NUMBERS, "");
 
-	// On supprime les nombres qui restent (ils sont autorisés)
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/[0-9]*/g,
-		"",
-	);
-
-	// On supprime les opérations autorisées
-	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
+	for (let i = 0; i < sanitizeCodeAllowedOperations.length; i++) {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(
-			allowedOperation,
+			sanitizeCodeAllowedOperations[i],
 			"///",
 		);
-	});
+	}
 
 	// On peut alors repérer les fragments interdits
-	const forbiddenExpressions = codeWithoutAllowedOperations
-		.split("///")
-		.map((exp) => exp.trim()) // On ne doit pas retirer les espaces
-		.filter((exp) => exp && exp !== "undefined"); // On ne doit pas retirer la formule "undefined"
+	const parts = codeWithoutAllowedOperations.split("///");
+	const forbiddenExpressions = [];
+	for (let i = 0; i < parts.length; i++) {
+		const trimmed = parts[i].trim();
+		if (trimmed && trimmed !== "undefined") {
+			forbiddenExpressions.push(trimmed);
+		}
+	}
 
 	// On retire ces fragments interdits du code initial
-	for (const forbidden of forbiddenExpressions) {
-		code = code.replaceAll(forbidden, "");
+	let sanitizedCode = code;
+	for (let i = 0; i < forbiddenExpressions.length; i++) {
+		sanitizedCode = sanitizedCode.replaceAll(forbiddenExpressions[i], "");
 	}
-	return code;
+
+	// Ajouter au cache (avec limitation de taille)
+	if (sanitizeCache.size >= MAX_CACHE_SIZE) {
+		const firstKey = sanitizeCache.keys().next().value;
+		sanitizeCache.delete(firstKey);
+	}
+	sanitizeCache.set(code, sanitizedCode);
+
+	return sanitizedCode;
 }
 
+// Cache pour les fonctions compilées
+const functionCache = new Map();
+const MAX_FUNCTION_CACHE_SIZE = 50;
+
 export function evaluateExpression(expression, dynamicVariables) {
-	// Si on est déjà dans le mode sécurisé (contrôle de la source des chatbots), on n'a pas besoin de sanitizer le code ; sinon, on sanitize le code
-	expression = config.secureMode ? expression : sanitizeCode(expression);
-	const result = new Function(
-		"dynamicVariables",
-		"tryConvertStringToNumber",
-		"mainTopic",
-		"return " + expression,
-	)(dynamicVariables, tryConvertStringToNumber, mainTopic);
-	return result;
+	// Si mode sécurisé, pas besoin de sanitizer
+	const finalExpression = config.secureMode
+		? expression
+		: sanitizeCode(expression);
+
+	// Vérifier le cache de fonctions
+	let fn = functionCache.get(finalExpression);
+
+	if (!fn) {
+		fn = new Function(
+			"dynamicVariables",
+			"tryConvertStringToNumber",
+			"mainTopic",
+			"return " + finalExpression,
+		);
+
+		// Ajouter au cache (avec limitation de taille)
+		if (functionCache.size >= MAX_FUNCTION_CACHE_SIZE) {
+			const firstKey = functionCache.keys().next().value;
+			functionCache.delete(firstKey);
+		}
+		functionCache.set(finalExpression, fn);
+	}
+
+	return fn(dynamicVariables, tryConvertStringToNumber, mainTopic);
 }
