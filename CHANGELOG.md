@@ -1,5 +1,32 @@
 # Changelog
 
+## 8.8.0 (2026-01-12)
+
+### Feat
+
+- **markdown**: gestion des variables dynamiques de type objet à partir d'une source en JSON (en utilisant JSON.parse)
+- **utils**: ajout d'une fonction NLP pour extraire le sujet principal d'une phrase courte et utilisation possible dans l'évaluation d'une expression pour le calcul de la valeur d'une variable ou pour le plugin readcsv
+- **core**: plugin readcsv - insertion possible du numéro de ligne du tableau de données avec "$i"
+- **core**: option random pour le plugin readcsv (pour afficher les données dans un ordre aléatoire)
+
+### Fix
+
+- **markdown**: optimisation de la fonction d'évaluation d'une expression utilisée pour le calcul des variables dynamiques, les blocs conditionnels et le plugin readCsv
+- **markdown**: optimisation - on vérifie d'abord la présence de sélecteurs @SELECTOR avant d'utiliser les fonctions qui ne sont utiles que s'il y a des sélecteurs
+- **markdown**: meilleure gestion des variables dont la valeur dépend d'un sélecteur @SELECTOR (qui doit parfois être évalué au moment de l'affichage)
+- **core**: gestion généralisée des variables et blocs conditionnels au moment de l'affichage pour les variables qui n'ont pas encore été évaluées
+- **core**: plugin readcsv - meilleure gestion en cas d'absence de données ou d'erreur dans le parsing du fichier
+- **css**: réglage taille maximale pour une image dans une admonition
+
+### Chore
+
+- ajout de robots.txt dans la page publique
+- add robots.txt
+
+### Test
+
+- **unit**: tests pour evaluateExpression()
+
 ## 8.7.2 (2025-12-20)
 
 ### Fix
