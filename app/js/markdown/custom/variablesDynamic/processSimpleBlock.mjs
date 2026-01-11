@@ -7,8 +7,10 @@ import { evaluateSelector } from "./helpers/evaluateSelector.mjs";
 function dependsOnUnevaluatedSelector(
 	dynamicVariables,
 	varName,
+	useSelectors,
 	visited = new Set(),
 ) {
+	if (!useSelectors) return false; // Optimisation : pas de SELECTOR dans le chatbot
 	if (visited.has(varName)) return false; // Évite les boucles infinies
 	visited.add(varName);
 
@@ -22,7 +24,14 @@ function dependsOnUnevaluatedSelector(
 	const refMatches = varValue.matchAll(/@([\p{L}0-9_]+)/gu);
 	for (const refMatch of refMatches) {
 		const refVarName = refMatch[1];
-		if (dependsOnUnevaluatedSelector(dynamicVariables, refVarName, visited)) {
+		if (
+			dependsOnUnevaluatedSelector(
+				dynamicVariables,
+				refVarName,
+				useSelectors,
+				visited,
+			)
+		) {
 			return true;
 		}
 	}
@@ -34,11 +43,14 @@ function processComplexDynamicVariables(
 	complexExpression,
 	dynamicVariables,
 	cumulativeOutput,
+	useSelectors,
 ) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
 
 	// Cas particulier : si on trouve une variable de type @SELECTOR["cssSelector"], on assigne à dynamicVariables[varName] la chaîne complète pour une évaluation différée
-	const selectorMatch = complexExpression.match(/@SELECTOR\["([^"]+)"\]/);
+	const selectorMatch = useSelectors
+		? complexExpression.match(/@SELECTOR\["([^"]+)"\]/)
+		: null;
 	if (selectorMatch) {
 		const cssSelector = selectorMatch[1];
 		let value = evaluateSelector(cssSelector, cumulativeOutput);
@@ -60,13 +72,17 @@ function processComplexDynamicVariables(
 	}
 
 	// On vérifie si l'expression contient des références à des variables qui dépendent de SELECTOR
-	const varMatch = complexExpression.match(/@([\p{L}0-9_]+)/gu);
-	if (varMatch) {
-		for (const match of varMatch) {
-			const varName = match.slice(1);
-			if (dependsOnUnevaluatedSelector(dynamicVariables, varName)) {
-				// Cette variable dépend d'un SELECTOR non évalué, on retourne l'expression pour évaluation différée
-				return complexExpression;
+	if (useSelectors) {
+		const varMatch = complexExpression.match(/@([\p{L}0-9_]+)/gu);
+		if (varMatch) {
+			for (const match of varMatch) {
+				const varName = match.slice(1);
+				if (
+					dependsOnUnevaluatedSelector(dynamicVariables, varName, useSelectors)
+				) {
+					// Cette variable dépend d'un SELECTOR non évalué, on retourne l'expression pour évaluation différée
+					return complexExpression;
+				}
 			}
 		}
 	}
@@ -89,6 +105,7 @@ export function processSimpleBlock(
 	message,
 	dynamicVariables,
 	cumulativeOutput,
+	useSelectors = false,
 ) {
 	cumulativeOutput = cumulativeOutput + message;
 	let output = "";
@@ -127,6 +144,7 @@ export function processSimpleBlock(
 						expr,
 						dynamicVariables,
 						cumulativeOutput,
+						useSelectors,
 					);
 					dynamicVariables[varName] = calcResult;
 					output +=
@@ -164,6 +182,7 @@ export function processSimpleBlock(
 
 			// Cas des variables dont la valeur est définie par un @SELECTOR
 			const isVariableWithSelector =
+				useSelectors &&
 				dynamicVariables &&
 				dynamicVariables[varName] &&
 				typeof dynamicVariables[varName] == "string" &&
@@ -202,7 +221,7 @@ export function processSimpleBlock(
 			}
 
 			// Cas des variables SELECTOR de type `@SELECTOR["cssSelector"]`
-			if (varName.startsWith("SELECTOR")) {
+			if (useSelectors && varName.startsWith("SELECTOR")) {
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
@@ -238,7 +257,9 @@ export function processSimpleBlock(
 					dynamicVariables[varName] !== undefined
 						? dynamicVariables[varName]
 						: "";
-				if (dependsOnUnevaluatedSelector(dynamicVariables, varName)) {
+				if (
+					dependsOnUnevaluatedSelector(dynamicVariables, varName, useSelectors)
+				) {
 					// Cette variable dépend d'un SELECTOR non évalué, on laisse la référence pour évaluation différée
 					output += `\`@${varName}\``;
 					continue;

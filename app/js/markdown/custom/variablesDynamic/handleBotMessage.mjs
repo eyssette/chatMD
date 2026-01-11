@@ -11,12 +11,15 @@ export function handleBotMessage(message, dynamicVariables, getLastMessage) {
 		},
 	);
 
+	// Détection de la présence de SELECTOR dans le message pour optimisation
+	const useSelectors = message.includes("@SELECTOR[");
+
 	// On extrait la structure du message, avec éventuellement des blocs conditionnels, qui peuvent être imbriqués
 	const structureMessage = extractStructureFromMessage(message);
 	let output = "";
 	structureMessage.forEach((block) => {
 		// On fait le traitement des variables dynamiques de manière séquentielle dans chaque bloc de contenu
-		output += processBlocks(block, dynamicVariables, output);
+		output += processBlocks(block, dynamicVariables, output, useSelectors);
 	});
 	message = output;
 

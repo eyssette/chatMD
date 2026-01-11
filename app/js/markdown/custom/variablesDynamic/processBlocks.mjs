@@ -2,7 +2,12 @@ import { processSimpleBlock } from "./processSimpleBlock.mjs";
 import { checkConditionalBlock } from "./checkConditionalBlock.mjs";
 
 // Fonction récursive qui traite un bloc de contenu, qui peut contenir des sous-blocs, éventuellement conditionnels
-export function processBlocks(block, dynamicVariables, cumulativeOutput) {
+export function processBlocks(
+	block,
+	dynamicVariables,
+	cumulativeOutput,
+	useSelectors = false,
+) {
 	let output = "";
 
 	// On vérifie si le bloc contient des sous-blocs
@@ -32,12 +37,17 @@ export function processBlocks(block, dynamicVariables, cumulativeOutput) {
 				if (conditionCheck.differEvaluation == true) {
 					output += `
 \`if ${conditionCheck.result}\`
-${processBlocks(subBlock, dynamicVariables, cumulativeOutput)}
+${processBlocks(subBlock, dynamicVariables, cumulativeOutput, useSelectors)}
 \`endif\`
 					`;
 				} else {
 					// Traitement normal du sous-bloc
-					output += processBlocks(subBlock, dynamicVariables, cumulativeOutput);
+					output += processBlocks(
+						subBlock,
+						dynamicVariables,
+						cumulativeOutput,
+						useSelectors,
+					);
 				}
 			});
 		}
@@ -47,6 +57,7 @@ ${processBlocks(subBlock, dynamicVariables, cumulativeOutput)}
 			block.content,
 			dynamicVariables,
 			cumulativeOutput,
+			useSelectors,
 		);
 	}
 	return output;

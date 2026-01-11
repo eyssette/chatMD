@@ -78,18 +78,11 @@ export async function processMessageWithPrompt(
 				});
 			} else if (type === "markdown") {
 				// Traitement des variables et blocs conditionnels qui restent à interpréter au moment de l'affichage du message
-
-				// Une variable dynamique est non évaluée si elle contient encore une référence à une autre variable
-				const hasNonEvaluatedDynamicVariables = chatbot.dynamicVariables
-					? Object.values(chatbot.dynamicVariables).some(
-							(value) => typeof value === "string" && value.includes("@"),
-						)
-					: false;
-
-				if (!isUser && hasNonEvaluatedDynamicVariables) {
+				if (!isUser && content.includes("@")) {
 					content = processDynamicVariablesAtDisplayTime(
 						content,
 						chatbot.dynamicVariables,
+						sequence,
 					);
 				}
 				// Gestion du contenu en Markdown
