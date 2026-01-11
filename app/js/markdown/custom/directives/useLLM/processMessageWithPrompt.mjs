@@ -4,7 +4,7 @@ import { processPromptWithRAG } from "./processPromptWithRAG.mjs";
 import { appendMessageToContainer } from "../../../../core/messages/helpers/dom.mjs";
 import { endsWithUnclosedHtmlTag } from "../../../../utils/strings.mjs";
 import { getLastElement } from "../../../../utils/dom.mjs";
-import { processConditionalBlocksAtDisplayTime } from "../../../../core/messages/helpers/processConditionalBlocksAtDisplayTime.mjs";
+import { processDynamicVariablesAtDisplayTime } from "../../../../core/messages/helpers/processDynamicVariablesAtDisplayTime.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
@@ -77,11 +77,21 @@ export async function processMessageWithPrompt(
 					shouldStreamLLMresponse: shouldStreamLLMresponse,
 				});
 			} else if (type === "markdown") {
-				// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
-				content = processConditionalBlocksAtDisplayTime(
-					content,
-					chatbot.dynamicVariables,
-				);
+				// Traitement des variables et blocs conditionnels qui restent à interpréter au moment de l'affichage du message
+
+				// Une variable dynamique est non évaluée si elle contient encore une référence à une autre variable
+				const hasNonEvaluatedDynamicVariables = chatbot.dynamicVariables
+					? Object.values(chatbot.dynamicVariables).some(
+							(value) => typeof value === "string" && value.includes("@"),
+						)
+					: false;
+
+				if (!isUser && hasNonEvaluatedDynamicVariables) {
+					content = processDynamicVariablesAtDisplayTime(
+						content,
+						chatbot.dynamicVariables,
+					);
+				}
 				// Gestion du contenu en Markdown
 				await displayMessage(content, {
 					isUser: isUser,

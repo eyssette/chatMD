@@ -10,7 +10,7 @@ import { encodeString } from "../../utils/strings.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 import { sendChatbotData } from "./helpers/plugins/scorm.mjs";
 import { scopeStyles } from "../../utils/css.mjs";
-import { processConditionalBlocksAtDisplayTime } from "./helpers/processConditionalBlocksAtDisplayTime.mjs";
+import { processDynamicVariablesAtDisplayTime } from "./helpers/processDynamicVariablesAtDisplayTime.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -79,9 +79,16 @@ export async function createMessage(chatbot, message, options) {
 		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
 		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
-		// Traitement des blocs conditionnels qui restent à interpréter au moment de l'affichage du message
-		if (!isUser && yaml && yaml.dynamicVariables) {
-			message = processConditionalBlocksAtDisplayTime(
+		// Traitement des variables et blocs conditionnels qui restent à interpréter au moment de l'affichage du message
+
+		// Une variable dynamique est non évaluée si elle contient encore une référence à une autre variable
+		const hasNonEvaluatedDynamicVariables = chatbot.dynamicVariables
+			? Object.values(chatbot.dynamicVariables).some(
+					(value) => typeof value === "string" && value.includes("@"),
+				)
+			: false;
+		if (!isUser && hasNonEvaluatedDynamicVariables) {
+			message = processDynamicVariablesAtDisplayTime(
 				message,
 				chatbot.dynamicVariables,
 			);

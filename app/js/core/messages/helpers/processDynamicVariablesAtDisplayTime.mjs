@@ -1,7 +1,7 @@
 import { extractStructureFromMessage } from "../../../markdown/custom/variablesDynamic/extractStructureFromMessage.mjs";
 import { processBlocks } from "../../../markdown/custom/variablesDynamic/processBlocks.mjs";
 
-export function processConditionalBlocksAtDisplayTime(
+export function processDynamicVariablesAtDisplayTime(
 	message,
 	dynamicVariables,
 ) {
