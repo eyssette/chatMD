@@ -1,14 +1,74 @@
 import { getRandomElement } from "../../../utils/arrays.mjs";
+import { getLastElement } from "../../../utils/dom.mjs";
 import { evaluateExpression } from "./evaluateExpression.mjs";
 import { evaluateSelector } from "./helpers/evaluateSelector.mjs";
 
-function processComplexDynamicVariables(complexExpression, dynamicVariables) {
+// Fonction récursive pour vérifier si une variable dépend d'un SELECTOR non évalué
+function dependsOnUnevaluatedSelector(
+	dynamicVariables,
+	varName,
+	visited = new Set(),
+) {
+	if (visited.has(varName)) return false; // Évite les boucles infinies
+	visited.add(varName);
+
+	const varValue = dynamicVariables[varName];
+	if (!varValue || typeof varValue !== "string") return false;
+
+	// Si la variable contient directement un SELECTOR, on essaie de l'évaluer
+	if (varValue.includes("SELECTOR[")) return true;
+
+	// Si la variable contient des références à d'autres variables
+	const refMatches = varValue.matchAll(/@([\p{L}0-9_]+)/gu);
+	for (const refMatch of refMatches) {
+		const refVarName = refMatch[1];
+		if (dependsOnUnevaluatedSelector(dynamicVariables, refVarName, visited)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function processComplexDynamicVariables(
+	complexExpression,
+	dynamicVariables,
+	cumulativeOutput,
+) {
 	// Remplace "@variableName" par la variable correspondante, en la convertissant en nombre si c'est possible
 
 	// Cas particulier : si on trouve une variable de type @SELECTOR["cssSelector"], on assigne à dynamicVariables[varName] la chaîne complète pour une évaluation différée
 	const selectorMatch = complexExpression.match(/@SELECTOR\["([^"]+)"\]/);
 	if (selectorMatch) {
+		const cssSelector = selectorMatch[1];
+		let value = evaluateSelector(cssSelector, cumulativeOutput);
+		if (value == "") {
+			const element = getLastElement(cssSelector, document);
+			value = element ? element.textContent.trim() : "";
+		}
+		if (value !== "") {
+			// Si on a trouvé une valeur, on teste si c'est un bloc spécial
+			const isSpecialBlock =
+				value.includes("readcsv") || value.includes("!useLLM");
+			if (isSpecialBlock) {
+				return complexExpression;
+			} else {
+				return value;
+			}
+		}
 		return complexExpression;
+	}
+
+	// On vérifie si l'expression contient des références à des variables qui dépendent de SELECTOR
+	const varMatch = complexExpression.match(/@([\p{L}0-9_]+)/gu);
+	if (varMatch) {
+		for (const match of varMatch) {
+			const varName = match.slice(1);
+			if (dependsOnUnevaluatedSelector(dynamicVariables, varName)) {
+				// Cette variable dépend d'un SELECTOR non évalué, on retourne l'expression pour évaluation différée
+				return complexExpression;
+			}
+		}
 	}
 
 	// Sinon, on remplace les variables par leurs valeurs
@@ -25,7 +85,12 @@ function processComplexDynamicVariables(complexExpression, dynamicVariables) {
 	return calcResult;
 }
 
-export function processSimpleBlock(message, dynamicVariables) {
+export function processSimpleBlock(
+	message,
+	dynamicVariables,
+	cumulativeOutput,
+) {
+	cumulativeOutput = cumulativeOutput + message;
 	let output = "";
 	let index = 0;
 
@@ -61,8 +126,16 @@ export function processSimpleBlock(message, dynamicVariables) {
 					const calcResult = processComplexDynamicVariables(
 						expr,
 						dynamicVariables,
+						cumulativeOutput,
 					);
 					dynamicVariables[varName] = calcResult;
+					output +=
+						typeof calcResult == "string" &&
+						(calcResult.includes("JSON.parse") ||
+							calcResult.includes("SELECTOR") ||
+							calcResult.includes("@"))
+							? `\`@${varName} = calc(${calcResult})\``
+							: "";
 				} catch (e) {
 					console.error("Erreur lors du calcul de", fullMatch, e);
 					dynamicVariables[varName] = undefined;
@@ -101,7 +174,11 @@ export function processSimpleBlock(message, dynamicVariables) {
 				);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
-					let value = evaluateSelector(cssSelector, output);
+					let value = evaluateSelector(cssSelector, cumulativeOutput);
+					if (value === "") {
+						const element = getLastElement(cssSelector, document);
+						value = element ? element.textContent.trim() : "";
+					}
 					if (value !== "") {
 						// Si on a trouvé une valeur, on teste si c'est un bloc spécial
 						const isSpecialBlock =
@@ -129,7 +206,11 @@ export function processSimpleBlock(message, dynamicVariables) {
 				const selectorMatch = varName.match(/SELECTOR\["([^"]+)"\]/);
 				if (selectorMatch) {
 					const cssSelector = selectorMatch[1];
-					let value = evaluateSelector(cssSelector, output);
+					let value = evaluateSelector(cssSelector, cumulativeOutput);
+					if (value == "") {
+						const element = getLastElement(cssSelector, document);
+						value = element ? element.textContent.trim() : "";
+					}
 					if (value !== "") {
 						// Si on a trouvé une valeur, on teste si c'est un bloc spécial
 						const isSpecialBlock =
@@ -157,7 +238,13 @@ export function processSimpleBlock(message, dynamicVariables) {
 					dynamicVariables[varName] !== undefined
 						? dynamicVariables[varName]
 						: "";
-				output += value;
+				if (dependsOnUnevaluatedSelector(dynamicVariables, varName)) {
+					// Cette variable dépend d'un SELECTOR non évalué, on laisse la référence pour évaluation différée
+					output += `\`@${varName}\``;
+					continue;
+				} else {
+					output += value;
+				}
 				continue;
 			}
 		}

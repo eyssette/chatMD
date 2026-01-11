@@ -32,18 +32,22 @@ export function processBlocks(block, dynamicVariables, cumulativeOutput) {
 				if (conditionCheck.differEvaluation == true) {
 					output += `
 \`if ${conditionCheck.result}\`
-${processBlocks(subBlock, dynamicVariables)}
+${processBlocks(subBlock, dynamicVariables, cumulativeOutput)}
 \`endif\`
 					`;
 				} else {
 					// Traitement normal du sous-bloc
-					output += processBlocks(subBlock, dynamicVariables);
+					output += processBlocks(subBlock, dynamicVariables, cumulativeOutput);
 				}
 			});
 		}
 	} else {
 		// Si le bloc n'a pas de sous-blocs, on le traite comme un bloc simple
-		output += processSimpleBlock(block.content, dynamicVariables);
+		output += processSimpleBlock(
+			block.content,
+			dynamicVariables,
+			cumulativeOutput,
+		);
 	}
 	return output;
 }
