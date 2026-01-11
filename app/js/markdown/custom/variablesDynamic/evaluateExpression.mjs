@@ -20,6 +20,8 @@ const sanitizeCodeAllowedOperations = [
 	"!",
 	"(",
 	")",
+	"{",
+	"}",
 	"encodeURI",
 	"Math.abs",
 	"Math.min",
@@ -32,6 +34,10 @@ const sanitizeCodeAllowedOperations = [
 	".toLowerCase",
 	".toUpperCase",
 	".trim",
+	"JSON.parse",
+	"JSON",
+	"replace",
+	"replaceAll",
 	",",
 	".",
 	"[",
@@ -63,6 +69,22 @@ function sanitizeCode(code) {
 		"///",
 	);
 
+	// On supprime les expressions avec un point qui sont autorisées : nombres à virgule, accès aux propriétés des objets
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/\.[a-zA-Z0-9_]+/g,
+		"///",
+	);
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/[0-9]+\.[0-9]+/g,
+		"///",
+	);
+
+	// On supprime les nombres qui restent (ils sont autorisés)
+	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
+		/[0-9]*/g,
+		"",
+	);
+
 	// On supprime les opérations autorisées
 	sanitizeCodeAllowedOperations.forEach((allowedOperation) => {
 		codeWithoutAllowedOperations = codeWithoutAllowedOperations.replaceAll(
@@ -70,11 +92,6 @@ function sanitizeCode(code) {
 			"///",
 		);
 	});
-	// On supprime aussi tous les nombres (ils sont autorisés)
-	codeWithoutAllowedOperations = codeWithoutAllowedOperations.replace(
-		/[0-9]*/g,
-		"",
-	);
 
 	// On peut alors repérer les fragments interdits
 	const forbiddenExpressions = codeWithoutAllowedOperations

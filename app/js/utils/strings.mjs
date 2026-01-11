@@ -8,6 +8,9 @@ export function startsWithAnyOf(string, array) {
 }
 
 export function tryConvertStringToNumber(input) {
+	if (typeof input !== "string") {
+		return input;
+	}
 	const number = parseFloat(input);
 	if (!isNaN(number) && number.toString() === input.toString().trim()) {
 		return number;
