@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.8.1 (2026-01-12)
+
+### Fix
+
+- **core**: optimisation du traitement des données dans le plugin readCsv
+- **core**: détection de la présence d'un sélecteur @SELECTOR - différenciation du cas d'un message avec ou sans présence d'un bloc prompt
+
 ## 8.8.0 (2026-01-12)
 
 ### Feat
