@@ -4,13 +4,10 @@ import { processBlocks } from "../../../markdown/custom/variablesDynamic/process
 export function processDynamicVariablesAtDisplayTime(
 	message,
 	dynamicVariables,
-	sequence,
+	options = {},
 ) {
 	// Détection de la présence de SELECTOR dans le message pour optimisation
-	// On récupère la séquence complète des contenus pour vérifier la présence de SELECTOR
-	const contentSequence = sequence.map((section) => section.content);
-	const combinedSequence = contentSequence.join("\n");
-	const useSelectors = combinedSequence.includes("@SELECTOR[");
+	const useSelectors = options.useSelectors || false;
 
 	const structureMessage = extractStructureFromMessage(message);
 	let output = "";

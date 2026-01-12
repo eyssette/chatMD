@@ -91,6 +91,7 @@ export async function createMessage(chatbot, message, options) {
 			message = processDynamicVariablesAtDisplayTime(
 				message,
 				chatbot.dynamicVariables,
+				{ useSelectors: message.includes("@SELECTOR[") },
 			);
 		}
 		if (message.trim() !== "") {

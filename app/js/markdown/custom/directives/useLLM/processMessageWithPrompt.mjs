@@ -79,10 +79,13 @@ export async function processMessageWithPrompt(
 			} else if (type === "markdown") {
 				// Traitement des variables et blocs conditionnels qui restent à interpréter au moment de l'affichage du message
 				if (!isUser && content.includes("@")) {
+					// On récupère la séquence complète
+					const contentSequence = sequence.map((section) => section.content);
+					const contentMessage = contentSequence.join("\n");
 					content = processDynamicVariablesAtDisplayTime(
 						content,
 						chatbot.dynamicVariables,
-						sequence,
+						{ useSelectors: contentMessage.includes("@SELECTOR[") },
 					);
 				}
 				// Gestion du contenu en Markdown
