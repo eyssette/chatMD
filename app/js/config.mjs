@@ -53,6 +53,10 @@ config.shortcuts = [
 		"https://codimd.apps.education.fr/UB1xium-TSqpdHEqdxipTw/download",
 	],
 	[
+		"data-education",
+		"https://codimd.apps.education.fr/tXP8s1LDSYmLc8O4kOANlw/download",
+	],
+	[
 		"multiple-urls",
 		[
 			"https://codimd.apps.education.fr/t7yi1Ak7Q--r2r4oB-3Uhg",
