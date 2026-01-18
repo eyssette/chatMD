@@ -2,11 +2,7 @@ import { yaml } from "../../../markdown/custom/yaml.mjs";
 import { goToNewChatbot } from "../../../utils/urls.mjs";
 import { deobfuscateString, sanitizeHtml } from "../../../utils/strings.mjs";
 import { createMessage } from "../../messages/createMessage.mjs";
-import {
-	chatContainer,
-	userInput,
-	sendButton,
-} from "../../../shared/selectors.mjs";
+import { userInput, sendButton } from "../../../shared/selectors.mjs";
 import { autoFocus } from "../../../shared/constants.mjs";
 import { responseToSelectedChoiceOption } from "../helpers/choiceOptions.mjs";
 import { getChatbotResponse } from "../getChatbotResponse.mjs";
@@ -43,7 +39,7 @@ function handleClickOnSendButton(chatbot) {
 }
 
 function handleClickOnChatContainer(chatbot) {
-	chatContainer.addEventListener("click", (event) => {
+	document.body.addEventListener("click", (event) => {
 		let target = event.target;
 		// Cas où on a cliqué sur un bouton pour ouvrir un nouveau chatbot
 		if (target.id == "openNewChatbot") {
