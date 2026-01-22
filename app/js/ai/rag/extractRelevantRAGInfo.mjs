@@ -1,4 +1,4 @@
-import { cosineSimilarity } from "../../utils/nlp.mjs";
+import { cosineSimilarityTextVector } from "../../utils/nlp.mjs";
 import { topElements } from "../../utils/arrays.mjs";
 import { yaml } from "../../markdown/custom/yaml.mjs";
 
@@ -17,7 +17,7 @@ export function extractRelevantRAGinfo(chatbot, question, options) {
 			: yaml.useLLM.RAGmaxTopElements;
 
 	const cosSimArray = vectorRAGinformations.map((vectorRAGinformation) =>
-		cosineSimilarity(question, vectorRAGinformation, {
+		cosineSimilarityTextVector(question, vectorRAGinformation, {
 			boostIfKeywordsInTitle: chatbot.nextMessage && chatbot.nextMessage.goto,
 		}),
 	);

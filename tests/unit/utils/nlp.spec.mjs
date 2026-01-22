@@ -8,7 +8,7 @@ import {
 	magnitude,
 	tokenize,
 	createVector,
-	cosineSimilarity,
+	cosineSimilarityTextVector,
 	mainTopic,
 } from "../../../app/js/utils/nlp.mjs";
 
@@ -417,7 +417,7 @@ describe("createVector", function () {
 	});
 });
 
-describe("cosineSimilarity", function () {
+describe("cosineSimilarityTextVector", function () {
 	const exampleVector = {
 		lorem: 11.2,
 		ipsum: 11.2,
@@ -460,23 +460,23 @@ describe("cosineSimilarity", function () {
 	};
 
 	it("returns 0 when the first parameter is an empty string or is undefined", function () {
-		const result1 = cosineSimilarity("", exampleVector);
-		const result2 = cosineSimilarity(undefined, exampleVector);
+		const result1 = cosineSimilarityTextVector("", exampleVector);
+		const result2 = cosineSimilarityTextVector(undefined, exampleVector);
 		expect(result1).toBe(0);
 		expect(result2).toBe(0);
 	});
 
 	it("returns 0 when the chatbot vector is null or undefined", function () {
-		const result = cosineSimilarity("test", {});
+		const result = cosineSimilarityTextVector("test", {});
 		expect(result).toBe(0);
 	});
 
 	it("returns correct cosine similarity for valid vectors", function () {
-		const result1 = cosineSimilarity("Lorem", exampleVector);
+		const result1 = cosineSimilarityTextVector("Lorem", exampleVector);
 		expect(result1).toBeCloseTo(0.5, 1);
-		const result2 = cosineSimilarity("Lorem ipsum,", exampleVector);
+		const result2 = cosineSimilarityTextVector("Lorem ipsum,", exampleVector);
 		expect(result2).toBeCloseTo(0.65, 1);
-		const result3 = cosineSimilarity(
+		const result3 = cosineSimilarityTextVector(
 			"Lorem ipsum dolor sit amet,",
 			exampleVector,
 		);
@@ -484,7 +484,7 @@ describe("cosineSimilarity", function () {
 	});
 
 	it("returns a value between -1 and 1", function () {
-		const result = cosineSimilarity(
+		const result = cosineSimilarityTextVector(
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel ligula semper, volutpat quam at, pulvinar mauris. ",
 			exampleVector,
 		);

@@ -1,4 +1,4 @@
-import { cosineSimilarity } from "../../../../utils/nlp.mjs";
+import { cosineSimilarityTextVector } from "../../../../utils/nlp.mjs";
 import { computeKeywordScore } from "./computeKeywordScore.mjs";
 
 const MATCH_SCORE_IDENTITY = 30; // Pour régler le fait de privilégier l'identité d'un keyword à la simple similarité
@@ -43,9 +43,13 @@ function calculateCosineSimilarityScore(
 	next,
 ) {
 	const vectorResponses = chatbot.vectorChatBotResponses;
-	const cosSim = cosineSimilarity(userInput, vectorResponses[responseIndex], {
-		boostIfKeywordsInTitle: next && next.goto,
-	});
+	const cosSim = cosineSimilarityTextVector(
+		userInput,
+		vectorResponses[responseIndex],
+		{
+			boostIfKeywordsInTitle: next && next.goto,
+		},
+	);
 	return cosSim ? cosSim + 0.5 : 0;
 }
 

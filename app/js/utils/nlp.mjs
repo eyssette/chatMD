@@ -278,22 +278,27 @@ export function createVector(text, options) {
 	return vec;
 }
 
-export function cosineSimilarity(str, vector, options) {
-	// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
-
-	// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)
-	const vectorString = createVector(str, options);
-
-	// Calcule la similarité cosinus
-	const dot = dotProduct(vectorString, vector);
-	const mag1 = magnitude(vectorString);
-	const mag2 = magnitude(vector);
+function cosineSimilarity(vectorA, vectorB) {
+	// Calcule la similarité cosinus entre deux vecteurs
+	const dot = dotProduct(vectorA, vectorB);
+	const mag1 = magnitude(vectorA);
+	const mag2 = magnitude(vectorB);
 
 	if (mag1 === 0 || mag2 === 0) {
 		return 0; // Évite la division par zéro
 	} else {
 		return dot / (mag1 * mag2);
 	}
+}
+
+export function cosineSimilarityTextVector(str, vector, options) {
+	// Calcul de similarité entre une chaîne de caractère (ce sera le message de l'utilisateur) et une autre chaîne de caractère déjà transformée en vecteur (c'est le vecteur de la réponse du chatbot)
+
+	// Crée les vecteurs pour la chaîne de caractère (qui correspondra au message de l'utilisateur)
+	const vectorString = createVector(str, options);
+
+	// Calcule la similarité cosinus entre les deux vecteurs
+	return cosineSimilarity(vectorString, vector);
 }
 
 const stopWords = new Set([
