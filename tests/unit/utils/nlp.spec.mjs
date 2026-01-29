@@ -10,6 +10,7 @@ import {
 	createVector,
 	cosineSimilarityTextVector,
 	mainTopic,
+	searchScore,
 } from "../../../app/js/utils/nlp.mjs";
 
 describe("longestCommonSubstringWeightedLength", function () {
@@ -621,5 +622,83 @@ describe("mainTopic", function () {
 			"J'aimerais bien en savoir plus sur les impacts du changement climatique sur la biodiversité marine.",
 		);
 		expect(result).toBe("impacts changement climatique biodiversité marine");
+	});
+});
+
+describe("searchScore", function () {
+	it("returns a high score when all important words are present", function () {
+		const text = "Le chat est sur le tapis rouge.";
+		const scoreTextWithOneImportantWord = searchScore(text, "chat");
+		expect(scoreTextWithOneImportantWord).toBeGreaterThanOrEqual(1);
+		const scoreTextWithTwoImportantWords = searchScore(text, "chat tapis");
+		expect(scoreTextWithTwoImportantWords).toBeGreaterThanOrEqual(1);
+		const scoreTextWithThreeImportantWords = searchScore(
+			text,
+			"chat tapis rouge",
+		);
+		expect(scoreTextWithThreeImportantWords).toBeGreaterThanOrEqual(1);
+	});
+	it("returns a higher score when all important words are present and the number of important words increases", function () {
+		const text = "Le chat est sur le tapis rouge.";
+		const scoreTextWithOneImportantWord = searchScore(text, "chat");
+		const scoreTextWithTwoImportantWords = searchScore(text, "chat tapis");
+		const scoreTextWithThreeImportantWords = searchScore(
+			text,
+			"chat tapis rouge",
+		);
+		expect(scoreTextWithTwoImportantWords).toBeGreaterThan(
+			scoreTextWithOneImportantWord,
+		);
+		expect(scoreTextWithThreeImportantWords).toBeGreaterThan(
+			scoreTextWithTwoImportantWords,
+		);
+	});
+
+	it("returns a low score for completely different texts", function () {
+		const text1 = "Le chat est sur le tapis.";
+		const text2 = "La voiture roule vite.";
+		const score = searchScore(text1, text2);
+		expect(score).toBeCloseTo(0, 1);
+	});
+
+	it("returns a lower score in strict mode when important words are missing", function () {
+		const baseText =
+			"Le changement climatique affecte la biodiversité et les écosystèmes.";
+		const searchWithImportantWords = [
+			"changement climatique biodiversité ?",
+			{ strictMode: true },
+		];
+		const searchWithoutImportantWords = [
+			"changement climatique pollution",
+			{ strictMode: true },
+		];
+
+		const scoreWithImportantWords = searchScore(
+			baseText,
+			searchWithImportantWords[0],
+			searchWithImportantWords[1],
+		);
+		const scoreWithoutImportantWords = searchScore(
+			baseText,
+			searchWithoutImportantWords[0],
+			searchWithoutImportantWords[1],
+		);
+
+		expect(scoreWithImportantWords).toBeGreaterThan(scoreWithoutImportantWords);
+		expect(scoreWithoutImportantWords).toBeLessThan(1);
+		expect(scoreWithoutImportantWords).toBeGreaterThan(2 / 3 - 0.1);
+		expect(scoreWithoutImportantWords).toBeLessThan(2 / 3 + 0.1);
+	});
+
+	it("penalizes missing important words in the search text", function () {
+		const baseText =
+			"Les énergies renouvelables sont essentielles pour lutter contre le changement climatique.";
+		const searchTextMissingImportantWords = "Parle-moi des énergies fossiles.";
+
+		const score = searchScore(baseText, searchTextMissingImportantWords);
+
+		// Since "énergies" and "changement climatique" are important words in the base text,
+		// their absence in the search text should lead to a lower score.
+		expect(score).toBeLessThan(20); // Arbitrary threshold for low score
 	});
 });

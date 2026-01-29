@@ -1,6 +1,6 @@
 import { config } from "../../../config.mjs";
 import { tryConvertStringToNumber } from "../../../utils/strings.mjs";
-import { mainTopic } from "../../../utils/nlp.mjs";
+import { mainTopic, normalizeText, searchScore } from "../../../utils/nlp.mjs";
 
 // Opérations autorisées pour le calcul des expressions complexes
 const sanitizeCodeAllowedOperations = [
@@ -50,6 +50,9 @@ const sanitizeCodeAllowedOperations = [
 	"tryConvertStringToNumber",
 	"dynamicVariables",
 	"mainTopic",
+	"normalizeText",
+	"searchScore",
+	"boostWords",
 ];
 
 // Regex pour identifier les parties autorisées dans le code
@@ -154,6 +157,8 @@ export function evaluateExpression(expression, dynamicVariables) {
 			"dynamicVariables",
 			"tryConvertStringToNumber",
 			"mainTopic",
+			"normalizeText",
+			"searchScore",
 			"return " + finalExpression,
 		);
 
@@ -165,5 +170,11 @@ export function evaluateExpression(expression, dynamicVariables) {
 		functionCache.set(finalExpression, fn);
 	}
 
-	return fn(dynamicVariables, tryConvertStringToNumber, mainTopic);
+	return fn(
+		dynamicVariables,
+		tryConvertStringToNumber,
+		mainTopic,
+		normalizeText,
+		searchScore,
+	);
 }

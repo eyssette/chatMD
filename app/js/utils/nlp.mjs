@@ -469,6 +469,84 @@ const stopWords = new Set([
 	"peux",
 ]);
 
+function cosineSimilarityTexts(strA, strB, options = {}) {
+	// Calcul de similarité entre deux chaînes de caractères normalisées
+	const strAnormalized = normalizeText(strA);
+	const strBnormalized = normalizeText(strB);
+
+	// Crée les vecteurs pour les deux chaînes de caractères
+	const vectorA = createVector(strAnormalized, options);
+	const vectorB = createVector(strBnormalized, options);
+
+	let result = cosineSimilarity(vectorA, vectorB);
+
+	const boostWords = options.boostWords ? options.boostWords : [];
+	// On booste le score si des mots spécifiques sont présents dans les deux chaînes de caractères
+	// et on booste encore plus le score si plusieurs mots spécifiques sont présents dans les deux chaînes de caractères
+	let countBoostedWords = 0;
+	for (const word of boostWords) {
+		const wordNormalized = normalizeText(word);
+		if (
+			strAnormalized.includes(wordNormalized) &&
+			strBnormalized.includes(wordNormalized)
+		) {
+			countBoostedWords++;
+			result = result + 1; // On booste de 1 par mot trouvé dans les deux chaînes
+			if (countBoostedWords > 1) {
+				result = result + 1 * (countBoostedWords - 1); // On booste encore plus si plusieurs mots sont trouvés
+			}
+		}
+	}
+
+	// Calcule la similarité cosinus entre les deux vecteurs
+	return result;
+}
+
+function getImportantWords(str) {
+	if (!str || typeof str !== "string") return [];
+	// On supprime les stopwords et les caractères spéciaux
+	const words = str
+		.replace(/[.,!?'’;:]/g, " ")
+		.split(/\s+/)
+		.filter((word) => word && !stopWords.has(word.toLowerCase()));
+	return words;
+}
+
+export function searchScore(baseText, searchText, options = {}) {
+	// Fonction de recherche fondée sur la similarité cosinus et qui prend en compte les mots importants à trouver
+
+	// Récupère les mots importants dans le texte de recherche
+	const importantWords = getImportantWords(searchText);
+	const importantWordCount = importantWords.length;
+	// Ajoute les mots importants à l'option de boostWords pour le calcul de similarité
+	if (!options.boostWords) {
+		options.boostWords = [];
+	}
+	options.boostWords = options.boostWords.concat(importantWords);
+
+	// Calcule la similarité cosinus entre les deux textes
+	let cosineSim = cosineSimilarityTexts(baseText, searchText, options);
+
+	// On réduit le score s'il y avait plusieurs mots spécifiques à trouver et qu'on ne les a pas tous trouvés
+	if (importantWordCount > 1 && options.strictMode) {
+		let foundImportantWordCount = 0;
+		for (const word of importantWords) {
+			const wordNormalized = normalizeText(word);
+			if (normalizeText(baseText).includes(wordNormalized)) {
+				foundImportantWordCount++;
+			}
+		}
+		if (foundImportantWordCount < importantWordCount) {
+			const missingWords = importantWordCount - foundImportantWordCount;
+			const penaltyPerMissingWord = 2.75;
+			const totalPenalty = missingWords * penaltyPerMissingWord;
+			cosineSim = Math.max(0, cosineSim - totalPenalty);
+		}
+	}
+
+	return cosineSim;
+}
+
 export function mainTopic(str, specificExpressionsToRemove = []) {
 	// Extrait le sujet principal d'une chaîne de caractères qui représente une courte phrase
 	if (!str || typeof str !== "string") return "";
