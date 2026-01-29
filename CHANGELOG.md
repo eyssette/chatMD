@@ -1,5 +1,22 @@
 # Changelog
 
+## 8.9.0 (2026-01-29)
+
+### Feat
+
+- **utils**: ajout d'une fonction searchScore  pour calcul de similarité entre 1 recherche et 1 texte, utilisable dans evaluateExpression (pour plugin readcsv notamment)
+
+### Fix
+
+- **utils**: amélioration de la tokenization (suppression de tokens non significatifs pour le calcul de similarité)
+- **core**: détection des click dans tout le body et pas seulement dans le container pour les conversations (permet d'avoir un déclencheur de réponse dans le footer)
+- **js**: alias vers chatbot data-education
+
+### Chore
+
+- fonction cosineSimilarity renommée en cosineSimilarityTextVector
+- **nlp**: déplacement des stopwords hors de la fonction mainTopic() pour pouvoir les réutiliser
+
 ## 8.8.1 (2026-01-12)
 
 ### Fix
