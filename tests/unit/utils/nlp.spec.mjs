@@ -379,6 +379,26 @@ describe("tokenize", function () {
 		expect(tokens.filter((t) => t === "elephant").length).toBe(1);
 		expect(tokens.filter((t) => t.includes("eleph")).length).toBeGreaterThan(0);
 	});
+
+	it("removes non significant tokens", function () {
+		const result = tokenize(
+			"l'association pour rendre les acteurs capables d'évolution",
+		);
+		const tokens = result.map((t) => t.token);
+		expect(tokens).toContain("association");
+		expect(tokens).toContain("rendre");
+		expect(tokens).toContain("acteurs");
+		expect(tokens).toContain("capables");
+		expect(tokens).toContain("evolution");
+		expect(tokens).not.toContain("l");
+		expect(tokens).not.toContain("pour");
+		expect(tokens).not.toContain("les");
+		expect(tokens).not.toContain("d");
+		expect(tokens).not.toContain("ation");
+		expect(tokens).not.toContain("endre");
+		expect(tokens).not.toContain("teurs");
+		expect(tokens).not.toContain("ution");
+	});
 });
 
 describe("createVector", function () {

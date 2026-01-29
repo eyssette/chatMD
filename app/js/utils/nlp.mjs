@@ -180,6 +180,80 @@ export function magnitude(vec) {
 	}
 	return Math.sqrt(sum);
 }
+// Constantes pour exclure certains tokens non significatifs (terminaisons courantes par exemple)
+const nonSignificantFiveLettersToken = [
+	"ation",
+	"etion",
+	"ition",
+	"otion",
+	"ution",
+	"ement",
+	"mment",
+	"ssant",
+	"sante",
+	"ments",
+	"antes",
+	"ourir",
+	"endre",
+	"isser",
+	"ction",
+	"tions",
+	"aient",
+	"erent",
+	"irent",
+	"euses",
+	"elles",
+	"iques",
+	"ables",
+	"pable",
+	"ibles",
+	"asses",
+	"esses",
+	"isses",
+	"osses",
+	"usses",
+	"oires",
+	"aires",
+	"euses",
+	"antes",
+	"entes",
+	"anger",
+	"endre",
+	"teurs",
+	"trice",
+];
+
+const nonSignificantSixLettersToken = [
+	"ations",
+	"etions",
+	"itions",
+	"otions",
+	"utions",
+	"ements",
+	"mments",
+	"ssants",
+	"santes",
+	"rement",
+	"amment",
+	"emment",
+	"iquent",
+	"issent",
+	"assent",
+	"ussent",
+	"escent",
+	"erions",
+	"irions",
+	"ueuses",
+	"eusent",
+	"ateurs",
+	"atrice",
+	"trices",
+	"ctions",
+	"ssions",
+	"eraient",
+	"iraient",
+	"uerait",
+];
 
 // Fonction pour diviser une chaîne de caractères en tokens, éventuellement en prenant en compte l'index de la réponse du Chatbot (pour prendre en compte différement les tokens présents dans le titre de la réponse)
 export function tokenize(text, options) {
@@ -221,6 +295,14 @@ export function tokenize(text, options) {
 			token = word;
 		} else {
 			token = word.substring(index, index + tokenLength);
+			// Si le token fait partie des tokens non significatifs, on l'ignore
+			const isNonSignificant =
+				(token.length === 5 &&
+					nonSignificantFiveLettersToken.includes(token)) ||
+				(token.length === 6 && nonSignificantSixLettersToken.includes(token));
+			if (isNonSignificant) {
+				return undefined;
+			}
 		}
 		if (prioritizeTokensInTitle) {
 			const titleResponse =
@@ -245,20 +327,24 @@ export function tokenize(text, options) {
 			token: word,
 			weight: weightFullWord,
 		});
-		// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes
+		// Ensuite on intègre des tokens de 5, 6 et 7 caractères consécutifs pour détecter des racines communes (sauf si le token fait partie des tokens non significatifs)
+
 		const wordLength = word.length;
 		if (wordLength >= 5) {
 			for (let i = 0; i <= wordLength - 5; i++) {
+				if (!weightedToken(i, 5, word)) continue;
 				tokens.push(weightedToken(i, 5, word));
 			}
 		}
 		if (wordLength >= 6) {
 			for (let i = 0; i <= wordLength - 6; i++) {
+				if (!weightedToken(i, 6, word)) continue;
 				tokens.push(weightedToken(i, 6, word));
 			}
 		}
 		if (wordLength >= 7) {
 			for (let i = 0; i <= wordLength - 7; i++) {
+				if (!weightedToken(i, 7, word)) continue;
 				tokens.push(weightedToken(i, 7, word));
 			}
 		}
