@@ -1,6 +1,6 @@
 import { config } from "../../config.mjs";
 import { load as loadYAML } from "../../lib/js-yaml.mjs";
-import { loadScript, loadCSS } from "../../utils/urls.mjs";
+import { loadScript, loadCSS, getParamsFromURL } from "../../utils/urls.mjs";
 import { deepMerge } from "../../utils/objects.mjs";
 import { setContentOfFooter } from "../../utils/ui.mjs";
 import { decodeApiKey } from "../../ai/helpers/keyDecoder.mjs";
@@ -164,9 +164,11 @@ export function processYAML(markdownContent) {
 			if (yaml.darkmode !== false) {
 				checkDarkModePreference();
 			}
-			if (yaml.theme) {
+			const themeInURL = getParamsFromURL().theme;
+			if (yaml.theme || themeInURL) {
+				const themeToApply = themeInURL ? themeInURL : yaml.theme;
 				// compatiblité avec l'ancien nom pour le thème sms
-				const themeName = yaml.theme == "bubbles" ? "sms" : yaml.theme;
+				const themeName = themeToApply == "bubbles" ? "sms" : themeToApply;
 				const cssFile = themeName.endsWith(".css")
 					? "css/themes/" + themeName
 					: "css/themes/" + themeName + ".css";
