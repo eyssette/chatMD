@@ -1,5 +1,7 @@
 function krokiCreateImageFromSource(type, source) {
-	const dataKroki = new TextEncoder("utf-8").encode(source);
+	const dataKroki = new TextEncoder("utf-8").encode(
+		source.replace(/\n\n/g, "\n"),
+	);
 	const dataKrokiCompressed = pako.deflate(dataKroki, {
 		level: 9,
 		to: "string",
