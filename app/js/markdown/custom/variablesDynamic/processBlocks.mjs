@@ -35,6 +35,21 @@ export function processBlocks(
 				// Cas où la condition nécessite une évaluation différée
 				// Dans ce cas on réintègre le bloc conditionnel dans le message pour un traitement ultérieur
 				if (conditionCheck.differEvaluation == true) {
+					// On marque les directives !Next qui sont dans des blocs conditionnels à évaluation différée pour qu'elles soient elles aussi traitées plus tard, au moment de l'affichage du message
+					if (subBlock.content.includes("!Next:")) {
+						subBlock.content = subBlock.content.replaceAll(
+							/!Next ?:(.*)/g,
+							function (match, nextDirectiveContent) {
+								// On ajoute "!differEvaluation" dans les options à la fin de la directive !Next, si ces options existent déjà, ou on les crée si elles n'existent pas
+								// Syntaxe : !Next: nom de la prochaine étape / options (ex: ignoreKeywords) !differEvaluation
+								if (nextDirectiveContent.includes("/")) {
+									return `!Next: ${nextDirectiveContent} !differEvaluation`;
+								} else {
+									return `!Next: ${nextDirectiveContent} / !differEvaluation`;
+								}
+							},
+						);
+					}
 					output += `
 \`if ${conditionCheck.result}\`
 ${processBlocks(subBlock, dynamicVariables, cumulativeOutput, useSelectors)}

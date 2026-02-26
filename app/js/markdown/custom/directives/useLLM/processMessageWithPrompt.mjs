@@ -5,6 +5,7 @@ import { appendMessageToContainer } from "../../../../core/messages/helpers/dom.
 import { endsWithUnclosedHtmlTag } from "../../../../utils/strings.mjs";
 import { getLastElement } from "../../../../utils/dom.mjs";
 import { processDynamicVariablesAtDisplayTime } from "../../../../core/messages/helpers/processDynamicVariablesAtDisplayTime.mjs";
+import { processDirectiveNext } from "../next.mjs";
 
 // Traite chaque partie d’un message découpé (Markdown / LLM)
 export async function processMessageWithPrompt(
@@ -87,6 +88,10 @@ export async function processMessageWithPrompt(
 						chatbot.dynamicVariables,
 						{ useSelectors: contentMessage.includes("@SELECTOR[") },
 					);
+				}
+				// Si le message contient une directive !Next qui n'a pas été traitée parce qu'elle était dans un bloc conditionnel à évaluation différée (au moment de l'affichage du message), on traite la directive !Next maintenant
+				if (!isUser && content.includes("!Next:")) {
+					content = processDirectiveNext(chatbot, content);
 				}
 				// Gestion du contenu en Markdown
 				await displayMessage(content, {

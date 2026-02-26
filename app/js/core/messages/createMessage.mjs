@@ -11,6 +11,7 @@ import { yaml } from "../../markdown/custom/yaml.mjs";
 import { sendChatbotData } from "./helpers/plugins/scorm.mjs";
 import { scopeStyles } from "../../utils/css.mjs";
 import { processDynamicVariablesAtDisplayTime } from "./helpers/processDynamicVariablesAtDisplayTime.mjs";
+import { processDirectiveNext } from "../../markdown/custom/directives/next.mjs";
 
 function handleBotResponse(chatbot) {
 	if (chatbot.nextMessage.selected) {
@@ -93,6 +94,10 @@ export async function createMessage(chatbot, message, options) {
 				chatbot.dynamicVariables,
 				{ useSelectors: message.includes("@SELECTOR[") },
 			);
+		}
+		// Si le message contient une directive !Next qui n'a pas été traitée parce qu'elle était dans un bloc conditionnel à évaluation différée (au moment de l'affichage du message), on traite la directive !Next maintenant
+		if (message.includes("!Next:")) {
+			message = processDirectiveNext(chatbot, message);
 		}
 		if (message.trim() !== "") {
 			displayMessage(message, {

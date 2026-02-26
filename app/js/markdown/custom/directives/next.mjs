@@ -14,6 +14,13 @@ export function processDirectiveNext(chatbot, message) {
 			} else {
 				nextDirectiveContent = nextDirectiveContentSplit[0];
 			}
+			// Si la directive Next est dans un bloc conditionnel qui suppose une évaluation différée, on ne la traite pas tout de suite, et on supprime le marqueur d'évaluation différée pour qu'elle puisse être traitée normalement plus tard
+			if (
+				nextDirectiveOptions &&
+				nextDirectiveOptions.includes("!differEvaluation")
+			) {
+				return `!Next: ${nextDirectiveContent}`;
+			}
 			const isLoopMode = nextDirectiveContent.includes("!loop");
 
 			chatbot.nextMessage.lastMessageFromBot = message;
