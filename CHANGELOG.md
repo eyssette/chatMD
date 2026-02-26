@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.9.1 (2026-02-26)
+
+### Fix
+
+- **markdown**: gestion des directives !Next dans des blocs conditionnels à évaluation différée (usage de @SELECTOR)
+- **plugins**: correction erreur avec kroki à cause de doublons dans les retours à la ligne
+- **markdown**: le thème dans l'URL l'emporte sur celui du YAML
+
 ## 8.9.0 (2026-01-29)
 
 ### Feat
