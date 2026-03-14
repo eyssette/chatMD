@@ -191,6 +191,16 @@ describe("handleURL", () => {
 		);
 	});
 
+	it("handles files from Docs / La suite numérique and returns the API URL to fetch the markdown content", () => {
+		const url =
+			"https://docs.numerique.gouv.fr/docs/7066cdaa-16b4-4bd8-a06b-e1de20ae402d/";
+		const options = {};
+		const result = handleURL(url, options);
+		expect(result).toBe(
+			"https://docs.numerique.gouv.fr/api/v1.0/documents/7066cdaa-16b4-4bd8-a06b-e1de20ae402d/content/?content_format=markdown",
+		);
+	});
+
 	it("does not add CORS proxy for URLs from the .forge domain", () => {
 		const url = "https://group.forge.apps.education.fr/repo/file.md";
 		const options = {};

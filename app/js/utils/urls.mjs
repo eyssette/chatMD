@@ -49,6 +49,18 @@ function handleURLfromFramapad(url) {
 	return url.replace(/\?.*/, "") + "/export/txt";
 }
 
+// gestion des fichiers hébergés sur Docs de La Suite numérique
+function isDocsSuiteNumeriqueURL(url) {
+	return url.includes("docs.numerique.gouv.fr/");
+}
+function handleURLfromDocsSuiteNumerique(url) {
+	const documentIdMatch = url.match(/docs\/([a-z0-9-]+)\//);
+	if (documentIdMatch) {
+		const documentId = documentIdMatch[1];
+		return `https://docs.numerique.gouv.fr/api/v1.0/documents/${documentId}/content/?content_format=markdown`;
+	} else return "";
+}
+
 function handleKnownHosts(url, shouldAddCorsProxy) {
 	if (url.includes(".forge")) {
 		shouldAddCorsProxy = false;
@@ -61,6 +73,9 @@ function handleKnownHosts(url, shouldAddCorsProxy) {
 	} else if (isFramapadURL(url)) {
 		shouldAddCorsProxy = false;
 		url = handleURLfromFramapad(url);
+	} else if (isDocsSuiteNumeriqueURL(url)) {
+		shouldAddCorsProxy = false;
+		url = handleURLfromDocsSuiteNumerique(url);
 	}
 	return { url, shouldAddCorsProxy };
 }
