@@ -65,7 +65,7 @@ config.shortcuts = [
 	],
 ];
 
-config.corsProxy = "https://corsproxy.io/?url=";
+config.corsProxy = "https://api.codetabs.com/v1/proxy/?quest=";
 
 // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 config.responsesTitles = ["## "];
