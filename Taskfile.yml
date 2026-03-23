@@ -69,7 +69,7 @@ tasks:
 
   push:
     vars:
-      GIT_REPO_NAMES: [apps, drane, chatmd, github, gitlab]
+      GIT_REPO_NAMES: [apps, drane, chatmd, github, gitlab, frama]
     preconditions:
       - test ! -f app/DEBUG
     cmds:
