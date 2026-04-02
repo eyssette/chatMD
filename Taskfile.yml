@@ -67,6 +67,15 @@ tasks:
     cmds:
       - npx rollup widget/widget.js --file widget/widget.min.js --format iife  --compact  -p @rollup/plugin-terser
 
+  init-repo:
+    cmds:
+      - git remote add chatmd git@forge.apps.education.fr:chatMD/chatMD.forge.apps.education.fr.git
+      - git remote add apps git@forge.apps.education.fr:eyssette/chatMD.git 
+      - git remote add drane git@forge.apps.education.fr:drane-lyon/chatmd.git
+      - git remote add github git@github.com:eyssette/chatMD.git
+      - git remote add gitlab git@gitlab.com:chatmd/chatmd.gitlab.io.git
+      - git remote add frama git@framagit.org:chatmd/chatmd.frama.io.git
+
   push:
     vars:
       GIT_REPO_NAMES: [apps, drane, chatmd, github, gitlab, frama]
