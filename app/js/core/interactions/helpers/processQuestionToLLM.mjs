@@ -25,7 +25,7 @@ export function processQuestionToLLM(chatbot, inputText, options) {
 		.replace('<span class="hidden">/span>', "");
 	// Gestion de l'historique des échanges avec le LLM
 	let shouldUseConversationHistory = false;
-	if (questionToLLM.includes("!useHistory")) {
+	if (yaml.useLLM.useHistory || questionToLLM.includes("!useHistory")) {
 		shouldUseConversationHistory = true;
 		questionToLLM = questionToLLM.replace("!useHistory", "");
 	}
