@@ -60,11 +60,13 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 		let bodyObject = {
 			model: yaml.useLLM.model,
 			stream: shouldStreamLLMresponse,
-			max_tokens: yaml.useLLM.maxTokens,
 			frequency_penalty: 0,
 			presence_penalty: 0,
 			temperature: 0.7,
 		};
+		if (yaml.useLLM.maxTokens) {
+			bodyObject.max_tokens = yaml.useLLM.maxTokens;
+		}
 		if (RAGinformations.length > 0) {
 			RAGinformations = RAGprompt + RAGinformations;
 		}
