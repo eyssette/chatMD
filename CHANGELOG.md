@@ -1,5 +1,24 @@
 # Changelog
 
+## 8.10.0 (2026-04-20)
+
+### Feat
+
+- **core**: ajout paramètre yaml useLLM/useHistory
+- **core**: gestion des fichiers hébergés sur Docs de La suite numérique
+
+### Fix
+
+- **ai**: gestion du systemPrompt pour l'API Cohere v1
+- **core**: utilisation possible d'un bouton d'option qui commence par "link:http" pour ouvrir une URL externe
+- **core**: utilisation possible d'un proxy CORS pour fetchContentFromMultipleSources
+- **config**: changement du proxy CORS
+
+### Chore
+
+- ajout d'une task pour ajouter tous les dépôts git remote
+- ajout de framagit comme répertoire distant
+
 ## 8.9.1 (2026-02-26)
 
 ### Fix
