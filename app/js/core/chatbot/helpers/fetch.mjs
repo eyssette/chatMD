@@ -46,7 +46,7 @@ export async function fetchContentWithProxyIfNeeded(url) {
 // Pour récupérer le contenu de plusieurs fichiers à partir d'un tableau d'URLS
 export async function fetchContentFromMultipleSources(urls) {
 	const contents = await Promise.all(
-		urls.map((url) => fetchContent(handleURL(url))),
+		urls.map((url) => fetchContentWithProxyIfNeeded(handleURL(url))),
 	);
 	return contents.join("\n");
 }
