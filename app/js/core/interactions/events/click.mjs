@@ -127,6 +127,13 @@ function handleClickOnChatContainer(chatbot) {
 				window.open(link);
 			}
 			if (link.startsWith("#")) {
+				// Si le lien commence par "link:http", alors c'est un lien vers une URL externe, et on l'ouvre dans un nouvel onglet
+				if (link.startsWith("#link:http")) {
+					event.preventDefault();
+					const externalUrl = link.replace("#link:", "");
+					window.open(externalUrl);
+					return;
+				}
 				// Si le lien est vers une option, alors on envoie le message correspondant à cette option
 				event.preventDefault();
 				// On enregistre l'action "clic sur un bouton de réponse" dans l'historique des actions du chatbot

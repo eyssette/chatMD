@@ -415,6 +415,12 @@ iframe {
 	color: #fff !important;
 }
 
+/* Bouton qui renvoie vers une URL externe */
+.messageOptions a[href^="#link:http"]:before {
+	content: "🔗";
+	margin-right: 0.5em;
+}
+
 /* Bouton et fenêtre modale pour accéder au menu de chaque message */
 
 .messageMenu {
