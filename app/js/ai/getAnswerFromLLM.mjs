@@ -86,6 +86,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 				yaml.useLLM.postprompt +
 				RAGinformations;
 		if (APItype == "cohere_v1") {
+			bodyObject.preamble = yaml.useLLM.systemPrompt;
 			if (options.useConversationHistory) {
 				bodyObject.chat_history = recentHistory.map((item) => {
 					return {
