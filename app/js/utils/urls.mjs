@@ -57,7 +57,7 @@ function handleURLfromDocsSuiteNumerique(url) {
 	const documentIdMatch = url.match(/docs\/([a-z0-9-]+)\//);
 	if (documentIdMatch) {
 		const documentId = documentIdMatch[1];
-		return `https://docs.numerique.gouv.fr/api/v1.0/documents/${documentId}/content/?content_format=markdown`;
+		return `https://docs.numerique.gouv.fr/api/v1.0/documents/${documentId}/formatted-content/?content_format=markdown`;
 	} else return "";
 }
 
