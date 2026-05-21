@@ -14,12 +14,10 @@ export async function fetchContent(url) {
 			const markdownContent = `${data.content}`.replaceAll("***", "---");
 			return markdownContent;
 		});
-		// Patch pour la gestion des déclencheurs
-		// Docs ajoute un double retour à la ligne entre les titres de niveau 2 et le début d'une liste à puce (qui commence toujours par "* " dans Docs)
-		// On remplace d'abord ces doubles retours à la ligne par un simple retour à la ligne
-		content = content.replace(/(## .+)\n\n(\* .+)/g, "$1\n$2");
-		// On remplace ensuite les "* " par des "- " pour que les listes à puce utilisent la syntaxe avec des tirets
-		content = content.replace(/^\* /gm, "- ");
+		// Docs ajoute des retours à la ligne en double, on les remplace par des retours à la ligne simples
+		content = content.replaceAll("\n\n", "\n");
+		// Docs transforme les listes à puces "- " en "* ", on les remet en "- "
+		content = content.replaceAll("\n* ", "\n- ");
 		return content;
 	}
 	return response.text();
