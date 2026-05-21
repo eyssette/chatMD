@@ -10,10 +10,16 @@ export async function fetchContent(url) {
 	if (url.includes("docs.numerique.gouv.fr/")) {
 		// Cas particulier des fichiers hébergés sur Docs de La Suite numérique
 		// Le contenu est un JSON qu'il faut traiter pour en extraire le Markdown
-		const content = await response.json().then((data) => {
+		let content = await response.json().then((data) => {
 			const markdownContent = `${data.content}`.replaceAll("***", "---");
 			return markdownContent;
 		});
+		// Patch pour la gestion des déclencheurs
+		// Docs ajoute un double retour à la ligne entre les titres de niveau 2 et le début d'une liste à puce (qui commence toujours par "* " dans Docs)
+		// On remplace d'abord ces doubles retours à la ligne par un simple retour à la ligne
+		content = content.replace(/(## .+)\n\n(\* .+)/g, "$1\n$2");
+		// On remplace ensuite les "* " par des "- " pour que les listes à puce utilisent la syntaxe avec des tirets
+		content = content.replace(/^\* /gm, "- ");
 		return content;
 	}
 	return response.text();
