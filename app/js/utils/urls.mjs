@@ -74,7 +74,7 @@ function handleKnownHosts(url, shouldAddCorsProxy) {
 		shouldAddCorsProxy = false;
 		url = handleURLfromFramapad(url);
 	} else if (isDocsSuiteNumeriqueURL(url)) {
-		shouldAddCorsProxy = false;
+		shouldAddCorsProxy = true;
 		url = handleURLfromDocsSuiteNumerique(url);
 	}
 	return { url, shouldAddCorsProxy };
