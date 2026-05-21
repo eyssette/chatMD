@@ -64,7 +64,8 @@ describe("handleURL", () => {
 			],
 			secureMode: false,
 			authorizedChatbots: ["https://chatbot.com"],
-			corsProxy: "https://corsproxy.io/?url=",
+			corsProxy:
+				"https://n8n.incubateur.education.gouv.fr/webhook/cors-proxy?url=",
 		});
 	});
 
@@ -197,7 +198,7 @@ describe("handleURL", () => {
 		const options = {};
 		const result = handleURL(url, options);
 		expect(result).toBe(
-			"https://docs.numerique.gouv.fr/api/v1.0/documents/7066cdaa-16b4-4bd8-a06b-e1de20ae402d/formatted-content/?content_format=markdown",
+			"https://n8n.incubateur.education.gouv.fr/webhook/cors-proxy?url=https://docs.numerique.gouv.fr/api/v1.0/documents/7066cdaa-16b4-4bd8-a06b-e1de20ae402d/formatted-content/?content_format=markdown",
 		);
 	});
 
@@ -213,7 +214,7 @@ describe("handleURL", () => {
 		const options = { useCorsProxy: true };
 		const result = handleURL(url, options);
 		expect(result).toBe(
-			"https://corsproxy.io/?url=https://example.com/file.txt",
+			"https://n8n.incubateur.education.gouv.fr/webhook/cors-proxy?url=https://example.com/file.txt",
 		);
 	});
 
