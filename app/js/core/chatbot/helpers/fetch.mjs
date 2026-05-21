@@ -39,9 +39,20 @@ export async function fetchContentWithProxyIfNeeded(url) {
 			try {
 				return await fetchContent(proxiedUrl);
 			} catch (proxyFetchError) {
-				console.error("Problème avec le fetch initial :", initialFetchError);
-				console.error("Échec de l'ajout de l'extension .md :", mdFetchError);
-				console.error("Échec de l'ajout du proxy :", proxyFetchError);
+				// Si le proxy principal échoue, on essaie le proxy de secours
+				const fallbackUrl =
+					config.corsProxyFallback + url.replace(config.corsProxy, "");
+				try {
+					return await fetchContent(fallbackUrl);
+				} catch (fallbackFetchError) {
+					console.error("Problème avec le fetch initial :", initialFetchError);
+					console.error("Échec de l'ajout de l'extension .md :", mdFetchError);
+					console.error(
+						"Échec de l'ajout du proxy principal :",
+						proxyFetchError,
+					);
+					console.error("Échec du proxy de secours :", fallbackFetchError);
+				}
 			}
 		}
 	}
