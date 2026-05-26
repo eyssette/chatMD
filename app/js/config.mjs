@@ -66,11 +66,11 @@ config.shortcuts = [
 ];
 
 // Proxy de base pour les requêtes CORS
-config.corsProxy =
-	"https://n8n.incubateur.education.gouv.fr/webhook/cors-proxy?url=";
+config.corsProxy = "https://api.codetabs.com/v1/proxy?quest=";
 
 // Proxy de secours pour les requêtes CORS
-config.corsProxyFallback = "https://api.codetabs.com/v1/proxy?quest=";
+config.corsProxyFallback =
+	"https://n8n.incubateur.education.gouv.fr/webhook/cors-proxy?url=";
 
 // Par défaut les titres des réponses sont définis par des titres en markdown niveau 2
 config.responsesTitles = ["## "];
