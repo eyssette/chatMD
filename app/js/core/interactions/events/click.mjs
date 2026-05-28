@@ -182,11 +182,8 @@ function handleClickOnChatContainer(chatbot) {
 				chatbot.nextMessage.lastMessageFromBot = "";
 				chatbot.nextMessage.goto = "";
 				chatbot.nextMessage.needsProcessing = false;
-				// On récupère le contenu du message de l'utilisateur, en HTML si on utilise du Latex ou des éléments cachés avec la classe "hidden"
-				let messageFromLink =
-					yaml.maths || target.innerHTML.includes("hidden")
-						? target.innerHTML
-						: target.innerText;
+				// On récupère le contenu du message de l'utilisateur
+				let messageFromLink = target.innerHTML;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM
 				const linkDeobfuscated = yaml.obfuscate
 					? deobfuscateString(link.replace("#", ""))
