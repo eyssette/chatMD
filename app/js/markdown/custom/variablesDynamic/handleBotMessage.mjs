@@ -25,21 +25,22 @@ export function handleBotMessage(message, dynamicVariables, getLastMessage) {
 
 	// Au lieu de récupérer l'input, on peut récupérer le contenu d'un bouton qui a été cliqué et on assigne alors ce contenu à une variable : pour cela on intègre la variable dans le bouton, et on la masque avec la classe "hidden"
 
-	// On masque l'assignation de la variable dans le bouton
-	message = message.replaceAll(
-		/ (@[^\s]*?=.*?)</g,
-		'<span class="hidden">$1</span><',
-	);
 	// Cas où il n'y a qu'une simple assignation sans autre texte
 	// Exemple : 1. [@choix=Choix 1](cible)
 	// On affiche dans le bouton "Choix 1", et on garde dans un élément HTML caché l'assignation de valeur qui sera à traiter.
-	message = message.replaceAll(
-		/>(@[^\s]*?)=(.*?)</g,
-		'><span class="hidden">$1=$2</span>$2<',
+	message = message.replace(
+		/<a href="(.*)?">(@[^\s]*?)=(.*?)<\/a>/g,
+		'<a href="$1"><span class="hidden">$2=$3</span>$3</a>',
+	);
+
+	// On masque l'assignation de la variable dans le bouton
+	message = message.replace(
+		/ (@[^\s]*?=.*?)<\/a>/g,
+		'<span class="hidden">$1</span></a>',
 	);
 
 	// On masque aussi, dans le message qui s'est affiché suite au clic sur le bouton, l'assignation de la variable qui a été transmise à ce message
-	message = message.replaceAll(
+	message = message.replace(
 		/class="(.*)?">(@[^\s]*?=)/g,
 		(match, beforeVariable, variable) => {
 			return beforeVariable.includes("hidden")
