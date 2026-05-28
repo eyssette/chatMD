@@ -1,5 +1,28 @@
 # Changelog
 
+## 8.11.0 (2026-05-28)
+
+### Feat
+
+- **core**: text2speech possible (à configurer dans le YAML)
+
+### Fix
+
+- **markdown**: traitement des valeurs booléennes dans les variables dynamiques
+- **core**: autorisation du HTML dans les boutons
+- **js**: test de l'existence de certaines variables objet avant accès à une propriété
+- **core**: inversion de l'ordre des proxy (base et secours)
+- **core**: ajout d'un proxy de secours en cas d'échec du proxy principal
+- **core**: fix du patch pour Docs (gestion plus simple et plus large)
+- **core**: patch pour la gestion des déclencheurs dans Docs de LaSuite
+- **config**: changement du proxy CORS
+- **utils**: changement d'URL de l'API de Docs de LaSuite
+- **ai**: possibilité de désactiver maxTokens dans le YAML
+
+### Test
+
+- **unit**: changement de l'URL du proxy CORS
+
 ## 8.10.0 (2026-04-20)
 
 ### Feat
