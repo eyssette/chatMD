@@ -34,7 +34,7 @@ function truncateHistoryToMaxTokens(history) {
 
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(chatbot, userPrompt, options) {
-	if (!options.useConversationHistory === true) {
+	const isFirstMessage = options && options.isFirstMessage;
 		// On remet l'historique des échanges à zéro si on n'utilise pas l'historique
 		llmHistory = [];
 	}
@@ -159,7 +159,13 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 								const actionsPrefix = actionsHistory
 									? `${actionsHistory}|`
 									: "";
-								const messageMenu = `<div class="messageMenu" data-actions-history="${actionsPrefix}${actionLlmQuestion}|${llmAnswer}">☰</div>`;
+								const messageMenuAudio = yaml.text2speech
+									? '<span class="messageAudio">🔈</span>'
+									: "";
+								const messageMenuActions = isFirstMessage
+									? ""
+									: `<span class="messageMenu" data-actions-history="${actionsPrefix}${actionLlmQuestion}|${llmAnswer}">☰</span>`;
+								const messageMenu = `<div class="messageActions">${messageMenuAudio}${messageMenuActions}</div>`;
 								const messageMenuElement = document.createElement("div");
 								messageMenuElement.innerHTML = messageMenu;
 								messageElement.appendChild(messageMenuElement);

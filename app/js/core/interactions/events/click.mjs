@@ -114,6 +114,35 @@ function handleClickOnChatContainer(chatbot) {
 				</ul>`;
 			showModal(modalContent);
 		}
+		// Gestion des clics pour déclencher la lecture audio du message du chatbot
+		if (target.classList.contains("messageAudio")) {
+			const audioButton = target;
+			const messageElement = audioButton.closest(".message");
+			// On récupère le contenu texte de messageElement, en supprimant le contenu de .messageActions
+			const messageText = Array.from(messageElement.childNodes)
+				.filter(
+					(node) =>
+						!node.classList ||
+						(!node.classList.contains("messageActions") &&
+							!node.classList.contains("hidden")),
+				)
+				// On ajoute un point en fin de chaque ligne s'il n'y a pas de signe de ponctuation pour que la synthèse vocale fasse une pause à chaque ligne
+				.map((node) => node.textContent.trim().replace(/([^.!?:])$/gm, "$1.\n"))
+				.join("\n")
+				.trim();
+			const utterance = new SpeechSynthesisUtterance(messageText);
+			speechSynthesis.speak(utterance);
+			// L'icône du bouton de lecture audio se transforme en icône pour stopper l'audio pendant la lecture, et redevient une icône de lecture quand la lecture est terminée ou si on clique à nouveau dessus pour mettre en pause
+			if (audioButton.innerText === "🔈") {
+				audioButton.innerText = "⏹️";
+				utterance.onend = () => {
+					audioButton.innerText = "🔈";
+				};
+			} else {
+				audioButton.innerText = "🔈";
+				speechSynthesis.cancel();
+			}
+		}
 		while (target && target.tagName !== "A") {
 			target = target.parentElement;
 		}

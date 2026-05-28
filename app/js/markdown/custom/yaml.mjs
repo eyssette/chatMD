@@ -27,6 +27,7 @@ export let yaml = {
 	useLLM: config.yaml.useLLM,
 	userInput: config.yaml.userInput,
 	variables: config.yaml.variables,
+	text2speech: config.yaml.text2speech || false,
 };
 
 export let filterBadWords;

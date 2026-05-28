@@ -158,3 +158,7 @@ config.yaml.useLLM = { ...config.yaml.useLLM, ...RAG };
 config.defaultPauseTypeWriter = 300;
 
 config.defaultChoiceOptionText = "suite";
+
+// Text2Speech
+// Par défaut, la synthèse vocale est désactivée, mais on peut l'activer en mettant text2speech à true dans le YAML ou dans la configuration globale
+config.yaml.text2speech = false;

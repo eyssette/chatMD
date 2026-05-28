@@ -22,6 +22,7 @@ function handleBotResponse(chatbot) {
 // Création du message par le bot ou l'utilisateur
 export async function createMessage(chatbot, message, options) {
 	const originalMessage = message;
+	const isFirstMessage = options && options.isFirstMessage;
 	const isUser = options && options.isUser;
 	const changeExistingMessage = options && options.changeExistingMessage;
 	const disableTypewriter = options && options.disableTypewriter;
@@ -45,14 +46,15 @@ export async function createMessage(chatbot, message, options) {
 	const hasPromptInmessage = checkPromptsinMessage.useLLM;
 
 	// On affiche un bouton de menu pour chaque message du bot, sauf si on a l'option noMessageMenu, si on est en train de traiter une partie d'un message qui contient un mélange de prompt et de Markdown, ou si le message affiché est le message initial
-	if (
-		!isUser &&
-		!noMessageMenu &&
-		!hasPromptInmessage &&
-		message != chatbot.initialMessage
-	) {
+	if (!isUser && !noMessageMenu && !hasPromptInmessage) {
 		const actionsHistory = chatbot.actions.join(`|`);
-		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
+		const messageMenuAudio = yaml.text2speech
+			? '<span class="messageAudio">🔈</span>'
+			: "";
+		const messageMenuActions = isFirstMessage
+			? ""
+			: `<span class="messageMenu" data-actions-history="${actionsHistory}">☰</span>`;
+		const messageMenu = `<div class="messageActions">${messageMenuAudio}${messageMenuActions}</div>`;
 		message = message ? message + "\n\n" + messageMenu : "";
 	}
 
@@ -77,7 +79,13 @@ export async function createMessage(chatbot, message, options) {
 		chatbot.actions.push(llmAnswerEncoded);
 		const actionsHistory = chatbot.actions.join(`|`);
 		// On ajoute le bouton de menu avec l'historique des actions
-		const messageMenu = `<div class="messageMenu" data-actions-history="${actionsHistory}">☰</div>`;
+		const messageMenuAudio = yaml.text2speech
+			? '<span class="messageAudio">🔈</span>'
+			: "";
+		const messageMenuActions = isFirstMessage
+			? ""
+			: `<span class="messageMenu" data-actions-history="${actionsHistory}">☰</span>`;
+		const messageMenu = `<div class="messageActions">${messageMenuAudio}${messageMenuActions}</div>`;
 		messageElement.innerHTML = llmAnswer + messageMenu;
 	} else {
 		// Traitement des variables et blocs conditionnels qui restent à interpréter au moment de l'affichage du message

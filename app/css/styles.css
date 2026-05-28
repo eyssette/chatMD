@@ -421,12 +421,19 @@ iframe {
 	margin-right: 0.5em;
 }
 
-/* Bouton et fenêtre modale pour accéder au menu de chaque message */
+/* Barre de boutons en dessous de chaque message du bot */
+.messageActions {
+	display: flex;
+	gap: 1em;
+	justify-content: end;
+}
 
+.messageAudio,
 .messageMenu {
-	text-align: right;
 	cursor: pointer;
 }
+
+/* Bouton et fenêtre modale pour accéder au menu de chaque message */
 
 #systemModal {
 	position: fixed;

@@ -76,7 +76,7 @@ export async function initializeChatbot(chatbotData, yaml, params) {
 	await createMessage(chatbot, initialMessage, {
 		isUser: false,
 		disableTypewriter: hasActions,
-		noMessageMenu: true,
+		isFirstMessage: true,
 	});
 	// S'il y a un élément dans le message initial qui ne doit apparaître que la première fois qu'il est affiché, alors on supprime cet élément pour les prochaines fois
 	initialMessage = initialMessage
