@@ -34,7 +34,7 @@ export function processBlocks(
 
 				// Cas où la condition nécessite une évaluation différée
 				// Dans ce cas on réintègre le bloc conditionnel dans le message pour un traitement ultérieur
-				if (conditionCheck.differEvaluation == true) {
+				if (conditionCheck && conditionCheck.differEvaluation == true) {
 					// On marque les directives !Next qui sont dans des blocs conditionnels à évaluation différée pour qu'elles soient elles aussi traitées plus tard, au moment de l'affichage du message
 					if (subBlock.content.includes("!Next:")) {
 						subBlock.content = subBlock.content.replaceAll(

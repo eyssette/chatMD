@@ -35,6 +35,7 @@ function truncateHistoryToMaxTokens(history) {
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(chatbot, userPrompt, options) {
 	const isFirstMessage = options && options.isFirstMessage;
+	if (!options || !options.useConversationHistory === true) {
 		// On remet l'historique des échanges à zéro si on n'utilise pas l'historique
 		llmHistory = [];
 	}
