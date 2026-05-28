@@ -167,6 +167,16 @@ describe("tryConvertStringToNumber", () => {
 		const result = tryConvertStringToNumber(undefined);
 		expect(result).toBe(undefined);
 	});
+
+	it("returns true if the argument is the string 'true'", () => {
+		const result = tryConvertStringToNumber("true");
+		expect(result).toBe(true);
+	});
+
+	it("returns false if the argument is the string 'false'", () => {
+		const result = tryConvertStringToNumber("false");
+		expect(result).toBe(false);
+	});
 });
 
 describe("hasSentenceEndMark", () => {

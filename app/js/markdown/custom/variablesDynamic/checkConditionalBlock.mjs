@@ -100,7 +100,9 @@ export function checkConditionalBlock(
 				},
 			)
 			.replaceAll('""', '"')
-			.replace('"undefined"', "undefined");
+			.replaceAll('"undefined"', "undefined")
+			.replaceAll('"true"', "true")
+			.replaceAll('"false"', "false");
 		// Évalue l'expression de manière sécurisée
 		return {
 			result: evaluateExpression(condition, dynamicVariables),

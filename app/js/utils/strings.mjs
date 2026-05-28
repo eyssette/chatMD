@@ -7,10 +7,27 @@ export function startsWithAnyOf(string, array) {
 	}
 }
 
+function tryConvertStringToBoolean(input) {
+	if (input === "true") {
+		return true;
+	} else if (input === "false") {
+		return false;
+	}
+	return input;
+}
+
 export function tryConvertStringToNumber(input) {
+	// Si l'input n'est pas une chaîne de caractères, on la retourne telle quelle
 	if (typeof input !== "string") {
 		return input;
 	}
+
+	// Si la chaîne de caractères est "true" ou "false", on la convertit en booléen
+	const booleanValue = tryConvertStringToBoolean(input);
+	if (typeof booleanValue === "boolean") {
+		return booleanValue;
+	}
+
 	const number = parseFloat(input);
 	if (!isNaN(number) && number.toString() === input.toString().trim()) {
 		return number;
