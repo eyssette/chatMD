@@ -1,7 +1,12 @@
+import { checkTypewriterPreferences } from "../../../core/messages/typewriter/checkPreferences.mjs";
 import { sendButton, controlsElement } from "../../../shared/selectors.mjs";
 
 export function processDirectiveKeyboard(message, yaml, dynamicVariables) {
 	const match = message.match(/!Keyboard\s*:\s*(true|false)/i);
+	const directiveTypewriter = checkTypewriterPreferences(message);
+	const useTypeWriter =
+		directiveTypewriter && directiveTypewriter.useTypewriter;
+
 	if (match) {
 		message = message.replace(match[0], "");
 		const useKeyboard = match[1].toLowerCase() === "true";
@@ -11,6 +16,7 @@ export function processDirectiveKeyboard(message, yaml, dynamicVariables) {
 		// Cas où le clavier est désactivé par défaut
 		if (dynamicVariables["KEYBOARD"] == "true") {
 			// Cas où dans une réponse on décide d'afficher le clavier
+			sendButton.style.display = "block";
 			sendButton.innerHTML = "Envoyer";
 			document.body.classList.remove("hideControls");
 			if (yaml.footer === false) {
@@ -18,7 +24,12 @@ export function processDirectiveKeyboard(message, yaml, dynamicVariables) {
 			}
 			dynamicVariables["KEYBOARD"] = "false";
 		} else {
-			sendButton.innerHTML = "Afficher tout";
+			if (!useTypeWriter) {
+				sendButton.style.display = "none";
+			} else {
+				sendButton.style.display = "block";
+				sendButton.innerHTML = "Afficher tout";
+			}
 			document.body.classList.add("hideControls");
 			if (yaml.footer === false) {
 				controlsElement.style.setProperty("height", "50px", "important");
@@ -28,10 +39,16 @@ export function processDirectiveKeyboard(message, yaml, dynamicVariables) {
 		// Cas où le clavier est activé par défaut
 		if (dynamicVariables["KEYBOARD"] == "false") {
 			// Cas où dans une réponse on décide de désactiver le clavier
-			sendButton.innerHTML = "Afficher tout";
+			if (!useTypeWriter) {
+				sendButton.style.display = "none";
+			} else {
+				sendButton.style.display = "block";
+				sendButton.innerHTML = "Afficher tout";
+			}
 			document.body.classList.add("hideControls");
 			dynamicVariables["KEYBOARD"] = "true";
 		} else {
+			sendButton.style.display = "block";
 			sendButton.innerHTML = "Envoyer";
 			document.body.classList.remove("hideControls");
 		}
