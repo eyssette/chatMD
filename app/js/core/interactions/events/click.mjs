@@ -9,6 +9,7 @@ import { getChatbotResponse } from "../getChatbotResponse.mjs";
 import { showModal } from "./helpers/modal.mjs";
 import { getElementFromEnd } from "../../../utils/arrays.mjs";
 import { getParamsFromURL } from "../../../utils/urls.mjs";
+import { resetDynamicVariablesForMessage } from "../../../markdown/custom/variablesDynamic.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
 
@@ -169,7 +170,7 @@ function handleClickOnChatContainer(chatbot) {
 				const choiceOptions = document.querySelectorAll(".messageOptions li a");
 				// On récupère l'index du bouton de réponse sur lequel on a cliqué, parmi l'ensemble des boutons de réponse affichés
 				const indexTarget = Array.from(choiceOptions).indexOf(target) + 1;
-				// Permet de gérer les liens vides (retour au menu intial)
+				// Permet de gérer les liens vides (retour au menu initial)
 				// dans ce cas, il ne faut pas mettre le numéro du bouton, mais le texte du bouton
 				const isBlankTarget = link == "#";
 				if (!isBlankTarget) {
@@ -182,6 +183,36 @@ function handleClickOnChatContainer(chatbot) {
 				chatbot.nextMessage.lastMessageFromBot = "";
 				chatbot.nextMessage.goto = "";
 				chatbot.nextMessage.needsProcessing = false;
+
+				// Si on a l'option "rewind" dans le YAML, alors on peut revenir à n'importe quel message précédent en cliquant sur un lien, et tous les messages affichés après ce message sont supprimés, pour ne garder que le fil linéaire de la conversation à partir de ce message
+				if (yaml.rewind) {
+					const messageElement = target.closest(".message");
+					const messagesContainer = messageElement.parentElement;
+					const messages = Array.from(messagesContainer.children);
+					const indexMessage = messages.indexOf(messageElement);
+					const lastMessageIndex = messages.length - 1;
+					if (indexMessage < lastMessageIndex) {
+						// Si on a des messages après le message sur lequel on vient de cliquer, on les supprime
+						messages.forEach((message, index) => {
+							if (index > indexMessage) {
+								message.remove();
+							}
+						});
+						// On réinitialise les variables dynamiques à l'état où elles étaient pour le message sur lequel on vient de cliquer
+						// On remet les variables dynamiques à l'état dans lequel elles étaient au niveau du message sur lequel on revient
+						chatbot.dynamicVariables =
+							resetDynamicVariablesForMessage(indexMessage);
+						// On réécrit l'historique des actions du chatbot pour qu'il corresponde au nouvel état de la conversation après le retour en arrière
+						const messageMenu = messageElement.querySelector(".messageMenu");
+						const actionsHistory = messageMenu
+							? messageMenu.getAttribute("data-actions-history")
+							: "";
+						const lastAction = chatbot.actions[chatbot.actions.length - 1];
+						chatbot.actions = actionsHistory.split("|");
+						chatbot.actions.push(lastAction);
+					}
+				}
+
 				// On récupère le contenu du message de l'utilisateur
 				let messageFromLink = target.innerHTML;
 				// Si on a utilisé la directive !useLLM dans le lien d'un bouton : on renvoie vers une réponse par un LLM

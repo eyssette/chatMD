@@ -264,6 +264,10 @@ export function processYAML(markdownContent) {
 						});
 				}
 			}
+			// Gestion de l'option "rewind" ou "retourArrière" pour revenir à un message précédent
+			if (yaml.rewind || yaml.retourArrière) {
+				yaml.rewind = yaml.retourArrière ? yaml.retourArrière : yaml.rewind;
+			}
 			// Gestion de la connexion à une IA externe pour enrichir les réponses
 			if (yaml.useLLM.url || (yaml.utiliserLLM && yaml.utiliserLLM.url)) {
 				yaml.useLLM = yaml.utiliserLLM ? yaml.utiliserLLM : yaml.useLLM;
