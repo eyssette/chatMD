@@ -32,6 +32,8 @@ function truncateHistoryToMaxTokens(history) {
 	return truncatedHistory;
 }
 
+const sourceChatbot = window.location.href;
+
 // Fonction pour récupérer une réponse d'un LLM à partir d'un prompt
 export function getAnswerFromLLM(chatbot, userPrompt, options) {
 	const isFirstMessage = options && options.isFirstMessage;
@@ -72,6 +74,11 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			RAGinformations = RAGprompt + RAGinformations;
 		}
 		const APIurl = yaml.useLLM.url;
+		// Certaines API sont des API sécurisées qui nécessitent d'envoyer la source du chatbot pour vérifier que l'on a le droit d'accéder à l'API, on ajoute donc la source du chatbot dans le corps de la requête dans ce cas
+		const isSecureAPI = yaml && yaml.useLLM && yaml.useLLM.isSecureAPI;
+		if (isSecureAPI) {
+			bodyObject.source = sourceChatbot;
+		}
 		let APItype;
 		const isCohere = yaml && APIurl.includes("cohere");
 		if (isCohere) {
