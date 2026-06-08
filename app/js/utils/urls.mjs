@@ -166,7 +166,7 @@ export function goToNewChatbot(
 	if (urlNewChatbot && urlNewChatbot.indexOf(".") > -1) {
 		URLbaseChatbot =
 			!URLbaseChatbot || URLbaseChatbot == "null" ? "" : URLbaseChatbot;
-		const fullUrl = URLbaseChatbot + `/#${urlNewChatbot}`;
+		const fullUrl = URLbaseChatbot.replace(/\/$/, "") + `/#${urlNewChatbot}`;
 		window.open(fullUrl, "_blank");
 	} else {
 		window.alert("Veuillez entrer une URL valide.");
