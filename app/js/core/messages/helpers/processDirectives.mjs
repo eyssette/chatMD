@@ -4,6 +4,7 @@ import { processDirectiveNext } from "../../../markdown/custom/directives/next.m
 import { processDirectiveSelectNext } from "../../../markdown/custom/directives/selectNext.mjs";
 import { processDirectiveBot } from "../../../markdown/custom/directives/bot.mjs";
 import { processDirectiveKeyboard } from "../../../markdown/custom/directives/keyboard.mjs";
+import { processDirectiveConfetti } from "../../../markdown/custom/directives/confetti.mjs";
 
 export function processDirectives(chatbot, message, container) {
 	// Gestion de la directive !Bot: botName
@@ -22,6 +23,9 @@ export function processDirectives(chatbot, message, container) {
 
 	// Gestion de la directive !Keyboard : possibilité d'activer ou de désactiver le clavier au cas par cas
 	message = processDirectiveKeyboard(message, yaml, chatbot.dynamicVariables);
+
+	// Gestion de la directive !Confetti ou !Confettis
+	message = processDirectiveConfetti(message);
 
 	return message;
 }
