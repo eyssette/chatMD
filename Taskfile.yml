@@ -186,7 +186,7 @@ tasks:
   
   server:stop:
     cmds:
-      - kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null || true
+      - bash -c 'kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null' || true
 
   ecma:
     sources:
