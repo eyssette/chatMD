@@ -162,10 +162,12 @@ export function processYAML(markdownContent) {
 			} else if (typeof yaml.footer == "string") {
 				setContentOfFooter(footerElement, yaml.footer);
 			}
-			if (yaml.darkmode !== false) {
+			const params = getParamsFromURL();
+			const darkModeInURL = params && params.darkmode;
+			if (yaml.darkmode !== false && darkModeInURL !== "false") {
 				checkDarkModePreference();
 			}
-			const themeInURL = getParamsFromURL().theme;
+			const themeInURL = params.theme;
 			if (yaml.theme || themeInURL) {
 				const themeToApply = themeInURL ? themeInURL : yaml.theme;
 				// compatiblité avec l'ancien nom pour le thème sms
