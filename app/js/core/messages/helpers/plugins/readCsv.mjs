@@ -294,6 +294,25 @@ export async function processCsv(message) {
 			// Si une condition est présente, filtre les données du CSV
 			if (condition) {
 				data = filterTable(data, condition);
+				// Si la condition contient un searchScore, on ajoute une colonne supplémentaire avec le score de recherche pour chaque ligne
+				if (condition.includes("searchScore")) {
+					data = data.map((row) => {
+						const extractSearchScoreRegex = /searchScore\(([^)]+)\)/g;
+						const searchScoreMatches = [
+							...condition.matchAll(extractSearchScoreRegex),
+						];
+						if (searchScoreMatches.length > 0) {
+							const searchScoreExpr = searchScoreMatches[0][1];
+							const score = evaluateExpression(
+								transformExpression("searchScore(" + searchScoreExpr + ")"),
+								{
+									row,
+								},
+							);
+							return [...row, score];
+						}
+					});
+				}
 			}
 
 			// Si maxResults est petit et qu'on a beaucoup de données, limiter avant de trier
