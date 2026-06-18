@@ -156,6 +156,7 @@ export function removeAccents(str) {
 
 export function normalizeText(str, options) {
 	// Fonction pour normaliser une chaîne de caractères : tout en minuscules, sans accents, sans ponctuation
+	if (!str || typeof str !== "string") return "";
 	const keepCase = options && options.keepCase;
 	let normalized = keepCase ? str.trim() : str.toLowerCase().trim();
 	normalized = removeAccents(normalized);
