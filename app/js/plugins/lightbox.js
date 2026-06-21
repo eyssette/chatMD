@@ -4,6 +4,10 @@ function lightbox() {
 	const images = document.querySelectorAll(
 		"img[src]:not([src$='?nolightbox'])",
 	);
+	// Le curseur doit signifier que l'image est cliquable
+	images.forEach((image) => {
+		image.style.cursor = "pointer";
+	});
 	// On sélectionne tous les liens qui vont vers des PDFs
 	const pdfLinks = document.querySelectorAll("a[href$='.pdf']");
 
@@ -46,6 +50,7 @@ function lightbox() {
 	lightboxImage.style.width = "100%";
 	lightboxImage.style.maxHeight = "100%";
 	lightboxImage.style.objectFit = "contain";
+	lightboxImage.style.cursor = "pointer";
 
 	// Crée un élément <embed> pour afficher les PDFs
 	const lightboxPDF = document.createElement("embed");
