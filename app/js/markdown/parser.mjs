@@ -166,6 +166,7 @@ const converter = new Showdown.Converter({
 		showdownExtensionGenericAttributes,
 		allowInternalLinksWithSpaces,
 	],
+	disableForced4SpacesIndentedSublists: true,
 });
 
 function fixImageDimensionsCodiMD(md) {
