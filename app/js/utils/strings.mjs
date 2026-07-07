@@ -38,6 +38,10 @@ export function tryConvertStringToNumber(input) {
 
 // Pour vérifier si une chaîne de caractère se termine par un signe qui marque la fin d'un texte.
 export function hasSentenceEndMark(str) {
+	// Si ce n'est pas du texte, on retourne false
+	if (typeof str !== "string") {
+		return false;
+	}
 	const trimmed = str.trim();
 	const lastChar = trimmed.slice(-1);
 	return [".", "!", "?", "…", ">"].includes(lastChar);
