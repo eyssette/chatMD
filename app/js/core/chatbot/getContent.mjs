@@ -21,7 +21,15 @@ export async function getContent(defaultMd, params) {
 	// Si la source est une URL, on la traite pour pouvoir récupérer correctement la source du chatbot
 	let sourceChatBot = handleURL(hash);
 
-	if (!sourceChatBot && navigator.language.includes("en-")) {
+	const isChatmdWebApp =
+		window.location.href.includes("chatmd.") ||
+		window.location.href.includes("/chatMD");
+
+	const shouldUseEnglishVersion =
+		(isChatmdWebApp && navigator.language.includes("en-")) ||
+		params.lang === "en";
+
+	if (!sourceChatBot && shouldUseEnglishVersion) {
 		sourceChatBot = "https://chatmd.forge.apps.education.fr/_i18n/index.en.md";
 	}
 
