@@ -55,8 +55,9 @@ export async function displayMessage(md, options) {
 				processLightbox();
 			}
 			textFitForMathBlocks(messageHtmlElement);
-			if (!isUser) {
+			if (!isUser && !changeExistingMessage) {
 				// On scrolle vers le bas de la page pour voir la nouvelle réponse, avec un petit délai pour être sûr que le message a été ajouté au DOM
+				// Seulement si ce n'est pas un message de l'utilisateur et que ce n'est pas un message qui remplace un message existant (cas des formulaires de type "select" ou "input").
 				setTimeout(() => {
 					if (noTypewriter && !useCustomTarget) {
 						// Si l'effet typewriter a été désactivé et que ce n'est pas un message qui s'affiche à l'intérieur d'un message plus long (composé de prompts), on scrolle au début du dernier message de l'utilisateur
