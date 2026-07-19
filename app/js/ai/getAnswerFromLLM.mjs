@@ -143,13 +143,20 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 							messageElement.classList.add("message");
 							messageElement.classList.add("bot-message");
 						}
-						container.appendChild(messageElement);
+						if (shouldStreamLLMresponse) {
+							// Si on streame la réponse du LLM, on ajoute le message dans le container dès le début pour que l'utilisateur voit que le LLM est en train de répondre
+							container.appendChild(messageElement);
+						}
 						readStreamFromLLM(
 							response.body,
 							messageElement,
 							APItype,
 							options,
 						).then(() => {
+							if (!shouldStreamLLMresponse) {
+								// Si on ne streame pas la réponse du LLM, on ajoute le message dans le container à la fin pour que l'utilisateur voit la réponse complète du LLM
+								container.appendChild(messageElement);
+							}
 							const llmAnswer = messageElement.innerHTML;
 							llmHistory.push({ role: "user", content: userMessage });
 							llmHistory.push({ role: "assistant", content: llmAnswer });
