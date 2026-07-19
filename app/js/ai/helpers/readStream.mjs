@@ -58,8 +58,10 @@ function extractFullResponseText(responseData, APItype) {
 				}
 			} catch (error) {
 				console.error("Erreur lors de l'analyse du chunk n8n :", error);
+				return "";
 			}
 		}
+		return "";
 	}
 	// Pour les autres types d'API, on parse le JSON et on récupère le texte de la réponse, que l'on traite ensuite en fonction du type d'API
 	responseData = JSON.parse(responseData);
