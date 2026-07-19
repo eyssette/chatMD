@@ -40,6 +40,29 @@ async function simulateStreaming(fullText, chatMessage, delay = 15) {
 
 // Pour extraire le texte complet d'une réponse d'un LLM non-streamée
 function extractFullResponseText(responseData, APItype) {
+	// Cas particulier pour l'API n8n, sauf si la réponse a déjà été formatée au format OpenAI
+	const useOpenAIformat = responseData.startsWith('{"success":true');
+	if (APItype === "n8n" && !useOpenAIformat) {
+		const responseLines = responseData.split("\n");
+		const itemLine = responseLines.find((line) =>
+			line.startsWith('{"type":"item","content":'),
+		);
+		if (itemLine) {
+			try {
+				const itemObject = JSON.parse(itemLine);
+				if (itemObject.content) {
+					const contentObject = JSON.parse(itemObject.content);
+					if (contentObject.output) {
+						return contentObject.output;
+					}
+				}
+			} catch (error) {
+				console.error("Erreur lors de l'analyse du chunk n8n :", error);
+			}
+		}
+	}
+	// Pour les autres types d'API, on parse le JSON et on récupère le texte de la réponse, que l'on traite ensuite en fonction du type d'API
+	responseData = JSON.parse(responseData);
 	if (APItype === "cohere_v1") {
 		return responseData.text || "";
 	} else if (APItype === "ollama") {
@@ -49,6 +72,7 @@ function extractFullResponseText(responseData, APItype) {
 	} else if (
 		APItype === "openai" ||
 		APItype === "cohere_v2" ||
+		(APItype === "n8n" && useOpenAIformat) ||
 		typeof APItype === "undefined"
 	) {
 		if (responseData.choices) {
@@ -119,10 +143,9 @@ export async function readStreamFromLLM(
 				yaml.useLLM && yaml.useLLM.simulateStream === true;
 
 			if (!isStreamMode) {
-				// MOde non streamé
+				// Mode non streamé
 				// Extraction du texte complet
-				const fullResponse = JSON.parse(chunkString);
-				const fullText = extractFullResponseText(fullResponse, APItype);
+				const fullText = extractFullResponseText(chunkString, APItype);
 
 				if (!fullText) {
 					console.error("Impossible d'extraire le texte de la réponse");
@@ -184,6 +207,12 @@ export async function readStreamFromLLM(
 							continue;
 						}
 					}
+					if (APItype === "n8n") {
+						if (cleanedChunk.indexOf('"type":"end"') !== -1) {
+							LLMactive = false;
+							continue;
+						}
+					}
 
 					const parsingChunk = parseChunkSafely(
 						cleanedChunk,
@@ -228,6 +257,15 @@ export async function readStreamFromLLM(
 						const choice = chunkObject.choices && chunkObject.choices[0];
 						if (choice && choice.delta && choice.delta.content) {
 							const chunkMessage = choice.delta.content;
+							accumulatedChunks += chunkMessage;
+							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
+						}
+					} else if (APItype === "n8n") {
+						// On vérifie que le chunk n'est pas le chunk final qui contient tout le contenu de la réponse du LLM, sinon on ne l'affiche pas pour éviter d'avoir un doublon
+						const isFinalChunk =
+							chunkObject.content && chunkObject.content.includes('{"output"');
+						if (chunkObject.content && !isFinalChunk) {
+							const chunkMessage = chunkObject.content;
 							accumulatedChunks += chunkMessage;
 							chatMessage.innerHTML = markdownToHTML(accumulatedChunks);
 						}

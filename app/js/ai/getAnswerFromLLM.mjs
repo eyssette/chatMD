@@ -80,6 +80,10 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 			bodyObject.source = sourceChatbot;
 		}
 		let APItype;
+		const isn8n = yaml && APIurl.includes("n8n");
+		if (isn8n) {
+			APItype = "n8n";
+		}
 		const isCohere = yaml && APIurl.includes("cohere");
 		if (isCohere) {
 			if (APIurl.includes("v1")) {

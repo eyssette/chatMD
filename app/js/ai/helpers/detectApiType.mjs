@@ -2,6 +2,9 @@
 export function detectApiType(chunkElement) {
 	try {
 		const chunkObject = JSON.parse(chunkElement);
+		if (chunkObject.metadata && chunkObject.metadata.nodeName) {
+			return "n8n";
+		}
 		if (chunkObject.message) {
 			return "ollama";
 		} else {
