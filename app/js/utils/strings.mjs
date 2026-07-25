@@ -116,11 +116,11 @@ export function splitHtmlIntoChunks(html, chunkSize) {
 }
 
 export function encodeString(str) {
-	return window.btoa(encodeURIComponent(str));
+	return btoa(encodeURIComponent(str));
 }
 
 export function decodeString(str) {
-	return decodeURIComponent(window.atob(str));
+	return decodeURIComponent(atob(str));
 }
 
 // Obfuscation Unicode-safe

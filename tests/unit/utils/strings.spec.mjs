@@ -309,14 +309,14 @@ describe("encodeString", () => {
 	it("returns a Base64-encoded URI component for a regular string", () => {
 		const input = "Hello, world!";
 		const result = encodeString(input);
-		const expected = window.btoa(encodeURIComponent(input));
+		const expected = btoa(encodeURIComponent(input));
 		expect(result).toEqual(expected);
 	});
 
 	it("correctly encodes special characters", () => {
 		const input = "éà&%$";
 		const result = encodeString(input);
-		const expected = window.btoa(encodeURIComponent(input));
+		const expected = btoa(encodeURIComponent(input));
 		expect(result).toEqual(expected);
 	});
 
