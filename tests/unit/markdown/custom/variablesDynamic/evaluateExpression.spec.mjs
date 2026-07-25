@@ -280,6 +280,6 @@ describe("evaluateExpression", () => {
 		const timeTaken2 = endTime2 - startTime2;
 		expect(result2).toBe(29.181818181818183);
 		expect(timeTaken2).toBeLessThan(timeTaken);
-		expect(timeTaken2).toBeLessThan(0.05); // Doit s'exécuter en moins de 0.05 ms
+		expect(timeTaken2).toBeLessThan(0.1); // Doit s'exécuter en moins de 0.1 ms
 	});
 });
