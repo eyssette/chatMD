@@ -7,6 +7,7 @@ import {
 	goToNewChatbot,
 	normalizeUrl,
 } from "../../../app/js/utils/urls.mjs";
+import { getWindow } from "../.config/helpers.mjs";
 
 describe("normalizeUrl", function () {
 	const originalConfig = { ...config }; // Store the original config to restore after tests
@@ -256,6 +257,10 @@ describe("loadScript", () => {
 			onerror: null,
 		};
 
+		const window = getWindow();
+		global.window = window;
+		global.document = window.document;
+
 		createElementSpy = spyOn(document, "createElement").and.returnValue(
 			mockScript,
 		);
@@ -318,6 +323,9 @@ describe("loadCSS", () => {
 			onerror: null,
 			textContent: "",
 		};
+		const window = getWindow();
+		global.window = window;
+		global.document = window.document;
 
 		createElementSpy = spyOn(document, "createElement").and.callFake((tag) => {
 			mockElement.tagName = tag;
@@ -401,6 +409,10 @@ describe("goToNewChatbot", () => {
 	let alertSpy;
 
 	beforeEach(() => {
+		const window = getWindow();
+		global.window = window;
+		global.document = window.document;
+
 		openSpy = spyOn(window, "open");
 		alertSpy = spyOn(window, "alert");
 	});
