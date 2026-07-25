@@ -1,5 +1,44 @@
 # Changelog
 
+## 8.12.0 (2026-07-26)
+
+### Feat
+
+- **ai**: gestion de n8n en mode streamé et non-streamé
+- **plugin**: si on utilise readCsv et searchScore dans une condition, alors on ajoute une colonne aux données avec le résultat de searchScore (pour pouvoir l'utiliser dans un tri ou dans le template de sortie)
+- **markdown**: directive !Confetti pour lancer des confetti lors de l'affichage d'un message
+- **core**: option “rewind” (ou "retourArrière”) pour pouvoir revenir à un message précédent
+
+### Fix
+
+- **ai**: ajout de la réponse du LLM dans le DOM différent selon qu'on streame ou pas la réponse
+- **ai**: extractFullResponseText doit toujours renvoyer une chaîne de caractère, même vide
+- **core**: scroll vers le bas désactivé si on vient d'utiliser un élément "input" ou "select" pour définir une variable dynamique
+- **core**: utilisation de la version anglaise du fichier index.md seulement sur le site de chatMD ou si on a le paramètre "lang=en"
+- **utils**: gestion du cas où l'entrée n'est pas du texte pour la fonction hasSentenceEndMark()
+- **core**: possibilité d'utiliser des liens "link:mailto" dans les boutons d'option
+- **plugin**: curseur de souris "pointer" pour les images avec le plugin Lightbox
+- pas besoin de 4 espaces pour faire des sous listes indentées
+- **nlp**: gestion des erreurs dans la fonction pour normaliser un texte
+- **params**: possibilité de désactiver le darkmode dans les paramètres URL avec "darkmode=false"
+- **markdown**: options possibles pour la direction !Confetti
+- **utils**: pas de double slash dans l'URL quand on ouvre un chatbot
+- **ai**: possibilité d'utiliser une API sécurisée en incluant la source du chatbot dans l'appel au LLM pour vérifier si cette source peut faire appel à cette API
+- **markdown**: pas besoin du bouton "Afficher tout" (sendButton) si le clavier et l'effet typewriter sont désactivés
+- **core**: fix du traitement des assignations de variables dans les boutons et de la gestion des actions dans l'historique dans cette situation
+
+### Chore
+
+- atob et btoa utilisés sans préfixe "window" (pour éviter un problème dans les tests unitaires)
+- update package-lock.json
+- fix de la tâche server:stop
+- update version canvas-confetti
+
+### Test
+
+- **unit**: utilisation d'un helper getWindow() pour Jasmine + réorganisation des beforeEach => tests beaucoup plus rapides
+- réévaluation d'un paramètre de performance
+
 ## 8.11.0 (2026-05-28)
 
 ### Feat
