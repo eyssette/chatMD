@@ -3,6 +3,7 @@ import path from "node:path";
 import globals from "globals";
 import js from "@eslint/js";
 import codeceptjs from "eslint-plugin-codeceptjs";
+import stylistic from "@stylistic/eslint-plugin";
 
 const gherkinGlobals = {
 	Given: "readonly",
@@ -24,6 +25,9 @@ export default defineConfig([
 			globals: {
 				...globals.browser,
 			},
+		},
+		plugins: {
+			"@stylistic": stylistic,
 		},
 	},
 	// Règles spécifiques pour les fichiers JS de l'application
@@ -47,23 +51,31 @@ export default defineConfig([
 		},
 	},
 	js.configs.recommended,
+	stylistic.configs.recommended,
 	{
 		rules: {
-			semi: ["error", "always"],
-			indent: "off",
-			quotes: ["error", "double", { avoidEscape: true }],
-			"no-multi-spaces": ["error"],
-			"no-trailing-spaces": ["error"],
-			"comma-spacing": ["error"],
-			"array-bracket-spacing": ["error"],
-			"object-curly-spacing": ["error", "always"],
-			"space-infix-ops": ["error"],
 			camelcase: ["error"],
-			"key-spacing": ["error"],
 			"no-duplicate-imports": ["error"],
-			"padded-blocks": ["error", "never"],
-			"space-before-blocks": ["error"],
-			"keyword-spacing": ["error"],
+			"@stylistic/semi": ["error", "always"],
+			"@stylistic/indent": ["off"],
+			"@stylistic/quotes": ["error", "double", { avoidEscape: true }],
+			"@stylistic/no-multi-spaces": ["error"],
+			"@stylistic/no-trailing-spaces": ["error"],
+			"@stylistic/comma-spacing": ["error"],
+			"@stylistic/array-bracket-spacing": ["error"],
+			"@stylistic/object-curly-spacing": ["error", "always"],
+			"@stylistic/space-infix-ops": ["error"],
+			"@stylistic/key-spacing": ["error"],
+			"@stylistic/padded-blocks": ["error", "never"],
+			"@stylistic/space-before-blocks": ["error"],
+			"@stylistic/keyword-spacing": ["error"],
+			"@stylistic/no-tabs": ["error", { allowIndentationTabs: true }],
+			"@stylistic/operator-linebreak": ["off"],
+			"@stylistic/arrow-parens": ["error", "always"],
+			"@stylistic/spaced-comment": ["error", "always"],
+			"@stylistic/brace-style": ["error", "1tbs", { allowSingleLine: true }],
+			"@stylistic/quote-props": ["off"],
+			"@stylistic/indent-binary-ops": ["off"],
 		},
 	},
 ]);

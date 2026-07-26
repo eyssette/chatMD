@@ -44,8 +44,8 @@ export function setKeypressListener() {
 					adjustFooterToInputHeight();
 				}
 			}
-		} // Si on a appuyé sur une autre touche qu'Enter
-		else if (
+		} else if (
+			// Si on a appuyé sur une autre touche qu'Enter
 			userInput.parentElement.parentElement.classList.contains("hideControls")
 		) {
 			// Si l'userInput est caché : on désactive l'entrée clavier (sauf pour Enter qui permet toujours d'afficher plus vite la suite)

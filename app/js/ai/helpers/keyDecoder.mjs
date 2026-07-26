@@ -10,9 +10,9 @@ function xorEncryptDecrypt(message, password) {
 }
 
 // function xorEncrypt(message, passwordApiKey) {
-// 	const xorMessage = xorEncryptDecrypt(message, passwordApiKey);
-// 	const xorMessageEncoded = btoa(xorMessage);
-// 	return xorMessageEncoded;
+//   const xorMessage = xorEncryptDecrypt(message, passwordApiKey);
+//   const xorMessageEncoded = btoa(xorMessage);
+//   return xorMessageEncoded;
 // }
 
 function xorDecrypt(xorMessageEncoded, passwordApiKey) {

@@ -352,12 +352,12 @@ describe("tokenize", function () {
 	it("applies bonus weight when token is in the title and prioritization is enabled", function () {
 		const result1 = tokenize("elephant", {
 			prioritizeTokensInTitle: true,
-			//boostIfKeywordsInTitle: true,
+			// boostIfKeywordsInTitle: true,
 			titleResponse: "The elephant in the Room",
 		});
 		const result2 = tokenize("elephant", {
 			prioritizeTokensInTitle: true,
-			//boostIfKeywordsInTitle: false,
+			// boostIfKeywordsInTitle: false,
 			titleResponse: "The Tiger in the Room",
 		});
 		const match1 = result1.find((t) => t.token === "elephant");
@@ -429,7 +429,7 @@ describe("createVector", function () {
 	it("respects tokenization options (e.g., title boost)", function () {
 		const options = {
 			prioritizeTokensInTitle: true,
-			//boostIfKeywordsInTitle: true,
+			// boostIfKeywordsInTitle: true,
 			titleResponse: "The Elephant",
 		};
 		const result1 = createVector("elephant", options);

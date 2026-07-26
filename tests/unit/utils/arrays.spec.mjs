@@ -238,16 +238,6 @@ describe("shouldBeRandomized", () => {
 		const result = shouldBeRandomized(input);
 		expect(result).toBeFalse();
 	});
-
-	// it("handles mixed types without crashing", () => {
-	// 	const input = [
-	// 		["Text", 0, "not-a-boolean"],
-	// 		["Another", 1, undefined],
-	// 		["Final", 2, true],
-	// 	];
-	// 	const result = shouldBeRandomized(input);
-	// 	expect(result).toBeTrue();
-	// });
 });
 
 describe("getElementFromEnd", () => {

@@ -112,7 +112,7 @@ config.yaml = {
 	searchInContent: false,
 	style: "",
 	theme: "",
-	//useLLM : défini plus bas
+	// useLLM : défini plus bas
 	typeWriter: true,
 	userInput: true,
 	variables: "",
