@@ -4,6 +4,8 @@ import globals from "globals";
 import js from "@eslint/js";
 import codeceptjs from "eslint-plugin-codeceptjs";
 import stylistic from "@stylistic/eslint-plugin";
+import unicorn from "eslint-plugin-unicorn";
+import e18e from "@e18e/eslint-plugin";
 
 const gherkinGlobals = {
 	Given: "readonly",
@@ -14,6 +16,17 @@ const gherkinGlobals = {
 };
 
 const gitignorePath = path.resolve(import.meta.dirname, ".gitignore");
+
+const asWarn = (rules) =>
+	Object.fromEntries(
+		Object.entries(rules).map(([rule, config]) => {
+			if (Array.isArray(config)) {
+				return [rule, ["warn", ...config.slice(1)]];
+			}
+
+			return [rule, config === "error" ? "warn" : config];
+		}),
+	);
 
 export default defineConfig([
 	// On ignore certains fichiers et dossiers qui ne sont pas pertinents pour l'analyse ESLint
@@ -36,6 +49,14 @@ export default defineConfig([
 		languageOptions: {
 			ecmaVersion: 2018,
 		},
+		plugins: {
+			unicorn,
+			e18e,
+		},
+		rules: {
+			...asWarn(unicorn.configs.recommended.rules),
+			...asWarn(e18e.configs.recommended.rules),
+		},
 	},
 	// Règles spécifiques pour les fichiers de test
 	{
@@ -50,10 +71,10 @@ export default defineConfig([
 			ecmaVersion: 2020,
 		},
 	},
-	js.configs.recommended,
-	stylistic.configs.recommended,
 	{
 		rules: {
+			...js.configs.recommended.rules,
+			...stylistic.configs.recommended.rules,
 			camelcase: ["error"],
 			"no-duplicate-imports": ["error"],
 			"@stylistic/semi": ["error", "always"],
