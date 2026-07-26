@@ -349,7 +349,7 @@ export async function processCsv(message) {
 			message = message.replace(fullMatch, result);
 		} else {
 			// Si le parsing du fichier a échoué, on remplace le bloc par un message d'erreur
-			const errorMessage = `\n⚠️ Erreur d'accès aux données\n`;
+			const errorMessage = "\n⚠️ Erreur d'accès aux données\n";
 			message = message.replace(fullMatch, errorMessage);
 		}
 	}

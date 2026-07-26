@@ -47,7 +47,7 @@ theme: sms
 ---
 `;
 
-		const expectedOutput = ``;
+		const expectedOutput = "";
 
 		const result = removeYaml(mdOnlyYaml);
 		expect(result).toBe(expectedOutput);
@@ -61,7 +61,7 @@ theme: sms
 
 This document has no titles, only content.`;
 
-		const expectedOutput = `This document has no titles, only content.`;
+		const expectedOutput = "This document has no titles, only content.";
 
 		const result = removeYaml(mdNoTitles);
 		expect(result).toBe(expectedOutput);

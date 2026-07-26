@@ -287,6 +287,7 @@ describe("loadScript", () => {
 			mockScript.onerror(); // simulate script loading failure
 			await promise;
 		} catch (e) {
+			if (e) console(e);
 			errorCaught = true;
 		}
 
@@ -360,6 +361,7 @@ describe("loadCSS", () => {
 			mockElement.onerror(); // simulate error
 			await promise;
 		} catch (e) {
+			if (e) console(e);
 			rejected = true;
 		}
 
@@ -419,7 +421,7 @@ describe("goToNewChatbot", () => {
 
 	it("opens a new tab with the correct chatbot URL when given a valid chatbot path and no origin", () => {
 		goToNewChatbot("my.bot.fr");
-		const expectedUrl = `/#my.bot.fr`;
+		const expectedUrl = "/#my.bot.fr";
 		const baseURL = window.location.origin + window.location.pathname;
 		expect(openSpy).toHaveBeenCalledWith(baseURL + expectedUrl, "_blank");
 		expect(alertSpy).not.toHaveBeenCalled();
@@ -429,7 +431,7 @@ describe("goToNewChatbot", () => {
 		const customOrigin = "https://custom-origin.com";
 		goToNewChatbot("my.bot", customOrigin);
 
-		const expectedUrl = `https://custom-origin.com/#my.bot`;
+		const expectedUrl = "https://custom-origin.com/#my.bot";
 		expect(openSpy).toHaveBeenCalledWith(expectedUrl, "_blank");
 		expect(alertSpy).not.toHaveBeenCalled();
 	});

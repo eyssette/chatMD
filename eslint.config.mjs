@@ -1,24 +1,54 @@
-import { defineConfig, globalIgnores } from "eslint/config";
+import { defineConfig, globalIgnores, includeIgnoreFile } from "eslint/config";
+import path from "node:path";
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import codeceptjsPlugin from "eslint-plugin-codeceptjs";
+import js from "@eslint/js";
+import codeceptjs from "eslint-plugin-codeceptjs";
+
+const gherkinGlobals = {
+	Given: "readonly",
+	When: "readonly",
+	Then: "readonly",
+	And: "readonly",
+	But: "readonly",
+};
+
+const gitignorePath = path.resolve(import.meta.dirname, ".gitignore");
 
 export default defineConfig([
-	globalIgnores(["app/js/lib/**"]),
+	// On ignore certains fichiers et dossiers qui ne sont pas pertinents pour l'analyse ESLint
+	globalIgnores(["app/js/lib/**", "**/*.min.js", "app/js/plugins/**/*"]),
+	includeIgnoreFile(gitignorePath),
+
 	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
-				...globals.jasmine,
 			},
+		},
+	},
+	// Règles spécifiques pour les fichiers JS de l'application
+	{
+		files: ["app/**/*.{js,mjs}"],
+		languageOptions: {
 			ecmaVersion: 2018,
 		},
 	},
-	pluginJs.configs.recommended,
+	// Règles spécifiques pour les fichiers de test
 	{
-		files: ["/app/**/*.js", "/app/**/*.mjs", "tests/**/*.*js"],
+		files: ["tests/**/*", "./*.{js,mjs}"],
+		languageOptions: {
+			globals: {
+				...globals.node,
+				...globals.jasmine,
+				...codeceptjs.environments.codeceptjs.globals,
+				...gherkinGlobals,
+			},
+			ecmaVersion: 2020,
+		},
+	},
+	js.configs.recommended,
+	{
 		rules: {
-			...codeceptjsPlugin.configs.recommended.rules,
 			semi: ["error", "always"],
 			indent: "off",
 			quotes: ["error", "double", { avoidEscape: true }],

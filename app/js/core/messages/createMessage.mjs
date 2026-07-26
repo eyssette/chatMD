@@ -47,7 +47,7 @@ export async function createMessage(chatbot, message, options) {
 
 	// On affiche un bouton de menu pour chaque message du bot, sauf si on a l'option noMessageMenu, si on est en train de traiter une partie d'un message qui contient un mélange de prompt et de Markdown, ou si le message affiché est le message initial
 	if (!isUser && !noMessageMenu && !hasPromptInmessage) {
-		const actionsHistory = chatbot.actions.join(`|`);
+		const actionsHistory = chatbot.actions.join("|");
 		const messageMenuAudio = yaml.text2speech
 			? '<span class="messageAudio">🔈</span>'
 			: "";
@@ -77,7 +77,7 @@ export async function createMessage(chatbot, message, options) {
 		const llmAnswerEncoded = "llmr:" + encodeString(llmAnswer);
 		chatbot.actions.push(llmQuestionEncoded);
 		chatbot.actions.push(llmAnswerEncoded);
-		const actionsHistory = chatbot.actions.join(`|`);
+		const actionsHistory = chatbot.actions.join("|");
 		// On ajoute le bouton de menu avec l'historique des actions
 		const messageMenuAudio = yaml.text2speech
 			? '<span class="messageAudio">🔈</span>'

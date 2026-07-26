@@ -195,7 +195,5 @@ tasks:
       - npx es-check es2018 "{{.APP_FOLDER}}/js/**/*.mjs" --module
 
   lint:
-    sources:
-      - "{{.APP_FOLDER}}/js/**/*.mjs"
     cmds:
-      - npx eslint "app/**/*.mjs"
+      - npx eslint .

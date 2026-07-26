@@ -98,7 +98,7 @@ describe("initializeChatbot", () => {
 			typeWriter: false,
 		};
 		const params = null;
-		const chatbot = await initializeChatbot(chatbotData, yaml, params);
+		await initializeChatbot(chatbotData, yaml, params);
 
 		expect(document.getElementById("chatbot-name").innerHTML).toBe(
 			"<strong>Bold</strong> and <em>Italic</em> Chatbot",

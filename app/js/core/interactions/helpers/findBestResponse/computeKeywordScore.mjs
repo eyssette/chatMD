@@ -11,7 +11,7 @@ export function computeKeywordScore(userInput, keyword, next, options = {}) {
 	let distanceScore = 0;
 	let matchScore = 0;
 	const MATCH_SCORE_IDENTITY =
-		options && options.identity_bonus ? options.identity_bonus : 0;
+		options && options.identityBonus ? options.identityBonus : 0;
 	// On prend en compte les keywords négatifs (on ne doit pas les voir dans la question de l'utilisateur)
 	const isNegativeKeyword = keyword.startsWith("! ");
 	keyword = keyword.replace(/^!\s/, "");

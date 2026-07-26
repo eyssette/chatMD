@@ -23,7 +23,7 @@ export async function displayMessage(md, options) {
 	const checkTypeWriter = checkTypewriterPreferences(md);
 	md = checkTypeWriter.md;
 	const isMessageWithFormElement =
-		md.includes("<select ") || md.includes(`<input type="text"`);
+		md.includes("<select ") || md.includes('<input type="text"');
 	const noTypewriter =
 		disableTypewriter ||
 		checkTypeWriter.useTypewriter === false ||

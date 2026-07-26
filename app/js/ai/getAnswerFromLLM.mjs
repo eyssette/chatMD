@@ -63,11 +63,14 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 		let bodyObject = {
 			model: yaml.useLLM.model,
 			stream: shouldStreamLLMresponse,
+			/* eslint-disable-next-line camelcase */
 			frequency_penalty: 0,
+			/* eslint-disable-next-line camelcase */
 			presence_penalty: 0,
 			temperature: 0.7,
 		};
 		if (yaml.useLLM.maxTokens) {
+			/* eslint-disable-next-line camelcase */
 			bodyObject.max_tokens = yaml.useLLM.maxTokens;
 		}
 		if (RAGinformations.length > 0) {
@@ -102,6 +105,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 		if (APItype == "cohere_v1") {
 			bodyObject.preamble = yaml.useLLM.systemPrompt;
 			if (options.useConversationHistory) {
+				/* eslint-disable-next-line camelcase */
 				bodyObject.chat_history = recentHistory.map((item) => {
 					return {
 						role: item.role == "user" ? "user" : "chatbot",
@@ -167,7 +171,7 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 									actionsLatest = chatbot.actions.pop();
 								}
 								actionsLatest = encodeString(actionsLatest.replace(/^e:/, ""));
-								const actionsHistory = chatbot.actions.join(`|`);
+								const actionsHistory = chatbot.actions.join("|");
 								const actionLlmQuestion = `llmq:${actionsLatest}`;
 								// On récupère le contenu de la réponse générée par le LLM
 								const actionLlmAnswer = `llmr:${encodeString(llmAnswer)}`;

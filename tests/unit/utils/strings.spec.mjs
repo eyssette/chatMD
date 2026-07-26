@@ -284,10 +284,11 @@ describe("splitHtmlIntoChunks", () => {
 	});
 
 	it("handles single tags HTML element correctly", () => {
-		const html = `<div>Hello <br />World<img src="test"/></div><span><img src="test"/></span>`;
+		const html =
+			'<div>Hello <br />World<img src="test"/></div><span><img src="test"/></span>';
 		const result = splitHtmlIntoChunks(html, 4);
 		expect(result).toBe(
-			`<div>\`Hell\`\`o \`<br />\`Worl\`\`d\`<img src="test"/></div><span><img src="test"/></span>`,
+			'<div>`Hell``o `<br />`Worl``d`<img src="test"/></div><span><img src="test"/></span>',
 		);
 	});
 

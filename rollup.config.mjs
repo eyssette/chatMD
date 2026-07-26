@@ -92,7 +92,6 @@ const onwarn = (warning) => {
 
 // En mode DEBUG, on ne change pas le nom des variables, afin de pouvoir les vérifier
 const optionsTerser =
-	// eslint-disable-next-line no-undef
 	process.env.DEBUG == "true"
 		? { mangle: false, ecma: ECMA_VERSION }
 		: { ecma: ECMA_VERSION };

@@ -226,14 +226,14 @@ describe("evaluateExpression", () => {
 	it("returns correct result for mainTopic function", () => {
 		expect(
 			evaluateExpression(
-				`mainTopic("Je m'intéresse beaucoup à la photographie")`,
+				'mainTopic("Je m\'intéresse beaucoup à la photographie")',
 				dynamicVariables,
 			),
 		).toBe("photographie");
 
 		expect(
 			evaluateExpression(
-				`mainTopic("Je voudrais des informations sur les vélos électriques")`,
+				'mainTopic("Je voudrais des informations sur les vélos électriques")',
 				dynamicVariables,
 			),
 		).toBe("vélos électriques");
@@ -246,7 +246,8 @@ describe("evaluateExpression", () => {
 		expect(() => {
 			evaluateExpression('fetch("http://malicious.com")', dynamicVariables);
 		}).toThrow();
-		const evilCode = `const fs=require("fs");fs.writeFileSync("hacked.txt", "You have been hacked!");`;
+		const evilCode =
+			'const fs=require("fs");fs.writeFileSync("hacked.txt", "You have been hacked!");';
 		expect(() => {
 			evaluateExpression(evilCode, dynamicVariables);
 		}).toThrow();
@@ -266,7 +267,8 @@ describe("evaluateExpression", () => {
 
 	// Measure performance
 	it("returns result within acceptable time for complex expressions", () => {
-		const complexExpression = `(Math.max(tryConvertStringToNumber(dynamicVariables["num1"]), tryConvertStringToNumber(dynamicVariables["num2"])) * Math.min(tryConvertStringToNumber(dynamicVariables["num1"]), tryConvertStringToNumber(dynamicVariables["num2"]))) / (Math.abs(tryConvertStringToNumber(dynamicVariables["num2"]) - tryConvertStringToNumber(dynamicVariables["num1"])) + 1) + JSON.parse(dynamicVariables["jsonObj"]).numbers[0] + (dynamicVariables["str1"].length + dynamicVariables["str2"].length)`;
+		const complexExpression =
+			'(Math.max(tryConvertStringToNumber(dynamicVariables["num1"]), tryConvertStringToNumber(dynamicVariables["num2"])) * Math.min(tryConvertStringToNumber(dynamicVariables["num1"]), tryConvertStringToNumber(dynamicVariables["num2"]))) / (Math.abs(tryConvertStringToNumber(dynamicVariables["num2"]) - tryConvertStringToNumber(dynamicVariables["num1"])) + 1) + JSON.parse(dynamicVariables["jsonObj"]).numbers[0] + (dynamicVariables["str1"].length + dynamicVariables["str2"].length)';
 		const startTime = performance.now();
 		const result = evaluateExpression(complexExpression, dynamicVariables);
 		const endTime = performance.now();

@@ -58,7 +58,6 @@ function processAdmonition(text, level) {
 					return;
 				}
 				// On construit le HTML de l'admonition
-				let admonitionHTML = "";
 				let contentAdmonition = admonition
 					.replace(admonitionFirstLine, "")
 					.trim();
@@ -67,12 +66,11 @@ function processAdmonition(text, level) {
 					0,
 					contentAdmonition.lastIndexOf("\n"),
 				);
-				if (isCollapsible) {
-					// On affiche d'un coup, sans effet typewriter, le contenu interne de l'admonition si elle est collapsible
-					admonitionHTML = `<div class="admonition ${typeAdmonition}">\`<details><summary class="admonitionTitle">${titleAdmonition}</summary><div class="admonitionContent">\n${contentAdmonition}\n</div></details>\`</div>\n`;
-				} else {
-					admonitionHTML = `<div class="admonition ${typeAdmonition}"><div class="admonitionTitle">${titleAdmonition}</div><div class="admonitionContent">\n${contentAdmonition}\n</div></div>\n`;
-				}
+				// On affiche d'un coup, sans effet typewriter, le contenu interne de l'admonition si elle est collapsible
+				const admonitionHTML = isCollapsible
+					? `<div class="admonition ${typeAdmonition}">\`<details><summary class="admonitionTitle">${titleAdmonition}</summary><div class="admonitionContent">\n${contentAdmonition}\n</div></details>\`</div>\n`
+					: `<div class="admonition ${typeAdmonition}"><div class="admonitionTitle">${titleAdmonition}</div><div class="admonitionContent">\n${contentAdmonition}\n</div></div>\n`;
+
 				text = text.replace(admonition, admonitionHTML);
 			}
 		});

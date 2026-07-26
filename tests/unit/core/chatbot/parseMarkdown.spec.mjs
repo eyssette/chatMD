@@ -317,7 +317,8 @@ This is the first response for @{_userName}.
 	});
 
 	it("parses a Markdown file with \r\n line endings", () => {
-		const md = `# Chatbot Title\r\n\r\nWelcome to the chatbot!\r\n\r\n## Response 1\r\n\r\nThis is the first response.\r\n`;
+		const md =
+			"# Chatbot Title\r\n\r\nWelcome to the chatbot!\r\n\r\n## Response 1\r\n\r\nThis is the first response.\r\n";
 		const chatbotData = parseMarkdown(md, defaultYAML);
 		expect(chatbotData.title).toBe("Chatbot Title");
 		expect(chatbotData.initialMessage.content).toEqual([

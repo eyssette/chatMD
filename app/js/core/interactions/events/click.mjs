@@ -1,5 +1,5 @@
 import { yaml } from "../../../markdown/custom/yaml.mjs";
-import { goToNewChatbot } from "../../../utils/urls.mjs";
+import { goToNewChatbot, getParamsFromURL } from "../../../utils/urls.mjs";
 import { deobfuscateString, sanitizeHtml } from "../../../utils/strings.mjs";
 import { createMessage } from "../../messages/createMessage.mjs";
 import { userInput, sendButton } from "../../../shared/selectors.mjs";
@@ -8,7 +8,6 @@ import { responseToSelectedChoiceOption } from "../helpers/choiceOptions.mjs";
 import { getChatbotResponse } from "../getChatbotResponse.mjs";
 import { showModal } from "./helpers/modal.mjs";
 import { getElementFromEnd } from "../../../utils/arrays.mjs";
-import { getParamsFromURL } from "../../../utils/urls.mjs";
 import { resetDynamicVariablesForMessage } from "../../../markdown/custom/variablesDynamic.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];

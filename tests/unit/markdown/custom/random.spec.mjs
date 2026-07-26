@@ -11,7 +11,7 @@ describe("processRandomMessage", () => {
 	});
 
 	it('picks one element from multiple messages separated by "\n---\n"', () => {
-		const variants = [`Hi!`, `Hello!`, `Hey!`];
+		const variants = ["Hi!", "Hello!", "Hey!"];
 		const input = `
 ${variants[0]}
 ---
@@ -79,7 +79,7 @@ ${choiceOptionsHTML}
 	});
 
 	it("ignores empty or whitespace-only parts between separators or before choiceOptions", () => {
-		const variants = [`Real message 1`, `Real message 2`];
+		const variants = ["Real message 1", "Real message 2"];
 		const input = `
 ${variants[0]}
 

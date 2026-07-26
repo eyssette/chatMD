@@ -113,7 +113,7 @@ export function computeResponseScore({
 	// On calcule les scores pour chaque keyword
 	for (let keyword of keywords) {
 		const keywordScore = computeKeywordScore(userInput, keyword, next, {
-			identity_bonus: MATCH_SCORE_IDENTITY,
+			identityBonus: MATCH_SCORE_IDENTITY,
 		});
 		matchScore = matchScore + keywordScore.matchScore;
 		distanceScore = distanceScore + keywordScore.distanceScore;
@@ -131,7 +131,6 @@ export function computeResponseScore({
 
 	// On retourne le score final
 	matchScore = adjustedScore.matchScore;
-	bestDistanceScore = adjustedScore.bestDistanceScore;
 
 	return matchScore;
 }
