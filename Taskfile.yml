@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   APP_FOLDER: "app"
@@ -70,7 +70,7 @@ tasks:
   init-repo:
     cmds:
       - git remote add chatmd git@forge.apps.education.fr:chatMD/chatMD.forge.apps.education.fr.git
-      - git remote add apps git@forge.apps.education.fr:eyssette/chatMD.git 
+      - git remote add apps git@forge.apps.education.fr:eyssette/chatMD.git
       - git remote add drane git@forge.apps.education.fr:drane-lyon/chatmd.git
       - git remote add github git@github.com:eyssette/chatMD.git
       - git remote add gitlab git@gitlab.com:chatmd/chatmd.gitlab.io.git
@@ -85,7 +85,7 @@ tasks:
       - task: lint
       - task: tests
       - for: { var: GIT_REPO_NAMES }
-        cmd:  git push {{.ITEM}} && git push {{.ITEM}} --tags
+        cmd: git push {{.ITEM}} && git push {{.ITEM}} --tags
 
   tag:
     desc: "Crée un tag avec pour date du tag la date du commit (usage: task tag -- <commit> <tag>)"
@@ -139,13 +139,13 @@ tasks:
           '
         silent: true
       - task: server:start
-      - defer: {task: server:stop}
+      - defer: { task: server:stop }
       - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)'
 
   tests:e2e:current:
     cmds:
       - task: server:start
-      - defer: {task: server:stop}
+      - defer: { task: server:stop }
       - npx codeceptjs run --steps --grep '(?=.*)^(?!.*@WIP)(?=.*{{.CURRENT_E2E_TEST}})'
 
   tests:unit:
@@ -183,7 +183,7 @@ tasks:
     cmds:
       - node --env-file=.env server.js {{.PORT_LOCAL_SERVER}} & # On lance le serveur en arrière-plan
       - until nc -z localhost {{.PORT_LOCAL_SERVER}}; do sleep 1; done # On attend que le port soit ouvert avant de lancer la suite
-  
+
   server:stop:
     cmds:
       - bash -c 'kill $(lsof -ti :{{.PORT_LOCAL_SERVER}}) 2>/dev/null' || true
@@ -194,6 +194,41 @@ tasks:
     cmds:
       - npx es-check es2018 "{{.APP_FOLDER}}/js/**/*.mjs" --module
 
-  lint:
+  format:
+    desc: Formate les fichiers .mjs avec Oxfmt
     cmds:
-      - npx eslint .
+      - npx oxfmt --config .oxfmtrc.json .
+
+  format:staged:
+    desc: Formate uniquement les fichiers .mjs staged (pour le hook pre-commit)
+    silent: true
+    cmds:
+      - |
+        FILES=$(git diff --cached --name-only --diff-filter=ACM -- '{{.APP_FOLDER}}/**/*.mjs')
+        if [ -z "$FILES" ]; then
+          exit 0
+        fi
+        npx oxfmt --config .oxfmtrc.json $FILES
+
+  lint:
+    desc: Lint les fichiers .mjs avec Oxlint, en affichant uniquement les erreurs (pas les warnings)
+    silent: true
+    cmds:
+      - ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs --quiet
+
+  lint:staged:
+    desc: Lint uniquement les fichiers .mjs staged (pour le hook pre-commit)
+    silent: true
+    cmds:
+      - |
+        FILES=$(git diff --cached --name-only --diff-filter=ACM -- '{{.APP_FOLDER}}/**/*.mjs')
+        if [ -z "$FILES" ]; then
+          exit 0
+        fi
+        ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs --quiet $FILES
+
+  lint:all:
+    desc: Lint tous les fichiers .mjs avec Oxlint, en affichant toutes les erreurs, même les simples warnings
+    silent: true
+    cmds:
+      - npx oxlint --config oxlint.config.mjs

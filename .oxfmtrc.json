@@ -1,0 +1,11 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"tabWidth": 2,
+	"useTabs": true,
+	"bracketSameLine": true,
+	"semi": true,
+	"singleQuote": false,
+	"arrowParens": "always",
+	"printWidth": 80,
+	"ignorePatterns": ["**/*.min.js", "**/*.min.css"]
+}

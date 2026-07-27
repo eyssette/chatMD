@@ -1,33 +1,35 @@
 {
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "oxc.oxc-vscode",
 		"editor.formatOnSave": true
 	},
 	"[css]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "oxc.oxc-vscode",
 		"editor.formatOnSave": true
 	},
 	"liveServer.settings.port": 5501,
 	"liveServer.settings.root": "/app",
 	"editor.semanticTokenColorCustomizations": {
-        "enabled": true,
-        "rules": {
-            "variable": {"underline": true },
-            "variable.local": {"underline": false}, 
-            "variable.defaultLibrary": {"underline": false}, 
-            "property.declaration": {"underline": false}, 
-        }
-    },
-	"eslint.validate": [
-		".mjs",
-		"javascript",
-		"html",
-		"markdown",
-		"json"
-	],
+		"enabled": true,
+		"rules": {
+			"variable": { "underline": true },
+			"variable.local": { "underline": false },
+			"variable.defaultLibrary": { "underline": false },
+			"property.declaration": { "underline": false }
+		}
+	},
 	"[feature]": {
 		"editor.defaultFormatter": "alexkrechik.cucumberautocomplete",
 		"editor.formatOnSave": true
 	},
+	"oxc.enable": true,
+	"oxc.enable.oxfmt": true,
+	"oxc.enable.oxlint": true,
+	"oxc.configPath": "oxlint.config.mjs",
+	"oxc.fmt.configPath": ".oxfmtrc.json",
+	"workbench.colorCustomizations": {
+		"editorWarning.foreground": "#00000000" /* Désactive le soulignement des erreurs de type simplement "warning" */
+	},
+	"oxc.disableNestedConfig": true
 }

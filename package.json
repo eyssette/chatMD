@@ -1,49 +1,51 @@
 {
-  "name": "chatmd",
-  "version": "8.12.0",
-  "description": "Un outil libre et gratuit pour créer un chatbot à partir d'un simple fichier en Markdown",
-  "main": "script.min.js",
-  "devDependencies": {
-    "@e18e/eslint-plugin": "^0.6.0",
-    "@eslint/js": "^10.0.1",
-    "@go-task/cli": "^3.42.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@stylistic/eslint-plugin": "^5.10.0",
-    "codeceptjs": "^3.7.3",
-    "es-check": "^9.0.0",
-    "eslint": "^10.8.0",
-    "eslint-plugin-codeceptjs": "^1.3.0",
-    "eslint-plugin-unicorn": "^72.0.0",
-    "globals": "^15.9.0",
-    "jasmine": "^5.6.0",
-    "jsdom": "^26.1.0",
-    "playwright": "^1.52.0",
-    "postcss": "^8.4.40",
-    "postcss-clean": "^1.2.2",
-    "prettier": "3.3.3",
-    "rollup": "^4.19.2",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-string": "^3.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup --config",
-    "dev": "node --env-file=.env server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eyssette/chatMD.git"
-  },
-  "keywords": [
-    "chatbot",
-    "Markdown",
-    "LLM",
-    "RAG"
-  ],
-  "author": "Cédric Eyssette",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/eyssette/chatMD/issues"
-  },
-  "homepage": "https://github.com/eyssette/chatMD#readme"
+	"name": "chatmd",
+	"version": "8.12.0",
+	"description": "Un outil libre et gratuit pour créer un chatbot à partir d'un simple fichier en Markdown",
+	"keywords": [
+		"LLM",
+		"Markdown",
+		"RAG",
+		"chatbot"
+	],
+	"homepage": "https://github.com/eyssette/chatMD#readme",
+	"bugs": {
+		"url": "https://github.com/eyssette/chatMD/issues"
+	},
+	"license": "MIT",
+	"author": "Cédric Eyssette",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/eyssette/chatMD.git"
+	},
+	"main": "script.min.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "rollup --config",
+		"dev": "node --env-file=.env server.js"
+	},
+	"devDependencies": {
+		"@e18e/eslint-plugin": "^0.6.0",
+		"@eslint/js": "^10.0.1",
+		"@go-task/cli": "^3.42.1",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@stylistic/eslint-plugin": "^5.10.0",
+		"codeceptjs": "^3.7.3",
+		"es-check": "^9.0.0",
+		"eslint": "^10.8.0",
+		"eslint-plugin-codeceptjs": "^1.3.0",
+		"eslint-plugin-unicorn": "^72.0.0",
+		"globals": "^15.9.0",
+		"jasmine": "^5.6.0",
+		"jsdom": "^26.1.0",
+		"oxfmt": "^0.61.0",
+		"oxlint": "^1.76.0",
+		"playwright": "^1.52.0",
+		"postcss": "^8.4.40",
+		"postcss-clean": "^1.2.2",
+		"prettier": "3.3.3",
+		"rollup": "^4.19.2",
+		"rollup-plugin-postcss": "^4.0.2",
+		"rollup-plugin-string": "^3.0.0"
+	}
 }

@@ -190,6 +190,7 @@ function compileTemplate(template) {
 function fillTemplateFromValuesFromArray(template, sourceArray) {
 	const { placeholders } = compileTemplate(template);
 
+	// oxlint-disable-next-line unicorn/no-new-array
 	const results = new Array(sourceArray.length);
 
 	for (let rowIndex = 0; rowIndex < sourceArray.length; rowIndex++) {

@@ -242,7 +242,7 @@ export function processYAML(markdownContent) {
 						"{" +
 						botCSSmessage +
 						"}</style>";
-					Promise.all([loadCSS(botCSS)]);
+					Promise.resolve([loadCSS(botCSS)]);
 				}
 			}
 			// Gestion des synonymes
