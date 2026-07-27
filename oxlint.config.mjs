@@ -160,13 +160,13 @@ const config = {
 		{
 			files: ["app/**/*.{js,mjs}"],
 			rules: appFolderOverridesRules,
-			env: { es2020: true, builtin: true },
+			env: { es2018: true, builtin: true },
 		},
 		// Override pour les tests :
 		// - les fichiers tests e2e sont en snake_case (on rajoute un override ensuite pour les fichiers de tests unitaires qui sont en kebab-case)
 		// - on ajoute les variables globales de CodeceptJS et Gherkin
 		// - on ajoute l'environnement Node et Jasmine
-		// - on ne se contraint pas à rester en ES2020
+		// - on ne se contraint pas à rester en ES2018
 		{
 			files: ["tests/**/*", "./*.{js,mjs}"],
 			rules: testFolderOverridesRules,
