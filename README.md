@@ -4,32 +4,35 @@ Translations :
 
 [![](https://img.shields.io/badge/%F0%9F%87%AC%F0%9F%87%A7_README-EN-A1C)](https://github.com/eyssette/chatMD/blob/main/README.en.md)
 
-
 [ChatMD](https://chatmd.forge.apps.education.fr/) est un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 
 ## ✨ Fonctionnalités clés
 
 **Simplicité**
+
 - Créez un chatbot en quelques minutes grâce à une syntaxe facile à apprendre
 - Utilisation directe en ligne — aucune installation serveur nécessaire
 
 **Personnalisation et flexibilité**
+
 - Interface entièrement configurable
 - Syntaxe étendue (variables, conditions, etc.) pour concevoir des chatbots plus avancés
 
 **Intégration possible de l'IA**
+
 - Pas d'IA par défaut, mais possibilité de l'intégrer de manière sobre et ciblée
 - Prise en charge du RAG (Retrieval-Augmented Generation) pour que les réponses de l'IA intègrent une base de connaissances personnalisée.
 
 **Compatibilité RGPD**
+
 - Pas de compte à créer
 - Aucune collecte de données personnelles
 
 **Code optimisé et écoresponsable**
+
 - Code très léger, rapide et à faible empreinte carbone (note A+)
 - 100 % sur tous les indicateurs Lighthouse
 - 100 % de réussite aux tests automatisés d’accessibilité (en attente pour un audit complet)
-
 
 ## ⚙️ Comment ça marche ?
 
@@ -42,6 +45,7 @@ Pour plus d'explications, laissez-vous guider par le [chatbot initial](https://c
 ## 🎯 Quels sont les usages possibles ?
 
 On peut imaginer de nombreux usages :
+
 - Réponse à des questions fréquentes (FAQ)
 - Tutoriel pour un outil informatique
 - Aide à la décision ou à la création
@@ -53,8 +57,9 @@ On peut imaginer de nombreux usages :
 - Escape game, enquête …
 
 ChatMD peut même intégrer de la géolocalisation, ce qui permet d'autres usages :
+
 - Jeu de piste
-- Visite scolaire augmentée 
+- Visite scolaire augmentée
 - Recommandations fondées sur la position de l'utilisateur
 
 ## 🙋‍♀️ Contribuer
@@ -74,6 +79,7 @@ Si vous souhaitez contribuer ou tout simplement discuter de ce projet pour parti
 Merci également à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert, Jean-Marc Viglino pour leurs suggestions d'amélioration de l'outil, et merci à toutes les personnes qui ont pu tester ChatMD et me faire des retours !
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) est un logiciel libre qui repose également sur d'autres logiciels libres :
+
 - [js-yaml](https://github.com/nodeca/js-yaml) pour la gestion des en-têtes yaml
 - [typed.js](https://github.com/mattboldt/typed.js) pour l'effet "machine à écrire"
 - [showdown](https://github.com/showdownjs/showdown) pour la conversion du markdown en html

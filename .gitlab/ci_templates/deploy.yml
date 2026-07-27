@@ -20,7 +20,7 @@ pages:
     # Récupérer tous les fichiers du dépôt, de manière récursive dans un dossier temporaire .public
     - mkdir .public
     - cp -r * .public
-    
+
     # Créer le dossier public et récupérer l'application
     - mkdir -p public
     - wget https://forge.apps.education.fr/$APP_NAME/$APP_NAME.forge.apps.education.fr/-/archive/main/$APP_NAME.forge.apps.education.fr-main.tar.bz2
@@ -31,14 +31,14 @@ pages:
     - cp -r .public/* public/$APP_FOLDER
     - cp -r .public/* public/
     - rm -r .public
-   
+
     # Construire l'application
     - cd public
     - npm ci --cache ../.npm --prefer-offline --no-audit
     - npm run build
 
     # Supprimer les modules nodes dans public
-    - rm -r node_modules 
+    - rm -r node_modules
 
     # L'application est construite dans le répertoire app : on déplace tous les fichiers nécessaires à la racine
     # On ne copie pas par défaut les fichiers du dossier i18n original : c'est à l'utilisateur de les créer s'il le souhaite
@@ -62,7 +62,7 @@ pages:
         find . -type f -name "*.$ext" -exec gzip -k {} \;
         find . -type f -name "*.$ext" -exec brotli {} \;
       done
-    
+
   artifacts:
     paths:
       - public

@@ -7,8 +7,9 @@ style: .admonition.success,.admonition.warning{margin:2em auto}
 Hello, I’m **ChatMD**, a free and open-source tool that lets you easily create a custom chatbot from a simple Markdown file.
 \`
 :::info It's very simple!
+
 1. Create a Markdown file accessible online
-2. Follow the ChatMD syntax to define your chatbot  
+2. Follow the ChatMD syntax to define your chatbot
    - [Check out the documentation](https://chatmd.forge.apps.education.fr/docs)
 3. Your chatbot will be accessible at the following address: `https://chatmd.forge.apps.education.fr/#URL_OF_YOUR_MARKDOWN_FILE`
 
@@ -19,10 +20,11 @@ Hello, I’m **ChatMD**, a free and open-source tool that lets you easily create
 
 1. [What are the possible uses?](What are the possible uses?)
 2. [Give me some examples!](Examples)
-4. [Bug, need help or suggestion for improvement](Bug, need help or suggestion for improvement)
-5. [Who created ChatMD?](Who created ChatMD?)
+3. [Bug, need help or suggestion for improvement](Bug, need help or suggestion for improvement)
+4. [Who created ChatMD?](Who created ChatMD?)
 
 ## What are the possible uses?
+
 - uses
 - how to use
 - purpose
@@ -42,13 +44,12 @@ You can imagine **many different uses**:
 - Choose-your-own-adventure stories
 - Escape games, investigation...
 
-`
-:::success
+`:::success
 The basic syntax is simple, but ChatMD can be configured for **more complex use cases**: interface customization, use of variables, random choices, integration with an LLM, RAG capabilities…
-:::
-`
+:::`
 
 ## Examples
+
 - example
 - give an example
 - concrete
@@ -77,8 +78,8 @@ You can also reach out to me on [social media](https://eyssette.forge.apps.educa
 :::
 \`
 
-
 ## Bug, need help or suggestion for improvement
+
 - a bug
 - a problem
 - doesn't work
@@ -93,14 +94,16 @@ You can also reach out to me on [social media](https://eyssette.forge.apps.educa
 - can't figure it out
 
 **Need help?**
-- Join the [Tchap chatroom](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) dedicated to ChatMD  
-- Submit a [ticket](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=help) and describe your need  
+
+- Join the [Tchap chatroom](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) dedicated to ChatMD
+- Submit a [ticket](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=help) and describe your need
 - Contact the project owner by [email](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) or on [social media](https://eyssette.forge.apps.education.fr/)
 
 :::success Don’t hesitate!
+
 - [Report a bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) if you found an issue!
 - [Make a suggestion](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=suggestion) for new features if you have a specific need or idea!
-:::
+  :::
 
 To contribute to the code, check the tickets and [contact the project owner](https://eyssette.forge.apps.education.fr/).
 
@@ -112,6 +115,7 @@ https://chatmd.forge.apps.education.fr/docs
 \`
 
 ## Who created ChatMD?
+
 - Who created ChatMD
 - creator of ChatMD
 - who is the author
@@ -130,7 +134,7 @@ It is open-source software under the MIT license. The source code is available o
 :::info Acknowledgments
 ChatMD would not exist without the institutional support of DRANE Lyon and DNE, as part of their policy to promote digital commons and open-source software.
 
-ChatMD also benefited from the support of the [Incubator of the French Ministry of National Education]((https://incubateur.education.gouv.fr/)), and especially from the help of Thomas Sanson. Thank you for the guidance, which helped structure the development of this app in a more professional way!
+ChatMD also benefited from the support of the [Incubator of the French Ministry of National Education](<(https://incubateur.education.gouv.fr/)>), and especially from the help of Thomas Sanson. Thank you for the guidance, which helped structure the development of this app in a more professional way!
 
 Thanks to Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert, and Jean-Marc Viglino for their suggestions to improve the tool.
 

@@ -93,7 +93,7 @@
 
 ### Feat
 
-- **utils**: ajout d'une fonction searchScore  pour calcul de similarité entre 1 recherche et 1 texte, utilisable dans evaluateExpression (pour plugin readcsv notamment)
+- **utils**: ajout d'une fonction searchScore pour calcul de similarité entre 1 recherche et 1 texte, utilisable dans evaluateExpression (pour plugin readcsv notamment)
 
 ### Fix
 
@@ -200,7 +200,7 @@
 
 - **e2e**: test de fallback avec bouton de choix d'options en fin de message
 - **e2e**: possibilité de tester si la réponse du chatbot correspond exactement à un contenu HTML précis
-- **e2e**:  personnaliser le message par défaut en cas de réponse non trouvée
+- **e2e**: personnaliser le message par défaut en cas de réponse non trouvée
 - **e2e**: possibilité de tester que le chatbot répond parmi une liste possible de réponses
 - **e2e**: utiliser le contenu du message pour chercher des mots clés qui serviront de déclencheurs
 - **e2e**: utiliser le titre d'une réponse comme déclencheur
@@ -312,7 +312,7 @@
 
 ### Fix
 
-- **markdown**: ajout possible du contenu produit par un LLM  dans un élément HTML
+- **markdown**: ajout possible du contenu produit par un LLM dans un élément HTML
 - **core**: historique des actions - fix d'un bug en cas d'utilisation d'un LLM dans le message initial (sans question préalable de l'utilisateur)
 - **markdown**: amélioration des performances pour readCsv et le RAG en utilisant yaml.preload en cas de fichiers plus lourds
 - **utils**: amélioration du parsing des fichiers avec readCsv
@@ -365,7 +365,7 @@
 - **ccs**: amélioration widget - affichage sur tablette (position de l'iframe du chatbot par rapport au widget)
 - **css**: élément html - overflow-x: hidden pour éviter une barre horizontale de défilement inutile pour le widget
 - **css**: amélioration affichage widget sur écrans de taille moyenne
-- **css**: amélioration taille widget + variables CSS  pour pouvoir la modifier
+- **css**: amélioration taille widget + variables CSS pour pouvoir la modifier
 - **css**: variable CSS pour la taille de l'avatar
 - **utils**: gestion dans les @keyframes pour les balises `<style scoped>` des indications de pourcentages pour une animation
 - **utils**: gestion des @keyframes si on utilise la personnalisation du style d'un message avec `<style scoped>`
@@ -408,7 +408,7 @@
 
 ### Chore
 
-- nom de variable plus clair pour la gestion de  la directive !Next et de l'objet chatbot.nextMessage
+- nom de variable plus clair pour la gestion de la directive !Next et de l'objet chatbot.nextMessage
 - résolution du bug sur le package-lock.json
 - config commitizen pour que package-lock.json soit bien préesnt dans le bump
 
@@ -417,7 +417,7 @@
 ### Fix
 
 - **css**: amélioration du thème bubbles
-- **markdown**: gestion de l'avatar dans le YAML après la gestion du thème  - permet d'avoir un avatar par défaut spécifique à un thème, que l'on peut quand même changer avec la propriété "avatar" dans le YAML
+- **markdown**: gestion de l'avatar dans le YAML après la gestion du thème - permet d'avoir un avatar par défaut spécifique à un thème, que l'on peut quand même changer avec la propriété "avatar" dans le YAML
 - **css**: amélioration du thème sombre (pour les éléments de type input)
 - **css**: ajout d'un thème sombre
 
@@ -464,7 +464,7 @@
 
 ### Fix
 
-- **core**: filterTable dans le plugin readCsv  (utilisation sans titres de colonnes)
+- **core**: filterTable dans le plugin readCsv (utilisation sans titres de colonnes)
 - **core**: gestion des retours à la ligne dans les données externes avec le plugin readCsv
 - **markdown**: utilisation de useLLM.encryptedAPIkey: true pour indiquer qu'on utilise un serveur d'API qui cache par défaut la clé pour le LLM
 
@@ -765,13 +765,13 @@
 
 - **interactions**: clic sur le bouton de menu dans chaque message ouvre une modale avec des liens vers l'historique des conversations avec le chatbot
 - **messages**: ajout d'un bouton de menu pour chaque message
-- **interactions**: enregistrement des interactions  de l'utilisateur pour garder un historique
+- **interactions**: enregistrement des interactions de l'utilisateur pour garder un historique
 
 ### Fix
 
 - **html**: footer plus court et discret
 - **chatbot**: action "clic" sur un bouton de réponse : identification possible d'un bouton de réponse à sélectionner par son numéro parmi l'ensemble des boutons de réponse affichés
-- **chatbot**: possibilité d'utiliser une action "clic" sur un bouton de réponse, dans le paramètre "actions" dans l'URL  pour initialiser le chatbot avec une série d'actions
+- **chatbot**: possibilité d'utiliser une action "clic" sur un bouton de réponse, dans le paramètre "actions" dans l'URL pour initialiser le chatbot avec une série d'actions
 
 ### Chore
 
@@ -826,7 +826,7 @@
 
 ### Fix
 
-- **messages**:  directive !Typewriter fonctionne maintenant correctement + désactivation automatique de l'effet typewriter si on utilise un élément HTML select
+- **messages**: directive !Typewriter fonctionne maintenant correctement + désactivation automatique de l'effet typewriter si on utilise un élément HTML select
 - **CSS**: résolution d'un problème avec la zone de texte, qui était cachée sur petit écran + footer:false + keyboard:false mais temporairement activée à true avec la variable dynamique @KEYBOARD
 - **CSS**: taille éléments “pre” sur petits écrans, et en cas de bloc “pre” en première ligne d'un message du chatbot
 
@@ -878,7 +878,7 @@
 
 ### Fix
 
-- **interactions**: processMessageWithChoiceOptions()  : on doit filtrer les options d'après les conditions dynamiques mêmes si dynamicVariables n'existe pas
+- **interactions**: processMessageWithChoiceOptions() : on doit filtrer les options d'après les conditions dynamiques mêmes si dynamicVariables n'existe pas
 
 ### Chore
 
@@ -946,7 +946,7 @@
 - **lib**: messages d'erreur plus courts dans la librairie showdown
 - **core**: test de l'existence de yaml avant de chercher les propriétés de cet objet
 - **interactions**: directive !Next sans conditions (pas de keywords dans la réponse) renvoie directement vers la réponse
-- **chatbot**: autorisation des choix d'options avec texte de lien vide "1. [texte]()", car on peut les utiliser pour faire des retours au menu principal
+- **chatbot**: autorisation des choix d'options avec texte de lien vide "1. [texte](<>)", car on peut les utiliser pour faire des retours au menu principal
 
 ### Refactor
 
@@ -954,7 +954,7 @@
 - **interactions**: fonction controlEvents (renommage fonction et dossier)
 - **chatbot**: création de initializeChatbot() dans create.mjs plutôt que dans controller.mjs
 - **chatbot**: modularisation de create.mjs
-- **interactions**:  variable nextMessage intégrée dans l'objet chatbot dans controller.mjs
+- **interactions**: variable nextMessage intégrée dans l'objet chatbot dans controller.mjs
 
 ## 7.3.6 (2025-04-30)
 
@@ -1095,7 +1095,7 @@
 ### Refactor
 
 - **nlp**: objet pour options de vectorisation
-- **nlp**:  hasLevenshteinDistanceLessThan
+- **nlp**: hasLevenshteinDistanceLessThan
 - handleURL()
 
 ### Test
@@ -1116,7 +1116,7 @@
 - organisation des tests dans des sous-dossiers
 - lancement des tests en excluant le tag @WIP (Work In Progress)
 - **Taskfile**: server:stop même si fail des tests codeceptjs
-- configuration de codecept  et task avec serveur local
+- configuration de codecept et task avec serveur local
 - serveur local à la racine plutôt que dans app/
 - refactor et amélioration de deepMerge()
 - **taskfile**: tests en série plutôt qu'en parallèle
@@ -1294,7 +1294,6 @@
 - template issue bug : simplification
 - add template issue: suggestion
 - template service desk
-
 
 ## 6.7.0 (2025-02-05)
 
@@ -2322,7 +2321,7 @@ Montée de version majeure : ChatMD peut maintenant se connecter à un LLM
 - Ajout de commentaires + typo
 - explication options de configuration
 - messageOptions : nouvel élément ul
-- Ajout titres  réponses dans calcul vecteurs
+- Ajout titres réponses dans calcul vecteurs
 
 ## 1.4.0 (2023-10-18)
 

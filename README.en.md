@@ -5,22 +5,27 @@
 ## ✨ Key Features
 
 **Simplicity**
+
 - Build a chatbot in minutes with an easy-to-learn syntax
 - Use the tool directly online, no server installation needed
 
 **Customization and Flexibility**
+
 - Fully configurable interface
 - Extended syntax (variables, conditions, etc.) to create more advanced chatbots
 
 **Optional AI Integration**
+
 - AI is not enabled by default, but can be integrated in a targeted and efficient way
 - RAG (Retrieval-Augmented Generation) support for custom knowledge base integration
 
 **GDPR Compliance**
+
 - No account required
 - No personal data collected
 
 **Optimized and Eco-Friendly Code**
+
 - Lightweight, fast, and energy-efficient (A+ eco-rating)
 - Perfect scores (100%) across all Lighthouse metrics
 - 100% success on automated accessibility checks (awaiting a full audit)
@@ -50,6 +55,7 @@ ChatMD offers versatile applications across a wide range of educational and inst
 - Escape games, investigations, and more...
 
 ChatMD can even integrate geolocation, enabling additional features such as:
+
 - Interactive treasure hunts
 - Enhanced educational field trips
 - Location-based recommendations
@@ -66,7 +72,7 @@ Interested in contributing to or discussing this project? Please review our [CON
 
 [ChatMD](https://chatmd.forge.apps.education.fr/) was developed with institutional support from DRANE Lyon and the DNE as part of their initiative to promote digital commons and open-source educational software.
 
-[ChatMD](https://chatmd.forge.apps.education.fr/) also benefited from the support of the [Incubator of the French Ministry of National Education]((https://incubateur.education.gouv.fr/)), and in particular from the assistance of Thomas Sanson. Many thanks for the valuable guidance, which helped structure the development of this application in a more professional way!
+[ChatMD](https://chatmd.forge.apps.education.fr/) also benefited from the support of the [Incubator of the French Ministry of National Education](<(https://incubateur.education.gouv.fr/)>), and in particular from the assistance of Thomas Sanson. Many thanks for the valuable guidance, which helped structure the development of this application in a more professional way!
 
 Special thanks to Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, Mélanie Fenaert, Jean-Marc Viglino for their valuable improvement suggestions, and to all beta testers who provided essential feedback!
 

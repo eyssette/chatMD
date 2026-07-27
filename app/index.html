@@ -1,32 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<title>ChatMD</title>
+		<meta
+			name="description"
+			content="ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot à partir d'un fichier en Markdown. ChatMD est disponible sur la Forge des Communs Numériques Éducatifs." />
+		<meta name="author" content="Cédric Eyssette" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/styles.min.css" />
+		<link id="favicon" rel="icon" href="favicon.svg" />
+	</head>
 
-<head>
-	<meta charset="utf-8" />
-	<title>ChatMD</title>
-	<meta name="description"
-		content="ChatMD est un outil libre et gratuit qui permet de créer facilement un chatbot à partir d'un fichier en Markdown. ChatMD est disponible sur la Forge des Communs Numériques Éducatifs." />
-	<meta name="author" content="Cédric Eyssette" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="css/styles.min.css" />
-	<link id="favicon" rel="icon" href="favicon.svg" />
-</head>
-
-<body>
-	<h1 id="chatbot-name">&nbsp;</h1>
-	<main>
-		<div id="chat" class="chat-container" role="region" aria-label="Zone de conversation">
-		</div>
-		<div id="controls">
-			<div id="input-container">
-				<label id="user-input-label" class="sr-only" for="user-input">Écrivez votre message</label>
-				<div id="user-input" contenteditable="true" placeholder="Écrivez votre message" tabindex="0" role="textbox" aria-labelledby="user-input-label" title="Écrivez votre message"></div>
+	<body>
+		<h1 id="chatbot-name">&nbsp;</h1>
+		<main>
+			<div
+				id="chat"
+				class="chat-container"
+				role="region"
+				aria-label="Zone de conversation"></div>
+			<div id="controls">
+				<div id="input-container">
+					<label id="user-input-label" class="sr-only" for="user-input"
+						>Écrivez votre message</label
+					>
+					<div
+						id="user-input"
+						contenteditable="true"
+						placeholder="Écrivez votre message"
+						tabindex="0"
+						role="textbox"
+						aria-labelledby="user-input-label"
+						title="Écrivez votre message"></div>
+				</div>
+				<button id="send-button" type="button">Envoyer</button>
 			</div>
-			<button id="send-button" type="button">Envoyer</button>
-		</div>
-	</main>
-	<footer id="footer">Chatbot créé avec <a href="https://chatmd.forge.apps.education.fr/">ChatMD</a></footer>
-	<script src="script.min.js"></script>
-</body>
-
+		</main>
+		<footer id="footer">
+			Chatbot créé avec
+			<a href="https://chatmd.forge.apps.education.fr/">ChatMD</a>
+		</footer>
+		<script src="script.min.js"></script>
+	</body>
 </html>

@@ -13,9 +13,8 @@ describe("computeSimilarityScore", () => {
 		global.document = window.document;
 
 		// Importer le module APRÈS avoir créé global.document
-		const mod = await import(
-			"../../../../../../app/js/core/interactions/helpers/findBestResponse/computeSimilarityScore.mjs"
-		);
+		const mod =
+			await import("../../../../../../app/js/core/interactions/helpers/findBestResponse/computeSimilarityScore.mjs");
 		computeSimilarityScore = mod.computeSimilarityScore;
 
 		chatbot = {

@@ -7,9 +7,10 @@ gestionGrosMots: true
 Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer facilement un chatbot personnalisé à partir d'un simple fichier en Markdown.
 \`
 :::info C'est très simple !
+
 1. Créez un fichier en Markdown accessible en ligne
 2. Respectez la syntaxe de ChatMD pour définir votre chatbot
-	- [consultez la documentation](https://chatmd.forge.apps.education.fr/docs)
+   - [consultez la documentation](https://chatmd.forge.apps.education.fr/docs)
 3. Votre chatbot est accessible à l'adresse suivante : `https://chatmd.forge.apps.education.fr/#URL_DU_FICHIER_MARKDOWN`
 
 <label for="urlSourceChatbot">Collez ici l'URL de votre fichier et cliquez sur “OK” pour accéder à votre chatbot :</label>
@@ -19,10 +20,11 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 
 1. [Quels sont les usages possibles ?](Quels sont les usages possibles ?)
 2. [Donne-moi des exemples !](Exemples)
-4. [Bug, besoin d'aide ou suggestion d'amélioration](Bug, besoin d'aide ou suggestion d'amélioration)
-5. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
+3. [Bug, besoin d'aide ou suggestion d'amélioration](Bug, besoin d'aide ou suggestion d'amélioration)
+4. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
 
 ## Quels sont les usages possibles ?
+
 - usages
 - utilisation
 - pourquoi
@@ -43,8 +45,9 @@ On peut imaginer **de nombreux usages** :
 - Escape game, enquête …
 
 ChatMD peut même intégrer de la géolocalisation, ce qui permet d'autres usages :
+
 - Jeu de piste
-- Visite scolaire augmentée 
+- Visite scolaire augmentée
 - Recommandations fondées sur la position de l'utilisateur
 
 \`
@@ -54,6 +57,7 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 \`
 
 ## Exemples
+
 - exemple
 - donner un exemple
 - concret
@@ -77,8 +81,8 @@ Vous pouvez aussi me contacter sur les [réseaux sociaux](https://eyssette.forge
 :::
 \`
 
-
 ## Bug, besoin d'aide ou suggestion d'amélioration
+
 - un bug
 - un problème
 - ne marche pas
@@ -94,16 +98,17 @@ Vous pouvez aussi me contacter sur les [réseaux sociaux](https://eyssette.forge
 - besoin d'aide
 - n'y arrive pas
 
-
 **Besoin d'aide ?**
+
 - rejoignez le [salon Tchap](https://www.tchap.gouv.fr/#/room/!BLAbHlkynUkpyIfNvT:agent.education.tchap.gouv.fr) dédié à ChatMD
 - écrivez un [ticket](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=help) et précisez votre besoin.
 - contactez le responsable de ce projet par [mail](mailto:forge-apps+guichet+chatmd-chatmd-forge-apps-education-fr-1072-issue-@phm.education.gouv.fr) ou sur les [réseaux sociaux](https://eyssette.forge.apps.education.fr/)
 
 :::success Ne pas hésiter !
+
 - [signalez un bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) si vous avez constaté un problème !
 - [faites une suggestion](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=suggestion) de nouvelles fonctionnalités si vous avez un besoin spécifique ou une idée !
-:::
+  :::
 
 Pour contribuer au code, consultez les tickets et [contactez le responsable](https://eyssette.forge.apps.education.fr/).
 
@@ -115,6 +120,7 @@ https://chatmd.forge.apps.education.fr/docs
 \`
 
 ## Qui a créé ChatMD ?
+
 - Qui a créé ChatMD
 - créé ChatMD
 - quel est l'auteur
@@ -129,7 +135,6 @@ ChatMD a été créé par Cédric Eyssette, professeur de philosophie et chargé
 
 C'est un logiciel libre sous licence MIT. Les sources sont disponibles sur [la Forge des Communs Numériques Éducatifs](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr).
 
-
 \`
 :::success Remerciements
 ChatMD n'aurait pas pu exister sans le soutien institutionnel de la DRANE Lyon et de la DNE, dans le cadre de leur politique de développement des communs numériques et du libre.
@@ -140,7 +145,6 @@ Merci à Perrine Douhéret, Laetitia Allegrini, Romain Estampes, Charlie Rollo, 
 
 Merci enfin à toutes les personnes qui testent ChatMD et font des retours !
 :::
-
 
 Si vous aimez ce travail, vous aimerez peut-être aussi les autres outils ou sites que je propose sur [mon site perso](https://eyssette.forge.apps.education.fr).
 \`

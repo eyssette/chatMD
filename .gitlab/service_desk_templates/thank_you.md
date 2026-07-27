@@ -5,6 +5,6 @@ Merci beaucoup pour votre demande d'assistance. 🙌 Votre ticket **%{ISSUE_ID}*
 Si vous souhaitez ne plus recevoir de notifications concernant ce ticket, copiez simplement ce lien dans votre navigateur :  
 🔗 **%{UNSUBSCRIBE_URL}**
 
-N'hésitez pas à nous contacter à nouveau si besoin !  
+N'hésitez pas à nous contacter à nouveau si besoin !
 
 Bonne journée !

@@ -14,5 +14,4 @@ Si vous avez accès à Tchap, la messagerie instantanée du secteur public, n'h�
 
 Si vous avez besoin d'aide pour le développement de votre chatbot, vous pouvez aussi utiliser le système des [tickets](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/) et préciser votre besoin.
 
-
 Merci pour votre contribution ! 🎉

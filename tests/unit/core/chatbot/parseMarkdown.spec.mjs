@@ -12,9 +12,8 @@ describe("parseMarkdown", () => {
 		global.document = window.document;
 
 		// Importer le module APRÈS avoir créé global.document
-		const mod = await import(
-			"../../../../app/js/core/chatbot/parseMarkdown.mjs"
-		);
+		const mod =
+			await import("../../../../app/js/core/chatbot/parseMarkdown.mjs");
 		parseMarkdown = mod.parseMarkdown;
 	});
 
