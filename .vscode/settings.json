@@ -1,13 +1,6 @@
 {
 	"editor.defaultFormatter": "oxc.oxc-vscode",
-	"[javascript]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
-		"editor.formatOnSave": true
-	},
-	"[css]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
-		"editor.formatOnSave": true
-	},
+	"editor.formatOnSave": true,
 	"liveServer.settings.port": 5501,
 	"liveServer.settings.root": "/app",
 	"editor.semanticTokenColorCustomizations": {
