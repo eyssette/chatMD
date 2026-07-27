@@ -197,7 +197,7 @@ tasks:
   format:
     desc: Formate les fichiers .mjs avec Oxfmt
     cmds:
-      - npx oxfmt --config .oxfmtrc.json .
+      - npx oxfmt --config .oxfmtrc.json . --ignore-path .oxfmtignore
 
   format:staged:
     desc: Formate uniquement les fichiers .mjs staged (pour le hook pre-commit)
@@ -208,7 +208,7 @@ tasks:
         if [ -z "$FILES" ]; then
           exit 0
         fi
-        npx oxfmt --config .oxfmtrc.json $FILES
+        npx oxfmt --config .oxfmtrc.json $FILES --ignore-path .oxfmtignore
 
   lint:
     desc: Lint les fichiers .mjs avec Oxlint, en affichant uniquement les erreurs (pas les warnings)
