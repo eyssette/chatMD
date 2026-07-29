@@ -57,7 +57,8 @@ function handleURLfromDocsSuiteNumerique(url) {
 	const documentIdMatch = url.match(/docs\/([a-z0-9-]+)\//);
 	if (documentIdMatch) {
 		const documentId = documentIdMatch[1];
-		return `https://docs.numerique.gouv.fr/api/v1.0/documents/${documentId}/formatted-content/?content_format=markdown`;
+		const corsProxyForDocs = config.corsProxyFallback;
+		return `${corsProxyForDocs}https://docs.numerique.gouv.fr/api/v1.0/documents/${documentId}/formatted-content/?content_format=markdown`;
 	} else return "";
 }
 
@@ -74,7 +75,7 @@ function handleKnownHosts(url, shouldAddCorsProxy) {
 		shouldAddCorsProxy = false;
 		url = handleURLfromFramapad(url);
 	} else if (isDocsSuiteNumeriqueURL(url)) {
-		shouldAddCorsProxy = true;
+		shouldAddCorsProxy = false;
 		url = handleURLfromDocsSuiteNumerique(url);
 	}
 	return { url, shouldAddCorsProxy };
