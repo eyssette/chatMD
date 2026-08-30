@@ -1,5 +1,35 @@
 # Changelog
 
+## 8.12.1 (2026-08-31)
+
+### Fix
+
+- **md**: pas de formatage automatique du Markdown (pour prendre en compte les spécificités de la syntaxe ChatMD)
+- **urls**: correctif pour l'utilisation de Docs comme source
+
+### Chore
+
+- correctifs lint liés à la nouvelle configuration
+- meilleure configuration oxlint
+- update de codeceptJS (version 4.1.0)
+- **Taskfile**: mise à jour des tâches de formatage
+- configuration d'oxfmt - pas de formatage des fichiers Markdown
+- mise à jour de fichiers de onfiguration de l'environnement
+- **Taskfile**: update de Taskfile pour les tâches de tests e2e
+- **IDE**: surcharge pour forcer l'utilisation de Oxfmt pour les fichiers HTML, CSS, Javascriptt et Markdown
+- update package-lock.json
+- simplification de la configuration du  defaultFormatteur dans l'éditeur, et formatOnSave pour tous les fichiers
+- formatage avec Oxfmt
+- configuration d'Oxfmt pour ignorer certains fichiers (librairies externes)
+- **lint**: utilisation d'ES2018 pour le lint du dossier "app"
+- ajout des plugins unicorn et e18e au lint (en mode "warning" seulement)
+- **lint**: ajout d'un plugin de lint - @stylistic/eslint-plugin
+- **lint**: configuration simplifiée du lint + extension à tous les fichiers + corrections des erreurs de lint
+
+### Perf
+
+- **lint**: migration d'ESlint vers Oxlint et de Prettier vers Oxfmt
+
 ## 8.12.0 (2026-07-26)
 
 ### Feat
