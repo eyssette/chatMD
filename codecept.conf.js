@@ -1,4 +1,5 @@
-exports.config = {
+// oxlint-disable unicorn/no-null
+const config = {
 	output: "./tests/e2e/output",
 	helpers: {
 		Playwright: {
@@ -10,9 +11,9 @@ exports.config = {
 		},
 	},
 	include: {
-		I: "./tests/e2e/.config/steps_file.js",
+		I: "./tests/e2e/.config/steps-file.js",
 	},
-	mocha: {},
+	mocha: { bail: true },
 	bootstrap: null,
 	timeout: null,
 	teardown: null,
@@ -21,14 +22,13 @@ exports.config = {
 		features: "./features/**/*.feature",
 		steps: "./tests/e2e/step_definitions/**/*.js",
 	},
+	noGlobals: true,
 	plugins: {
-		screenshotOnFail: {
+		screenshot: {
 			enabled: true,
+			on: "fail",
 		},
 		retryFailedStep: {
-			enabled: true,
-		},
-		eachElement: {
 			enabled: true,
 		},
 		pauseOnFail: {},
@@ -46,3 +46,5 @@ exports.config = {
 	],
 	name: "chatMD",
 };
+
+export default config;

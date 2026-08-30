@@ -1,6 +1,7 @@
-const { I } = inject();
-
 import { config } from "../../../app/js/config.mjs";
+import { locate } from "codeceptjs";
+
+const { I } = inject();
 
 Then("Le texte de présentation de ChatMD s'affiche d'un coup", () => {
 	I.waitForText("Qui a créé ChatMD ?", 1);
@@ -26,6 +27,7 @@ Then(
 
 When("Je clique sur le bouton de menu du dernier message", () => {
 	I.pressKey("Enter");
+	I.waitForElement(".message:last-child .messageMenu", 100);
 	I.click(".message:last-child .messageMenu");
 });
 

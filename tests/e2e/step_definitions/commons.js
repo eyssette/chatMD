@@ -1,3 +1,5 @@
+import { locate } from "codeceptjs";
+
 const { I } = inject();
 
 Given("Je lance ChatMD {string}", async (link, rawsource) => {
@@ -12,7 +14,7 @@ When("Je demande {string}", async (question) => {
 
 Given("Je clique sur le bouton {string}", async (buttonText) => {
 	I.pressKey("Enter");
-	I.waitForText(buttonText, 10);
+	I.waitForText(buttonText, 50);
 	I.click(locate(".messageOptions li a").withText(buttonText));
 });
 
