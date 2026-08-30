@@ -1,6 +1,13 @@
+dist/
 node_modules/
 .env
-.task
-tests/e2e/output
+.task/
+tests/e2e/output/
 megalinter-reports/
 .mega-linter.yml
+.npm/
+.report/
+.release/
+.roadmap/
+.plan/
+.init/

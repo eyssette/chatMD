@@ -2,16 +2,16 @@
 	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.formatOnSave": true,
 	"[html]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
+		"editor.defaultFormatter": "oxc.oxc-vscode"
 	},
 	"[css]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
+		"editor.defaultFormatter": "oxc.oxc-vscode"
 	},
 	"[javascript]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
+		"editor.defaultFormatter": "oxc.oxc-vscode"
 	},
 	"[markdown]": {
-		"editor.defaultFormatter": "oxc.oxc-vscode",
+		"editor.formatOnSave": false
 	},
 	"liveServer.settings.port": 5501,
 	"liveServer.settings.root": "/app",
