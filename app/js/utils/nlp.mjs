@@ -82,6 +82,7 @@ export function levenshteinDistance(a, b) {
 	return matrix[bLength][aLength];
 }
 
+// oxlint-disable-next-line max-params
 export function hasLevenshteinDistanceLessThan(
 	string,
 	keyWord,

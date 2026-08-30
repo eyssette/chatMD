@@ -54,6 +54,7 @@ function calculateCosineSimilarityScore(
 }
 
 // Ajustement du score final en fonction des scores de distance, de match, et des directives !Next
+// oxlint-disable-next-line max-params
 function adjustScore(
 	response,
 	matchScore,

@@ -5,6 +5,7 @@ import { processQuestionToLLM } from "../processQuestionToLLM.mjs";
 
 const BESTMATCH_THRESHOLD = 0.545; // Seuil pour que le bestMatch soit pertinent
 
+// oxlint-disable-next-line max-statements max-params
 export function processFinalResponse(
 	chatbot,
 	userInput,
