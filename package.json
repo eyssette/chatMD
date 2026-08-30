@@ -47,5 +47,8 @@
 		"rollup": "^4.19.2",
 		"rollup-plugin-postcss": "^4.0.2",
 		"rollup-plugin-string": "^3.0.0"
+	},
+	"allowScripts": {
+		"@go-task/cli@3.45.4": true
 	}
 }
