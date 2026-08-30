@@ -24,7 +24,6 @@ Bonjour, je suis **ChatMD**, un outil libre et gratuit qui permet de créer faci
 4. [Qui a créé ChatMD ?](Qui a créé ChatMD ?)
 
 ## Quels sont les usages possibles ?
-
 - usages
 - utilisation
 - pourquoi
@@ -57,7 +56,6 @@ La syntaxe de base est simple, mais ChatMD peut être configuré pour des **usag
 \`
 
 ## Exemples
-
 - exemple
 - donner un exemple
 - concret
@@ -82,7 +80,6 @@ Vous pouvez aussi me contacter sur les [réseaux sociaux](https://eyssette.forge
 \`
 
 ## Bug, besoin d'aide ou suggestion d'amélioration
-
 - un bug
 - un problème
 - ne marche pas
@@ -120,7 +117,6 @@ https://chatmd.forge.apps.education.fr/docs
 \`
 
 ## Qui a créé ChatMD ?
-
 - Qui a créé ChatMD
 - créé ChatMD
 - quel est l'auteur

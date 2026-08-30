@@ -24,7 +24,6 @@ Hello, I’m **ChatMD**, a free and open-source tool that lets you easily create
 4. [Who created ChatMD?](Who created ChatMD?)
 
 ## What are the possible uses?
-
 - uses
 - how to use
 - purpose
@@ -49,7 +48,6 @@ The basic syntax is simple, but ChatMD can be configured for **more complex use 
 :::`
 
 ## Examples
-
 - example
 - give an example
 - concrete
@@ -79,7 +77,6 @@ You can also reach out to me on [social media](https://eyssette.forge.apps.educa
 \`
 
 ## Bug, need help or suggestion for improvement
-
 - a bug
 - a problem
 - doesn't work
@@ -115,7 +112,6 @@ https://chatmd.forge.apps.education.fr/docs
 \`
 
 ## Who created ChatMD?
-
 - Who created ChatMD
 - creator of ChatMD
 - who is the author
