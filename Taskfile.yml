@@ -196,7 +196,7 @@ tasks:
 
   tests:widget:
     cmds:
-      - node tests/test_widget.mjs
+      - node tests/test-widget.mjs
 
   bump:
     generates:
@@ -245,10 +245,10 @@ tasks:
         npx oxfmt --config .oxfmtrc.json --check $FILES --no-error-on-unmatched-pattern --ignore-path .oxfmtignore
 
   lint:
-    desc: Lint les fichiers .mjs avec Oxlint, en affichant uniquement les erreurs (pas les warnings)
+    desc: Lint les fichiers .mjs avec Oxlint, en affichant uniquement les erreurs principales
     silent: true
     cmds:
-      - ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs --quiet
+      - SHOW_MAIN_ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs . -f stylish
 
   lint:staged:
     desc: Lint uniquement les fichiers .mjs staged (pour le hook pre-commit)
@@ -259,10 +259,16 @@ tasks:
         if [ -z "$FILES" ]; then
           exit 0
         fi
-        ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs --quiet $FILES
+        SHOW_MAIN_ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs $FILES -f stylish
+
+  lint:errors:
+    desc: Lint les fichiers .mjs avec Oxlint, en affichant seulement les erreurs bloquantes
+    silent: true
+    cmds:
+      - SHOW_MAIN_ERRORS_ONLY=1 npx oxlint --config oxlint.config.mjs --quiet . -f stylish
 
   lint:all:
     desc: Lint tous les fichiers .mjs avec Oxlint, en affichant toutes les erreurs, même les simples warnings
     silent: true
     cmds:
-      - npx oxlint --config oxlint.config.mjs
+      - npx oxlint --config oxlint.config.mjs --report-unused-disable-directives-severity "warn" . -f stylish
