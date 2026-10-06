@@ -66,7 +66,7 @@ config.shortcuts = [
 ];
 
 // Proxy de base pour les requêtes CORS
-config.corsProxy = "https://api.codetabs.com/v1/proxy?quest=";
+config.corsProxy = "https://cors.bwa.workers.dev/";
 
 // Proxy de secours pour les requêtes CORS
 config.corsProxyFallback =
