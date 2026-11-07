@@ -1,5 +1,21 @@
 # Changelog
 
+## 9.0.0 (2026-11-07)
+
+### Feat
+
+- **stats**: Possibilité d'envoyer des statistiques sur les conversations avec un chatbot
+
+### Fix
+
+- **config**: changement du proxy cors de base
+- **html**: simplification du footer par défaut
+
+### Chore
+
+- dossier .explore ignoré
+- npm approve-scripts pour @go-task/cli
+
 ## 8.12.1 (2026-08-31)
 
 ### Fix
