@@ -105,7 +105,7 @@ Vous pouvez aussi me contacter sur les [réseaux sociaux](https://eyssette.forge
 
 - [signalez un bug](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=bug) si vous avez constaté un problème !
 - [faites une suggestion](https://forge.apps.education.fr/chatMD/chatMD.forge.apps.education.fr/-/issues/new?issuable_template=suggestion) de nouvelles fonctionnalités si vous avez un besoin spécifique ou une idée !
-  :::
+:::
 
 Pour contribuer au code, consultez les tickets et [contactez le responsable](https://eyssette.forge.apps.education.fr/).
 
