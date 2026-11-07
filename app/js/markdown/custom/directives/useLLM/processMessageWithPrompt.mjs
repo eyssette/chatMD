@@ -99,6 +99,12 @@ export async function processMessageWithPrompt(
 					htmlElement: sectionElement,
 					appendTo: messageElement,
 					noMessageMenu: true,
+					stats: {
+						type: "bot",
+						subtype: "mixed-content",
+						type_details: "markdown",
+						content: content,
+					},
 				});
 			}
 		} catch (error) {

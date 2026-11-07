@@ -9,6 +9,7 @@ import { getChatbotResponse } from "../getChatbotResponse.mjs";
 import { showModal } from "./helpers/modal.mjs";
 import { getElementFromEnd } from "../../../utils/arrays.mjs";
 import { resetDynamicVariablesForMessage } from "../../../markdown/custom/variablesDynamic.mjs";
+import { isBadWords } from "../helpers/processBadWords.mjs";
 
 const allowedTagsInUserInput = ["<p>", "</p>"];
 
@@ -19,11 +20,20 @@ function handleClickOnSendButton(chatbot) {
 			userInputText = sanitizeHtml(userInputText, allowedTagsInUserInput);
 			// On enregistre l'action "écrire un message" dans l'historique des actions du chatbot
 			chatbot.actions.push("e:" + userInputText);
-			createMessage(chatbot, userInputText, { isUser: true });
+			createMessage(chatbot, userInputText, {
+				isUser: true,
+				stats: {
+					type: "user",
+					subtype: "written-message",
+					type_details: isBadWords(userInputText) ? "bad-words" : "",
+					content: userInputText,
+				},
+			});
 			setTimeout(() => {
-				const response = getChatbotResponse(chatbot, userInputText, yaml);
-				if (response) {
-					createMessage(chatbot, response, { isUser: false });
+				const responseObject = getChatbotResponse(chatbot, userInputText, yaml);
+				if (responseObject) {
+					const { response, stats } = responseObject;
+					createMessage(chatbot, response, { isUser: false, stats });
 				}
 			}, 100);
 			userInput.innerText = "";
@@ -229,17 +239,47 @@ function handleClickOnChatContainer(chatbot) {
 						.replace("#", "")
 						.replace("!useLLM", '<span class="hidden">!useLLM</span>')
 						.trim();
-					createMessage(chatbot, messageFromLink, { isUser: true });
-					const response = getChatbotResponse(chatbot, messageFromLink, yaml);
-					if (response) {
-						createMessage(chatbot, response, { isUser: false });
+					createMessage(chatbot, messageFromLink, {
+						isUser: true,
+						stats: {
+							type: "user",
+							subtype: "clicked-choice-option",
+							type_details: isBadWords(messageFromLink) ? "bad-words" : "",
+							content: messageFromLink,
+						},
+					});
+					const responseObject = getChatbotResponse(
+						chatbot,
+						messageFromLink,
+						yaml,
+					);
+					if (responseObject) {
+						const { response, stats } = responseObject;
+						createMessage(chatbot, response, { isUser: false, stats });
 					}
 				} else {
-					createMessage(chatbot, messageFromLink, { isUser: true });
+					createMessage(chatbot, messageFromLink, {
+						isUser: true,
+						stats: {
+							type: "user",
+							subtype: "clicked-choice-option",
+							type_details: isBadWords(messageFromLink) ? "bad-words" : "",
+							content: messageFromLink,
+						},
+					});
 					const optionLink = link.substring(1);
 					const response = responseToSelectedChoiceOption(chatbot, optionLink);
 					if (response) {
-						createMessage(chatbot, response, { isUser: false });
+						createMessage(chatbot, response, {
+							isUser: false,
+							stats: {
+								type: "bot",
+								subtype: "predefined-answer",
+								type_details: "response-to-clicked-choice-option",
+								content: response,
+								label: optionLink,
+							},
+						});
 					}
 					// Supprimer le focus sur le bouton qu'on vient de cliquer
 					document.activeElement.blur();

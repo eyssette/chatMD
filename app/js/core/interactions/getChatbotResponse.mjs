@@ -9,13 +9,23 @@ export function getChatbotResponse(chatbot, inputText, yaml) {
 
 	// Gestion des insultes
 	const responseToBadWords = processBadWords(inputText);
-	if (responseToBadWords) return responseToBadWords;
+	if (responseToBadWords)
+		return {
+			response: responseToBadWords,
+			stats: {
+				type: "bot",
+				subtype: "predefined-answer",
+				type_details: "response-to-bad-words",
+				content: responseToBadWords,
+				label: inputText,
+			},
+		};
 
 	// Réponse par un LLM
 	const answerFromLLM = processQuestionToLLM(chatbot, inputText);
 	if (answerFromLLM) return null;
 
 	// Choix de la réponse que le chatbot va envoyer
-	const response = findBestResponse(chatbot, inputText, yaml);
-	return response;
+	const { response, stats } = findBestResponse(chatbot, inputText, yaml);
+	return { response, stats };
 }

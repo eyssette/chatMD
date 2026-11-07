@@ -12,6 +12,10 @@ import { chatContainer } from "../../shared/selectors.mjs";
 import { processLightbox } from "./helpers/plugins/lighbox.mjs";
 import { textFitForMathBlocks } from "./helpers/plugins/textFitForMathBlocks.mjs";
 import { scrollWindow, scrollToLastUserMessage } from "../../utils/ui.mjs";
+import {
+	getStatsData,
+	sendStatsData,
+} from "../../markdown/custom/statistics.mjs";
 
 export async function displayMessage(md, options) {
 	const isUser = options && options.isUser;
@@ -35,6 +39,40 @@ export async function displayMessage(md, options) {
 	if (yaml && yaml.maths) {
 		await waitForKaTeX();
 		html = convertLatexExpressions(html);
+	}
+
+	const shouldCollectStats = yaml && yaml.stats && yaml.stats.collect;
+	if (shouldCollectStats) {
+		const sendResponseType =
+			shouldCollectStats && yaml.stats.collect["response-type"];
+		const sendResponseContent =
+			shouldCollectStats && yaml.stats.collect["response-content"];
+		const type = sendResponseType
+			? options && options.stats && options.stats.type
+			: "";
+		const subtype = sendResponseType
+			? options && options.stats && options.stats.subtype
+			: "";
+		const type_details = sendResponseType
+			? options && options.stats && options.stats.type_details
+			: "";
+		const content_raw = sendResponseContent
+			? options && options.stats && options.stats.content
+			: "";
+		const content_html =
+			sendResponseContent && html !== content_raw ? html : "";
+		const label = sendResponseContent
+			? options && options.stats && options.stats.label
+			: "";
+		const statsData = getStatsData({
+			type,
+			subtype,
+			type_details,
+			content_raw,
+			label,
+			content_html,
+		});
+		sendStatsData(yaml, statsData);
 	}
 
 	return new Promise((resolve) => {

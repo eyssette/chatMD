@@ -67,7 +67,19 @@ export function processFinalResponse(
 			});
 			if (answerFromLLM) return null;
 		} else {
-			return selectedResponseWithChoiceOptions;
+			return {
+				response: selectedResponseWithChoiceOptions,
+				stats: {
+					type: "bot",
+					subtype: "predefined-answer",
+					type_details: "best-match",
+					content: selectedResponseWithChoiceOptions,
+					label:
+						(chatbotResponses[indexBestMatch] &&
+							chatbotResponses[indexBestMatch].title) ||
+						"",
+				},
+			};
 		}
 	} else {
 		// Si on n'a pas de bestMatch, on utilise un LLM pour répondre à la question si le yaml le permet
@@ -79,7 +91,17 @@ export function processFinalResponse(
 		} else {
 			// Sinon, en cas de correspondance non trouvée, on envoie un message par défaut (sélectionné au hasard dans la liste définie par defaultMessage)
 			// On fait en sorte que le message par défaut envoyé ne soit pas le même que les derniers messages par défaut envoyés
-			return getDefaultMessage(chatbot, userInput);
+			const response = getDefaultMessage(chatbot, userInput);
+			return {
+				response: response,
+				stats: {
+					type: "bot",
+					subtype: "predefined-answer",
+					type_details: "no-match-found",
+					content: response,
+					label: "",
+				},
+			};
 		}
 	}
 }

@@ -66,13 +66,22 @@ export async function processActions(chatbot, yaml, hasActions) {
 			// On affiche ce message
 			const userMessage =
 				yaml && yaml.obfuscate ? deobfuscateString(actionData) : actionData;
-			await createMessage(chatbot, userMessage, { isUser: true });
+			await createMessage(chatbot, userMessage, {
+				isUser: true,
+				stats: {
+					type: "user",
+					subtype: "written-message",
+					content: userMessage,
+				},
+			});
 			// Puis on affiche la réponse, sans typewriter sauf si on en est à la dernière action
-			const response = getChatbotResponse(chatbot, userMessage, yaml);
-			if (response) {
+			const responseObject = getChatbotResponse(chatbot, userMessage, yaml);
+			if (responseObject) {
+				const { response, stats } = responseObject;
 				await createMessage(chatbot, response, {
 					isUser: false,
 					disableTypewriter: !isLast,
+					stats,
 				});
 			}
 		}
@@ -109,17 +118,26 @@ export async function processActions(chatbot, yaml, hasActions) {
 					? deobfuscateString(messageToChatbot)
 					: messageToChatbot;
 				// On affiche le message à afficher côté utilisateur
-				await createMessage(chatbot, messageToDisplay, { isUser: true });
+				await createMessage(chatbot, messageToDisplay, {
+					isUser: true,
+					stats: {
+						type: "user",
+						subtype: "clicked-choice-option",
+						content: messageToDisplay,
+					},
+				});
 				// On récupère puis affiche la répones du chatbot
-				const response = await getChatbotResponse(
+				const responseObject = await getChatbotResponse(
 					chatbot,
 					messageToChatbot,
 					yaml,
 				);
-				if (response) {
+				if (responseObject) {
+					const { response, stats } = responseObject;
 					await createMessage(chatbot, response, {
 						isUser: false,
 						disableTypewriter: !isLast,
+						stats,
 					});
 				}
 			}
@@ -127,7 +145,14 @@ export async function processActions(chatbot, yaml, hasActions) {
 
 		if (actionType == "llmq") {
 			const userMessage = decodeString(actionData);
-			await createMessage(chatbot, userMessage, { isUser: true });
+			await createMessage(chatbot, userMessage, {
+				isUser: true,
+				stats: {
+					type: "user",
+					subtype: "llm-question",
+					content: userMessage,
+				},
+			});
 		}
 
 		if (actionType == "llmr") {
@@ -135,6 +160,10 @@ export async function processActions(chatbot, yaml, hasActions) {
 			await createMessage(chatbot, botMessage, {
 				isUser: false,
 				disableTypewriter: !isLast,
+				stats: {
+					type: "bot",
+					subtype: "llm-answer",
+				},
 			});
 		}
 	}

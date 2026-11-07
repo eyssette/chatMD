@@ -3,6 +3,7 @@ import { chatContainer } from "../shared/selectors.mjs";
 import { errorMessage } from "./helpers/error.mjs";
 import { readStreamFromLLM } from "./helpers/readStream.mjs";
 import { encodeString } from "../utils/strings.mjs";
+import { getStatsData, sendStatsData } from "../markdown/custom/statistics.mjs";
 
 let llmHistory = [];
 
@@ -157,6 +158,34 @@ export function getAnswerFromLLM(chatbot, userPrompt, options) {
 							APItype,
 							options,
 						).then(() => {
+							// Envoi des statistiques si l'option est activée dans le YAML
+							const shouldCollectStats =
+								yaml && yaml.stats && yaml.stats.collect;
+							if (shouldCollectStats) {
+								const sendResponseType =
+									shouldCollectStats && yaml.stats.collect["response-type"];
+								const sendResponseContent =
+									shouldCollectStats && yaml.stats.collect["response-content"];
+								const type = sendResponseType ? "bot" : "";
+								const subtype = sendResponseType ? "llm-response" : "";
+								const type_details = sendResponseType ? "llm" : "";
+								const content_raw = sendResponseContent ? userPrompt : "";
+								const content_html = sendResponseContent
+									? messageElement.innerHTML
+									: "";
+								const label = sendResponseContent
+									? messageElement.previousElementSibling.textContent
+									: "";
+								const statsData = getStatsData({
+									type,
+									subtype,
+									type_details,
+									content_raw,
+									content_html,
+									label,
+								});
+								sendStatsData(yaml, statsData);
+							}
 							if (!shouldStreamLLMresponse) {
 								// Si on ne streame pas la réponse du LLM, on ajoute le message dans le container à la fin pour que l'utilisateur voit la réponse complète du LLM
 								container.appendChild(messageElement);

@@ -114,10 +114,12 @@ export async function createMessage(chatbot, message, options) {
 				changeExistingMessage,
 				disableTypewriter: disableTypewriter,
 				noMessageMenu: noMessageMenu,
+				stats: options && options.stats,
 			}).then(() => {
-				const response = handleBotResponse(chatbot);
-				if (response) {
-					createMessage(chatbot, response, { isUser: false });
+				const responseObject = handleBotResponse(chatbot);
+				if (responseObject) {
+					const { response, stats } = responseObject;
+					createMessage(chatbot, response, { isUser: false, stats });
 				}
 			});
 			// Gestion des éléments HTML de type formulaire (<select>, <input>) si on veut les utiliser pour gérer des variables dynamiques
